@@ -1,105 +1,128 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical - Admin Panel</title>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azam Medical Centre - Admin</title>
 <style>
-body{font-family:system-ui;background:#eef2f8;margin:0;padding:0}
-.header{background:#fff;padding:14px;text-align:center;border-bottom:3px solid #183e8a;position:sticky;top:0;z-index:9}
-.header img{width:70px;height:70px;border-radius:50%;border:2px solid #183e8a}
-.header h1{margin:6px 0 2px;color:#183e8a;font-size:22px}
-.header p{margin:2px;font-size:13px;color:#444}
-.card{background:#fff;border-radius:14px;padding:14px;max-width:700px;margin:12px auto;box-shadow:0 4px 14px rgba(0,0,0,.07)}
-label{font-weight:700;font-size:13px;display:block;margin-top:8px;color:#1a3a7a}
-input,select,textarea{width:100%;padding:11px;margin:5px 0;border:1px solid #cdd6e6;border-radius:10px;font-size:14px;box-sizing:border-box}
-button{padding:12px;background:#183e8a;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;width:100%}
-.btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px}
-.btns button{padding:8px;font-size:12px}
-.preview img{width:68px;height:68px;object-fit:cover;border-radius:8px;border:1px solid #ddd;margin:4px}
+:root{--blue:#183e8a;--light:#f0f4ff}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui;background:#f3f6fd;color:#1a2a4a}
+.header{background:#fff;text-align:center;padding:16px 10px;border-bottom:4px solid var(--blue);position:sticky;top:0;z-index:10}
+.header.ayat{font-family:serif;font-size:26px;color:#7a5a1e;margin:0 0 6px}
+.header img{width:78px;height:78px;border-radius:50%;border:3px solid var(--blue)}
+.header h1{margin:8px 0 2px;color:var(--blue);font-size:24px}
+.header.addr{font-size:13px;line-height:1.4;margin:4px 10px;color:#333}
+.header.doc{font-weight:700;color:var(--blue);margin-top:6px}
+.card{background:#fff;border-radius:16px;padding:14px;max-width:720px;margin:12px auto;box-shadow:0 8px 20px rgba(0,0,0,.06)}
+label{font-weight:700;font-size:13px;color:var(--blue);display:block;margin-top:10px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cdd6e6;border-radius:12px;font-size:15px;margin-top:4px;background:#fcfdff}
+textarea{min-height:70px}
+.upbox{border:2px dashed #a3b7e0;background:var(--light);border-radius:12px;padding:10px;text-align:center;margin-top:6px}
+.upbox span{display:inline-block;padding:8px 14px;background:#fff;border-radius:10px;margin:4px;border:1px solid #cdd6e6;cursor:pointer}
+.preview img{width:72px;height:72px;object-fit:cover;border-radius:10px;border:1px solid #ddd;margin:4px}
+.btn{width:100%;padding:14px;border:none;border-radius:14px;background:#16a34a;color:#fff;font-weight:800;font-size:16px;margin-top:14px;cursor:pointer}
+.done{background:#d1fae5;color:#065f46;padding:10px;border-radius:12px;text-align:center;margin-top:10px;display:none;font-weight:700}
+.searchbox{display:flex;gap:6px}.searchbox input{flex:1}
+.btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
+.btns button{padding:8px;border-radius:10px;border:none;font-weight:700;cursor:pointer}
 </style></head><body>
 
 <div class="header">
-<img src="logo.png" onerror="this.src='https://via.placeholder.com/70'">
+<p class="ayat">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+<img src="logo.png" onerror="this.src='https://via.placeholder.com/80'">
 <h1>Azam Medical Centre</h1>
-<p><b>Dr. Muhammad Zeeshan Mughal</b> | MBBS | RMP</p>
-<p>Main Bazaar, Sargodha Road | 0321-6010123</p>
-<h2 style="color:#183e8a;margin:8px 0 0;font-size:18px">Admin Panel</h2>
+<div class="addr">Plot No.27, new 460 street, Allama Iqbal road, Manzoor Colony, Karachi.<br>Contact No. 02135386116</div>
+<div class="doc">Dr. Muhammad Zeeshan (MBBS, RMP, Sonologist)<br>Timings: 4:00 PM to 10:00 PM</div>
+<h2 style="margin:8px 0 0;color:var(--blue);font-size:18px">Patient Record - Admin Panel</h2>
 </div>
 
 <div class="card">
-<label>Name</label><input id="name">
-<label>Mobile (Patient ID)</label><input id="mobile" placeholder="0321...">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label>Age</label><input id="age"></div><div><label>Gender</label><select id="gender"><option>Male</option><option>Female</option></select></div></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label>Checkup Date</label><input id="checkup" type="date"></div><div><label>Follow Up</label><input id="followup" type="date"></div></div>
-<label>Diagnosis</label><textarea id="diagnosis"></textarea>
-<label>Medicines</label><textarea id="medicines"></textarea>
+<label>Patient Name</label><input id="pname" placeholder="Enter patient name">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div><label>Gender</label><select id="gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+<div><label>Age</label><input id="age" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="e.g. 25"></div>
+</div>
+<label>WhatsApp Number</label><input id="wapp" type="text" inputmode="numeric" placeholder="03xx-xxxxxxx">
+<label>Diagnosis & Complaints</label><textarea id="diag" placeholder="Fever, cough for 3 days..."></textarea>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div><label>Date of Checkup</label><input id="checkup" type="date"></div>
+<div><label>Follow Up Date</label><input id="followup" type="date"></div>
+</div>
+<label>Prescription - Medicines</label><textarea id="meds" placeholder="• Tab. Paracetamol 500mg - 1x3 daily&#10;• Syrup..."></textarea>
+<label>Upload Prescription Picture (Camera/Gallery - Auto Compressed)</label>
+<div class="upbox"><label><span>📷 Camera</span><input id="presCam" type="file" accept="image/*" capture="environment" hidden></label>
+<label><span>🖼️ Gallery</span><input id="presGal" type="file" accept="image/*" hidden></label><div id="presBadge" style="font-size:12px;color:#065f46"></div><div id="presPrev" class="preview"></div></div>
 
-<label>Prescription Pic (Gallery + Camera)</label>
-<input id="presImgInput" type="file" accept="image/*">
-<div id="presPreview" class="preview"></div>
+<label>Test Reports (Multiple, Compressed)</label>
+<div class="upbox"><input id="repInput" type="file" accept="image/*" multiple><div id="repPrev" class="preview"></div></div>
 
-<label>Test Reports (Multiple)</label>
-<input id="reportsInput" type="file" accept="image/*" multiple>
-<div id="reportsPreview" class="preview"></div>
-
-<button id="saveBtn" style="margin-top:14px">Save Patient</button>
+<button class="btn" id="saveBtn">✅ Save</button>
+<div id="doneMsg" class="done">✅ Done! Patient record saved successfully</div>
 </div>
 
 <div class="card">
-<input id="search" placeholder="Search name/mobile..." oninput="render()">
+<label>🔒 Admin-only Search</label>
+<div class="searchbox"><input id="search" placeholder="Search by patient name, mobile, ID..." oninput="render()"></div>
 <div id="list"></div>
 </div>
 
 <script>
-let DB, presData=null, reportsData=[];
-let openReq=indexedDB.open("AzamDB",1);
-openReq.onupgradeneeded=e=>{ let db=e.target.result; if(!db.objectStoreNames.contains("patients")) db.createObjectStore("patients",{keyPath:"mobile"}) };
-openReq.onsuccess=e=>{ DB=e.target.result; render(); };
+let DB, presImg=null, reports=[];
+let req=indexedDB.open("AzamDB",1);
+req.onupgradeneeded=e=>{ let db=e.target.result; if(!db.objectStoreNames.contains("patients")) db.createObjectStore("patients",{keyPath:"mobile"}) };
+req.onsuccess=e=>{ DB=e.target.result; render(); };
 
 function compress(file, cb){
-  let r=new FileReader();
-  r.onload=ev=>{
-    let img=new Image();
-    img.onload=()=>{
-      let c=document.createElement('canvas');
-      let max=900, ratio=Math.min(1,max/img.width);
-      c.width=img.width*ratio; c.height=img.height*ratio;
+  let r=new FileReader(); r.onload=ev=>{
+    let img=new Image(); img.onload=()=>{
+      let max=900; let scale=Math.min(1,max/img.width,max/img.height);
+      let c=document.createElement('canvas'); c.width=img.width*scale; c.height=img.height*scale;
       c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-      cb(c.toDataURL('image/jpeg',0.6));
-    };
-    img.src=ev.target.result;
-  };
-  r.readAsDataURL(file);
+      cb(c.toDataURL('image/jpeg',0.5)); // highly compressed 50% quality
+    }; img.src=ev.target.result;
+  }; r.readAsDataURL(file);
 }
-presImgInput.addEventListener('change',e=>{
-  let f=e.target.files[0]; if(!f) return;
-  compress(f,res=>{ presData=res; presPreview.innerHTML=`<img src="${res}"><br><small>${Math.round(res.length/1024)}KB compressed</small>`; });
-});
-reportsInput.addEventListener('change',e=>{
-  [...e.target.files].forEach(f=>{
-    compress(f,res=>{ reportsData.push(res); let im=document.createElement('img'); im.src=res; reportsPreview.appendChild(im); });
+function handlePres(f){
+  if(!f) return; compress(f,res=>{
+    presImg=res; document.getElementById('presPrev').innerHTML=`<img src="${res}">`;
+    document.getElementById('presBadge').innerText=`Compressed • ${Math.round(res.length/1024)}KB`;
   });
-});
+}
+presCam.onchange=e=>handlePres(e.target.files[0]); presGal.onchange=e=>handlePres(e.target.files[0]);
+repInput.onchange=e=>{
+  [...e.target.files].forEach(f=>{
+    compress(f,res=>{
+      reports.push(res);
+      let im=document.createElement('img'); im.src=res; repPrev.appendChild(im);
+    });
+  });
+};
+
 saveBtn.onclick=()=>{
-  let n=name.value.trim(), m=mobile.value.trim();
-  if(!n||!m){ alert("Name & Mobile lazmi"); return; }
-  let obj={name:n,mobile:m,age:age.value,gender:gender.value,checkup:checkup.value,followup:followup.value,diagnosis:diagnosis.value,medicines:medicines.value,presImg:presData,reports:reportsData};
+  let n=pname.value.trim(), m=wapp.value.trim().replace(/[^0-9]/g,'');
+  if(!n||!m){ alert("Name & WhatsApp lazmi"); return; }
+  let obj={name:n,mobile:m,gender:gender.value,age:age.value,diag:diag.value,checkup:checkup.value,followup:followup.value,meds:meds.value,presImg,reports,created:Date.now()};
   let tx=DB.transaction("patients","readwrite"); tx.objectStore("patients").put(obj);
-  tx.oncomplete=()=>{ alert("Saved!"); location.reload(); };
+  tx.oncomplete=()=>{
+    doneMsg.style.display='block'; setTimeout(()=>doneMsg.style.display='none',4000);
+    // Auto WhatsApp
+    let patientLink = `${location.origin}${location.pathname.replace('azam-admin.html','')}patient.html?m=${m}`;
+    let msg = `Salam ${n}, Azam Medical Centre - Aapka record save ho gaya hai. Aapka link: ${patientLink}`;
+    let waNum = m.startsWith('0')? '92'+m.substring(1) : m;
+    window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`, '_blank');
+    render();
+  };
 };
 function render(){
-  let q=(search.value||"").toLowerCase(), html="";
+  if(!DB) return; let q=(search.value||"").toLowerCase(), html="";
   DB.transaction("patients","readonly").objectStore("patients").openCursor().onsuccess=e=>{
-    let cur=e.target.result;
-    if(cur){
+    let cur=e.target.result; if(cur){
       let p=cur.value;
       if(!q||p.name.toLowerCase().includes(q)||p.mobile.includes(q)){
-        let link=`patient.html?m=${p.mobile}`;
-        html+=`<div style="border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin:8px 0"><b>${p.name}</b> - ${p.mobile}<br><small>${p.checkup||""}</small>
-        <div class="btns"><button onclick="window.open('${link}')">View</button><button onclick="editP('${p.mobile}')" style="background:#e3ebff;color:#183e8a">Edit</button><button onclick="delP('${p.mobile}')" style="background:#ffe1e1;color:#a00">Del</button></div></div>`;
+        html+=`<div style="border:1px solid #e2e8f0;border-radius:12px;padding:10px;margin:8px 0"><b>${p.name}</b> (${p.age||''}y) - ${p.mobile}<br><small>${p.checkup||''}</small>
+        <div class="btns"><button onclick="window.open('patient.html?m=${p.mobile}')" style="background:#e3ebff">View</button><button onclick="editP('${p.mobile}')" style="background:#fff3bf">Edit</button><button onclick="delP('${p.mobile}')" style="background:#ffd5d5">Del</button></div></div>`;
       }
       cur.continue();
-    } else list.innerHTML=html||"No patients";
+    } else list.innerHTML=html||"<small>No patients</small>";
   };
 }
-function editP(m){ DB.transaction("patients").objectStore("patients").get(m).onsuccess=e=>{ let p=e.target.result; name.value=p.name; mobile.value=p.mobile; age.value=p.age; gender.value=p.gender; checkup.value=p.checkup; followup.value=p.followup; diagnosis.value=p.diagnosis; medicines.value=p.medicines; presData=p.presImg; reportsData=p.reports||[]; presPreview.innerHTML=p.presImg?`<img src="${p.presImg}">`:""; reportsPreview.innerHTML=(p.reports||[]).map(x=>`<img src="${x}">`).join(""); window.scrollTo(0,0);} }
+function editP(m){ DB.transaction("patients").objectStore("patients").get(m).onsuccess=e=>{ let p=e.target.result; pname.value=p.name; wapp.value=p.mobile; gender.value=p.gender; age.value=p.age; diag.value=p.diag; checkup.value=p.checkup; followup.value=p.followup; meds.value=p.meds; presImg=p.presImg; reports=p.reports||[]; presPrev.innerHTML=p.presImg?`<img src="${p.presImg}">`:""; repPrev.innerHTML=(p.reports||[]).map(x=>`<img src="${x}">`).join(""); window.scrollTo(0,0);} }
 function delP(m){ if(confirm("Delete?")){ DB.transaction("patients","readwrite").objectStore("patients").delete(m).onsuccess=()=>render(); } }
 </script></body></html>
