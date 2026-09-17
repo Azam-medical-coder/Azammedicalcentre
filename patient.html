@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam Patient Portal</title>
-<style>body{font-family:system-ui;background:#eef2ff;padding:12px;margin:0}.box{max-width:600px;margin:auto;background:#fff;padding:18px;border-radius:14px}input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;box-sizing:border-box}button{width:100%;padding:12px;background:#1d4ed8;color:#fff;border:0;border-radius:8px;font-weight:700;margin-top:8px}img{max-width:100%;border-radius:10px;margin-top:10px;border:1px solid #ddd}</style>
-</head><body>
-<div class="box">
-<h2 style="color:#1e40af;margin:0;text-align:center">Azam Medical Centre</h2><p style="text-align:center">Apna Mobile Number Likhen</p>
-<input id="mob" placeholder="03XX-XXXXXXX"><button onclick="view()">View My Report</button>
-<div id="res" style="margin-top:16px"></div>
-</div>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Patient Record</title>
+<style>body{font-family:system-ui;background:#f3f6fd;margin:0}.header{background:#fff;text-align:center;padding:16px;border-bottom:4px solid #183e8a}.card{background:#fff;border-radius:16px;padding:14px;max-width:700px;margin:12px auto;box-shadow:0 4px 14px rgba(0,0,0,.06)} input{width:100%;padding:12px;border-radius:12px;border:1px solid #cdd6e6} button{padding:12px;background:#183e8a;color:#fff;border:none;border-radius:12px;width:100%;font-weight:700}</style></head><body>
+<div class="header"><img src="logo.png" width="70" style="border-radius:50%"><h2 style="color:#183e8a;margin:6px">Azam Medical Centre</h2><small>Plot No.27, Allama Iqbal Road, Karachi - 02135386116<br>Dr. Muhammad Zeeshan (MBBS,RMP,Sonologist)</small></div>
+<div class="card"><h3>Apna Record Dekhen</h3><input id="m" placeholder="WhatsApp number likhen e.g. 03001234567"><button onclick="view()" style="margin-top:8px">View My Record</button><div id="out" style="margin-top:14px"></div></div>
 <script>
+let params=new URLSearchParams(location.search); if(params.get('m')){ m.value=params.get('m'); view(); }
 function view(){
- let m=mob.value.trim();if(!m){alert('Mobile likhen');return;}
- let all=JSON.parse(localStorage.getItem('azam_patients')||'[]');
- let p=[...all].reverse().find(x=>x.mobile==m);
- if(!p){res.innerHTML='<p style="color:red">Record nahi mila</p>';return;}
- res.innerHTML=`<hr><b>Name:</b> ${p.name}<br><b>Age:</b> ${p.age} ${p.gender}<br><b>Visit:</b> ${p.vdate}<br><b>Follow Up:</b> ${p.fdate}<br><br><b>Diagnosis:</b><br>${p.diag||'-'}<br><br><b>Medicine:</b><br>${p.med||'-'}<br><br>${p.presImg?`<h3>Prescription</h3><img src="${p.presImg}">`:''}${p.reports&&p.reports.length?`<h3>Reports</h3>${p.reports.map(r=>`<img src="${r}">`).join('')}`:''}`;
+  let mob=document.getElementById('m').value.replace(/[^0-9]/g,''); if(!mob){alert("Number likhen");return;}
+  let req=indexedDB.open("AzamDB",1); req.onsuccess=e=>{
+    let db=e.target.result; db.transaction("patients").objectStore("patients").get(mob).onsuccess=ev=>{
+      let p=ev.target.result; if(!p){ out.innerHTML="<p style='color:red'>Record nahi mila</p>"; return; }
+      out.innerHTML=`<b>${p.name}</b> (${p.age} ${p.gender})<br><small>Checkup: ${p.checkup} | Follow: ${p.followup}</small><br><br><b>Diagnosis:</b><br>${p.diag}<br><br><b>Medicines:</b><br>${p.meds.replace(/\n/g,'<br>')}<br><br>${p.presImg?`<b>Prescription:</b><br><img src="${p.presImg}" style="width:100%;border-radius:12px"><br><br>`:""}${(p.reports||[]).length?`<b>Reports:</b><br>${p.reports.map(x=>`<img src="${x}" style="width:100%;margin:6px 0;border-radius:12px">`).join('')}`:""}`;
+    };
+  };
 }
 </script></body></html>
