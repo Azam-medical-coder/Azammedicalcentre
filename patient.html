@@ -1,16 +1,5 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Patient Record</title>
-<style>body{font-family:system-ui;background:#f3f6fd;margin:0}.header{background:#fff;text-align:center;padding:16px;border-bottom:4px solid #183e8a}.card{background:#fff;border-radius:16px;padding:14px;max-width:700px;margin:12px auto;box-shadow:0 4px 14px rgba(0,0,0,.06)} input{width:100%;padding:12px;border-radius:12px;border:1px solid #cdd6e6} button{padding:12px;background:#183e8a;color:#fff;border:none;border-radius:12px;width:100%;font-weight:700}</style></head><body>
-<div class="header"><img src="logo.png" width="70" style="border-radius:50%"><h2 style="color:#183e8a;margin:6px">Azam Medical Centre</h2><small>Plot No.27, Allama Iqbal Road, Karachi - 02135386116<br>Dr. Muhammad Zeeshan (MBBS,RMP,Sonologist)</small></div>
-<div class="card"><h3>Apna Record Dekhen</h3><input id="m" placeholder="WhatsApp number likhen e.g. 03001234567"><button onclick="view()" style="margin-top:8px">View My Record</button><div id="out" style="margin-top:14px"></div></div>
-<script>
-let params=new URLSearchParams(location.search); if(params.get('m')){ m.value=params.get('m'); view(); }
-function view(){
-  let mob=document.getElementById('m').value.replace(/[^0-9]/g,''); if(!mob){alert("Number likhen");return;}
-  let req=indexedDB.open("AzamDB",1); req.onsuccess=e=>{
-    let db=e.target.result; db.transaction("patients").objectStore("patients").get(mob).onsuccess=ev=>{
-      let p=ev.target.result; if(!p){ out.innerHTML="<p style='color:red'>Record nahi mila</p>"; return; }
-      out.innerHTML=`<b>${p.name}</b> (${p.age} ${p.gender})<br><small>Checkup: ${p.checkup} | Follow: ${p.followup}</small><br><br><b>Diagnosis:</b><br>${p.diag}<br><br><b>Medicines:</b><br>${p.meds.replace(/\n/g,'<br>')}<br><br>${p.presImg?`<b>Prescription:</b><br><img src="${p.presImg}" style="width:100%;border-radius:12px"><br><br>`:""}${(p.reports||[]).length?`<b>Reports:</b><br>${p.reports.map(x=>`<img src="${x}" style="width:100%;margin:6px 0;border-radius:12px">`).join('')}`:""}`;
-    };
-  };
-}
-</script></body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Patient View</title><style>body{margin:0;background:#eaf0ff;font-family:system-ui}.card{border-radius:18px;padding:14px;margin:10px auto;max-width:680px;box-shadow:0 8px 20px rgba(0,0,0,.07)}.logo-card{background:#fff;border:3px solid #1e90ff;text-align:center}.hospital-card{background:linear-gradient(135deg,#1e90ff,#0a2463);color:#fff;text-align:center}input{width:100%;padding:12px;border-radius:12px;border:2px solid #1e90ff}button{width:100%;padding:12px;border-radius:12px;background:#1e90ff;color:#fff;border:none;font-weight:800;margin-top:8px}</style></head><body>
+<div class="card logo-card"><img src="logo.png" width="80"><div>بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div></div>
+<div class="card hospital-card"><h3 style="margin:0">Azam Medical Centre</h3>Dr. Muhammad Zeeshan (MBBS,RMP,Sonologist)<br>Plot No.27, Manzoor Colony, Karachi</div>
+<div class="card" style="background:#fff"><h3>Apna Record Dekhen</h3><input id="m" placeholder="03xx-xxxxxxx"><button onclick="view()">View My Record</button><div id="out" style="margin-top:12px"></div></div>
+<script>let p=new URLSearchParams(location.search);if(p.get('m')){m.value=p.get('m');view()}function view(){let mob=document.getElementById('m').value.replace(/[^0-9]/g,'');let req=indexedDB.open("AzamDB",1);req.onsuccess=e=>{e.target.result.transaction("patients").objectStore("patients").get(mob).onsuccess=ev=>{let p=ev.target.result;if(!p){out.innerHTML="Record nahi mila";return}out.innerHTML=`<div style="background:#f9f9ff;border-radius:12px;padding:12px"><b>${p.name}</b> (${p.age})<br>Gender: ${p.gender}<br>Checkup: ${p.checkup} | Follow: ${p.followup}<br><br><b>Diagnosis:</b><br>${p.diag}<br><br><b>Medicines:</b><br>${p.meds.replace(/\n/g,'<br>')}<br><br>${p.presImg?`<img src="${p.presImg}" style="width:100%;border-radius:12px">`:""}<br>${(p.reports||[]).map(x=>`<img src="${x}" style="width:100%;border-radius:12px;margin:6px 0">`).join('')}</div>`}}}}</script></body></html>
