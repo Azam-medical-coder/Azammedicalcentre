@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam Patient Portal</title>
+<style>body{font-family:system-ui;background:#eef2ff;padding:12px;margin:0}.box{max-width:600px;margin:auto;background:#fff;padding:18px;border-radius:14px}input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;box-sizing:border-box}button{width:100%;padding:12px;background:#1d4ed8;color:#fff;border:0;border-radius:8px;font-weight:700;margin-top:8px}img{max-width:100%;border-radius:10px;margin-top:10px;border:1px solid #ddd}</style>
+</head><body>
+<div class="box">
+<h2 style="color:#1e40af;margin:0;text-align:center">Azam Medical Centre</h2><p style="text-align:center">Apna Mobile Number Likhen</p>
+<input id="mob" placeholder="03XX-XXXXXXX"><button onclick="view()">View My Report</button>
+<div id="res" style="margin-top:16px"></div>
+</div>
+<script>
+function view(){
+ let m=mob.value.trim();if(!m){alert('Mobile likhen');return;}
+ let all=JSON.parse(localStorage.getItem('azam_patients')||'[]');
+ let p=[...all].reverse().find(x=>x.mobile==m);
+ if(!p){res.innerHTML='<p style="color:red">Record nahi mila</p>';return;}
+ res.innerHTML=`<hr><b>Name:</b> ${p.name}<br><b>Age:</b> ${p.age} ${p.gender}<br><b>Visit:</b> ${p.vdate}<br><b>Follow Up:</b> ${p.fdate}<br><br><b>Diagnosis:</b><br>${p.diag||'-'}<br><br><b>Medicine:</b><br>${p.med||'-'}<br><br>${p.presImg?`<h3>Prescription</h3><img src="${p.presImg}">`:''}${p.reports&&p.reports.length?`<h3>Reports</h3>${p.reports.map(r=>`<img src="${r}">`).join('')}`:''}`;
+}
+</script></body></html>
