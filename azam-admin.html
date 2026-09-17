@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Admin</title>
+<title>Azam Medical - Admin Panel</title>
 <style>
-body{font-family:system-ui;background:#f3f6fb;margin:0;padding:10px}
-.card{background:#fff;border-radius:14px;padding:14px;max-width:650px;margin:10px auto;box-shadow:0 3px 12px rgba(0,0,0,.06)}
-input,select,textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #cdd6e6;border-radius:10px;font-size:15px;box-sizing:border-box}
-label{font-weight:600;font-size:14px;display:block;margin-top:8px}
-button{padding:12px;background:#183e8a;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer}
+body{font-family:system-ui;background:#eef2f8;margin:0;padding:0}
+.header{background:#fff;padding:14px;text-align:center;border-bottom:3px solid #183e8a;position:sticky;top:0;z-index:9}
+.header img{width:70px;height:70px;border-radius:50%;border:2px solid #183e8a}
+.header h1{margin:6px 0 2px;color:#183e8a;font-size:22px}
+.header p{margin:2px;font-size:13px;color:#444}
+.card{background:#fff;border-radius:14px;padding:14px;max-width:700px;margin:12px auto;box-shadow:0 4px 14px rgba(0,0,0,.07)}
+label{font-weight:700;font-size:13px;display:block;margin-top:8px;color:#1a3a7a}
+input,select,textarea{width:100%;padding:11px;margin:5px 0;border:1px solid #cdd6e6;border-radius:10px;font-size:14px;box-sizing:border-box}
+button{padding:12px;background:#183e8a;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;width:100%}
 .btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px}
-.btns button{font-size:13px;padding:9px}
-.preview img{width:70px;height:70px;object-fit:cover;border-radius:8px;border:1px solid #ddd;margin:4px}
+.btns button{padding:8px;font-size:12px}
+.preview img{width:68px;height:68px;object-fit:cover;border-radius:8px;border:1px solid #ddd;margin:4px}
 </style></head><body>
 
+<div class="header">
+<img src="logo.png" onerror="this.src='https://via.placeholder.com/70'">
+<h1>Azam Medical Centre</h1>
+<p><b>Dr. Muhammad Zeeshan Mughal</b> | MBBS | RMP</p>
+<p>Main Bazaar, Sargodha Road | 0321-6010123</p>
+<h2 style="color:#183e8a;margin:8px 0 0;font-size:18px">Admin Panel</h2>
+</div>
+
 <div class="card">
-<h2 style="text-align:center;color:#183e8a;margin:4px">Azam Medical - Admin Panel</h2>
 <label>Name</label><input id="name">
 <label>Mobile (Patient ID)</label><input id="mobile" placeholder="0321...">
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label>Age</label><input id="age"></div><div><label>Gender</label><select id="gender"><option>Male</option><option>Female</option></select></div></div>
@@ -21,7 +32,7 @@ button{padding:12px;background:#183e8a;color:#fff;border:none;border-radius:10px
 <label>Diagnosis</label><textarea id="diagnosis"></textarea>
 <label>Medicines</label><textarea id="medicines"></textarea>
 
-<label>Prescription Pic (Gallery / Camera)</label>
+<label>Prescription Pic (Gallery + Camera)</label>
 <input id="presImgInput" type="file" accept="image/*">
 <div id="presPreview" class="preview"></div>
 
@@ -29,52 +40,51 @@ button{padding:12px;background:#183e8a;color:#fff;border:none;border-radius:10px
 <input id="reportsInput" type="file" accept="image/*" multiple>
 <div id="reportsPreview" class="preview"></div>
 
-<button style="width:100%;margin-top:12px" id="saveBtn">Save Patient</button>
+<button id="saveBtn" style="margin-top:14px">Save Patient</button>
 </div>
 
-<div class="card"><input id="search" placeholder="Search name/mobile..." oninput="render()"><div id="list"></div></div>
+<div class="card">
+<input id="search" placeholder="Search name/mobile..." oninput="render()">
+<div id="list"></div>
+</div>
 
 <script>
 let DB, presData=null, reportsData=[];
-let openReq = indexedDB.open("AzamDB",1);
-openReq.onupgradeneeded = e=>{ let db=e.target.result; if(!db.objectStoreNames.contains("patients")) db.createObjectStore("patients",{keyPath:"mobile"}) };
-openReq.onsuccess = e=>{ DB=e.target.result; render(); };
+let openReq=indexedDB.open("AzamDB",1);
+openReq.onupgradeneeded=e=>{ let db=e.target.result; if(!db.objectStoreNames.contains("patients")) db.createObjectStore("patients",{keyPath:"mobile"}) };
+openReq.onsuccess=e=>{ DB=e.target.result; render(); };
 
-// *** COMPRESS FUNCTION - Auto chhota karega ***
 function compress(file, cb){
-  let r = new FileReader();
-  r.onload = ev=>{
-    let img = new Image();
-    img.onload = ()=>{
-      let c = document.createElement('canvas');
-      let max = 900, ratio = Math.min(1, max/img.width);
-      c.width = img.width*ratio; c.height = img.height*ratio;
+  let r=new FileReader();
+  r.onload=ev=>{
+    let img=new Image();
+    img.onload=()=>{
+      let c=document.createElement('canvas');
+      let max=900, ratio=Math.min(1,max/img.width);
+      c.width=img.width*ratio; c.height=img.height*ratio;
       c.getContext('2d').drawImage(img,0,0,c.width,c.height);
       cb(c.toDataURL('image/jpeg',0.6));
     };
-    img.src = ev.target.result;
+    img.src=ev.target.result;
   };
   r.readAsDataURL(file);
 }
-
-document.getElementById('presImgInput').addEventListener('change', e=>{
+presImgInput.addEventListener('change',e=>{
   let f=e.target.files[0]; if(!f) return;
-  compress(f, res=>{ presData=res; document.getElementById('presPreview').innerHTML=`<img src="${res}"><small> ${Math.round(res.length/1024)}KB compressed</small>`; });
+  compress(f,res=>{ presData=res; presPreview.innerHTML=`<img src="${res}"><br><small>${Math.round(res.length/1024)}KB compressed</small>`; });
 });
-document.getElementById('reportsInput').addEventListener('change', e=>{
+reportsInput.addEventListener('change',e=>{
   [...e.target.files].forEach(f=>{
-    compress(f, res=>{ reportsData.push(res); let i=document.createElement('img'); i.src=res; document.getElementById('reportsPreview').appendChild(i); });
+    compress(f,res=>{ reportsData.push(res); let im=document.createElement('img'); im.src=res; reportsPreview.appendChild(im); });
   });
 });
-
-document.getElementById('saveBtn').onclick = ()=>{
-  let n=document.getElementById('name').value.trim(), m=document.getElementById('mobile').value.trim();
-  if(!n||!m){alert("Name & Mobile lazmi");return;}
+saveBtn.onclick=()=>{
+  let n=name.value.trim(), m=mobile.value.trim();
+  if(!n||!m){ alert("Name & Mobile lazmi"); return; }
   let obj={name:n,mobile:m,age:age.value,gender:gender.value,checkup:checkup.value,followup:followup.value,diagnosis:diagnosis.value,medicines:medicines.value,presImg:presData,reports:reportsData};
   let tx=DB.transaction("patients","readwrite"); tx.objectStore("patients").put(obj);
   tx.oncomplete=()=>{ alert("Saved!"); location.reload(); };
 };
-
 function render(){
   let q=(search.value||"").toLowerCase(), html="";
   DB.transaction("patients","readonly").objectStore("patients").openCursor().onsuccess=e=>{
@@ -82,14 +92,14 @@ function render(){
     if(cur){
       let p=cur.value;
       if(!q||p.name.toLowerCase().includes(q)||p.mobile.includes(q)){
-        let link=`https://drzeeshanmughal.github.io/Azam-Medical-Centre/patient.html?m=${p.mobile}`;
+        let link=`patient.html?m=${p.mobile}`;
         html+=`<div style="border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin:8px 0"><b>${p.name}</b> - ${p.mobile}<br><small>${p.checkup||""}</small>
-        <div class="btns"><button onclick="window.open('${link}')">View</button><button onclick="editP('${p.mobile}')" style="background:#e8eefb;color:#183e8a">Edit</button><button onclick="delP('${p.mobile}')" style="background:#ffdddd;color:#a00">Del</button></div></div>`;
+        <div class="btns"><button onclick="window.open('${link}')">View</button><button onclick="editP('${p.mobile}')" style="background:#e3ebff;color:#183e8a">Edit</button><button onclick="delP('${p.mobile}')" style="background:#ffe1e1;color:#a00">Del</button></div></div>`;
       }
       cur.continue();
     } else list.innerHTML=html||"No patients";
   };
 }
-function editP(m){ DB.transaction("patients").objectStore("patients").get(m).onsuccess=e=>{ let p=e.target.result; name.value=p.name; mobile.value=p.mobile; age.value=p.age; gender.value=p.gender; checkup.value=p.checkup; followup.value=p.followup; diagnosis.value=p.diagnosis; medicines.value=p.medicines; presData=p.presImg; reportsData=p.reports||[]; presPreview.innerHTML=p.presImg?`<img src="${p.presImg}">`:""; reportsPreview.innerHTML=(p.reports||[]).map(x=>`<img src="${x}">`).join(""); window.scrollTo(0,0); } }
+function editP(m){ DB.transaction("patients").objectStore("patients").get(m).onsuccess=e=>{ let p=e.target.result; name.value=p.name; mobile.value=p.mobile; age.value=p.age; gender.value=p.gender; checkup.value=p.checkup; followup.value=p.followup; diagnosis.value=p.diagnosis; medicines.value=p.medicines; presData=p.presImg; reportsData=p.reports||[]; presPreview.innerHTML=p.presImg?`<img src="${p.presImg}">`:""; reportsPreview.innerHTML=(p.reports||[]).map(x=>`<img src="${x}">`).join(""); window.scrollTo(0,0);} }
 function delP(m){ if(confirm("Delete?")){ DB.transaction("patients","readwrite").objectStore("patients").delete(m).onsuccess=()=>render(); } }
 </script></body></html>
