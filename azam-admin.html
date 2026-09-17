@@ -1,127 +1,50 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Azam Medical Centre - Admin</title>
-<style>
-:root{--blue:#183e8a;--light:#f0f4ff}
-*{box-sizing:border-box} body{margin:0;font-family:system-ui;background:#f3f6fd;color:#1a2a4a}
-.header{background:#fff;text-align:center;padding:16px 10px;border-bottom:4px solid var(--blue);position:sticky;top:0;z-index:10}
-.header.ayat{font-family:serif;font-size:26px;color:#7a5a1e;margin:0 0 6px}
-.header img{width:78px;height:78px;border-radius:50%;border:3px solid var(--blue)}
-.header h1{margin:8px 0 2px;color:var(--blue);font-size:24px}
-.header.addr{font-size:13px;line-height:1.4;margin:4px 10px;color:#333}
-.header.doc{font-weight:700;color:var(--blue);margin-top:6px}
-.card{background:#fff;border-radius:16px;padding:14px;max-width:720px;margin:12px auto;box-shadow:0 8px 20px rgba(0,0,0,.06)}
-label{font-weight:700;font-size:13px;color:var(--blue);display:block;margin-top:10px}
-input,select,textarea{width:100%;padding:12px;border:1px solid #cdd6e6;border-radius:12px;font-size:15px;margin-top:4px;background:#fcfdff}
-textarea{min-height:70px}
-.upbox{border:2px dashed #a3b7e0;background:var(--light);border-radius:12px;padding:10px;text-align:center;margin-top:6px}
-.upbox span{display:inline-block;padding:8px 14px;background:#fff;border-radius:10px;margin:4px;border:1px solid #cdd6e6;cursor:pointer}
-.preview img{width:72px;height:72px;object-fit:cover;border-radius:10px;border:1px solid #ddd;margin:4px}
-.btn{width:100%;padding:14px;border:none;border-radius:14px;background:#16a34a;color:#fff;font-weight:800;font-size:16px;margin-top:14px;cursor:pointer}
-.done{background:#d1fae5;color:#065f46;padding:10px;border-radius:12px;text-align:center;margin-top:10px;display:none;font-weight:700}
-.searchbox{display:flex;gap:6px}.searchbox input{flex:1}
-.btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
-.btns button{padding:8px;border-radius:10px;border:none;font-weight:700;cursor:pointer}
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Azam Medical Centre</title><style>
+body{margin:0;background:#eaf0ff;font-family:system-ui}
+.ayat{text-align:center;font-size:26px;color:#b8860b;padding:10px}
+.card{border-radius:18px;padding:14px;margin:10px auto;max-width:720px;box-shadow:0 8px 20px rgba(0,0,0,.07)}
+.logo-card{background:#fff;border:3px solid #1e90ff;text-align:center}
+.hospital-card{background:linear-gradient(135deg,#1e90ff,#0a2463);color:#fff;text-align:center}
+.doctor-card{background:linear-gradient(135deg,#ffe9b5,#ffda8a);color:#12307a;text-align:center;font-weight:800}
+.form-card{background:#fff}
+label{font-weight:800;font-size:13px;margin-top:10px;display:block}
+input,select,textarea{width:100%;padding:12px;border-radius:14px;border:2px solid #d0d8e8;margin-top:4px;font-size:15px}
+.purple{border-color:#a55eea;color:#a55eea}.orange{border-color:#ff7f50}.green{border-color:#1dd1a1}.blue{border-color:#54a0ff}
+.save{width:100%;padding:15px;border:none;border-radius:14px;background:linear-gradient(90deg,#1e90ff,#5f27cd);color:#fff;font-weight:900;font-size:17px;margin-top:12px}
+.done{background:#d1fae5;color:#065f46;padding:10px;border-radius:12px;text-align:center;display:none;margin-top:10px;font-weight:800}
+.preview img{width:70px;height:70px;border-radius:10px;margin:4px;object-fit:cover;border:1px solid #ddd}
 </style></head><body>
+<div class="ayat">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+<div class="card logo-card"><img src="logo.png" width="90"></div>
+<div class="card hospital-card"><h2 style="margin:0">Azam Medical Centre</h2>Plot No.27, new 460 street, Allama Iqbal road, Manzoor Colony, Karachi.<br>Contact: 02135386116</div>
+<div class="card doctor-card">Dr. Muhammad Zeeshan (MBBS, RMP, Sonologist)<br>⏰ Timings: 4:00 PM to 10:00 PM</div>
 
-<div class="header">
-<p class="ayat">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
-<img src="logo.png" onerror="this.src='https://via.placeholder.com/80'">
-<h1>Azam Medical Centre</h1>
-<div class="addr">Plot No.27, new 460 street, Allama Iqbal road, Manzoor Colony, Karachi.<br>Contact No. 02135386116</div>
-<div class="doc">Dr. Muhammad Zeeshan (MBBS, RMP, Sonologist)<br>Timings: 4:00 PM to 10:00 PM</div>
-<h2 style="margin:8px 0 0;color:var(--blue);font-size:18px">Patient Record - Admin Panel</h2>
-</div>
-
-<div class="card">
-<label>Patient Name</label><input id="pname" placeholder="Enter patient name">
+<div class="card form-card">
+<h3 style="color:#183e8a">✨ Patient Record - Admin Panel</h3>
+<label style="color:#a55eea">👤 Patient Name</label><input id="pname" class="purple" placeholder="Baby suzzana">
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-<div><label>Gender</label><select id="gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
-<div><label>Age</label><input id="age" type="text" inputmode="text" placeholder="e.g. 13 years">
-<label>WhatsApp Number</label><input id="wapp" type="text" inputmode="numeric" placeholder="03xx-xxxxxxx">
-<label>Diagnosis & Complaints</label><textarea id="diag" placeholder="Fever, cough for 3 days..."></textarea>
+<div><label style="color:#ff7f50">🎂 Age (Full Keyboard)</label><input id="age" class="orange" type="text" placeholder="13 - full keyboard"></div>
+<div><label style="color:#009688">⚧️ Gender</label><select id="gender" class="green"><option>Female</option><option>Male</option><option>Other</option></select></div>
+</div>
+<label style="color:#0a8a00">💬 WhatsApp Number</label><input id="wapp" class="green" placeholder="03214569871">
+<label style="color:#c0392b">📄 Diagnosis & Complaints</label><textarea id="diag" placeholder="RTI"></textarea>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-<div><label>Date of Checkup</label><input id="checkup" type="date"></div>
-<div><label>Follow Up Date</label><input id="followup" type="date"></div>
+<div><label>Date of Checkup</label><input id="checkup" type="date" class="blue"></div>
+<div><label>Follow Up Date</label><input id="followup" type="date" class="purple"></div>
 </div>
-<label>Prescription - Medicines</label><textarea id="meds" placeholder="• Tab. Paracetamol 500mg - 1x3 daily&#10;• Syrup..."></textarea>
-<label>Upload Prescription Picture (Camera/Gallery - Auto Compressed)</label>
-<div class="upbox"><label><span>📷 Camera</span><input id="presCam" type="file" accept="image/*" capture="environment" hidden></label>
-<label><span>🖼️ Gallery</span><input id="presGal" type="file" accept="image/*" hidden></label><div id="presBadge" style="font-size:12px;color:#065f46"></div><div id="presPrev" class="preview"></div></div>
-
-<label>Test Reports (Multiple, Compressed)</label>
-<div class="upbox"><input id="repInput" type="file" accept="image/*" multiple><div id="repPrev" class="preview"></div></div>
-
-<button class="btn" id="saveBtn">✅ Save</button>
-<div id="doneMsg" class="done">✅ Done! Patient record saved successfully</div>
+<label>💊 Prescription Medicines</label><textarea id="meds"></textarea>
+<label>📸 Prescription Picture (Auto Compressed)</label><div style="border:2px dashed #a3b7e0;padding:8px;border-radius:12px;text-align:center;background:#f0f4ff"><input id="pres" type="file" accept="image/*"><div id="presPrev" class="preview"></div></div>
+<label>🧪 Test Reports (Compressed)</label><div style="border:2px dashed #a3b7e0;padding:8px;border-radius:12px;background:#f0f4ff"><input id="rep" type="file" multiple accept="image/*"><div id="repPrev" class="preview"></div></div>
+<button class="save" id="saveBtn">✅ SAVE PATIENT RECORD</button><div id="doneMsg" class="done">✅ Done! Record Saved & WhatsApp Sent</div>
+<hr><label>🔒 Admin Search</label><input id="search" placeholder="Search name/mobile" oninput="render()"><div id="list"></div>
 </div>
-
-<div class="card">
-<label>🔒 Admin-only Search</label>
-<div class="searchbox"><input id="search" placeholder="Search by patient name, mobile, ID..." oninput="render()"></div>
-<div id="list"></div>
-</div>
-
 <script>
-let DB, presImg=null, reports=[];
-let req=indexedDB.open("AzamDB",1);
-req.onupgradeneeded=e=>{ let db=e.target.result; if(!db.objectStoreNames.contains("patients")) db.createObjectStore("patients",{keyPath:"mobile"}) };
-req.onsuccess=e=>{ DB=e.target.result; render(); };
-
-function compress(file, cb){
-  let r=new FileReader(); r.onload=ev=>{
-    let img=new Image(); img.onload=()=>{
-      let max=900; let scale=Math.min(1,max/img.width,max/img.height);
-      let c=document.createElement('canvas'); c.width=img.width*scale; c.height=img.height*scale;
-      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-      cb(c.toDataURL('image/jpeg',0.5)); // highly compressed 50% quality
-    }; img.src=ev.target.result;
-  }; r.readAsDataURL(file);
-}
-function handlePres(f){
-  if(!f) return; compress(f,res=>{
-    presImg=res; document.getElementById('presPrev').innerHTML=`<img src="${res}">`;
-    document.getElementById('presBadge').innerText=`Compressed • ${Math.round(res.length/1024)}KB`;
-  });
-}
-presCam.onchange=e=>handlePres(e.target.files[0]); presGal.onchange=e=>handlePres(e.target.files[0]);
-repInput.onchange=e=>{
-  [...e.target.files].forEach(f=>{
-    compress(f,res=>{
-      reports.push(res);
-      let im=document.createElement('img'); im.src=res; repPrev.appendChild(im);
-    });
-  });
-};
-
-saveBtn.onclick=()=>{
-  let n=pname.value.trim(), m=wapp.value.trim().replace(/[^0-9]/g,'');
-  if(!n||!m){ alert("Name & WhatsApp lazmi"); return; }
-  let obj={name:n,mobile:m,gender:gender.value,age:age.value,diag:diag.value,checkup:checkup.value,followup:followup.value,meds:meds.value,presImg,reports,created:Date.now()};
-  let tx=DB.transaction("patients","readwrite"); tx.objectStore("patients").put(obj);
-  tx.oncomplete=()=>{
-    doneMsg.style.display='block'; setTimeout(()=>doneMsg.style.display='none',4000);
-    // Auto WhatsApp
-    let patientLink = `${location.origin}${location.pathname.replace('azam-admin.html','')}patient.html?m=${m}`;
-    let msg = `Salam ${n}, Azam Medical Centre - Aapka record save ho gaya hai. Aapka link: ${patientLink}`;
-    let waNum = m.startsWith('0')? '92'+m.substring(1) : m;
-    window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`, '_blank');
-    render();
-  };
-};
-function render(){
-  if(!DB) return; let q=(search.value||"").toLowerCase(), html="";
-  DB.transaction("patients","readonly").objectStore("patients").openCursor().onsuccess=e=>{
-    let cur=e.target.result; if(cur){
-      let p=cur.value;
-      if(!q||p.name.toLowerCase().includes(q)||p.mobile.includes(q)){
-        html+=`<div style="border:1px solid #e2e8f0;border-radius:12px;padding:10px;margin:8px 0"><b>${p.name}</b> (${p.age||''}y) - ${p.mobile}<br><small>${p.checkup||''}</small>
-        <div class="btns"><button onclick="window.open('patient.html?m=${p.mobile}')" style="background:#e3ebff">View</button><button onclick="editP('${p.mobile}')" style="background:#fff3bf">Edit</button><button onclick="delP('${p.mobile}')" style="background:#ffd5d5">Del</button></div></div>`;
-      }
-      cur.continue();
-    } else list.innerHTML=html||"<small>No patients</small>";
-  };
-}
-function editP(m){ DB.transaction("patients").objectStore("patients").get(m).onsuccess=e=>{ let p=e.target.result; pname.value=p.name; wapp.value=p.mobile; gender.value=p.gender; age.value=p.age; diag.value=p.diag; checkup.value=p.checkup; followup.value=p.followup; meds.value=p.meds; presImg=p.presImg; reports=p.reports||[]; presPrev.innerHTML=p.presImg?`<img src="${p.presImg}">`:""; repPrev.innerHTML=(p.reports||[]).map(x=>`<img src="${x}">`).join(""); window.scrollTo(0,0);} }
-function delP(m){ if(confirm("Delete?")){ DB.transaction("patients","readwrite").objectStore("patients").delete(m).onsuccess=()=>render(); } }
+let DB,presImg=null,reports=[],req=indexedDB.open("AzamDB",1);req.onupgradeneeded=e=>{let db=e.target.result;if(!db.objectStoreNames.contains("patients"))db.createObjectStore("patients",{keyPath:"mobile"})};req.onsuccess=e=>{DB=e.target.result;render()};
+function compress(f,cb){let r=new FileReader();r.onload=ev=>{let img=new Image();img.onload=()=>{let max=800,sc=Math.min(1,max/img.width,max/img.height);let c=document.createElement('canvas');c.width=img.width*sc;c.height=img.height*sc;c.getContext('2d').drawImage(img,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.5))};img.src=ev.target.result};r.readAsDataURL(f)}
+pres.onchange=e=>{let f=e.target.files[0];if(!f)return;compress(f,res=>{presImg=res;presPrev.innerHTML=`<img src="${res}"><small> ${Math.round(res.length/1024)}KB compressed</small>`})};
+rep.onchange=e=>{reports=[];repPrev.innerHTML="";[...e.target.files].forEach(f=>{compress(f,res=>{reports.push(res);let im=document.createElement('img');im.src=res;repPrev.appendChild(im)})})};
+saveBtn.onclick=()=>{let n=pname.value.trim(),m=wapp.value.trim().replace(/[^0-9]/g,'');if(!n||!m){alert("Name & WhatsApp required");return}let obj={name:n,mobile:m,gender:gender.value,age:age.value,diag:diag.value,checkup:checkup.value,followup:followup.value,meds:meds.value,presImg,reports,created:Date.now()};let tx=DB.transaction("patients","readwrite");tx.objectStore("patients").put(obj);tx.oncomplete=()=>{doneMsg.style.display='block';setTimeout(()=>doneMsg.style.display='none',4000);let link=`${location.origin}${location.pathname.replace('azam-admin.html','')}patient.html?m=${m}`;let msg=`Salam ${n}, Azam Medical Centre - Record save ho gaya: ${link}`;let wa=m.startsWith('0')?'92'+m.substring(1):m;window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,'_blank');render()}};
+function render(){if(!DB)return;let q=(search.value||"").toLowerCase(),html="";DB.transaction("patients","readonly").objectStore("patients").openCursor().onsuccess=e=>{let cur=e.target.result;if(cur){let p=cur.value;if(!q||p.name.toLowerCase().includes(q)||p.mobile.includes(q)){html+=`<div style="border:1px solid #ddd;border-radius:12px;padding:8px;margin:6px 0"><b>${p.name}</b> ${p.age}y - ${p.mobile}<br><button onclick="window.open('patient.html?m=${p.mobile}')">View</button> <button onclick="editP('${p.mobile}')">Edit</button> <button onclick="delP('${p.mobile}')">Del</button></div>`}cur.continue()}else list.innerHTML=html||"No data"}}}
+function editP(m){DB.transaction("patients").objectStore("patients").get(m).onsuccess=e=>{let p=e.target.result;pname.value=p.name;wapp.value=p.mobile;gender.value=p.gender;age.value=p.age;diag.value=p.diag;checkup.value=p.checkup;followup.value=p.followup;meds.value=p.meds;presImg=p.presImg;reports=p.reports||[];presPrev.innerHTML=p.presImg?`<img src="${p.presImg}">`:"";repPrev.innerHTML=(p.reports||[]).map(x=>`<img src="${x}">`).join('');window.scrollTo(0,0)}}
+function delP(m){if(confirm("Delete?")){DB.transaction("patients","readwrite").objectStore("patients").delete(m).onsuccess=()=>render()}}
 </script></body></html>
