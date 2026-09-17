@@ -1,16 +1,18 @@
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam Medical - Login</title>
-<style>body{font-family:system-ui;background:#eef2ff;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}.box{background:#fff;padding:24px;border-radius:14px;box-shadow:0 4px 20px #0001;width:300px;text-align:center}input{width:100%;padding:12px;margin:8px 0;border:1px solid #cbd5e1;border-radius:8px;box-sizing:border-box}button{width:100%;padding:12px;background:#1d4ed8;color:#fff;border:0;border-radius:8px;font-weight:700;cursor:pointer}</style>
-</head><body>
-<div class="box">
-<h2 style="color:#1e40af;margin:0">Azam Medical Centre</h2><p>Admin Login</p>
-<input id="pass" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
-<p id="msg" style="color:red;font-size:13px"></p>
-</div>
-<script>
-function login(){
- if(pass.value==='Azam@123'){localStorage.setItem('azam_login','1');location.href='azam-admin.html';}
- else{msg.textContent='Wrong Password!';}
-}
-</script></body></html>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azam Medical Centre</title><style>
+body{margin:0;background:#eef3ff;font-family:system-ui}
+.top{text-align:center;padding:12px;background:#f8fbff}
+.card{border-radius:18px;padding:14px;margin:10px auto;max-width:680px;box-shadow:0 8px 22px rgba(0,0,0,.08)}
+.logo-card{background:#fff;border:3px solid #1e90ff;text-align:center}
+.hospital-card{background:linear-gradient(135deg,#1e90ff,#0a2463);color:#fff;text-align:center}
+.doctor-card{background:linear-gradient(135deg,#ffe9b5,#ffda8a);color:#1a3a8a;text-align:center;font-weight:800}
+.btn{display:block;text-align:center;padding:14px;border-radius:14px;margin:10px;font-weight:800;color:#fff;text-decoration:none}
+.b1{background:linear-gradient(90deg,#1e90ff,#6c5ce7)}.b2{background:linear-gradient(90deg,#00b894,#00cec9)}
+.ayat{font-size:28px;color:#b88a00;font-family:serif;margin:8px}
+</style></head><body>
+<div class="top"><div class="ayat">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div></div>
+<div class="card logo-card"><img src="logo.png" style="width:110px"></div>
+<div class="card hospital-card"><h2 style="margin:0">Azam Medical Centre</h2><p>Plot No.27, new 460 street, Allama Iqbal road,<br>Manzoor Colony, Karachi.<br>Contact No. 02135386116</p></div>
+<div class="card doctor-card">Dr. Muhammad Zeeshan (MBBS, RMP, Sonologist)<br>⏰ Timings: 4:00 PM to 10:00 PM</div>
+<div class="card" style="background:#fff"><a class="btn b1" href="azam-admin.html">🔐 Admin Panel</a><a class="btn b2" href="patient.html">👨‍⚕️ Patient - View Record</a></div>
+</body></html>
