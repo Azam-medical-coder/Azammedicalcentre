@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Ultrasound - Final with LMP & Edit</title>
+<title>Azam Ultrasound - FWB Line by Line Final</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 <style>
@@ -34,20 +34,19 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <input id="pDate" type="date"><select id="uType"></select>
 </div>
 <input id="ref" placeholder="Referred By Dr.">
-<!-- NAYE FIELDS -->
-<input id="clinicalLMP" placeholder="Clinical Data / LMP date - e.g. LMP 12-03-2026, 28 weeks amenorrhea" style="display:none">
-<input id="presentComp" placeholder="Present complaints-H/O: e.g. Pain abdomen, burning micturition" style="display:none">
+<input id="clinicalLMP" placeholder="Clinical Data / LMP date - e.g. LMP 12-03-2026" style="display:none">
+<input id="presentComp" placeholder="Present complaints-H/O:" style="display:none">
 <input type="file" id="wordUp" accept=".docx" style="display:none">
 <button class="btn2" onclick="document.getElementById('wordUp').click()">📄 Word File Se Template Update Karen</button>
 
 <div id="fetalCalc" class="calcBox" style="display:none">
-<h4>🤰 Gynae / FWB Calculator - Sirf HC, AC, FL mm likhen</h4>
+<h4>🤰 FWB Calculator - HC, AC, FL mm likhen</h4>
 <div class="calcGrid">
 <input id="cHC" type="number" placeholder="HC mm *" oninput="calcFWB()">
 <input id="cAC" type="number" placeholder="AC mm *" oninput="calcFWB()">
 <input id="cFL" type="number" placeholder="FL mm *" oninput="calcFWB()">
-<input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()">
 <input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()">
+<input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()">
 <input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()">
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
@@ -59,7 +58,7 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 </div>
 
 <b style="font-size:13px;display:block;margin-top:10px">Report Pattern (Editable):</b>
-<textarea id="rText" rows="22" style="font-family:monospace;font-size:13px"></textarea>
+<textarea id="rText" rows="24" style="font-family:monospace;font-size:13px"></textarea>
 <button class="btn" onclick="make()">✅ Final Report Banayen</button>
 </div>
 <div class="card" id="outCard" style="display:none"><div id="out" class="report"></div>
@@ -304,109 +303,290 @@ UTERUS: __ x __ cm, ET __ mm triple line.
 OVARIES: Right ovary shows mature follicle __ x __ mm, Left ovary follicle __ mm.
 Minimal free fluid in POD.
 IMPRESSION: Mature follicle __ mm - ready for ovulation.`,
+
+// === FWB ALL NEW LINE BY LINE FORMAT AS PER YOUR REQUIREMENT ===
 "FWB":`ULTRASOUND FWB
-Single live fetus, Cephalic.
-BPD __ mm, HC __ mm, AC __ mm, FL __ mm = __ weeks.
-AFI __ mm, Placenta __, Weight __ gm, FHR __ bpm.
-IMPRESSION: Single live __ weeks.`,
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: __ weeks
+Fetus Weight: __ gm
+AFI: __ mm
+Placenta: __, Grade __
+Cervix: Closed, Length __ mm
+IMPRESSION: Single live __ weeks, EFW __ gm, AFI __ mm.`,
+
 "FWB with anomaly scane":`ULTRASOUND ANOMALY SCAN
-Single live fetus __ weeks, Head, Spine, Heart 4-chamber, Abdomen, Limbs normal.
-AFI __ mm, Placenta __.
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: __ weeks
+Fetus Weight: __ gm
+AFI: __ mm
+Placenta: __
+Head: Normal, No hydrocephalus
+Spine: Intact
+Heart: 4 Chamber view normal
+Abdomen: Stomach, Kidneys, Bladder normal
+Limbs: All 4 limbs seen
 IMPRESSION: Normal anomaly scan __ weeks.`,
+
 "FWB with 15 weeks of pregnancy":`ULTRASOUND FWB 15 WEEKS
-Single live intrauterine fetus 15 weeks.
-CRL __ mm, BPD __ mm, FL __ mm.
-Cardiac activity present, FHR __ bpm.
-Placenta __, AFI __ mm, Cervix __ mm.
-IMPRESSION: Single live pregnancy 15 weeks 0 days.`,
+Presentation: Variable
+Lie: Variable
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+CRL: __ mm
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: 15 weeks 0 days
+Fetus Weight: __ gm
+AFI: __ mm
+Placenta: __
+Cervix: Closed __ mm
+IMPRESSION: Single live pregnancy 15 weeks.`,
+
 "FWB with 20 weeks of pregnancy":`ULTRASOUND FWB 20 WEEKS
-Single live fetus 20 weeks, Cephalic / Breech.
-BPD __ mm, HC __ mm, AC __ mm, FL __ mm = 20 weeks.
-AFI __ mm, Placenta __ anterior/posterior, Grade __.
-Anomaly: No gross anomaly seen.
+Presentation: Cephalic / Breech
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: 20 weeks
+Fetus Weight: __ gm
+AFI: __ mm
+Placenta: __ anterior/posterior, Grade __
+Anomaly: No gross anomaly seen
+Cervix: Closed
 IMPRESSION: Single live 20 weeks pregnancy.`,
+
 "FWB with 25 weeks of pregnancy":`ULTRASOUND FWB 25 WEEKS
-Single live fetus 25 weeks.
-BPD __ mm, FL __ mm, AC __ mm, Estimated weight __ gm.
-Placenta __, AFI __ mm, FHR __ bpm.
-Presentation Cephalic.
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: 25 weeks
+Fetus Weight: __ gm
+AFI: __ mm
+Placenta: __
+Cervix: __ mm
 IMPRESSION: Single live 25 weeks.`,
+
 "FWB with 30 weeks of pregnancy":`ULTRASOUND FWB 30 WEEKS
-Single live fetus 30 weeks, Cephalic.
-BPD __ mm, HC __ mm, AC __ mm, FL __ mm, Weight __ gm.
-AFI __ mm, Placenta __, Grade __.
-Doppler: Normal.
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: 30 weeks
+Fetus Weight: __ gm
+AFI: __ mm
+Placenta: __, Grade __
+Doppler: Normal
+Cervix: Closed
 IMPRESSION: Single live 30 weeks with adequate growth.`,
+
 "FWB with CRL":`ULTRASOUND FWB WITH CRL
-Single live intrauterine gestational sac, fetal pole with cardiac flicker present.
-CRL __ mm = __ weeks __ days.
-Yolk sac normal.
-Cervix closed.
+Presentation: N/A
+Lie: N/A
+Cardiac Activity: Present, Flicker Present
+Fetus: Single, Alive
+CRL: __ mm
+Weeks: __ weeks __ days
+Yolk Sac: Normal
+AFI: __ mm
+Cervix: Closed
 IMPRESSION: Single live early pregnancy CRL __ mm = __ weeks.`,
+
 "FWB with missed abortion":`ULTRASOUND FWB WITH MISSED ABORTION
-Single intrauterine gestational sac, fetal pole CRL __ mm = __ weeks, No cardiac activity seen.
-No subchorionic hematoma.
-Cervix closed.
+Presentation: N/A
+Lie: N/A
+Cardiac Activity: Absent
+Fetus: Single
+CRL: __ mm
+Weeks: __ weeks
+AFI: __ mm
+Subchorionic Hematoma: Nil
+Cervix: Closed
 IMPRESSION: Missed abortion __ weeks - No cardiac activity.`,
+
 "FWB with no cardiac Flickr":`ULTRASOUND FWB WITH NO CARDIAC FLICKER
-Single intrauterine fetus CRL __ mm __ weeks.
-Cardiac flicker absent, no fetal movement.
-No free fluid.
+Presentation: N/A
+Lie: N/A
+Cardiac Activity: Absent
+Fetus: Single
+CRL: __ mm
+Weeks: __ weeks
+AFI: __ mm
+Cervix: Closed
 IMPRESSION: Intrauterine fetal demise - No cardiac flicker at __ weeks.`,
+
 "FWB with IUD":`ULTRASOUND FWB WITH IUD
-Uterus __ x __ cm.
-Single live fetus __ weeks, normal.
-In addition, Copper T / Multiload IUD seen in lower uterine segment / displaced.
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: __ weeks
+Fetus Weight: __ gm
+AFI: __ mm
+Placenta: __
+IUD: Copper T / Multiload seen in lower uterine segment / displaced
+Cervix: Closed
 IMPRESSION: Single live __ weeks pregnancy with IUD in situ.`,
+
 "FWB with Cephalic presentation":`ULTRASOUND FWB WITH CEPHALIC PRESENTATION
-Single live fetus, Cephalic presentation, longitudinal lie.
-BPD __ mm, FL __ mm, AC __ mm = __ weeks.
-AFI __ mm, Placenta __, FHR __ bpm.
-Head engaged / not engaged.
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: __ weeks
+Fetus Weight: __ gm
+AFI: __ mm
+Placenta: __
+Head: Engaged / Not Engaged
 IMPRESSION: Single live cephalic presentation __ weeks.`,
+
 "FWB with Breech presentation":`ULTRASOUND FWB WITH BREECH PRESENTATION
-Single live fetus, Breech presentation, longitudinal lie, extended legs.
-BPD __ mm, FL __ mm = __ weeks.
-AFI __ mm, Placenta __.
+Presentation: Breech
+Lie: Longitudinal, Extended legs
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: __ weeks
+Fetus Weight: __ gm
+AFI: __ mm
+Placenta: __
 IMPRESSION: Single live breech presentation __ weeks.`,
+
 "FWB with complete fetus calculation":`ULTRASOUND FWB WITH COMPLETE FETAL BIOMETRY
-Single live fetus cephalic.
-BPD __ mm = __ w __ d
-HC __ mm = __ w __ d
-AC __ mm = __ w __ d
-FL __ mm = __ w __ d
-HL __ mm
-AFI __ mm, Placenta __, FHR __ bpm, EDD __.
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm = __ w __ d
+HC: __ mm = __ w __ d
+AC: __ mm = __ w __ d
+FL: __ mm = __ w __ d
+HL: __ mm
+Weeks: __ weeks (Composite)
+Fetus Weight: __ gm
+AFI: __ mm
+Placenta: __
+EDD: __
 IMPRESSION: Single live __ weeks as per composite.`,
+
 "FWB with fetus weight":`ULTRASOUND FWB WITH FETAL WEIGHT
-Single live fetus __ weeks cephalic.
-Biometry: BPD __ mm, FL __ mm, AC __ mm.
-Estimated Fetal Weight __ gm +/- __ gm (Hadlock).
-AFI __ mm, Placenta __.
-Growth adequate for gestational age.
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: __ weeks
+Fetus Weight: __ gm +/- __ gm (Hadlock)
+AFI: __ mm
+Placenta: __
 IMPRESSION: Single live __ weeks, EFW __ gm.`,
+
 "FWB for adequate fetus liquid amniotic fluid":`ULTRASOUND FWB FOR ADEQUATE LIQUOR
-Single live fetus __ weeks cephalic.
-AFI __ mm (Normal 80-180 mm), adequate liquor, clear.
-Placenta __, FHR __ bpm.
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: __ weeks
+Fetus Weight: __ gm
+AFI: __ mm (Normal 80-180 mm)
+Liquor: Adequate, Clear
+Placenta: __
 IMPRESSION: Single live __ weeks with adequate amniotic fluid AFI __ mm.`,
+
 "FWB for Oligohydramnios fetus liquid amniotic fluid":`ULTRASOUND FWB FOR OLIGOHYDRAMNIOS
-Single live fetus __ weeks.
-AFI __ mm (Low <50 mm), reduced liquor, suggestive of Oligohydramnios.
-Placenta __, FHR __ bpm, Weight __ gm.
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: __ weeks
+Fetus Weight: __ gm
+AFI: __ mm (Low <50 mm)
+Liquor: Reduced - Oligohydramnios
+Placenta: __
 IMPRESSION: Single live __ weeks with Oligohydramnios AFI __ mm.`,
+
 "FWB for Polyhydramnios fetus liquid amniotic fluid":`ULTRASOUND FWB FOR POLYHYDRAMNIOS
-Single live fetus __ weeks.
-AFI __ mm (High >240 mm), increased liquor, suggestive of Polyhydramnios.
-Placenta __, Weight __ gm.
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: __ weeks
+Fetus Weight: __ gm
+AFI: __ mm (High >240 mm)
+Liquor: Increased - Polyhydramnios
+Placenta: __
 IMPRESSION: Single live __ weeks with Polyhydramnios AFI __ mm.`,
+
 "FWB with Nuchal Cord":`ULTRASOUND FWB WITH NUCHAL CORD
-Single live fetus __ weeks, Cephalic presentation.
-BPD __ mm, HC __ mm, AC __ mm, FL __ mm = __ weeks.
-AFI __ mm, Placenta __, Estimated Weight __ gm, FHR __ bpm.
-COLOR DOPPLER: Single loop / Double loop of umbilical cord seen around fetal neck - Nuchal cord present.
-No true knot.
+Presentation: Cephalic
+Lie: Longitudinal
+Cardiac Activity: Present, FHR __ bpm
+Fetus: Single, Alive
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
+Weeks: __ weeks
+Fetus Weight: __ gm
+AFI: __ mm
+Placenta: __
+Color Doppler: Single loop / Double loop of umbilical cord around fetal neck - Nuchal cord present
 IMPRESSION: Single live __ weeks with Nuchal Cord (Single Loop).`,
+
 "Thyroids":`ULTRASOUND THYROID
 RIGHT LOBE: __ x __ x __ cm.
 LEFT LOBE: __ x __ x __ cm.
@@ -478,7 +658,6 @@ IMPRESSION: Normal Testicular Doppler.`
 
 let fetalData={};
 let editIndex=-1;
-
 function isGynae(t){ t=t.toLowerCase(); return t.includes('fwb') || t.includes('pelvis') || t.includes('follicle') || t.includes('rpco') || t.includes('ovarian'); }
 
 function calcFWB(){
@@ -515,16 +694,16 @@ function applyCalc(){
  let w=fetalData.efw? `${Math.round(fetalData.efw)} gm`:'__ gm';
  let afiTxt=fetalData.afi? `${fetalData.afi} mm`:'__ mm';
  let txt=document.getElementById('rText').value;
- if(fetalData.hc) txt=txt.replace(/HC __ mm/g,`HC ${fetalData.hc} mm`);
- if(fetalData.ac) txt=txt.replace(/AC __ mm/g,`AC ${fetalData.ac} mm`);
- if(fetalData.fl) txt=txt.replace(/FL __ mm/g,`FL ${fetalData.fl} mm`);
- if(fetalData.bpd) txt=txt.replace(/BPD __ mm/g,`BPD ${fetalData.bpd} mm`);
- if(fetalData.crl) txt=txt.replace(/CRL __ mm/g,`CRL ${fetalData.crl} mm`);
- if(fetalData.afi) txt=txt.replace(/AFI __ mm/g,`AFI ${afiTxt}`).replace(/AFI __ cm/g,`AFI ${afiTxt}`);
- if(fetalData.efw) txt=txt.replace(/Weight __ gm/g,`Weight ${w}`).replace(/Estimated Weight __ gm/g,`Estimated Weight ${w}`).replace(/Estimated weight __ gm/g,`Estimated weight ${w}`);
- if(ga){ txt=txt.replace(/= __ weeks/g,`= ${gaFull}`); txt=txt.replace(/IMPRESSION: Single live __ weeks\./g,`IMPRESSION: Single live ${gaFull}, EFW ${w}, AFI ${afiTxt}.`); txt=txt.replace(/IMPRESSION: Single live __ weeks/g,`IMPRESSION: Single live ${gaFull}, EFW ${w}`); }
+ if(fetalData.hc) txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);
+ if(fetalData.ac) txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);
+ if(fetalData.fl) txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);
+ if(fetalData.bpd) txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);
+ if(fetalData.crl) txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);
+ if(fetalData.afi) txt=txt.replace(/AFI: __ mm/g,`AFI: ${afiTxt}`);
+ if(fetalData.efw){ txt=txt.replace(/Fetus Weight: __ gm/g,`Fetus Weight: ${w}`); txt=txt.replace(/Weeks: __ weeks/g,`Weeks: ${gaFull}`); }
+ if(ga){ txt=txt.replace(/IMPRESSION: Single live __ weeks.*/g,`IMPRESSION: Single live ${gaFull}, EFW ${w}, AFI ${afiTxt}.`); }
  document.getElementById('rText').value=txt;
- alert('✅ Calculations mm me report me lag gayi!');
+ alert('✅ Calculations line by line report me lag gayi!');
 }
 
 let custom=JSON.parse(localStorage.getItem('custom_templates')||'{}');Object.assign(T,custom);
@@ -589,7 +768,7 @@ function saveR(){
  let obj={n:pName.value,a:pAge.value,g:pGen.value,d:pDate.value,t:uType.value,r:rText.value, lmp:clinicalLMP.value, comp:presentComp.value, ref:ref.value};
  if(editIndex>=0){ a[editIndex]=obj; editIndex=-1; }
  else { a.unshift(obj); }
- localStorage.setItem('us_rep',JSON.stringify(a)); render(); alert(editIndex>=0?'Report Updated!':'Report Saved!');
+ localStorage.setItem('us_rep',JSON.stringify(a)); render(); alert('Report Saved!');
 }
 function render(){
  let q=(sBox.value||'').toLowerCase();
@@ -613,10 +792,7 @@ function editR(i){
  let a=JSON.parse(localStorage.getItem('us_rep')||'[]')[i];
  pName.value=a.n; pAge.value=a.a; pGen.value=a.g; pDate.value=a.d; uType.value=a.t; rText.value=a.r;
  clinicalLMP.value=a.lmp||''; presentComp.value=a.comp||''; ref.value=a.ref||'';
- checkFetal();
- editIndex=i;
- window.scrollTo(0,0);
- alert('Edit Mode: Ab changes karke Save Report dabayen, report update ho jayega.');
+ checkFetal(); editIndex=i; window.scrollTo(0,0); alert('Edit Mode: Changes karke Save Report dabayen.');
 }
 function del(i){let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); a.splice(i,1); localStorage.setItem('us_rep',JSON.stringify(a)); render();}
 init();
