@@ -2,16 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - With BPH Auto Calc</title>
+<title>Azam Medical Centre - Final</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#eef4ff;padding:10px}
 .card{background:#fff;border-radius:16px;padding:14px;margin:10px auto;max-width:1100px;box-shadow:0 6px 18px #0001}
 input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px solid #cbd5e1;margin:6px 0;font-size:14px}
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;font-size:16px;margin-top:8px}
-.btn2{background:#ff3b30;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin:8px 0}
 .small{padding:8px 10px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff;font-size:12px}
 .report{width:210mm;min-height:297mm;margin:auto;background:#fff;border:2px solid #0a4eb5;border-radius:12px;padding:0 16mm 16mm 16mm;padding-top:51mm;line-height:1.9;box-sizing:border-box;position:relative;overflow:hidden}
 .report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background-image:url('logo.png'), url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.04;filter:grayscale(100%);z-index:0;pointer-events:none}
@@ -56,8 +54,6 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 
 <input id="clinicalLMP" placeholder="Clinical Data / LMP date" style="display:none">
 <input id="presentComp" placeholder="Present complaints-H/O:" style="display:none">
-<input type="file" id="wordUp" accept=".docx" style="display:none">
-<button class="btn2" onclick="document.getElementById('wordUp').click()">📄 Word File Se Template Update Karen</button>
 
 <div id="fetalCalc" class="calcBox" style="display:none">
 <h4>🤰 FWB Calculator - HC, AC, FL mm</h4>
@@ -125,28 +121,18 @@ document.getElementById('sono').addEventListener('change', function(){if(this.op
 let prostateData={};
 function calcProstate(){
  let l=parseFloat(pL.value)||0,w=parseFloat(pW.value)||0,h=parseFloat(pH.value)||0;
- if(l>0&&w>0&&h>0){
-   let vol=l*w*h*0.52;
-   prostateData={l:l,w:w,h:h,vol:vol,gm:vol};
-   resPVol.innerText=`Volume: ${vol.toFixed(1)} cc`;
-   resPGm.innerText=`Weight: ${vol.toFixed(1)} gm`;
- } else {
-   resPVol.innerText='Volume: -- cc';resPGm.innerText='Weight: -- gm';
- }
+ if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol,gm:vol};resPVol.innerText=`Volume: ${vol.toFixed(1)} cc`;resPGm.innerText=`Weight: ${vol.toFixed(1)} gm`;}
+ else{resPVol.innerText='Volume: -- cc';resPGm.innerText='Weight: -- gm';}
 }
 function applyProstateCalc(){
  if(!prostateData.vol){alert('Length, Width, Height cm me likhen!');return;}
  let l=prostateData.l,w=prostateData.w,h=prostateData.h,gm=prostateData.gm.toFixed(1),vol=prostateData.vol.toFixed(1);
  let lmm=(l*10).toFixed(0),wmm=(w*10).toFixed(0),hmm=(h*10).toFixed(0);
  let txt=rText.value;
- // Replace all prostate patterns
  txt=txt.replace(/__ x __ x __ cm/g, `${l} x ${w} x ${h} cm`);
  txt=txt.replace(/__ x __ x __ mm/g, `${lmm} x ${wmm} x ${hmm} mm`);
  txt=txt.replace(/__ gm/g, `${gm} gm`);
  txt=txt.replace(/__ cc/g, `${vol} cc`);
- txt=txt.replace(/__ gm with/g, `${gm} gm with`);
- txt=txt.replace(/Enlarged Prostate __ gm/g, `Enlarged Prostate ${gm} gm`);
- txt=txt.replace(/BPH __ gm/g, `BPH ${gm} gm`);
  rText.value=txt;
  alert(`✅ Prostate ${l} x ${w} x ${h} cm = ${gm} gm report me lag gaya!`);
 }
@@ -164,18 +150,13 @@ URINARY BLADDER: Normal, wall __ mm (N: <3 mm distended, <5 mm empty), capacity 
 PROSTATE: __ x __ x __ mm (N: <45 x <35 x <30 mm), __ gm (N: <25-30 gm), volume __ cc (N: <30 cc), normal.
 No ascites, no lymphadenopathy.
 IMPRESSION: Normal Ultrasound Whole Abdomen.`,
-
 "KUB + Prostate BPH":`ULTRASOUND KUB + PROSTATE BPH
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), no calculus, no hydronephrosis, parenchyma normal.
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm), no calculus, no hydronephrosis.
 URINARY BLADDER: Capacity __ cc (N: 300-500 cc), wall thickness __ mm (N: <3 mm full, <5 mm empty), no calculus, pre-void __ cc (N: 300-500 cc), post-void residual __ cc (N: <50 cc, significant >100 cc).
 PROSTATE: Enlarged __ x __ x __ cm (N: <4.5 x <3.5 x <3.0 cm), __ x __ x __ mm (N: <45 x <35 x <30 mm), Weight __ gm (N: <25-30 gm), Volume __ cc (N: <30 cc), enlarged in size, heterogeneous echotexture, median lobe hypertrophy present, lateral lobes enlarged, no focal hypoechoic lesion, no calcification, bladder base indentation present.
 IMPRESSION: Benign Prostatic Hyperplasia (BPH) (Prostatomegaly) - Enlarged Prostate __ gm with median lobe hypertrophy.
-- Grade I BPH if __ gm (N: 30-50 gm)
-- Grade II BPH if __ gm (N: 50-80 gm)
-- Grade III BPH if __ gm (N: >80 gm)
 Advice: PSA Total (N: <4 ng/ml), Free PSA, Urine R/E & C/S, RFTs, Uroflowmetry, Urologist consultation, Plenty of fluids, Avoid constipation & cold exposure, Follow-up USG after treatment.`,
-
 "Whole abdomen with multiple pathologies":`ULTRASOUND WHOLE ABDOMEN WITH MULTIPLE PATHOLOGIES - MASTER TEMPLATE (Jo pathology na ho delete kar den)
 LIVER: Size __ cm (N: <15 cm, avg 10-12 cm), echotexture homogenous (Options: Normal / Increased echogenicity Grade I Fatty Liver / Grade II / Grade III / Enlarged __ cm Hepatomegaly / Focal hyperechoic lesion __ mm hemangioma / Simple cyst __ mm / Heterogeneous / Coarse).
 GALL BLADDER: Distension: Normally distended / Contracted / Distended, Wall thickness __ mm (N: <3 mm) (Options: Normal / Thickened __ mm edematous - cholecystitis / Cholesterolosis), Lumen: No calculus (Options: No calculus / Single calculus __ mm / Multiple calculi largest __ mm with shadowing / Sludge / Pericholecystic fluid present).
@@ -188,9 +169,7 @@ URINARY BLADDER: Capacity __ cc (N: 300-500 cc), Wall thickness __ mm (N: <3 mm 
 PROSTATE: Size __ x __ x __ mm (N: <45 x <35 x <30 mm), Weight __ gm (N: <25-30 gm), Volume __ cc (N: <30 cc) (Options: Normal / Enlarged __ gm BPH Grade I/II/III / Median lobe hypertrophy / Heterogeneous / Calcification).
 PERITONEUM: No ascites (Options: No ascites / Mild free fluid / Moderate ascites / Gross ascites with internal echoes).
 BOWEL: Not dilated (N: Small bowel <25 mm, Large bowel <50 mm) (Options: Normal / Prominent dilated loops max __ mm).
-IMPRESSION: As per findings.
-Advice: As per findings - LFTs, RFTs, CBC, Urine R/E & C/S, Lipid Profile, HBsAg, HCV, Blood Sugar, CA-125 / PSA as indicated, CT / MRI if needed, Physician / Surgeon / Urologist / Gynae consultation, Plenty of fluids 3-4L/day.`,
-
+IMPRESSION: As per findings.`,
 "Whole Abdomen with Fatty Liver":`ULTRASOUND WHOLE ABDOMEN WITH FATTY LIVER
 LIVER: Enlarged __ cm (N: <15 cm), increased echogenicity, Grade __ Fatty Liver.
 GALL BLADDER: Normal wall <3 mm (N: <3 mm).
@@ -198,7 +177,6 @@ PANCREAS: Normal Head <30 mm (N: <30 mm), Body <25 mm (N: <25 mm).
 SPLEEN: Normal <12-13 cm (N: <12-13 cm).
 KIDNEYS: Normal 9-12 cm (N: 9-12 cm).
 IMPRESSION: Fatty Liver Grade __.`,
-
 "Whole abdomen with hepatomegaly":`ULTRASOUND WHOLE ABDOMEN WITH HEPATOMEGALY
 LIVER: Enlarged __ cm (N: <15 cm, avg 10-12 cm), homogenous, no focal lesion.
 GALL BLADDER: Normal wall <3 mm (N: <3 mm).
@@ -206,7 +184,6 @@ PANCREAS: Normal.
 SPLEEN: Normal __ cm (N: <12-13 cm).
 KIDNEYS: Normal 9-12 cm (N: 9-12 cm).
 IMPRESSION: Hepatomegaly __ cm.`,
-
 "Whole abdomen with splenomegaly":`ULTRASOUND WHOLE ABDOMEN WITH SPLENOMEGALY
 LIVER: Normal __ cm (N: <15 cm).
 SPLEEN: Enlarged __ cm (N: <12-13 cm).
@@ -214,7 +191,6 @@ GALL BLADDER: Normal.
 PANCREAS: Normal.
 KIDNEYS: Normal.
 IMPRESSION: Splenomegaly __ cm.`,
-
 "Whole abdomen with ascites":`ULTRASOUND WHOLE ABDOMEN WITH ASCITES
 LIVER: Normal __ cm (N: <15 cm).
 GALL BLADDER: Normal.
@@ -222,7 +198,6 @@ SPLEEN: __ cm (N: <12-13 cm).
 KIDNEYS: Normal.
 PERITONEAL CAVITY: Gross free fluid suggestive of Ascites.
 IMPRESSION: Ascites.`,
-
 "Whole abdomen with pancreatitis":`ULTRASOUND WHOLE ABDOMEN WITH PANCREATITIS
 LIVER: Normal.
 GALL BLADDER: Normal.
@@ -230,7 +205,6 @@ PANCREAS: Bulky, hypoechoic __ x __ cm (N: Head <30 mm, Body <25 mm), peripancre
 SPLEEN: Normal.
 KIDNEYS: Normal.
 IMPRESSION: Acute Pancreatitis.`,
-
 "Whole abdomen with prominent bowel loops":`ULTRASOUND WHOLE ABDOMEN WITH PROMINENT BOWEL LOOPS
 LIVER: Normal __ cm (N: <15 cm).
 GALL BLADDER: Normal.
@@ -240,7 +214,6 @@ BOWEL LOOPS: Prominent, dilated bowel loops with increased peristalsis noted in 
 KIDNEYS: Normal 9-12 cm (N: 9-12 cm).
 No ascites.
 IMPRESSION: Prominent / Dilated bowel loops -? Subacute obstruction / gastroenteritis.`,
-
 "Whole abdomen with cholelithiasis":`ULTRASOUND WHOLE ABDOMEN WITH CHOLELITHIASIS
 LIVER: Normal __ cm (N: <15 cm).
 GALL BLADDER: Distended, shows multiple echogenic calculi, largest __ x __ mm (N: No stone) with posterior acoustic shadowing, wall thickness __ mm (N: <3 mm) normal.
@@ -248,14 +221,12 @@ PANCREAS: Normal.
 SPLEEN: Normal.
 KIDNEYS: Normal.
 IMPRESSION: Cholelithiasis.`,
-
 "Whole abdomen with cholecystitis":`ULTRASOUND WHOLE ABDOMEN WITH CHOLECYSTITIS
 LIVER: Normal __ cm.
 GALL BLADDER: Distended, wall thickened __ mm (N: <3 mm), edematous, shows calculus __ mm (N: No stone) impacted at neck, pericholecystic fluid noted, positive sonographic Murphy's sign.
 PANCREAS: Normal.
 KIDNEYS: Normal.
 IMPRESSION: Acute Cholecystitis with Cholelithiasis.`,
-
 "Whole abdomen with post cholecystectomy":`ULTRASOUND WHOLE ABDOMEN WITH POST CHOLECYSTECTOMY
 LIVER: Normal __ cm (N: <15 cm), no focal lesion.
 GALL BLADDER: Surgically absent - Post Cholecystectomy status, GB fossa empty, no collection.
@@ -265,7 +236,6 @@ SPLEEN: Normal.
 KIDNEYS: Normal.
 No ascites.
 IMPRESSION: Post Cholecystectomy status - Normal scan.`,
-
 "Upper abdomen":`ULTRASOUND UPPER ABDOMEN
 LIVER: __ cm (N: <15 cm) homogenous, no focal lesion.
 GALL BLADDER: Normal distended, no stone, wall <3 mm (N: <3 mm).
@@ -274,185 +244,153 @@ SPLEEN: __ cm (N: <12-13 cm) normal.
 BOTH KIDNEYS: Normal 9-12 cm (N: 9-12 cm).
 No ascites.
 IMPRESSION: Normal Upper Abdomen.`,
-
 "Lower abdomen":`ULTRASOUND LOWER ABDOMEN (MALE)
 URINARY BLADDER: __ cc (N: 300-500 cc), wall __ mm (N: <3 mm full) normal.
 PROSTATE: __ x __ x __ mm (N: <45 x <35 x <30 mm), __ gm (N: <25-30 gm), volume __ cc (N: <30 cc) normal.
 BOTH KIDNEYS: Normal 9-12 cm (N: 9-12 cm).
 No free fluid.
 IMPRESSION: Normal Lower Abdomen.`,
-
 "Lower abdomen female":`ULTRASOUND LOWER ABDOMEN (FEMALE)
 URINARY BLADDER: __ cc (N: 300-500 cc) normal.
 UTERUS: __ x __ cm (N: 7.5 x 5 x 2.5 cm), ET __ mm (N: 5-15 mm premenopausal, <5 mm postmenopausal).
 OVARIES: Right __ x __ cm (N: Volume <10 cc), Left __ x __ cm (N: Volume <10 cc).
 No adnexal mass.
 IMPRESSION: Normal Lower Abdomen Female.`,
-
 "KUB":`ULTRASOUND KUB
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), no calculus, no hydronephrosis.
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm), no calculus.
 URINARY BLADDER: __ cc (N: 300-500 cc), no calculus.
 IMPRESSION: Normal KUB.`,
-
 "KUB with Microliths":`ULTRASOUND KUB WITH MICROLITHS
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), microliths __ mm (N: No stone).
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm), microliths __ mm (N: No stone).
 URINARY BLADDER: Normal.
 IMPRESSION: Bilateral Renal Microlithiasis.`,
-
 "KUB with dilated proximal ureter dilation":`ULTRASOUND KUB WITH DILATED PROXIMAL URETER
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), mild hydronephrosis, proximal ureter dilated __ mm (N: <3 mm).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Normal.
 IMPRESSION: Right proximal ureteric dilatation.`,
-
 "KUB with hydronephrosis":`ULTRASOUND KUB WITH HYDRONEPHROSIS
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), moderate hydronephrosis (N: No hydronephrosis).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Normal.
 IMPRESSION: Right hydronephrosis.`,
-
 "KUB with Renal Fullness":`ULTRASOUND KUB WITH RENAL FULLNESS
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), mild fullness.
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm), mild fullness.
 URINARY BLADDER: __ cc (N: 300-500 cc).
 IMPRESSION: Bilateral mild renal fullness.`,
-
 "KUB with Calculus":`ULTRASOUND KUB WITH CALCULUS
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), calculus __ mm (N: No stone).
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm), calculus __ mm (N: No stone).
 URINARY BLADDER: Normal.
 IMPRESSION: Bilateral Renal Calculus.`,
-
 "KUB with Cortical Simple Cyst":`ULTRASOUND KUB WITH CORTICAL SIMPLE CYST
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), simple cyst __ mm (N: No cyst).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Normal.
 IMPRESSION: Right Renal Simple Cyst.`,
-
 "KUB with Complex Cyst":`ULTRASOUND KUB WITH COMPLEX CYST
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), complex cyst __ mm with internal echoes (N: No cyst).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 IMPRESSION: Right Complex Cyst.`,
-
 "KUB with swelled kidney":`ULTRASOUND KUB WITH SWELLED KIDNEY
 RIGHT KIDNEY: Enlarged __ x __ cm (N: 9-12 cm), swollen, increased echogenicity.
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 IMPRESSION: Right swollen kidney -? Pyelonephritis.`,
-
 "KUB with Atopic Kidney":`ULTRASOUND KUB WITH ATROPHIC KIDNEY
 RIGHT KIDNEY: Atrophic __ x __ cm (N: 9-12 cm).
 LEFT KIDNEY: Compensatory enlarged __ x __ cm (N: 9-12 cm).
 IMPRESSION: Right Atrophic Kidney.`,
-
 "KUB with Infection":`ULTRASOUND KUB WITH INFECTION
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), infective changes.
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm), infective changes.
 URINARY BLADDER: Thickened wall __ mm (N: <3 mm full) - cystitis.
 IMPRESSION: Bilateral infective changes.`,
-
 "KUB with PUJ":`ULTRASOUND KUB WITH PUJ OBSTRUCTION
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), hydronephrosis with PUJ narrowing (N: No obstruction).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 IMPRESSION: Right PUJ Obstruction.`,
-
 "KUB with Urinary bladder stone":`ULTRASOUND KUB WITH URINARY BLADDER STONE
 RIGHT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Calculus __ mm (N: No stone) with shadowing.
 IMPRESSION: UB Calculus __ mm.`,
-
 "KUB with cystitis":`ULTRASOUND KUB WITH CYSTITIS
 RIGHT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Thickened wall __ mm (N: <3 mm full), internal echoes.
 IMPRESSION: Cystitis.`,
-
 "KUB with UB debris":`ULTRASOUND KUB WITH UB DEBRIS
 RIGHT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Debris / internal echoes in lumen __ cc (N: Clear).
 IMPRESSION: UB debris - infection.`,
-
 "KUB with well placed folys catheter":`ULTRASOUND KUB WITH WELL PLACED FOLYS CATHETER
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm) normal.
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm) normal.
 URINARY BLADDER: Partially distended, Foleys catheter balloon well placed within lumen, tip in bladder, no encrustation.
 IMPRESSION: Well placed Foleys catheter in bladder.`,
-
 "KUB + Enlarged Prostate":`ULTRASOUND KUB + ENLARGED PROSTATE
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm) normal.
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm) normal.
 URINARY BLADDER: __ cc (N: 300-500 cc), residual __ cc (N: <50 cc).
 PROSTATE: __ x __ x __ mm (N: <45 x <35 x <30 mm), __ gm (N: <25-30 gm), Volume __ cc (N: <30 cc), Enlarged.
-IMPRESSION: Enlarged Prostate __ gm.
-Advice: PSA (N: <4 ng/ml), Urine R/E, RFTs, Urologist consultation, Uroflowmetry.`,
-
+IMPRESSION: Enlarged Prostate __ gm.`,
 "KUB + Normal Prostate":`ULTRASOUND KUB + NORMAL PROSTATE
 RIGHT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Normal.
 PROSTATE: __ x __ x __ mm (N: <45 x <35 x <30 mm), __ gm (N: <25-30 gm), Volume __ cc (N: <30 cc), normal.
 IMPRESSION: Normal KUB with Normal Prostate.`,
-
 "Prostate Normal":`ULTRASOUND PROSTATE NORMAL
 PROSTATE: __ x __ x __ mm (N: <45 x <35 x <30 mm), __ gm (N: <25-30 gm), Volume __ cc (N: <30 cc), normal.
 Bladder normal.
 IMPRESSION: Normal Prostate.`,
-
 "Prostate with pre & post void urine":`ULTRASOUND PROSTATE WITH PRE & POST VOID
 PROSTATE: __ x __ x __ mm (N: <45 x <35 x <30 mm), __ gm (N: <25-30 gm), Volume __ cc (N: <30 cc).
 URINARY BLADDER: Pre-void __ cc (N: 300-500 cc), Post-void residual __ cc (N: <50 cc, significant >100 cc).
 IMPRESSION: Prostate __ gm with residual __ cc.`,
-
 "Pelvis Normal":`ULTRASOUND PELVIS NORMAL
 UTERUS: __ x __ cm (N: 7.5 x 5 x 2.5 cm reproductive), ET __ mm (N: 5-15 mm premenopausal, <5 mm postmenopausal).
 OVARIES: Right __ x __ cm (N: Vol <10 cc), Left __ x __ cm (N: Vol <10 cc).
 No free fluid.
 IMPRESSION: Normal Pelvis.`,
-
 "Pelvis with PIDs":`ULTRASOUND PELVIS WITH PID
 UTERUS: __ x __ cm (N: 7.5 x 5 x 2.5 cm), bulky, heterogeneous.
 OVARIES: Bulky (N: Vol <10 cc).
 POD: Free fluid with echoes.
 IMPRESSION: PID.`,
-
 "Pelvis with Bulky uterus":`ULTRASOUND PELVIS WITH BULKY UTERUS
 UTERUS: Bulky __ x __ cm (N: 7.5 x 5 x 2.5 cm), ET __ mm (N: 5-15 mm).
 OVARIES: Normal (N: Vol <10 cc).
 IMPRESSION: Bulky Uterus.`,
-
 "Pelvis with Fibroid":`ULTRASOUND PELVIS WITH FIBROID
 UTERUS: __ x __ cm (N: 7.5 x 5 x 2.5 cm), fibroid __ mm (N: No fibroid) anterior/posterior wall.
 ET __ mm (N: 5-15 mm).
 OVARIES: Normal (N: Vol <10 cc).
 IMPRESSION: Uterine Fibroid __ mm.`,
-
 "Pelvis with ovarian cyst":`ULTRASOUND PELVIS WITH OVARIAN CYST
 UTERUS: __ x __ cm (N: 7.5 x 5 x 2.5 cm), ET __ mm (N: 5-15 mm).
 OVARY: Right / Left ovary shows anechoic simple cyst __ x __ mm (N: Follicle <25 mm), thin walled, no internal echoes.
 No free fluid.
 IMPRESSION: Right / Left Ovarian Simple Cyst __ mm.`,
-
 "Pelvis with RPCOs":`ULTRASOUND PELVIS WITH PCOS / RPCOs
 UTERUS: __ x __ cm (N: 7.5 x 5 x 2.5 cm), ET __ mm (N: 5-15 mm).
 OVARIES: Both enlarged, Right __ x __ cm volume __ cc (N: <10 cc), Left __ x __ cm volume __ cc (N: <10 cc), multiple small peripheral follicles 8-12 in number, 2-8mm (N: <12 follicles), central echogenic stroma - RPCOs.
 No free fluid.
 IMPRESSION: Bilateral Polycystic Ovaries (PCOS / RPCOs).`,
-
 "Pelvis with follicle":`ULTRASOUND PELVIS WITH FOLLICLE
 UTERUS: __ x __ cm, ET __ mm (N: 5-15 mm, triple line pre-ovulatory).
 OVARIES: Right ovary shows dominant follicle __ x __ mm (N: Mature 18-24 mm), Left ovary normal (N: Vol <10 cc).
 No free fluid.
 IMPRESSION: Dominant follicle __ mm in Right ovary.`,
-
 "Pelvis with mature follicles":`ULTRASOUND PELVIS WITH MATURE FOLLICLES
 UTERUS: __ x __ cm, ET __ mm triple line (N: 8-14 mm pre-ovulatory).
 OVARIES: Right ovary shows mature follicle __ x __ mm (N: 18-24 mm), Left ovary follicle __ mm.
 Minimal free fluid in POD.
 IMPRESSION: Mature follicle __ mm - ready for ovulation.`,
-
 "FWB":`ULTRASOUND FWB
 Presentation: Cephalic (N: Cephalic at term)
 Lie: Longitudinal (N: Longitudinal)
@@ -468,7 +406,6 @@ AFI: __ mm (N: 80-180 mm)
 Placenta: __, Grade __ (N: Grade 0-I early, Grade III term)
 Cervix: Closed, Length __ mm (N: >25 mm)
 IMPRESSION: Single live __ weeks, EFW __ gm, AFI __ mm.`,
-
 "FWB with anomaly scane":`ULTRASOUND ANOMALY SCAN
 Presentation: Cephalic
 Lie: Longitudinal
@@ -483,7 +420,6 @@ Fetus Weight: __ gm
 AFI: __ mm (N: 80-180 mm)
 Placenta: __
 IMPRESSION: Normal anomaly scan __ weeks.`,
-
 "FWB with 15 weeks of pregnancy":`ULTRASOUND FWB 15 WEEKS
 Presentation: Variable
 Lie: Variable
@@ -500,7 +436,6 @@ AFI: __ mm (N: 80-180 mm)
 Placenta: __
 Cervix: Closed __ mm (N: >25 mm)
 IMPRESSION: Single live pregnancy 15 weeks.`,
-
 "FWB with 20 weeks of pregnancy":`ULTRASOUND FWB 20 WEEKS
 Presentation: Cephalic / Breech
 Lie: Longitudinal
@@ -517,7 +452,6 @@ Placenta: __ anterior/posterior, Grade __ (N: Grade 0-I)
 Anomaly: No gross anomaly seen
 Cervix: Closed (N: >25 mm)
 IMPRESSION: Single live 20 weeks pregnancy.`,
-
 "FWB with 25 weeks of pregnancy":`ULTRASOUND FWB 25 WEEKS
 Presentation: Cephalic
 Lie: Longitudinal
@@ -533,7 +467,6 @@ AFI: __ mm (N: 80-180 mm)
 Placenta: __
 Cervix: __ mm (N: >25 mm)
 IMPRESSION: Single live 25 weeks.`,
-
 "FWB with 30 weeks of pregnancy":`ULTRASOUND FWB 30 WEEKS
 Presentation: Cephalic
 Lie: Longitudinal
@@ -550,7 +483,6 @@ Placenta: __, Grade __ (N: Grade I-II at 30w)
 Doppler: Normal (N: S/D <3, RI <0.6)
 Cervix: Closed (N: >25 mm)
 IMPRESSION: Single live 30 weeks with adequate growth.`,
-
 "FWB with CRL":`ULTRASOUND FWB WITH CRL
 Presentation: N/A
 Lie: N/A
@@ -562,7 +494,6 @@ Yolk Sac: Normal (N: 3-6 mm, round)
 AFI: __ mm
 Cervix: Closed (N: >25 mm)
 IMPRESSION: Single live early pregnancy CRL __ mm = __ weeks.`,
-
 "FWB with missed abortion":`ULTRASOUND FWB WITH MISSED ABORTION
 Presentation: N/A
 Lie: N/A
@@ -573,7 +504,6 @@ Weeks: __ weeks
 AFI: __ mm
 Cervix: Closed
 IMPRESSION: Missed abortion __ weeks - No cardiac activity.`,
-
 "FWB with no cardiac Flickr":`ULTRASOUND FWB WITH NO CARDIAC FLICKER
 Presentation: N/A
 Lie: N/A
@@ -584,7 +514,6 @@ Weeks: __ weeks
 AFI: __ mm
 Cervix: Closed
 IMPRESSION: Intrauterine fetal demise - No cardiac flicker at __ weeks.`,
-
 "FWB with IUD":`ULTRASOUND FWB WITH IUD
 Presentation: Cephalic
 Lie: Longitudinal
@@ -600,7 +529,6 @@ AFI: __ mm (N: 80-180 mm)
 Placenta: __
 Cervix: Closed (N: >25 mm)
 IMPRESSION: Single live __ weeks pregnancy with IUD in situ.`,
-
 "FWB with Cephalic presentation":`ULTRASOUND FWB WITH CEPHALIC PRESENTATION
 Presentation: Cephalic (N: Cephalic at term)
 Lie: Longitudinal
@@ -615,7 +543,6 @@ Fetus Weight: __ gm
 AFI: __ mm (N: 80-180 mm)
 Placenta: __
 IMPRESSION: Single live cephalic presentation __ weeks.`,
-
 "FWB with Breech presentation":`ULTRASOUND FWB WITH BREECH PRESENTATION
 Presentation: Breech
 Lie: Longitudinal, Extended legs
@@ -630,7 +557,6 @@ Fetus Weight: __ gm
 AFI: __ mm (N: 80-180 mm)
 Placenta: __
 IMPRESSION: Single live breech presentation __ weeks.`,
-
 "FWB with complete fetus calculation":`ULTRASOUND FWB WITH COMPLETE FETAL BIOMETRY
 Presentation: Cephalic
 Lie: Longitudinal
@@ -647,7 +573,6 @@ AFI: __ mm (N: 80-180 mm)
 Placenta: __
 EDD: __
 IMPRESSION: Single live __ weeks as per composite.`,
-
 "FWB with fetus weight":`ULTRASOUND FWB WITH FETAL WEIGHT
 Presentation: Cephalic
 Lie: Longitudinal
@@ -662,7 +587,6 @@ Fetus Weight: __ gm +/- __ gm (Hadlock) (N: As per GA)
 AFI: __ mm (N: 80-180 mm)
 Placenta: __
 IMPRESSION: Single live __ weeks, EFW __ gm.`,
-
 "FWB for adequate fetus liquid amniotic fluid":`ULTRASOUND FWB FOR ADEQUATE LIQUOR
 Presentation: Cephalic
 Lie: Longitudinal
@@ -678,7 +602,6 @@ AFI: __ mm (N: 80-180 mm, Normal)
 Liquor: Adequate, Clear
 Placenta: __
 IMPRESSION: Single live __ weeks with adequate amniotic fluid AFI __ mm.`,
-
 "FWB for Oligohydramnios fetus liquid amniotic fluid":`ULTRASOUND FWB FOR OLIGOHYDRAMNIOS
 Presentation: Cephalic
 Lie: Longitudinal
@@ -694,7 +617,6 @@ AFI: __ mm (N: 80-180 mm, Low <50 mm)
 Liquor: Reduced - Oligohydramnios
 Placenta: __
 IMPRESSION: Single live __ weeks with Oligohydramnios AFI __ mm.`,
-
 "FWB for Polyhydramnios fetus liquid amniotic fluid":`ULTRASOUND FWB FOR POLYHYDRAMNIOS
 Presentation: Cephalic
 Lie: Longitudinal
@@ -710,7 +632,6 @@ AFI: __ mm (N: 80-180 mm, High >240 mm)
 Liquor: Increased - Polyhydramnios
 Placenta: __
 IMPRESSION: Single live __ weeks with Polyhydramnios AFI __ mm.`,
-
 "FWB with Nuchal Cord":`ULTRASOUND FWB WITH NUCHAL CORD
 Presentation: Cephalic
 Lie: Longitudinal
@@ -726,7 +647,6 @@ AFI: __ mm (N: 80-180 mm)
 Placenta: __
 Color Doppler: Single loop / Double loop of umbilical cord around fetal neck - Nuchal cord present (N: No cord around neck)
 IMPRESSION: Single live __ weeks with Nuchal Cord (Single Loop).`,
-
 "Thyroids":`ULTRASOUND THYROID
 RIGHT LOBE: __ x __ x __ cm (N: 4-6 x 1-2 cm, Vol 4-10 ml).
 LEFT LOBE: __ x __ x __ cm (N: 4-6 x 1-2 cm).
@@ -734,79 +654,62 @@ ISTHMUS: __ mm (N: <3-4 mm).
 Volume Total __ ml (N: Female 10-18 ml, Male 12-25 ml).
 Homogenous, no nodule (N: Homogenous).
 IMPRESSION: Normal Thyroid.`,
-
 "Breasts Normal":`ULTRASOUND BREASTS NORMAL
 Both breasts fibroglandular pattern (N: Normal), no lesion.
 No axillary lymphadenopathy (N: No nodes, normal node <10 mm cortex <3 mm).
 IMPRESSION: Normal Breast Scan.`,
-
 "Breasts with lymph nodes":`ULTRASOUND BREASTS WITH LYMPH NODES
 Breasts: lesion __ mm (N: No lesion) at __ o clock.
 Axillary lymph nodes enlarged Right __ mm (N: <10 mm), Left __ mm (N: <10 mm).
 IMPRESSION: Breast lesion with lymphadenopathy.`,
-
 "Axila Normal":`ULTRASOUND AXILLA NORMAL
 RIGHT: No nodes (N: No significant nodes, cortex <3 mm).
 LEFT: No nodes.
 IMPRESSION: Normal Axilla.`,
-
 "Axila with lymph nodes":`ULTRASOUND AXILLA WITH LYMPH NODES
 RIGHT: Nodes __ mm (N: <10 mm).
 LEFT: Nodes __ mm (N: <10 mm).
 IMPRESSION: Axillary lymphadenopathy.`,
-
 "Neck Normal":`ULTRASOUND NECK NORMAL
 Thyroid normal Vol 10-25 ml (N: Normal), no lymphadenopathy (N: No nodes >8 mm).
 IMPRESSION: Normal Neck.`,
-
 "Neck with lymph nodes":`ULTRASOUND NECK WITH LYMPH NODES
 Cervical nodes enlarged __ mm at Level __ (N: <8-10 mm short axis).
 Thyroid normal.
 IMPRESSION: Cervical lymphadenopathy.`,
-
 "Doppler study":`DOPPLER STUDY
 Artery: PSV __ cm/s (N: As per vessel), EDV __, RI __ (N: 0.5-0.7), normal flow.
 Vein: Normal compressibility (N: Compressible), no thrombus.
 IMPRESSION: Normal Doppler.`,
-
 "Appendicitis":`ULTRASOUND FOR APPENDICITIS
 RIF: Non-compressible appendix __ mm diameter (N: <6 mm), wall __ mm (N: <3 mm), echogenic fat, minimal fluid.
 IMPRESSION: Acute Appendicitis __ mm.`,
-
 "Umbilical Hernia":`ULTRASOUND UMBILICAL HERNIA
 Umbilicus: Defect __ mm (N: No defect), herniation of fat / bowel on Valsalva.
 IMPRESSION: Umbilical Hernia __ mm.`,
-
 "Inguainal Hernia":`ULTRASOUND INGUINAL HERNIA
 Inguinal region: Defect __ mm (N: No defect), herniation of fat / bowel on Valsalva.
 IMPRESSION: Inguinal Hernia.`,
-
 "Scrotum Normal":`ULTRASOUND SCROTUM NORMAL
 Both testes normal Right __ mm (N: 40-50 x 30 mm Vol 15-25 ml), Left __ mm (N: Same).
 No hydrocele (N: No fluid), no varicocele (N: Veins <2 mm rest <3 mm Valsalva).
 IMPRESSION: Normal Scrotum.`,
-
 "Testis Normal":`ULTRASOUND TESTIS NORMAL
 Right __ mm (N: 40-50 mm length Vol 15-25 ml), Left __ mm, homogenous, normal vascularity (N: Low resistance).
 IMPRESSION: Normal Testes.`,
-
 "Testis with varicocele":`ULTRASOUND TESTIS WITH VARICOCELE
 Left pampiniform plexus dilated channels __ mm on Valsalva (N: <2 mm rest, <3 mm Valsalva).
 IMPRESSION: Left Varicocele.`,
-
 "Testis with hydrocele":`ULTRASOUND TESTIS WITH HYDROCELE
 Fluid around testis __ cc (N: No fluid, minimal <2 cc physiological).
 Testis normal Vol 15-25 ml (N: 15-25 ml).
 IMPRESSION: Hydrocele __ cc.`,
-
 "Testis with swelling":`ULTRASOUND TESTIS WITH SWELLING
 Right Testis enlarged __ mm (N: 40-50 mm), heterogeneous, increased vascularity.
 IMPRESSION: Right orchitis / swelling.`,
-
 "Testis with epididymitis":`ULTRASOUND TESTIS WITH EPIDIDYMITIS
 Epididymis bulky __ mm (N: Head <12 mm Body <5 mm), increased vascularity.
 IMPRESSION: Epididymitis.`,
-
 "Testis with Doppler study":`ULTRASOUND TESTIS WITH DOPPLER
 Right: PSV __ cm/s (N: 10-30 cm/s), RI __ (N: 0.5-0.7), normal flow.
 Left: Normal flow.
@@ -825,7 +728,6 @@ function init(){let s=uType;s.innerHTML='';Object.keys(T).forEach(k=>{let o=docu
 function checkFetal(){let v=uType.value;let gyn=isGynae(v);let pros=isProstate(v);fetalCalc.style.display=v.toLowerCase().includes('fwb')?'block':'none';prostateCalc.style.display=pros?'block':'none';clinicalLMP.style.display=gyn?'block':'none';presentComp.style.display=!gyn?'block':'none';}
 function load(){rText.value=T[uType.value]||'';checkFetal();}
 uType.addEventListener('change',load);
-wordUp.addEventListener('change',async(e)=>{let file=e.target.files[0];if(!file)return;let buf=await file.arrayBuffer();let res=await mammoth.extractRawText({arrayBuffer:buf});let txt=res.value.trim();let name=file.name.replace('.docx','');T[name]=txt;let saved=JSON.parse(localStorage.getItem('custom_templates')||'{}');saved[name]=txt;localStorage.setItem('custom_templates',JSON.stringify(saved));let s=uType;if(![...s.options].some(o=>o.value==name)){let o=document.createElement('option');o.value=name;o.textContent=name+' (Imported)';s.appendChild(o);}s.value=name;rText.value=txt;checkFetal();alert('Template update!');e.target.value='';});
 function formatReport(text){return text.split('\n').map(line=>{line=line.trim();if(!line)return'<br>';if(line.startsWith('ULTRASOUND')||line.startsWith('DOPPLER')){return `<div style="text-align:center;margin:8px 0;font-size:16px"><b><u>${line}</u></b></div>`;}if(line.startsWith('IMPRESSION')||line.startsWith('Advice')){return `<div style="margin:8px 0"><b><u>${line.split(':')[0]}:</u></b> ${line.split(':').slice(1).join(':')}</div>`;}if(line.includes(':')){let p=line.split(':');return `<div style="margin:3px 0"><b><u>${p[0]}:</u></b> ${p.slice(1).join(':')}</div>`;}return `<div>${line}</div>`;}).join('');}
 function make(){
 let type=uType.value;let gyn=isGynae(type);
