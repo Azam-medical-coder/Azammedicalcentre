@@ -16,7 +16,8 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 .report{
  width:210mm; min-height:297mm; margin:auto; background:#fff;
  border:2px solid #0a4eb5; border-radius:12px; padding:0 16mm 16mm 16mm;
- padding-top: 76mm; line-height:1.9; box-sizing:border-box;
+ padding-top: 51mm; /* 2 inch top space */
+ line-height:1.9; box-sizing:border-box;
 }
 @media print{
   @page{size:A4; margin:0}
@@ -131,7 +132,7 @@ function make(){
  document.getElementById('outCard').style.display='block';
  window.scrollTo(0,document.getElementById('outCard').offsetTop);
 }
-function pdf(){const{jsPDF}=window.jspdf; let doc=new jsPDF('p','mm','a4'); let t=document.getElementById('out').innerText; doc.text(doc.splitTextToSize(t,180),10,80); doc.save((pName.value||'Report')+'.pdf');}
+function pdf(){const{jsPDF}=window.jspdf; let doc=new jsPDF('p','mm','a4'); let t=document.getElementById('out').innerText; doc.text(doc.splitTextToSize(t,180),10,52); doc.save((pName.value||'Report')+'.pdf');}
 function saveR(){let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); a.unshift({n:pName.value,a:pAge.value,g:pGen.value,d:pDate.value,t:uType.value,r:rText.value}); localStorage.setItem('us_rep',JSON.stringify(a)); render(); alert('Report Saved!')}
 function render(){let q=(sBox.value||'').toLowerCase(); let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); list.innerHTML=a.map((x,i)=>`<div style="border:1px solid #ddd;border-radius:10px;padding:8px;margin:6px 0"><b>${x.n}</b> ${x.t} ${x.d} <button class="small" style="background:#0a4eb5" onclick="view(${i})">View</button> <button class="small" style="background:#ff3b30" onclick="del(${i})">Del</button></div>`).filter((_,i)=> (a[i].n+a[i].t).toLowerCase().includes(q)).join('')}
 function view(i){let a=JSON.parse(localStorage.getItem('us_rep')||'[]')[i]; pName.value=a.n; pAge.value=a.a; pGen.value=a.g; pDate.value=a.d; uType.value=a.t; rText.value=a.r; make();}
