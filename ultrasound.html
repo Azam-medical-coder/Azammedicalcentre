@@ -13,22 +13,33 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;font-size:16px;margin-top:8px}
 .btn2{background:#ff3b30;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin:8px 0}
 .small{padding:8px 12px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff}
-.report{border:2px solid #0a4eb5;border-radius:12px;padding:16px;background:#fff;line-height:1.9}
-.report b u{color:#000}
-@media print{body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:100%}}
+/* A4 REPORT STYLE */
+.report{
+ width:210mm; min-height:297mm; margin:auto; background:#fff;
+ border:2px solid #0a4eb5; border-radius:12px; padding:0 16mm 16mm 16mm;
+ padding-top: 76mm; /* 3 inch = 76mm top space */
+ line-height:1.9; box-sizing:border-box;
+}
+@media print{
+  @page{size:A4; margin:0}
+  body *{visibility:hidden}
+ .report,.report *{visibility:visible}
+ .report{position:absolute;left:0;top:0;width:210mm;min-height:297mm;border:none;border-radius:0;box-shadow:none}
+ .noPrint{display:none}
+}
 </style>
 </head>
 <body>
 
-<div class="card" style="text-align:center;border:3px solid #1e90ff;position:relative">
-<img src="https://azam-medical-coder.github.io/Azammedicalcentre/logo.png" onerror="this.style.display='none'" style="position:absolute;left:15px;top:15px;width:60px;height:60px;border-radius:50%;border:2px solid #0a4eb5">
+<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;position:relative">
+<img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="position:absolute;left:15px;top:15px;width:60px;height:60px;border-radius:50%;border:2px solid #0a4eb5">
 <h2 style="color:#0a4eb5">Azam Medical Centre</h2>
 <p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p>
 <h3>Dr. Muhammad Zeeshan - MBBS, RMP, Sonologist</h3>
 <p>Timings: 4PM to 10PM</p>
 </div>
 
-<div class="card">
+<div class="card noPrint">
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
 <input id="pName" placeholder="Patient Name *">
 <input id="pAge" placeholder="Age">
@@ -47,14 +58,14 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 
 <div class="card" id="outCard" style="display:none">
 <div id="out" class="report"></div>
-<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+<div class="noPrint" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center">
 <button class="small" style="background:#0a4eb5" onclick="window.print()">Print</button>
 <button class="small" style="background:#f59e0b" onclick="pdf()">PDF Download</button>
 <button class="small" style="background:#10b981" onclick="saveR()">Save Report</button>
 </div>
 </div>
 
-<div class="card"><h3>Saved Reports</h3><input id="sBox" placeholder="Search Name" onkeyup="render()"><div id="list"></div></div>
+<div class="card noPrint"><h3>Saved Reports</h3><input id="sBox" placeholder="Search Name" onkeyup="render()"><div id="list"></div></div>
 
 <script>
 let T={
@@ -75,7 +86,7 @@ IMPRESSION: Normal Ultrasound Whole Abdomen.`,
 "KUB + Prostate":`ULTRASOUND KUB + PROSTATE\nRIGHT KIDNEY: __ x __ cm, no calculus.\nLEFT KIDNEY: __ x __ cm, no calculus.\nURINARY BLADDER: __ cc, normal.\nPROSTATE: __ gm, __ x __ x __ cm, normal echotexture, no focal lesion.\nPost-void residual __ cc.\nIMPRESSION: __`,
 "Prostate":`ULTRASOUND PROSTATE\nPROSTATE: __ gm, measures __ x __ x __ cm.\nEchotexture: Homogenous.\nNo focal lesion, no calcification.\nUrinary bladder normal.\nIMPRESSION: __`,
 "Pelvis":`ULTRASOUND PELVIS\nUTERUS: __ x __ cm, Anteverted, ET __ mm.\nOVARIES: Right __ x __ cm, Left __ x __ cm.\nNo adnexal mass, no free fluid in POD.\nIMPRESSION: Normal Pelvic Scan.`,
-"FWB":`ULTRASOUND FWB (Fetal Well Being)\nSingle live intrauterine fetus, Cephalic presentation.\nBPD __ mm, FL __ mm, AC __ mm = __ weeks.\nAFI __ cm, Placenta __, Estimated weight __ gm.\nIMPRESSION: Single live pregnancy __ weeks.`,
+"FWB":`ULTRASOUND FWB\nSingle live intrauterine fetus, Cephalic presentation.\nBPD __ mm, FL __ mm, AC __ mm = __ weeks.\nAFI __ cm, Placenta __, Estimated weight __ gm.\nIMPRESSION: Single live pregnancy __ weeks.`,
 "Thyroids":`ULTRASOUND THYROID\nRIGHT LOBE: __ x __ x __ cm.\nLEFT LOBE: __ x __ x __ cm.\nISTHMUS: __ mm.\nEchotexture homogenous, no nodule.\nNo lymphadenopathy.\nIMPRESSION: Normal Thyroid Scan.`,
 "Breasts":`ULTRASOUND BREASTS\nBoth breasts normal fibroglandular pattern.\nNo focal lesion, no ductal dilatation.\nNo axillary lymphadenopathy.\nIMPRESSION: Normal Breast Scan.`,
 "Axila":`ULTRASOUND AXILLA\nRIGHT AXILLA: No lymphadenopathy.\nLEFT AXILLA: No lymphadenopathy.\nNo collection, no mass.\nIMPRESSION: Normal Axillary Scan.`,
@@ -103,8 +114,12 @@ document.getElementById('wordUp').addEventListener('change',async(e)=>{
 function formatReport(text){
  return text.split('\n').map(line=>{
   line=line.trim(); if(!line) return '<br>';
-  if(line.startsWith('ULTRASOUND') || line.startsWith('DOPPLER') || line.startsWith('IMPRESSION')){
-    return `<div style="margin:4px 0"><b><u>${line}</u></b></div>`;
+  // Main Heading Centre
+  if(line.startsWith('ULTRASOUND') || line.startsWith('DOPPLER')){
+    return `<div style="text-align:center;margin:8px 0;font-size:16px"><b><u>${line}</u></b></div>`;
+  }
+  if(line.startsWith('IMPRESSION')){
+    return `<div style="margin:6px 0"><b><u>${line.split(':')[0]}:</u></b> ${line.split(':').slice(1).join(':')}</div>`;
   }
   if(line.includes(':')){
     let parts=line.split(':'); let head=parts[0]; let rest=parts.slice(1).join(':');
@@ -115,15 +130,19 @@ function formatReport(text){
 }
 
 function make(){
- let header=`<div style="text-align:center;border-bottom:3px double #0a4eb5;padding-bottom:8px"><b style="font-size:18px">Azam Medical Centre</b><br><small>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</small><br>
- <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:14px;text-align:left"><div><b>Patient:</b> ${pName.value} (${pAge.value}/${pGen.value})<br><b>Ref:</b> ${ref.value}</div><div><b>Date:</b> ${pDate.value}<br><b>Type:</b> ${uType.value}</div></div></div><br>`;
+ let info=`<div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:15px"><div><b>Patient Name:</b> ${pName.value} &nbsp; <b>Age/Sex:</b> ${pAge.value}/${pGen.value}<br><b>Referred By:</b> ${ref.value}</div><div><b>Date:</b> ${pDate.value}</div></div><hr style="margin-bottom:15px">`;
  let body=formatReport(rText.value);
- let footer=`<div style="margin-top:40px"><div style="border-top:1px solid #000;width:220px"></div><b>DR. M. ZEESHAN</b><br>MBBS, DIP SONOGRAPHY<br>GP & SONOLOGIST</div>`;
- document.getElementById('out').innerHTML=header+body+footer;
+ let footer=`<div style="margin-top:60px"><div style="border-top:1px solid #000;width:240px;margin-bottom:5px"></div><b>DR. M. ZEESHAN</b><br>MBBS, DIP SONOGRAPHY<br>GP & SONOLOGIST</div>`;
+ document.getElementById('out').innerHTML=info+body+footer;
  document.getElementById('outCard').style.display='block';
- window.scrollTo(0,document.body.scrollHeight);
+ window.scrollTo(0,document.getElementById('outCard').offsetTop);
 }
-function pdf(){const{jsPDF}=window.jspdf; let doc=new jsPDF(); let t=document.getElementById('out').innerText; let l=doc.splitTextToSize(t,180); doc.text(l,10,10); doc.save((pName.value||'Report')+'.pdf')}
+function pdf(){
+ const{jsPDF}=window.jspdf; let doc=new jsPDF('p','mm','a4');
+ let t=document.getElementById('out').innerText;
+ doc.text(doc.splitTextToSize(t,180),10,80); // 80mm = 3 inch top space
+ doc.save((pName.value||'Report')+'.pdf');
+}
 function saveR(){let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); a.unshift({n:pName.value,a:pAge.value,g:pGen.value,d:pDate.value,t:uType.value,r:rText.value}); localStorage.setItem('us_rep',JSON.stringify(a)); render(); alert('Report Saved!')}
 function render(){let q=(sBox.value||'').toLowerCase(); let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); list.innerHTML=a.map((x,i)=>`<div style="border:1px solid #ddd;border-radius:10px;padding:8px;margin:6px 0"><b>${x.n}</b> ${x.t} ${x.d} <button class="small" style="background:#0a4eb5" onclick="view(${i})">View</button> <button class="small" style="background:#ff3b30" onclick="del(${i})">Del</button></div>`).filter((_,i)=> (a[i].n+a[i].t).toLowerCase().includes(q)).join('')}
 function view(i){let a=JSON.parse(localStorage.getItem('us_rep')||'[]')[i]; pName.value=a.n; pAge.value=a.a; pGen.value=a.g; pDate.value=a.d; uType.value=a.t; rText.value=a.r; make();}
