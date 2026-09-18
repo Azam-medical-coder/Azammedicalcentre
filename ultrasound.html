@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Ultrasound - Auto FWB Calculator Final</title>
+<title>Azam Ultrasound - HC AC FL Auto Calc</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 <style>
@@ -15,9 +15,9 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 .small{padding:8px 12px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff}
 .report{width:210mm;min-height:297mm;margin:auto;background:#fff;border:2px solid #0a4eb5;border-radius:12px;padding:0 16mm 16mm 16mm;padding-top:51mm;line-height:1.9;box-sizing:border-box}
 .calcBox{background:#f0f7ff;border:2px dashed #1e90ff;border-radius:12px;padding:12px;margin:10px 0}
-.calcBox h4{color:#0a4eb5;margin-bottom:8px}
+.calcBox h4{color:#0a4eb5;margin-bottom:8px;font-size:14px}
 .calcGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.calcRes{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;font-size:13px;font-weight:700;text-align:center}
+.calcRes{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;font-size:12px;font-weight:800;text-align:center}
 @media print{@page{size:A4;margin:0}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:210mm;min-height:297mm;border:none}.noPrint{display:none}}
 </style>
 </head>
@@ -26,7 +26,6 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:65px;height:65px;border-radius:50%;border:2px solid #0a4eb5">
 <div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p></div>
 </div>
-
 <div class="card noPrint">
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
 <input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select>
@@ -38,15 +37,14 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <input type="file" id="wordUp" accept=".docx" style="display:none">
 <button class="btn2" onclick="document.getElementById('wordUp').click()">📄 Word File Se Template Update Karen</button>
 
-<!-- AUTO FETAL CALCULATOR -->
 <div id="fetalCalc" class="calcBox" style="display:none">
-<h4>🤰 Gynae / FWB Auto Calculator - Measurements likhen, Age & Weight auto ayega</h4>
+<h4>🤰 Gynae / FWB Calculator - Sirf HC, AC, FL likhen - Age & Weight Auto</h4>
 <div class="calcGrid">
-<input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()">
-<input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB()">
-<input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB()">
-<input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB()">
+<input id="cHC" type="number" placeholder="HC mm *" oninput="calcFWB()">
+<input id="cAC" type="number" placeholder="AC mm *" oninput="calcFWB()">
+<input id="cFL" type="number" placeholder="FL mm *" oninput="calcFWB()">
 <input id="cCRL" type="number" placeholder="CRL mm (early)" oninput="calcFWB()">
+<input id="cBPD" type="number" placeholder="BPD mm (optional)" oninput="calcFWB()">
 <input id="cAFI" type="number" placeholder="AFI cm" oninput="calcFWB()">
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
@@ -54,14 +52,13 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <div class="calcRes" id="resEDD">EDD: --</div>
 <div class="calcRes" id="resEFW">Weight: -- gm</div>
 </div>
-<button class="small" style="background:#10b981;width:100%;margin-top:8px" onclick="applyCalc()">✅ Calculation Report Me Lagayen</button>
+<div style="font-size:11px;color:#0a4eb5;margin-top:6px;text-align:center">* HC, AC, FL likhte hi neeche report me khud lag jayega</div>
 </div>
 
 <b style="font-size:13px;display:block;margin-top:10px">Report Pattern (Editable):</b>
 <textarea id="rText" rows="22" style="font-family:monospace;font-size:13px"></textarea>
 <button class="btn" onclick="make()">✅ Final Report Banayen</button>
 </div>
-
 <div class="card" id="outCard" style="display:none"><div id="out" class="report"></div>
 <div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap">
 <button class="small" style="background:#0a4eb5" onclick="window.print()">Print</button>
@@ -306,8 +303,8 @@ Minimal free fluid in POD.
 IMPRESSION: Mature follicle __ mm - ready for ovulation.`,
 "FWB":`ULTRASOUND FWB
 Single live fetus, Cephalic.
-BPD __ mm, FL __ mm, AC __ mm = __ weeks.
-AFI __ cm, Placenta __, Weight __ gm.
+BPD __ mm, HC __ mm, AC __ mm, FL __ mm = __ weeks.
+AFI __ cm, Placenta __, Weight __ gm, FHR __ bpm.
 IMPRESSION: Single live __ weeks.`,
 "FWB with anomaly scane":`ULTRASOUND ANOMALY SCAN
 Single live fetus __ weeks, Head, Spine, Heart 4-chamber, Abdomen, Limbs normal.
@@ -400,6 +397,13 @@ Single live fetus __ weeks.
 AFI __ cm (High >24 cm), increased liquor, suggestive of Polyhydramnios.
 Placenta __, Weight __ gm.
 IMPRESSION: Single live __ weeks with Polyhydramnios AFI __ cm.`,
+"FWB with Nuchal Cord":`ULTRASOUND FWB WITH NUCHAL CORD
+Single live fetus __ weeks, Cephalic presentation.
+BPD __ mm, HC __ mm, AC __ mm, FL __ mm = __ weeks.
+AFI __ cm, Placenta __, Estimated Weight __ gm, FHR __ bpm.
+COLOR DOPPLER: Single loop / Double loop of umbilical cord seen around fetal neck - Nuchal cord present.
+No true knot.
+IMPRESSION: Single live __ weeks with Nuchal Cord (Single Loop).`,
 "Thyroids":`ULTRASOUND THYROID
 RIGHT LOBE: __ x __ x __ cm.
 LEFT LOBE: __ x __ x __ cm.
@@ -469,36 +473,36 @@ No torsion.
 IMPRESSION: Normal Testicular Doppler.`
 };
 
-let fetalData={ga:0,efw:0,edd:''};
+let fetalData={};
+let autoApply=true;
 
 function calcFWB(){
- let bpd=parseFloat(cBPD.value)||0;
- let hc=parseFloat(cHC.value)||0;
- let ac=parseFloat(cAC.value)||0;
- let fl=parseFloat(cFL.value)||0;
- let crl=parseFloat(cCRL.value)||0;
- let afi=parseFloat(cAFI.value)||0;
+ let bpd=parseFloat(document.getElementById('cBPD').value)||0;
+ let hc=parseFloat(document.getElementById('cHC').value)||0;
+ let ac=parseFloat(document.getElementById('cAC').value)||0;
+ let fl=parseFloat(document.getElementById('cFL').value)||0;
+ let crl=parseFloat(document.getElementById('cCRL').value)||0;
+ let afi=parseFloat(document.getElementById('cAFI').value)||0;
 
  let gas=[];
- if(bpd>0){ let ga_bpd = 0.3*bpd + 6.5; if(bpd>50) ga_bpd = 0.24*bpd + 9.5; gas.push(ga_bpd); }
- if(hc>0){ let ga_hc = hc*0.105 + 6.8; gas.push(ga_hc); }
- if(ac>0){ let ga_ac = ac*0.14 + 5.2; gas.push(ga_ac); }
- if(fl>0){ let ga_fl = fl*0.32 + 10.5; gas.push(ga_fl); }
- if(crl>0){ let ga_crl = (crl*0.18)+6.2; gas.push(ga_crl); }
+ // Standard formulas - only HC AC FL as you requested
+ if(hc>0){ let ga_hc = (hc * 0.111) + 5.5; gas.push(ga_hc); } // ~ HC 200=27.7w
+ if(ac>0){ let ga_ac = (ac * 0.117) + 3.8; gas.push(ga_ac); } // ~ AC 250=33w
+ if(fl>0){ let ga_fl = (fl * 0.4) + 9.5; gas.push(ga_fl); } // FL 55=31.5w
+ if(crl>0){ let ga_crl = (crl * 0.16) + 6.8; gas.push(ga_crl); }
+ if(bpd>0 && gas.length<2){ let ga_bpd = (bpd * 0.33) + 4; gas.push(ga_bpd); }
 
  let avgGA = gas.length? (gas.reduce((a,b)=>a+b,0)/gas.length) : 0;
 
- // Hadlock EFW log10
+ // EFW - Hadlock 3 params HC,AC,FL in CM - FIXED
  let efw=0;
  if(hc>0 && ac>0 && fl>0){
-   let log10efw = 1.326 - 0.00326*ac*fl + 0.0107*hc + 0.0438*ac + 0.158*fl;
-   efw = Math.pow(10, log10efw);
- } else if(ac>0 && fl>0){
-   let log10efw = 1.304 + 0.05281*ac + 0.1938*fl -0.004*ac*fl;
+   let hc_cm = hc/10, ac_cm = ac/10, fl_cm = fl/10;
+   // Hadlock formula: log10(EFW) = 1.326 -0.00326*AC*FL +0.0107*HC +0.0438*AC +0.158*FL
+   let log10efw = 1.326 - (0.00326*ac_cm*fl_cm) + (0.0107*hc_cm) + (0.0438*ac_cm) + (0.158*fl_cm);
    efw = Math.pow(10, log10efw);
  }
 
- // EDD
  let eddStr='--';
  if(avgGA>0){
    let daysLeft = (40 - avgGA)*7;
@@ -506,37 +510,49 @@ function calcFWB(){
    eddStr = edd.toLocaleDateString('en-GB');
  }
 
- fetalData.ga=avgGA; fetalData.efw=efw; fetalData.edd=eddStr; fetalData.afi=afi;
- fetalData.bpd=bpd; fetalData.hc=hc; fetalData.ac=ac; fetalData.fl=fl; fetalData.crl=crl;
+ fetalData={ga:avgGA, efw:efw, edd:eddStr, hc:hc, ac:ac, fl:fl, bpd:bpd, crl:crl, afi:afi};
 
- document.getElementById('resGA').innerText = avgGA? `GA: ${avgGA.toFixed(1)} weeks (${Math.floor(avgGA)}w ${Math.round((avgGA%1)*7)}d)` : 'GA: -- weeks';
+ document.getElementById('resGA').innerText = avgGA? `GA: ${avgGA.toFixed(1)}w (${Math.floor(avgGA)}w${Math.round((avgGA%1)*7)}d)` : 'GA: -- weeks';
  document.getElementById('resEDD').innerText = `EDD: ${eddStr}`;
  document.getElementById('resEFW').innerText = efw? `Weight: ${Math.round(efw)} gm` : 'Weight: -- gm';
+
+ // AUTO APPLY TO REPORT PATTERN - Sirf HC AC FL se
+ if(autoApply && (hc>0 || ac>0 || fl>0)){
+   autoUpdateReport();
+ }
 }
 
-function applyCalc(){
- if(!fetalData.ga){ alert('Pehle measurements likhen!'); return; }
- let gaTxt = `${fetalData.ga.toFixed(1)} weeks (${Math.floor(fetalData.ga)} weeks ${Math.round((fetalData.ga%1)*7)} days)`;
- let wTxt = fetalData.efw? `${Math.round(fetalData.efw)} gm` : '__ gm';
- let eddTxt = fetalData.edd;
- let afiTxt = fetalData.afi? `${fetalData.afi} cm` : '__ cm';
+function autoUpdateReport(){
+ let t=document.getElementById('rType')? '':''; // dummy
+ let txt = document.getElementById('rText').value;
+ let ga = fetalData.ga;
+ let w = fetalData.efw? Math.round(fetalData.efw)+' gm' : '__ gm';
+ let gaFull = ga? `${ga.toFixed(1)} weeks` : '__ weeks';
+ let afi = fetalData.afi? `${fetalData.afi} cm` : '__ cm';
 
- let txt = rText.value;
- txt = txt.replace(/BPD __ mm/g, `BPD ${fetalData.bpd||'__'} mm`);
- txt = txt.replace(/HC __ mm/g, `HC ${fetalData.hc||'__'} mm`);
- txt = txt.replace(/AC __ mm/g, `AC ${fetalData.ac||'__'} mm`);
- txt = txt.replace(/FL __ mm/g, `FL ${fetalData.fl||'__'} mm`);
- txt = txt.replace(/CRL __ mm/g, `CRL ${fetalData.crl||'__'} mm`);
- txt = txt.replace(/AFI __ cm/g, `AFI ${afiTxt}`);
- txt = txt.replace(/Weight __ gm/g, `Weight ${wTxt}`);
- txt = txt.replace(/__ weeks/g, gaTxt);
- txt = txt.replace(/EDD __/g, `EDD ${eddTxt}`);
- // For impression
- if(txt.includes('IMPRESSION:')){
-   txt = txt.replace(/IMPRESSION:.*/, `IMPRESSION: Single live fetus ${gaTxt}, EFW ${wTxt}, AFI ${afiTxt}, Placenta __, FHR __ bpm, EDD ${eddTxt}.`);
+ // Replace only if fields contain __
+ if(fetalData.hc) txt = txt.replace(/HC __ mm/, `HC ${fetalData.hc} mm`).replace(/HC __/, `HC ${fetalData.hc} mm`);
+ if(fetalData.ac) txt = txt.replace(/AC __ mm/, `AC ${fetalData.ac} mm`).replace(/AC __/, `AC ${fetalData.ac} mm`);
+ if(fetalData.fl) txt = txt.replace(/FL __ mm/, `FL ${fetalData.fl} mm`).replace(/FL __/, `FL ${fetalData.fl} mm`);
+ if(fetalData.bpd) txt = txt.replace(/BPD __ mm/, `BPD ${fetalData.bpd} mm`);
+ if(fetalData.crl) txt = txt.replace(/CRL __ mm/, `CRL ${fetalData.crl} mm`);
+
+ // Update weight and AFI in common lines
+ if(fetalData.efw) txt = txt.replace(/Weight __ gm/g, `Weight ${w}`).replace(/Estimated Weight __ gm/g, `Estimated Weight ${w}`).replace(/Estimated weight __ gm/g, `Estimated weight ${w}`);
+ if(fetalData.afi) txt = txt.replace(/AFI __ cm/g, `AFI ${afi}`);
+
+ // Update = __ weeks line
+ if(ga){
+   txt = txt.replace(/= __ weeks/g, `= ${gaFull}`);
+   // Update IMPRESSION last __ weeks
+   txt = txt.replace(/IMPRESSION: Single live __ weeks\./, `IMPRESSION: Single live ${gaFull}, EFW ${w}, AFI ${afi}.`);
+   txt = txt.replace(/IMPRESSION: Single live __ weeks/, `IMPRESSION: Single live ${gaFull}, EFW ${w}`);
+   if(txt.includes('IMPRESSION: Single live fetus')){
+     txt = txt.replace(/IMPRESSION: Single live fetus __ weeks[\s\S]*/, `IMPRESSION: Single live fetus ${gaFull}, EFW ${w}, AFI ${afi}, EDD ${fetalData.edd}.`);
+   }
  }
- rText.value = txt;
- alert('Calculation report me lag gaya! Ab Final Report banayen.');
+
+ document.getElementById('rText').value = txt;
 }
 
 let custom=JSON.parse(localStorage.getItem('custom_templates')||'{}');Object.assign(T,custom);
@@ -548,7 +564,7 @@ function init(){
 }
 function checkFetal(){
  let v=document.getElementById('uType').value.toLowerCase();
- if(v.includes('fwb') || v.includes('pelvis') || v.includes('follicle')){
+ if(v.includes('fwb')){
    document.getElementById('fetalCalc').style.display='block';
  } else {
    document.getElementById('fetalCalc').style.display='none';
