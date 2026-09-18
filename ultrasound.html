@@ -13,17 +13,18 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;font-size:16px;margin-top:8px}
 .btn2{background:#ff3b30;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin:8px 0}
 .small{padding:8px 12px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff}
-.report{border:2px solid #0a4eb5;border-radius:12px;padding:16px;background:#fff;line-height:1.8;white-space:pre-wrap}
+.report{border:2px solid #0a4eb5;border-radius:12px;padding:16px;background:#fff;line-height:1.9}
+.report b u{color:#000}
 @media print{body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:100%}}
 </style>
 </head>
 <body>
 
 <div class="card" style="text-align:center;border:3px solid #1e90ff;position:relative">
-<img src="https://azam-medical-coder.github.io/Azammedicalcentre/logo.png" onerror="this.style.display='none'" style="position:absolute;left:15px;top:15px;width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid #0a4eb5">
+<img src="https://azam-medical-coder.github.io/Azammedicalcentre/logo.png" onerror="this.style.display='none'" style="position:absolute;left:15px;top:15px;width:60px;height:60px;border-radius:50%;border:2px solid #0a4eb5">
 <h2 style="color:#0a4eb5">Azam Medical Centre</h2>
 <p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p>
-<h3 style="color:#000">Dr. Muhammad Zeeshan - MBBS, RMP, Sonologist</h3>
+<h3>Dr. Muhammad Zeeshan - MBBS, RMP, Sonologist</h3>
 <p>Timings: 4PM to 10PM</p>
 </div>
 
@@ -34,14 +35,11 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<input id="pDate" type="date">
-<select id="uType"></select>
+<input id="pDate" type="date"><select id="uType"></select>
 </div>
 <input id="ref" placeholder="Referred By Dr.">
-
 <input type="file" id="wordUp" accept=".docx" style="display:none">
-<button class="btn2" onclick="document.getElementById('wordUp').click()">📄 Apni Word File (.docx) Se Template Update Karen</button>
-
+<button class="btn2" onclick="document.getElementById('wordUp').click()">📄 Word File Se Template Update Karen</button>
 <b style="font-size:13px;display:block;margin-top:10px">Report Pattern (Editable) - __ me size likhen:</b>
 <textarea id="rText" rows="18" style="font-family:monospace;font-size:13px"></textarea>
 <button class="btn" onclick="make()">✅ Final Report Banayen</button>
@@ -52,8 +50,11 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
 <button class="small" style="background:#0a4eb5" onclick="window.print()">Print</button>
 <button class="small" style="background:#f59e0b" onclick="pdf()">PDF Download</button>
+<button class="small" style="background:#10b981" onclick="saveR()">Save Report</button>
 </div>
 </div>
+
+<div class="card"><h3>Saved Reports</h3><input id="sBox" placeholder="Search Name" onkeyup="render()"><div id="list"></div></div>
 
 <script>
 let T={
@@ -68,124 +69,65 @@ URINARY BLADDER: Normal, no calculus.
 PROSTATE: __ gm, normal.
 No ascites, no lymphadenopathy.
 IMPRESSION: Normal Ultrasound Whole Abdomen.`,
-
-"Upper abdomen":`ULTRASOUND UPPER ABDOMEN
-LIVER: __ cm, homogenous, no focal lesion.
-GALL BLADDER: Normal distended, no stone.
-PANCREAS: Normal.
-SPLEEN: __ cm, normal.
-BOTH KIDNEYS: Normal.
-No ascites.
-IMPRESSION: Normal Upper Abdomen.`,
-
-"Lower abdomen":`ULTRASOUND LOWER ABDOMEN
-URINARY BLADDER: __ cc, wall thickness normal.
-PROSTATE: __ gm.
-BOTH KIDNEYS: Normal.
-No free fluid.
-IMPRESSION: Normal Lower Abdomen.`,
-
-"KUB":`ULTRASOUND KUB
-RIGHT KIDNEY: __ x __ cm, no calculus, no hydronephrosis.
-LEFT KIDNEY: __ x __ cm, no calculus, no hydronephrosis.
-URINARY BLADDER: Pre-void __ cc, Post-void __ cc, no calculus.
-IMPRESSION: Normal KUB.`,
-
-"KUB + Prostate":`ULTRASOUND KUB + PROSTATE
-RIGHT KIDNEY: __ x __ cm, no calculus.
-LEFT KIDNEY: __ x __ cm, no calculus.
-URINARY BLADDER: __ cc, normal.
-PROSTATE: __ gm, __ x __ x __ cm, normal echotexture, no focal lesion.
-Post-void residual __ cc.
-IMPRESSION: __`,
-
-"Prostate":`ULTRASOUND PROSTATE
-PROSTATE: __ gm, measures __ x __ x __ cm.
-Echotexture: Homogenous.
-No focal lesion, no calcification.
-Urinary bladder normal.
-IMPRESSION: __`,
-
-"Pelvis":`ULTRASOUND PELVIS
-UTERUS: __ x __ cm, Anteverted, ET __ mm.
-OVARIES: Right __ x __ cm, Left __ x __ cm.
-No adnexal mass, no free fluid in POD.
-IMPRESSION: Normal Pelvic Scan.`,
-
-"FWB":`ULTRASOUND FWB (Fetal Well Being)
-Single live intrauterine fetus, Cephalic presentation.
-BPD __ mm, FL __ mm, AC __ mm = __ weeks.
-AFI __ cm, Placenta __, Estimated weight __ gm.
-IMPRESSION: Single live pregnancy __ weeks.`,
-
-"Thyroids":`ULTRASOUND THYROID
-RIGHT LOBE: __ x __ x __ cm.
-LEFT LOBE: __ x __ x __ cm.
-ISTHMUS: __ mm.
-Echotexture homogenous, no nodule.
-No lymphadenopathy.
-IMPRESSION: Normal Thyroid Scan.`,
-
-"Breasts":`ULTRASOUND BREASTS
-Both breasts normal fibroglandular pattern.
-No focal lesion, no ductal dilatation.
-No axillary lymphadenopathy.
-IMPRESSION: Normal Breast Scan.`,
-
-"Axila":`ULTRASOUND AXILLA
-RIGHT AXILLA: No lymphadenopathy.
-LEFT AXILLA: No lymphadenopathy.
-No collection, no mass.
-IMPRESSION: Normal Axillary Scan.`,
-
-"Neck":`ULTRASOUND NECK
-Thyroid normal, no lymphadenopathy.
-No collection, salivary glands normal.
-IMPRESSION: Normal Neck Scan.`,
-
-"Doppler study":`DOPPLER STUDY
-Artery: Normal flow, PSV __, EDV __, RI __.
-Vein: Normal compressibility, normal flow.
-No thrombus, no stenosis.
-IMPRESSION: Normal Doppler Study.`
+"Upper abdomen":`ULTRASOUND UPPER ABDOMEN\nLIVER: __ cm, homogenous, no focal lesion.\nGALL BLADDER: Normal distended, no stone.\nPANCREAS: Normal.\nSPLEEN: __ cm, normal.\nBOTH KIDNEYS: Normal.\nNo ascites.\nIMPRESSION: Normal Upper Abdomen.`,
+"Lower abdomen":`ULTRASOUND LOWER ABDOMEN\nURINARY BLADDER: __ cc, wall thickness normal.\nPROSTATE: __ gm.\nBOTH KIDNEYS: Normal.\nNo free fluid.\nIMPRESSION: Normal Lower Abdomen.`,
+"KUB":`ULTRASOUND KUB\nRIGHT KIDNEY: __ x __ cm, no calculus, no hydronephrosis.\nLEFT KIDNEY: __ x __ cm, no calculus, no hydronephrosis.\nURINARY BLADDER: Pre-void __ cc, Post-void __ cc, no calculus.\nIMPRESSION: Normal KUB.`,
+"KUB + Prostate":`ULTRASOUND KUB + PROSTATE\nRIGHT KIDNEY: __ x __ cm, no calculus.\nLEFT KIDNEY: __ x __ cm, no calculus.\nURINARY BLADDER: __ cc, normal.\nPROSTATE: __ gm, __ x __ x __ cm, normal echotexture, no focal lesion.\nPost-void residual __ cc.\nIMPRESSION: __`,
+"Prostate":`ULTRASOUND PROSTATE\nPROSTATE: __ gm, measures __ x __ x __ cm.\nEchotexture: Homogenous.\nNo focal lesion, no calcification.\nUrinary bladder normal.\nIMPRESSION: __`,
+"Pelvis":`ULTRASOUND PELVIS\nUTERUS: __ x __ cm, Anteverted, ET __ mm.\nOVARIES: Right __ x __ cm, Left __ x __ cm.\nNo adnexal mass, no free fluid in POD.\nIMPRESSION: Normal Pelvic Scan.`,
+"FWB":`ULTRASOUND FWB (Fetal Well Being)\nSingle live intrauterine fetus, Cephalic presentation.\nBPD __ mm, FL __ mm, AC __ mm = __ weeks.\nAFI __ cm, Placenta __, Estimated weight __ gm.\nIMPRESSION: Single live pregnancy __ weeks.`,
+"Thyroids":`ULTRASOUND THYROID\nRIGHT LOBE: __ x __ x __ cm.\nLEFT LOBE: __ x __ x __ cm.\nISTHMUS: __ mm.\nEchotexture homogenous, no nodule.\nNo lymphadenopathy.\nIMPRESSION: Normal Thyroid Scan.`,
+"Breasts":`ULTRASOUND BREASTS\nBoth breasts normal fibroglandular pattern.\nNo focal lesion, no ductal dilatation.\nNo axillary lymphadenopathy.\nIMPRESSION: Normal Breast Scan.`,
+"Axila":`ULTRASOUND AXILLA\nRIGHT AXILLA: No lymphadenopathy.\nLEFT AXILLA: No lymphadenopathy.\nNo collection, no mass.\nIMPRESSION: Normal Axillary Scan.`,
+"Neck":`ULTRASOUND NECK\nThyroid normal, no lymphadenopathy.\nNo collection, salivary glands normal.\nIMPRESSION: Normal Neck Scan.`,
+"Doppler study":`DOPPLER STUDY\nArtery: Normal flow, PSV __, EDV __, RI __.\nVein: Normal compressibility, normal flow.\nNo thrombus, no stenosis.\nIMPRESSION: Normal Doppler Study.`
 };
-
-let custom=JSON.parse(localStorage.getItem('custom_templates')||'{}');
-Object.assign(T,custom);
-
+let custom=JSON.parse(localStorage.getItem('custom_templates')||'{}');Object.assign(T,custom);
 function init(){
- let s=document.getElementById('uType'); s.innerHTML='';
- Object.keys(T).forEach(k=>{let o=document.createElement('option'); o.value=k; o.textContent=k; s.appendChild(o);});
+ let s=document.getElementById('uType');s.innerHTML='';
+ Object.keys(T).forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
  document.getElementById('pDate').valueAsDate=new Date();
- if(Object.keys(T).length>0) document.getElementById('rText').value=T[Object.keys(T)[0]];
+ document.getElementById('rText').value=T[Object.keys(T)[0]];render();
 }
-function load(){ document.getElementById('rText').value=T[document.getElementById('uType').value]||'' }
+function load(){document.getElementById('rText').value=T[document.getElementById('uType').value]||''}
 document.getElementById('uType').addEventListener('change',load);
-
-document.getElementById('wordUp').addEventListener('change', async (e)=>{
- let file=e.target.files[0]; if(!file) return;
- let buf=await file.arrayBuffer();
- let res=await mammoth.extractRawText({arrayBuffer:buf});
- let txt=res.value.trim();
- if(txt.length<20){ alert('File khali hai'); return; }
- let name=file.name.replace('.docx','').replace('.doc','');
- T[name]=txt;
- let saved=JSON.parse(localStorage.getItem('custom_templates')||'{}'); saved[name]=txt; localStorage.setItem('custom_templates',JSON.stringify(saved));
- let s=document.getElementById('uType');
- if(![...s.options].some(o=>o.value==name)){ let o=document.createElement('option'); o.value=name; o.textContent=name+' (Imported)'; s.appendChild(o); }
- s.value=name; document.getElementById('rText').value=txt;
- alert('Template "'+name+'" update ho gaya!');
- e.target.value='';
+document.getElementById('wordUp').addEventListener('change',async(e)=>{
+ let file=e.target.files[0];if(!file)return;let buf=await file.arrayBuffer();let res=await mammoth.extractRawText({arrayBuffer:buf});
+ let txt=res.value.trim();if(txt.length<20){alert('Khali');return;}
+ let name=file.name.replace('.docx','');T[name]=txt;
+ let saved=JSON.parse(localStorage.getItem('custom_templates')||'{}');saved[name]=txt;localStorage.setItem('custom_templates',JSON.stringify(saved));
+ let s=document.getElementById('uType');if(![...s.options].some(o=>o.value==name)){let o=document.createElement('option');o.value=name;o.textContent=name+' (Imported)';s.appendChild(o);}
+ s.value=name;document.getElementById('rText').value=txt;alert('Template "'+name+'" update!');e.target.value='';
 });
 
+function formatReport(text){
+ return text.split('\n').map(line=>{
+  line=line.trim(); if(!line) return '<br>';
+  if(line.startsWith('ULTRASOUND') || line.startsWith('DOPPLER') || line.startsWith('IMPRESSION')){
+    return `<div style="margin:4px 0"><b><u>${line}</u></b></div>`;
+  }
+  if(line.includes(':')){
+    let parts=line.split(':'); let head=parts[0]; let rest=parts.slice(1).join(':');
+    return `<div style="margin:3px 0"><b><u>${head}:</u></b> ${rest}</div>`;
+  }
+  return `<div>${line}</div>`;
+ }).join('');
+}
+
 function make(){
- let header=`Azam Medical Centre\nPlot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116\n\nPatient: ${pName.value} Age: ${pAge.value} / ${pGen.value}\nDate: ${pDate.value} Ref By: ${ref.value}\nType: ${uType.value}\n--------------------------------------------------\n\n`;
- let footer=`\n\n\n--------------------------------------------------\nDR. M. ZEESHAN\nMBBS, DIP SONOGRAPHY\nGP & SONOLOGIST`;
- document.getElementById('out').innerText=header+rText.value+footer;
+ let header=`<div style="text-align:center;border-bottom:3px double #0a4eb5;padding-bottom:8px"><b style="font-size:18px">Azam Medical Centre</b><br><small>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</small><br>
+ <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:14px;text-align:left"><div><b>Patient:</b> ${pName.value} (${pAge.value}/${pGen.value})<br><b>Ref:</b> ${ref.value}</div><div><b>Date:</b> ${pDate.value}<br><b>Type:</b> ${uType.value}</div></div></div><br>`;
+ let body=formatReport(rText.value);
+ let footer=`<div style="margin-top:40px"><div style="border-top:1px solid #000;width:220px"></div><b>DR. M. ZEESHAN</b><br>MBBS, DIP SONOGRAPHY<br>GP & SONOLOGIST</div>`;
+ document.getElementById('out').innerHTML=header+body+footer;
  document.getElementById('outCard').style.display='block';
  window.scrollTo(0,document.body.scrollHeight);
 }
 function pdf(){const{jsPDF}=window.jspdf; let doc=new jsPDF(); let t=document.getElementById('out').innerText; let l=doc.splitTextToSize(t,180); doc.text(l,10,10); doc.save((pName.value||'Report')+'.pdf')}
+function saveR(){let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); a.unshift({n:pName.value,a:pAge.value,g:pGen.value,d:pDate.value,t:uType.value,r:rText.value}); localStorage.setItem('us_rep',JSON.stringify(a)); render(); alert('Report Saved!')}
+function render(){let q=(sBox.value||'').toLowerCase(); let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); list.innerHTML=a.map((x,i)=>`<div style="border:1px solid #ddd;border-radius:10px;padding:8px;margin:6px 0"><b>${x.n}</b> ${x.t} ${x.d} <button class="small" style="background:#0a4eb5" onclick="view(${i})">View</button> <button class="small" style="background:#ff3b30" onclick="del(${i})">Del</button></div>`).filter((_,i)=> (a[i].n+a[i].t).toLowerCase().includes(q)).join('')}
+function view(i){let a=JSON.parse(localStorage.getItem('us_rep')||'[]')[i]; pName.value=a.n; pAge.value=a.a; pGen.value=a.g; pDate.value=a.d; uType.value=a.t; rText.value=a.r; make();}
+function del(i){let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); a.splice(i,1); localStorage.setItem('us_rep',JSON.stringify(a)); render();}
 init();
 </script>
 </body>
