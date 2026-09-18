@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Ultrasound - Final Fixed</title>
+<title>Azam Ultrasound - Final with LMP & Edit</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 <style>
@@ -12,7 +12,7 @@ body{background:#eef4ff;padding:10px}
 input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px solid #cbd5e1;margin:6px 0;font-size:14px}
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;font-size:16px;margin-top:8px}
 .btn2{background:#ff3b30;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin:8px 0}
-.small{padding:8px 12px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff}
+.small{padding:8px 10px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff;font-size:12px}
 .report{width:210mm;min-height:297mm;margin:auto;background:#fff;border:2px solid #0a4eb5;border-radius:12px;padding:0 16mm 16mm 16mm;padding-top:51mm;line-height:1.9;box-sizing:border-box}
 .calcBox{background:#f0f7ff;border:2px dashed #1e90ff;border-radius:12px;padding:12px;margin:10px 0}
 .calcBox h4{color:#0a4eb5;margin-bottom:8px;font-size:14px}
@@ -34,6 +34,9 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <input id="pDate" type="date"><select id="uType"></select>
 </div>
 <input id="ref" placeholder="Referred By Dr.">
+<!-- NAYE FIELDS -->
+<input id="clinicalLMP" placeholder="Clinical Data / LMP date - e.g. LMP 12-03-2026, 28 weeks amenorrhea" style="display:none">
+<input id="presentComp" placeholder="Present complaints-H/O: e.g. Pain abdomen, burning micturition" style="display:none">
 <input type="file" id="wordUp" accept=".docx" style="display:none">
 <button class="btn2" onclick="document.getElementById('wordUp').click()">📄 Word File Se Template Update Karen</button>
 
@@ -43,8 +46,8 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <input id="cHC" type="number" placeholder="HC mm *" oninput="calcFWB()">
 <input id="cAC" type="number" placeholder="AC mm *" oninput="calcFWB()">
 <input id="cFL" type="number" placeholder="FL mm *" oninput="calcFWB()">
-<input id="cCRL" type="number" placeholder="CRL mm (early)" oninput="calcFWB()">
-<input id="cBPD" type="number" placeholder="BPD mm (optional)" oninput="calcFWB()">
+<input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()">
+<input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()">
 <input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()">
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
@@ -474,6 +477,9 @@ IMPRESSION: Normal Testicular Doppler.`
 };
 
 let fetalData={};
+let editIndex=-1;
+
+function isGynae(t){ t=t.toLowerCase(); return t.includes('fwb') || t.includes('pelvis') || t.includes('follicle') || t.includes('rpco') || t.includes('ovarian'); }
 
 function calcFWB(){
  let bpd=parseFloat(document.getElementById('cBPD').value)||0;
@@ -482,71 +488,43 @@ function calcFWB(){
  let fl=parseFloat(document.getElementById('cFL').value)||0;
  let crl=parseFloat(document.getElementById('cCRL').value)||0;
  let afi=parseFloat(document.getElementById('cAFI').value)||0;
-
  let gas=[];
- if(hc>0){ let ga_hc = (hc * 0.111) + 5.5; gas.push(ga_hc); }
- if(ac>0){ let ga_ac = (ac * 0.117) + 3.8; gas.push(ga_ac); }
- if(fl>0){ let ga_fl = (fl * 0.4) + 9.5; gas.push(ga_fl); }
- if(crl>0){ let ga_crl = (crl * 0.16) + 6.8; gas.push(ga_crl); }
- if(bpd>0 && gas.length<2){ let ga_bpd = (bpd * 0.33) + 4; gas.push(ga_bpd); }
-
- let avgGA = gas.length? (gas.reduce((a,b)=>a+b,0)/gas.length) : 0;
-
+ if(hc>0) gas.push(hc*0.111+5.5);
+ if(ac>0) gas.push(ac*0.117+3.8);
+ if(fl>0) gas.push(fl*0.4+9.5);
+ if(crl>0) gas.push(crl*0.16+6.8);
+ if(bpd>0 && gas.length<2) gas.push(bpd*0.33+4);
+ let avgGA = gas.length? (gas.reduce((a,b)=>a+b,0)/gas.length):0;
  let efw=0;
  if(hc>0 && ac>0 && fl>0){
-   let hc_cm = hc/10, ac_cm = ac/10, fl_cm = fl/10;
+   let hc_cm=hc/10, ac_cm=ac/10, fl_cm=fl/10;
    let log10efw = 1.326 - (0.00326*ac_cm*fl_cm) + (0.0107*hc_cm) + (0.0438*ac_cm) + (0.158*fl_cm);
    efw = Math.pow(10, log10efw);
  }
-
  let eddStr='--';
- if(avgGA>0){
-   let daysLeft = (40 - avgGA)*7;
-   let edd = new Date(); edd.setDate(edd.getDate()+daysLeft);
-   eddStr = edd.toLocaleDateString('en-GB');
- }
-
+ if(avgGA>0){ let edd=new Date(); edd.setDate(edd.getDate()+(40-avgGA)*7); eddStr=edd.toLocaleDateString('en-GB'); }
  fetalData={ga:avgGA, efw:efw, edd:eddStr, hc:hc, ac:ac, fl:fl, bpd:bpd, crl:crl, afi:afi};
-
- document.getElementById('resGA').innerText = avgGA? `GA: ${avgGA.toFixed(1)}w (${Math.floor(avgGA)}w${Math.round((avgGA%1)*7)}d)` : 'GA: -- weeks';
+ document.getElementById('resGA').innerText = avgGA? `GA: ${avgGA.toFixed(1)}w (${Math.floor(avgGA)}w${Math.round((avgGA%1)*7)}d)`:'GA: -- weeks';
  document.getElementById('resEDD').innerText = `EDD: ${eddStr}`;
- document.getElementById('resEFW').innerText = efw? `Weight: ${Math.round(efw)} gm` : 'Weight: -- gm';
+ document.getElementById('resEFW').innerText = efw? `Weight: ${Math.round(efw)} gm`:'Weight: -- gm';
 }
 
 function applyCalc(){
- if(!fetalData.ga &&!fetalData.efw){ alert('Pehle HC, AC, FL mm me likhen!'); return; }
- let ga = fetalData.ga;
- let gaFull = ga? `${ga.toFixed(1)} weeks (${Math.floor(ga)} weeks ${Math.round((ga%1)*7)} days)` : '__ weeks';
- let w = fetalData.efw? `${Math.round(fetalData.efw)} gm` : '__ gm';
- let afiTxt = fetalData.afi? `${fetalData.afi} mm` : '__ mm';
-
- let txt = document.getElementById('rText').value;
-
- // HC AC FL BPD CRL in mm
- if(fetalData.hc) txt = txt.replace(/HC __ mm/g, `HC ${fetalData.hc} mm`);
- if(fetalData.ac) txt = txt.replace(/AC __ mm/g, `AC ${fetalData.ac} mm`);
- if(fetalData.fl) txt = txt.replace(/FL __ mm/g, `FL ${fetalData.fl} mm`);
- if(fetalData.bpd) txt = txt.replace(/BPD __ mm/g, `BPD ${fetalData.bpd} mm`);
- if(fetalData.crl) txt = txt.replace(/CRL __ mm/g, `CRL ${fetalData.crl} mm`);
-
- // AFI mm
- if(fetalData.afi) txt = txt.replace(/AFI __ mm/g, `AFI ${afiTxt}`).replace(/AFI __ cm/g, `AFI ${afiTxt}`);
-
- // Weight
- if(fetalData.efw) txt = txt.replace(/Weight __ gm/g, `Weight ${w}`).replace(/Estimated Weight __ gm/g, `Estimated Weight ${w}`).replace(/Estimated weight __ gm/g, `Estimated weight ${w}`);
-
- // Weeks
- if(ga){
-   txt = txt.replace(/= __ weeks/g, `= ${gaFull}`);
-   txt = txt.replace(/IMPRESSION: Single live __ weeks\./g, `IMPRESSION: Single live ${gaFull}, EFW ${w}, AFI ${afiTxt}.`);
-   txt = txt.replace(/IMPRESSION: Single live __ weeks/g, `IMPRESSION: Single live ${gaFull}, EFW ${w}`);
-   if(txt.includes('IMPRESSION: Single live fetus __ weeks')){
-     txt = txt.replace(/Single live fetus __ weeks.*/, `Single live fetus ${gaFull}, EFW ${w}, AFI ${afiTxt}, EDD ${fetalData.edd}.`);
-   }
- }
-
- document.getElementById('rText').value = txt;
- alert('✅ Calculations mm me report me lag gayi! Ab Final Report banayen.');
+ if(!fetalData.ga &&!fetalData.efw){ alert('Pehle HC, AC, FL mm likhen!'); return; }
+ let ga=fetalData.ga, gaFull=ga? `${ga.toFixed(1)} weeks (${Math.floor(ga)} weeks ${Math.round((ga%1)*7)} days)`:'__ weeks';
+ let w=fetalData.efw? `${Math.round(fetalData.efw)} gm`:'__ gm';
+ let afiTxt=fetalData.afi? `${fetalData.afi} mm`:'__ mm';
+ let txt=document.getElementById('rText').value;
+ if(fetalData.hc) txt=txt.replace(/HC __ mm/g,`HC ${fetalData.hc} mm`);
+ if(fetalData.ac) txt=txt.replace(/AC __ mm/g,`AC ${fetalData.ac} mm`);
+ if(fetalData.fl) txt=txt.replace(/FL __ mm/g,`FL ${fetalData.fl} mm`);
+ if(fetalData.bpd) txt=txt.replace(/BPD __ mm/g,`BPD ${fetalData.bpd} mm`);
+ if(fetalData.crl) txt=txt.replace(/CRL __ mm/g,`CRL ${fetalData.crl} mm`);
+ if(fetalData.afi) txt=txt.replace(/AFI __ mm/g,`AFI ${afiTxt}`).replace(/AFI __ cm/g,`AFI ${afiTxt}`);
+ if(fetalData.efw) txt=txt.replace(/Weight __ gm/g,`Weight ${w}`).replace(/Estimated Weight __ gm/g,`Estimated Weight ${w}`).replace(/Estimated weight __ gm/g,`Estimated weight ${w}`);
+ if(ga){ txt=txt.replace(/= __ weeks/g,`= ${gaFull}`); txt=txt.replace(/IMPRESSION: Single live __ weeks\./g,`IMPRESSION: Single live ${gaFull}, EFW ${w}, AFI ${afiTxt}.`); txt=txt.replace(/IMPRESSION: Single live __ weeks/g,`IMPRESSION: Single live ${gaFull}, EFW ${w}`); }
+ document.getElementById('rText').value=txt;
+ alert('✅ Calculations mm me report me lag gayi!');
 }
 
 let custom=JSON.parse(localStorage.getItem('custom_templates')||'{}');Object.assign(T,custom);
@@ -557,9 +535,11 @@ function init(){
  document.getElementById('rText').value=T[Object.keys(T)[0]]; checkFetal(); render();
 }
 function checkFetal(){
- let v=document.getElementById('uType').value.toLowerCase();
- if(v.includes('fwb')){ document.getElementById('fetalCalc').style.display='block'; }
- else { document.getElementById('fetalCalc').style.display='none'; }
+ let v=document.getElementById('uType').value;
+ let gyn=isGynae(v);
+ document.getElementById('fetalCalc').style.display=v.toLowerCase().includes('fwb')?'block':'none';
+ document.getElementById('clinicalLMP').style.display=gyn?'block':'none';
+ document.getElementById('presentComp').style.display=!gyn?'block':'none';
 }
 function load(){document.getElementById('rText').value=T[document.getElementById('uType').value]||''; checkFetal();}
 document.getElementById('uType').addEventListener('change',load);
@@ -586,7 +566,17 @@ function formatReport(text){
  }).join('');
 }
 function make(){
- let info=`<div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:15px"><div><b>Patient Name:</b> ${pName.value} &nbsp; <b>Age/Sex:</b> ${pAge.value}/${pGen.value}<br><b>Referred By:</b> ${ref.value}</div><div><b>Date:</b> ${pDate.value}</div></div><hr style="margin-bottom:15px">`;
+ let type=document.getElementById('uType').value;
+ let gyn=isGynae(type);
+ let clinicalHTML='';
+ if(gyn){
+   let lmp=document.getElementById('clinicalLMP').value||'__';
+   clinicalHTML=`<div style="margin:3px 0"><b><u>Clinical Data/LMP date:</u></b> ${lmp}</div>`;
+ } else {
+   let comp=document.getElementById('presentComp').value||'__';
+   clinicalHTML=`<div style="margin:3px 0"><b><u>Present complaints-H/O:</u></b> ${comp}</div>`;
+ }
+ let info=`<div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:10px"><div><b>Patient Name:</b> ${pName.value} &nbsp; <b>Age/Sex:</b> ${pAge.value}/${pGen.value}<br><b>Referred By:</b> ${ref.value}</div><div><b>Date:</b> ${pDate.value}</div></div><hr style="margin-bottom:10px">${clinicalHTML}<hr style="margin:10px 0">`;
  let body=formatReport(rText.value);
  let footer=`<div style="margin-top:80px;text-align:center;font-size:11px;color:#555"><i>This is computer generated report no signature required</i></div>`;
  document.getElementById('out').innerHTML=info+body+footer;
@@ -594,9 +584,40 @@ function make(){
  window.scrollTo(0,document.getElementById('outCard').offsetTop);
 }
 function pdf(){const{jsPDF}=window.jspdf; let doc=new jsPDF('p','mm','a4'); let t=document.getElementById('out').innerText; doc.text(doc.splitTextToSize(t,180),10,52); doc.save((pName.value||'Report')+'.pdf');}
-function saveR(){let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); a.unshift({n:pName.value,a:pAge.value,g:pGen.value,d:pDate.value,t:uType.value,r:rText.value}); localStorage.setItem('us_rep',JSON.stringify(a)); render(); alert('Report Saved!')}
-function render(){let q=(sBox.value||'').toLowerCase(); let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); list.innerHTML=a.map((x,i)=>`<div style="border:1px solid #ddd;border-radius:10px;padding:8px;margin:6px 0"><b>${x.n}</b> ${x.t} ${x.d} <button class="small" style="background:#0a4eb5" onclick="view(${i})">View</button> <button class="small" style="background:#ff3b30" onclick="del(${i})">Del</button></div>`).filter((_,i)=> (a[i].n+a[i].t).toLowerCase().includes(q)).join('')}
-function view(i){let a=JSON.parse(localStorage.getItem('us_rep')||'[]')[i]; pName.value=a.n; pAge.value=a.a; pGen.value=a.g; pDate.value=a.d; uType.value=a.t; rText.value=a.r; checkFetal(); make();}
+function saveR(){
+ let a=JSON.parse(localStorage.getItem('us_rep')||'[]');
+ let obj={n:pName.value,a:pAge.value,g:pGen.value,d:pDate.value,t:uType.value,r:rText.value, lmp:clinicalLMP.value, comp:presentComp.value, ref:ref.value};
+ if(editIndex>=0){ a[editIndex]=obj; editIndex=-1; }
+ else { a.unshift(obj); }
+ localStorage.setItem('us_rep',JSON.stringify(a)); render(); alert(editIndex>=0?'Report Updated!':'Report Saved!');
+}
+function render(){
+ let q=(sBox.value||'').toLowerCase();
+ let a=JSON.parse(localStorage.getItem('us_rep')||'[]');
+ list.innerHTML=a.map((x,i)=>`
+ <div style="border:1px solid #ddd;border-radius:10px;padding:8px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
+ <div><b>${x.n}</b> <small>${x.t} ${x.d}</small></div>
+ <div>
+ <button class="small" style="background:#0a4eb5" onclick="view(${i})">View</button>
+ <button class="small" style="background:#f59e0b" onclick="editR(${i})">Edit</button>
+ <button class="small" style="background:#ff3b30" onclick="del(${i})">Del</button>
+ </div></div>`).filter((_,i)=> (a[i].n+a[i].t).toLowerCase().includes(q)).join('');
+}
+function view(i){
+ let a=JSON.parse(localStorage.getItem('us_rep')||'[]')[i];
+ pName.value=a.n; pAge.value=a.a; pGen.value=a.g; pDate.value=a.d; uType.value=a.t; rText.value=a.r;
+ clinicalLMP.value=a.lmp||''; presentComp.value=a.comp||''; ref.value=a.ref||'';
+ checkFetal(); make();
+}
+function editR(i){
+ let a=JSON.parse(localStorage.getItem('us_rep')||'[]')[i];
+ pName.value=a.n; pAge.value=a.a; pGen.value=a.g; pDate.value=a.d; uType.value=a.t; rText.value=a.r;
+ clinicalLMP.value=a.lmp||''; presentComp.value=a.comp||''; ref.value=a.ref||'';
+ checkFetal();
+ editIndex=i;
+ window.scrollTo(0,0);
+ alert('Edit Mode: Ab changes karke Save Report dabayen, report update ho jayega.');
+}
 function del(i){let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); a.splice(i,1); localStorage.setItem('us_rep',JSON.stringify(a)); render();}
 init();
 </script>
