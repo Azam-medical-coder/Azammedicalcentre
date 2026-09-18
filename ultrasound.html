@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - Final Password Fixed</title>
+<title>Azam Medical Centre - Doctors Select Fixed</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 <style>
@@ -26,15 +26,14 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 </head>
 <body>
 
-<!-- PASSWORD SYSTEM FIXED - HAR BAR MANGE GA -->
 <div id="loginOverlay">
 <div class="loginBox">
 <img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:80px;height:80px;border-radius:50%;border:3px solid #0a4eb5;margin-bottom:10px">
 <h2 style="color:#0a4eb5;margin-bottom:5px">Azam Medical Centre</h2>
-<p style="margin-bottom:15px;color:#555">Secure Login - Password Required</p>
+<p style="margin-bottom:15px;color:#555">Secure Login</p>
 <input id="passInput" type="password" placeholder="Enter Password" autocomplete="off" style="text-align:center;font-size:16px;letter-spacing:4px">
 <button class="btn" onclick="checkPass()">Login</button>
-<p id="passErr" style="color:red;margin-top:10px;display:none">Ghalat Password! Correct: Pakistan@777</p>
+<p id="passErr" style="color:red;margin-top:10px;display:none">Ghalat Password!</p>
 </div>
 </div>
 
@@ -51,35 +50,9 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <input id="pDate" type="date"><select id="uType"></select>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<input id="ref" list="refList" placeholder="Ref By Dr.">
-<input id="sono" list="sonoList" placeholder="Sonologist Dr.">
+<select id="ref"></select>
+<select id="sono"></select>
 </div>
-
-<datalist id="refList">
-<option value="Dr. Shahzad Azam">
-<option value="Dr. M. Azam Arain">
-<option value="Dr. Nazia wagan">
-<option value="Dr. Syed Kashan">
-<option value="Dr. Ali mangrio">
-<option value="Dr. M. Zeeshan">
-<option value="Dr. M. Ali Taj">
-<option value="Dr. Shakeel Arain">
-<option value="Dr. Aqsa Gull">
-<option value="Dr. Shahzad Sadaqat">
-<option value="Dr. Bilal">
-<option value="Dr. Sofia Butt">
-<option value="Dr. Talha Bhatti">
-<option value="Dr. Irfan">
-<option value="Dr. Raheel Arain">
-<option value="Dr. ">
-<option value="Self">
-</datalist>
-
-<datalist id="sonoList">
-<option value="DR. M. ZEESHAN">
-<option value="DR. NAZIA WAGAN">
-<option value="DR. SAMAN AZAM">
-</datalist>
 
 <input id="clinicalLMP" placeholder="Clinical Data / LMP date" style="display:none">
 <input id="presentComp" placeholder="Present complaints-H/O:" style="display:none">
@@ -119,20 +92,47 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <div class="card noPrint"><h3>Saved Reports</h3><input id="sBox" placeholder="Search Name" onkeyup="render()"><div id="list"></div></div>
 
 <script>
-// PASSWORD FIXED - SESSION STORAGE
-function checkPass(){
- let p=document.getElementById('passInput').value;
- if(p==='Pakistan@777'){
-   sessionStorage.setItem('azam_login','ok');
-   document.getElementById('loginOverlay').style.display='none';
- } else {
-   document.getElementById('passErr').style.display='block';
- }
-}
-if(sessionStorage.getItem('azam_login')==='ok'){
- document.getElementById('loginOverlay').style.display='none';
-}
+function checkPass(){let p=document.getElementById('passInput').value;if(p==='Pakistan@777'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';}else{document.getElementById('passErr').style.display='block';}}
+if(sessionStorage.getItem('azam_login')==='ok'){document.getElementById('loginOverlay').style.display='none';}
 document.getElementById('passInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});
+
+// DOCTORS LIST - AB SELECT BOX ME
+const refDoctors = ["Ref By Dr. - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel Arain","Dr. Aqsa Gull","Dr. Shahzad Sadaqat","Dr. Bilal","Dr. Sofia Butt","Dr. Talha Bhatti","Dr. Irfan","Dr. Raheel Arain","Dr. ","Self","✏️ Other - Khud Likhen"];
+const sonoDoctors = ["Sonologist Dr. - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN","DR. SAMAN AZAM","✏️ Other - Khud Likhen"];
+
+function fillSelect(id, list){
+ let s=document.getElementById(id);
+ s.innerHTML='';
+ list.forEach(v=>{
+   let o=document.createElement('option');
+   o.value=v.includes('Select')?'':v;
+   o.textContent=v;
+   s.appendChild(o);
+ });
+}
+fillSelect('ref', refDoctors);
+fillSelect('sono', sonoDoctors);
+
+document.getElementById('ref').addEventListener('change', function(){
+ if(this.options[this.selectedIndex].text.includes('Other')){
+   let n=prompt('Ref By Dr. ka naam likhen:');
+   if(n){
+     let o=document.createElement('option');o.value=n;o.textContent=n;
+     this.insertBefore(o, this.options[this.options.length-1]);
+     this.value=n;
+   }
+ }
+});
+document.getElementById('sono').addEventListener('change', function(){
+ if(this.options[this.selectedIndex].text.includes('Other')){
+   let n=prompt('Sonologist Dr. ka naam likhen:');
+   if(n){
+     let o=document.createElement('option');o.value=n;o.textContent=n;
+     this.insertBefore(o, this.options[this.options.length-1]);
+     this.value=n;
+   }
+ }
+});
 
 let T={
 "Whole abdomen":`ULTRASOUND WHOLE ABDOMEN
@@ -264,82 +264,68 @@ IMPRESSION: Normal KUB.`,
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), microliths __ mm (N: No stone).
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm), microliths __ mm (N: No stone).
 URINARY BLADDER: Normal.
-IMPRESSION: Bilateral Renal Microlithiasis.
-Advice: RFTs, Urine R/E, Serum Calcium, Uric Acid, 24hrs fluid intake 3-4L, Urologist consultation.`,
+IMPRESSION: Bilateral Renal Microlithiasis.`,
 "KUB with dilated proximal ureter dilation":`ULTRASOUND KUB WITH DILATED PROXIMAL URETER
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), mild hydronephrosis, proximal ureter dilated __ mm (N: <3 mm).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Normal.
-IMPRESSION: Right proximal ureteric dilatation.
-Advice: RFTs, Urine R/E, X-Ray KUB, CT KUB if needed, Urologist consultation.`,
+IMPRESSION: Right proximal ureteric dilatation.`,
 "KUB with hydronephrosis":`ULTRASOUND KUB WITH HYDRONEPHROSIS
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), moderate hydronephrosis (N: No hydronephrosis).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Normal.
-IMPRESSION: Right hydronephrosis.
-Advice: RFTs, Urine R/E & C/S, CT IVP / KUB, Urologist consultation.`,
+IMPRESSION: Right hydronephrosis.`,
 "KUB with Renal Fullness":`ULTRASOUND KUB WITH RENAL FULLNESS
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), mild fullness.
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm), mild fullness.
 URINARY BLADDER: __ cc (N: 300-500 cc).
-IMPRESSION: Bilateral mild renal fullness.
-Advice: RFTs, Urine R/E, Plenty of fluids, Re-scan after hydration.`,
+IMPRESSION: Bilateral mild renal fullness.`,
 "KUB with Calculus":`ULTRASOUND KUB WITH CALCULUS
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), calculus __ mm (N: No stone).
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm), calculus __ mm (N: No stone).
 URINARY BLADDER: Normal.
-IMPRESSION: Bilateral Renal Calculus.
-Advice: RFTs, Urine R/E & C/S, Serum Calcium, Uric Acid, X-Ray KUB, Urologist consultation, Increase water intake.`,
+IMPRESSION: Bilateral Renal Calculus.`,
 "KUB with Cortical Simple Cyst":`ULTRASOUND KUB WITH CORTICAL SIMPLE CYST
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), simple cyst __ mm (N: No cyst).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Normal.
-IMPRESSION: Right Renal Simple Cyst.
-Advice: RFTs, Urine R/E, Urologist consultation, Follow-up scan after 6 months.`,
+IMPRESSION: Right Renal Simple Cyst.`,
 "KUB with Complex Cyst":`ULTRASOUND KUB WITH COMPLEX CYST
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), complex cyst __ mm with internal echoes (N: No cyst).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
-IMPRESSION: Right Complex Cyst.
-Advice: RFTs, Urine R/E, CT Abdomen with contrast, Urologist consultation.`,
+IMPRESSION: Right Complex Cyst.`,
 "KUB with swelled kidney":`ULTRASOUND KUB WITH SWELLED KIDNEY
 RIGHT KIDNEY: Enlarged __ x __ cm (N: 9-12 cm), swollen, increased echogenicity.
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
-IMPRESSION: Right swollen kidney -? Pyelonephritis.
-Advice: CBC, CRP, RFTs, Urine R/E & C/S, Blood culture, Physician / Nephrologist consultation.`,
+IMPRESSION: Right swollen kidney -? Pyelonephritis.`,
 "KUB with Atopic Kidney":`ULTRASOUND KUB WITH ATROPHIC KIDNEY
 RIGHT KIDNEY: Atrophic __ x __ cm (N: 9-12 cm).
 LEFT KIDNEY: Compensatory enlarged __ x __ cm (N: 9-12 cm).
-IMPRESSION: Right Atrophic Kidney.
-Advice: RFTs, Urine R/E, Blood Pressure monitoring, Nephrologist consultation.`,
+IMPRESSION: Right Atrophic Kidney.`,
 "KUB with Infection":`ULTRASOUND KUB WITH INFECTION
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), infective changes.
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm), infective changes.
 URINARY BLADDER: Thickened wall __ mm (N: <3 mm full) - cystitis.
-IMPRESSION: Bilateral infective changes.
-Advice: CBC, CRP, Urine R/E & Culture Sensitivity, RFTs, Physician consultation, Plenty of fluids.`,
+IMPRESSION: Bilateral infective changes.`,
 "KUB with PUJ":`ULTRASOUND KUB WITH PUJ OBSTRUCTION
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm), hydronephrosis with PUJ narrowing (N: No obstruction).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
-IMPRESSION: Right PUJ Obstruction.
-Advice: RFTs, DTPA Renal Scan, IVP / CT Urography, Urologist consultation.`,
+IMPRESSION: Right PUJ Obstruction.`,
 "KUB with Urinary bladder stone":`ULTRASOUND KUB WITH URINARY BLADDER STONE
 RIGHT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Calculus __ mm (N: No stone) with shadowing.
-IMPRESSION: UB Calculus __ mm.
-Advice: Urine R/E & C/S, RFTs, X-Ray Pelvis, Urologist consultation for cystoscopy.`,
+IMPRESSION: UB Calculus __ mm.`,
 "KUB with cystitis":`ULTRASOUND KUB WITH CYSTITIS
 RIGHT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Thickened wall __ mm (N: <3 mm full), internal echoes.
-IMPRESSION: Cystitis.
-Advice: Urine R/E & Culture, CBC, RFTs, Plenty of fluids, Physician consultation.`,
+IMPRESSION: Cystitis.`,
 "KUB with UB debris":`ULTRASOUND KUB WITH UB DEBRIS
 RIGHT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 URINARY BLADDER: Debris / internal echoes in lumen __ cc (N: Clear).
-IMPRESSION: UB debris - infection.
-Advice: Urine R/E & C/S, CBC, RFTs, Urologist consultation.`,
+IMPRESSION: UB debris - infection.`,
 "KUB with well placed folys catheter":`ULTRASOUND KUB WITH WELL PLACED FOLYS CATHETER
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm) normal.
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm) normal.
@@ -350,8 +336,7 @@ RIGHT KIDNEY: __ x __ cm (N: 9-12 cm) normal.
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm) normal.
 URINARY BLADDER: __ cc (N: 300-500 cc), residual __ cc (N: <50 cc).
 PROSTATE: __ x __ x __ mm (N: <45 x <35 x <30 mm), __ gm (N: <25-30 gm), Volume __ cc (N: <30 cc), Enlarged.
-IMPRESSION: Enlarged Prostate __ gm.
-Advice: PSA (N: <4 ng/ml), Urine R/E, RFTs, Urologist consultation, Uroflowmetry.`,
+IMPRESSION: Enlarged Prostate __ gm.`,
 "KUB + Normal Prostate":`ULTRASOUND KUB + NORMAL PROSTATE
 RIGHT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
 LEFT KIDNEY: Normal 9-12 cm (N: 9-12 cm).
@@ -365,8 +350,7 @@ IMPRESSION: Normal Prostate.`,
 "Prostate with pre & post void urine":`ULTRASOUND PROSTATE WITH PRE & POST VOID
 PROSTATE: __ x __ x __ mm (N: <45 x <35 x <30 mm), __ gm (N: <25-30 gm), Volume __ cc (N: <30 cc).
 URINARY BLADDER: Pre-void __ cc (N: 300-500 cc), Post-void residual __ cc (N: <50 cc, significant >100 cc).
-IMPRESSION: Prostate __ gm with residual __ cc.
-Advice: PSA (N: <4 ng/ml), Urine R/E, RFTs, Urologist consultation.`,
+IMPRESSION: Prostate __ gm with residual __ cc.`,
 "Pelvis Normal":`ULTRASOUND PELVIS NORMAL
 UTERUS: __ x __ cm (N: 7.5 x 5 x 2.5 cm reproductive), ET __ mm (N: 5-15 mm premenopausal, <5 mm postmenopausal).
 OVARIES: Right __ x __ cm (N: Vol <10 cc), Left __ x __ cm (N: Vol <10 cc).
@@ -376,52 +360,45 @@ IMPRESSION: Normal Pelvis.`,
 UTERUS: __ x __ cm (N: 7.5 x 5 x 2.5 cm), bulky, heterogeneous.
 OVARIES: Bulky (N: Vol <10 cc).
 POD: Free fluid with echoes.
-IMPRESSION: PID.
-Advice: CBC, CRP, Urine R/E & C/S, High Vaginal Swab C/S, CRP, Gynae consultation, Avoid unhygienic conditions.`,
+IMPRESSION: PID.`,
 "Pelvis with Bulky uterus":`ULTRASOUND PELVIS WITH BULKY UTERUS
 UTERUS: Bulky __ x __ cm (N: 7.5 x 5 x 2.5 cm), ET __ mm (N: 5-15 mm).
 OVARIES: Normal (N: Vol <10 cc).
-IMPRESSION: Bulky Uterus.
-Advice: CBC, CA-125 (N: <35 U/ml), Pap Smear, Gynae consultation.`,
+IMPRESSION: Bulky Uterus.`,
 "Pelvis with Fibroid":`ULTRASOUND PELVIS WITH FIBROID
 UTERUS: __ x __ cm (N: 7.5 x 5 x 2.5 cm), fibroid __ mm (N: No fibroid) anterior/posterior wall.
 ET __ mm (N: 5-15 mm).
 OVARIES: Normal (N: Vol <10 cc).
-IMPRESSION: Uterine Fibroid __ mm.
-Advice: CBC, CA-125 (N: <35 U/ml), Gynae consultation, Follow-up scan after 3 months.`,
+IMPRESSION: Uterine Fibroid __ mm.`,
 "Pelvis with ovarian cyst":`ULTRASOUND PELVIS WITH OVARIAN CYST
 UTERUS: __ x __ cm (N: 7.5 x 5 x 2.5 cm), ET __ mm (N: 5-15 mm).
 OVARY: Right / Left ovary shows anechoic simple cyst __ x __ mm (N: Follicle <25 mm), thin walled, no internal echoes.
 No free fluid.
-IMPRESSION: Right / Left Ovarian Simple Cyst __ mm.
-Advice: CA-125 (N: <35 U/ml), LH, FSH, Gynae consultation, Follow-up scan after 2 months.`,
+IMPRESSION: Right / Left Ovarian Simple Cyst __ mm.`,
 "Pelvis with RPCOs":`ULTRASOUND PELVIS WITH PCOS / RPCOs
 UTERUS: __ x __ cm (N: 7.5 x 5 x 2.5 cm), ET __ mm (N: 5-15 mm).
 OVARIES: Both enlarged, Right __ x __ cm volume __ cc (N: <10 cc), Left __ x __ cm volume __ cc (N: <10 cc), multiple small peripheral follicles 8-12 in number, 2-8mm (N: <12 follicles), central echogenic stroma - RPCOs.
 No free fluid.
-IMPRESSION: Bilateral Polycystic Ovaries (PCOS / RPCOs).
-Advice: LH, FSH, Prolactin, Testosterone, TSH, HbA1c, Lipid Profile, Gynae / Endocrine consultation, Weight reduction & Lifestyle modification.`,
+IMPRESSION: Bilateral Polycystic Ovaries (PCOS / RPCOs).`,
 "Pelvis with follicle":`ULTRASOUND PELVIS WITH FOLLICLE
 UTERUS: __ x __ cm, ET __ mm (N: 5-15 mm, triple line pre-ovulatory).
 OVARIES: Right ovary shows dominant follicle __ x __ mm (N: Mature 18-24 mm), Left ovary normal (N: Vol <10 cc).
 No free fluid.
-IMPRESSION: Dominant follicle __ mm in Right ovary.
-Advice: Serial follicle monitoring, Gynae consultation.`,
+IMPRESSION: Dominant follicle __ mm in Right ovary.`,
 "Pelvis with mature follicles":`ULTRASOUND PELVIS WITH MATURE FOLLICLES
 UTERUS: __ x __ cm, ET __ mm triple line (N: 8-14 mm pre-ovulatory).
 OVARIES: Right ovary shows mature follicle __ x __ mm (N: 18-24 mm), Left ovary follicle __ mm.
 Minimal free fluid in POD.
-IMPRESSION: Mature follicle __ mm - ready for ovulation.
-Advice: Timed intercourse, Gynae consultation.`,
+IMPRESSION: Mature follicle __ mm - ready for ovulation.`,
 "FWB":`ULTRASOUND FWB
 Presentation: Cephalic (N: Cephalic at term)
 Lie: Longitudinal (N: Longitudinal)
 Cardiac Activity: Present, FHR __ bpm (N: 110-160 bpm)
 Fetus: Single, Alive
-BPD: __ mm (N: As per GA chart)
-HC: __ mm (N: As per GA chart)
-AC: __ mm (N: As per GA chart)
-FL: __ mm (N: As per GA chart)
+BPD: __ mm
+HC: __ mm
+AC: __ mm
+FL: __ mm
 Weeks: __ weeks
 Fetus Weight: __ gm (N: As per GA, Hadlock)
 AFI: __ mm (N: 80-180 mm)
@@ -441,11 +418,6 @@ Weeks: __ weeks
 Fetus Weight: __ gm
 AFI: __ mm (N: 80-180 mm)
 Placenta: __
-Head: Normal, No hydrocephalus
-Spine: Intact
-Heart: 4 Chamber view normal (N: Normal)
-Abdomen: Stomach, Kidneys, Bladder normal
-Limbs: All 4 limbs seen
 IMPRESSION: Normal anomaly scan __ weeks.`,
 "FWB with 15 weeks of pregnancy":`ULTRASOUND FWB 15 WEEKS
 Presentation: Variable
@@ -475,8 +447,7 @@ FL: __ mm (N: ~33 mm at 20w)
 Weeks: 20 weeks
 Fetus Weight: __ gm (N: ~300-350 gm at 20w)
 AFI: __ mm (N: 80-180 mm)
-Placenta: __ anterior/posterior, Grade __ (N: Grade 0-I)
-Anomaly: No gross anomaly seen
+Placenta: __
 Cervix: Closed (N: >25 mm)
 IMPRESSION: Single live 20 weeks pregnancy.`,
 "FWB with 25 weeks of pregnancy":`ULTRASOUND FWB 25 WEEKS
@@ -529,10 +500,8 @@ Fetus: Single
 CRL: __ mm
 Weeks: __ weeks
 AFI: __ mm
-Subchorionic Hematoma: Nil
 Cervix: Closed
-IMPRESSION: Missed abortion __ weeks - No cardiac activity.
-Advice: CBC, Beta-HCG, Gynae emergency consultation, Hospital admission advised.`,
+IMPRESSION: Missed abortion __ weeks - No cardiac activity.`,
 "FWB with no cardiac Flickr":`ULTRASOUND FWB WITH NO CARDIAC FLICKER
 Presentation: N/A
 Lie: N/A
@@ -542,8 +511,7 @@ CRL: __ mm
 Weeks: __ weeks
 AFI: __ mm
 Cervix: Closed
-IMPRESSION: Intrauterine fetal demise - No cardiac flicker at __ weeks.
-Advice: CBC, Beta-HCG, Gynae emergency consultation.`,
+IMPRESSION: Intrauterine fetal demise - No cardiac flicker at __ weeks.`,
 "FWB with IUD":`ULTRASOUND FWB WITH IUD
 Presentation: Cephalic
 Lie: Longitudinal
@@ -557,10 +525,8 @@ Weeks: __ weeks
 Fetus Weight: __ gm
 AFI: __ mm (N: 80-180 mm)
 Placenta: __
-IUD: Copper T / Multiload seen in lower uterine segment / displaced
 Cervix: Closed (N: >25 mm)
-IMPRESSION: Single live __ weeks pregnancy with IUD in situ.
-Advice: Gynae consultation for high risk pregnancy, Removal planning after delivery.`,
+IMPRESSION: Single live __ weeks pregnancy with IUD in situ.`,
 "FWB with Cephalic presentation":`ULTRASOUND FWB WITH CEPHALIC PRESENTATION
 Presentation: Cephalic (N: Cephalic at term)
 Lie: Longitudinal
@@ -574,7 +540,6 @@ Weeks: __ weeks
 Fetus Weight: __ gm
 AFI: __ mm (N: 80-180 mm)
 Placenta: __
-Head: Engaged / Not Engaged
 IMPRESSION: Single live cephalic presentation __ weeks.`,
 "FWB with Breech presentation":`ULTRASOUND FWB WITH BREECH PRESENTATION
 Presentation: Breech
@@ -589,8 +554,7 @@ Weeks: __ weeks
 Fetus Weight: __ gm
 AFI: __ mm (N: 80-180 mm)
 Placenta: __
-IMPRESSION: Single live breech presentation __ weeks.
-Advice: Gynae consultation for ECV planning / LSCS counselling, Regular follow-up.`,
+IMPRESSION: Single live breech presentation __ weeks.`,
 "FWB with complete fetus calculation":`ULTRASOUND FWB WITH COMPLETE FETAL BIOMETRY
 Presentation: Cephalic
 Lie: Longitudinal
@@ -650,8 +614,7 @@ Fetus Weight: __ gm
 AFI: __ mm (N: 80-180 mm, Low <50 mm)
 Liquor: Reduced - Oligohydramnios
 Placenta: __
-IMPRESSION: Single live __ weeks with Oligohydramnios AFI __ mm.
-Advice: Plenty of oral fluids 3-4L/day, CBC, RFTs, NST, Doppler study (S/D <3), Gynae consultation, Bed rest, Daily fetal movement count.`,
+IMPRESSION: Single live __ weeks with Oligohydramnios AFI __ mm.`,
 "FWB for Polyhydramnios fetus liquid amniotic fluid":`ULTRASOUND FWB FOR POLYHYDRAMNIOS
 Presentation: Cephalic
 Lie: Longitudinal
@@ -666,8 +629,7 @@ Fetus Weight: __ gm
 AFI: __ mm (N: 80-180 mm, High >240 mm)
 Liquor: Increased - Polyhydramnios
 Placenta: __
-IMPRESSION: Single live __ weeks with Polyhydramnios AFI __ mm.
-Advice: GTT / OGTT (N: Fasting <92 mg/dl), HbA1c, TORCH screen, Detailed anomaly scan, Gynae consultation.`,
+IMPRESSION: Single live __ weeks with Polyhydramnios AFI __ mm.`,
 "FWB with Nuchal Cord":`ULTRASOUND FWB WITH NUCHAL CORD
 Presentation: Cephalic
 Lie: Longitudinal
@@ -682,8 +644,7 @@ Fetus Weight: __ gm
 AFI: __ mm (N: 80-180 mm)
 Placenta: __
 Color Doppler: Single loop / Double loop of umbilical cord around fetal neck - Nuchal cord present (N: No cord around neck)
-IMPRESSION: Single live __ weeks with Nuchal Cord (Single Loop).
-Advice: Daily fetal movement count, NST, Doppler weekly, Gynae consultation for delivery planning.`,
+IMPRESSION: Single live __ weeks with Nuchal Cord (Single Loop).`,
 "Thyroids":`ULTRASOUND THYROID
 RIGHT LOBE: __ x __ x __ cm (N: 4-6 x 1-2 cm, Vol 4-10 ml).
 LEFT LOBE: __ x __ x __ cm (N: 4-6 x 1-2 cm).
@@ -698,8 +659,7 @@ IMPRESSION: Normal Breast Scan.`,
 "Breasts with lymph nodes":`ULTRASOUND BREASTS WITH LYMPH NODES
 Breasts: lesion __ mm (N: No lesion) at __ o clock.
 Axillary lymph nodes enlarged Right __ mm (N: <10 mm), Left __ mm (N: <10 mm).
-IMPRESSION: Breast lesion with lymphadenopathy.
-Advice: Mammography (BI-RADS), FNAC / Trucut biopsy from lesion and node, CA 15-3, Oncologist / Surgeon consultation.`,
+IMPRESSION: Breast lesion with lymphadenopathy.`,
 "Axila Normal":`ULTRASOUND AXILLA NORMAL
 RIGHT: No nodes (N: No significant nodes, cortex <3 mm).
 LEFT: No nodes.
@@ -707,32 +667,27 @@ IMPRESSION: Normal Axilla.`,
 "Axila with lymph nodes":`ULTRASOUND AXILLA WITH LYMPH NODES
 RIGHT: Nodes __ mm (N: <10 mm).
 LEFT: Nodes __ mm (N: <10 mm).
-IMPRESSION: Axillary lymphadenopathy.
-Advice: CBC, ESR, FNAC from node, Chest X-Ray, Physician consultation.`,
+IMPRESSION: Axillary lymphadenopathy.`,
 "Neck Normal":`ULTRASOUND NECK NORMAL
 Thyroid normal Vol 10-25 ml (N: Normal), no lymphadenopathy (N: No nodes >8 mm).
 IMPRESSION: Normal Neck.`,
 "Neck with lymph nodes":`ULTRASOUND NECK WITH LYMPH NODES
 Cervical nodes enlarged __ mm at Level __ (N: <8-10 mm short axis).
 Thyroid normal.
-IMPRESSION: Cervical lymphadenopathy.
-Advice: CBC, ESR, CRP, FNAC from node, Tuberculin test, Chest X-Ray, ENT / Physician consultation.`,
+IMPRESSION: Cervical lymphadenopathy.`,
 "Doppler study":`DOPPLER STUDY
 Artery: PSV __ cm/s (N: As per vessel), EDV __, RI __ (N: 0.5-0.7), normal flow.
 Vein: Normal compressibility (N: Compressible), no thrombus.
 IMPRESSION: Normal Doppler.`,
 "Appendicitis":`ULTRASOUND FOR APPENDICITIS
 RIF: Non-compressible appendix __ mm diameter (N: <6 mm), wall __ mm (N: <3 mm), echogenic fat, minimal fluid.
-IMPRESSION: Acute Appendicitis __ mm.
-Advice: CBC (N: TLC 4000-11000), CRP (N: <5 mg/L), Urgent surgical consultation, NPO, Hospital admission.`,
+IMPRESSION: Acute Appendicitis __ mm.`,
 "Umbilical Hernia":`ULTRASOUND UMBILICAL HERNIA
 Umbilicus: Defect __ mm (N: No defect), herniation of fat / bowel on Valsalva.
-IMPRESSION: Umbilical Hernia __ mm.
-Advice: Surgical consultation.`,
+IMPRESSION: Umbilical Hernia __ mm.`,
 "Inguainal Hernia":`ULTRASOUND INGUINAL HERNIA
 Inguinal region: Defect __ mm (N: No defect), herniation of fat / bowel on Valsalva.
-IMPRESSION: Inguinal Hernia.
-Advice: Surgical consultation, Avoid heavy weight lifting.`,
+IMPRESSION: Inguinal Hernia.`,
 "Scrotum Normal":`ULTRASOUND SCROTUM NORMAL
 Both testes normal Right __ mm (N: 40-50 x 30 mm Vol 15-25 ml), Left __ mm (N: Same).
 No hydrocele (N: No fluid), no varicocele (N: Veins <2 mm rest <3 mm Valsalva).
@@ -742,21 +697,17 @@ Right __ mm (N: 40-50 mm length Vol 15-25 ml), Left __ mm, homogenous, normal va
 IMPRESSION: Normal Testes.`,
 "Testis with varicocele":`ULTRASOUND TESTIS WITH VARICOCELE
 Left pampiniform plexus dilated channels __ mm on Valsalva (N: <2 mm rest, <3 mm Valsalva).
-IMPRESSION: Left Varicocele.
-Advice: Semen analysis (N: Count >15 million/ml), Urologist consultation, Scrotal Doppler if needed.`,
+IMPRESSION: Left Varicocele.`,
 "Testis with hydrocele":`ULTRASOUND TESTIS WITH HYDROCELE
 Fluid around testis __ cc (N: No fluid, minimal <2 cc physiological).
 Testis normal Vol 15-25 ml (N: 15-25 ml).
-IMPRESSION: Hydrocele __ cc.
-Advice: CBC, Urine R/E, Urologist consultation, Transillumination test.`,
+IMPRESSION: Hydrocele __ cc.`,
 "Testis with swelling":`ULTRASOUND TESTIS WITH SWELLING
 Right Testis enlarged __ mm (N: 40-50 mm), heterogeneous, increased vascularity.
-IMPRESSION: Right orchitis / swelling.
-Advice: CBC, CRP, Urine R/E & C/S, Scrotal Doppler, Physician / Urologist consultation.`,
+IMPRESSION: Right orchitis / swelling.`,
 "Testis with epididymitis":`ULTRASOUND TESTIS WITH EPIDIDYMITIS
 Epididymis bulky __ mm (N: Head <12 mm Body <5 mm), increased vascularity.
-IMPRESSION: Epididymitis.
-Advice: CBC, Urine R/E & Culture, CRP, Urologist consultation, Scrotal support & antibiotics as per doctor.`,
+IMPRESSION: Epididymitis.`,
 "Testis with Doppler study":`ULTRASOUND TESTIS WITH DOPPLER
 Right: PSV __ cm/s (N: 10-30 cm/s), RI __ (N: 0.5-0.7), normal flow.
 Left: Normal flow.
