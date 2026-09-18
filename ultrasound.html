@@ -13,30 +13,28 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;font-size:16px;margin-top:8px}
 .btn2{background:#ff3b30;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin:8px 0}
 .small{padding:8px 12px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff}
-/* A4 REPORT STYLE */
 .report{
  width:210mm; min-height:297mm; margin:auto; background:#fff;
  border:2px solid #0a4eb5; border-radius:12px; padding:0 16mm 16mm 16mm;
- padding-top: 76mm; /* 3 inch = 76mm top space */
- line-height:1.9; box-sizing:border-box;
+ padding-top: 76mm; line-height:1.9; box-sizing:border-box;
 }
 @media print{
   @page{size:A4; margin:0}
   body *{visibility:hidden}
- .report,.report *{visibility:visible}
- .report{position:absolute;left:0;top:0;width:210mm;min-height:297mm;border:none;border-radius:0;box-shadow:none}
- .noPrint{display:none}
+.report,.report *{visibility:visible}
+.report{position:absolute;left:0;top:0;width:210mm;min-height:297mm;border:none;border-radius:0}
+.noPrint{display:none}
 }
 </style>
 </head>
 <body>
 
-<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;position:relative">
-<img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="position:absolute;left:15px;top:15px;width:60px;height:60px;border-radius:50%;border:2px solid #0a4eb5">
+<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;position:relative;display:flex;align-items:center;justify-content:center;gap:15px">
+<img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:65px;height:65px;border-radius:50%;border:2px solid #0a4eb5">
+<div>
 <h2 style="color:#0a4eb5">Azam Medical Centre</h2>
 <p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p>
-<h3>Dr. Muhammad Zeeshan - MBBS, RMP, Sonologist</h3>
-<p>Timings: 4PM to 10PM</p>
+</div>
 </div>
 
 <div class="card noPrint">
@@ -51,7 +49,7 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <input id="ref" placeholder="Referred By Dr.">
 <input type="file" id="wordUp" accept=".docx" style="display:none">
 <button class="btn2" onclick="document.getElementById('wordUp').click()">📄 Word File Se Template Update Karen</button>
-<b style="font-size:13px;display:block;margin-top:10px">Report Pattern (Editable) - __ me size likhen:</b>
+<b style="font-size:13px;display:block;margin-top:10px">Report Pattern (Editable):</b>
 <textarea id="rText" rows="18" style="font-family:monospace;font-size:13px"></textarea>
 <button class="btn" onclick="make()">✅ Final Report Banayen</button>
 </div>
@@ -104,17 +102,14 @@ function load(){document.getElementById('rText').value=T[document.getElementById
 document.getElementById('uType').addEventListener('change',load);
 document.getElementById('wordUp').addEventListener('change',async(e)=>{
  let file=e.target.files[0];if(!file)return;let buf=await file.arrayBuffer();let res=await mammoth.extractRawText({arrayBuffer:buf});
- let txt=res.value.trim();if(txt.length<20){alert('Khali');return;}
- let name=file.name.replace('.docx','');T[name]=txt;
+ let txt=res.value.trim();let name=file.name.replace('.docx','');T[name]=txt;
  let saved=JSON.parse(localStorage.getItem('custom_templates')||'{}');saved[name]=txt;localStorage.setItem('custom_templates',JSON.stringify(saved));
  let s=document.getElementById('uType');if(![...s.options].some(o=>o.value==name)){let o=document.createElement('option');o.value=name;o.textContent=name+' (Imported)';s.appendChild(o);}
  s.value=name;document.getElementById('rText').value=txt;alert('Template "'+name+'" update!');e.target.value='';
 });
-
 function formatReport(text){
  return text.split('\n').map(line=>{
   line=line.trim(); if(!line) return '<br>';
-  // Main Heading Centre
   if(line.startsWith('ULTRASOUND') || line.startsWith('DOPPLER')){
     return `<div style="text-align:center;margin:8px 0;font-size:16px"><b><u>${line}</u></b></div>`;
   }
@@ -128,21 +123,15 @@ function formatReport(text){
   return `<div>${line}</div>`;
  }).join('');
 }
-
 function make(){
  let info=`<div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:15px"><div><b>Patient Name:</b> ${pName.value} &nbsp; <b>Age/Sex:</b> ${pAge.value}/${pGen.value}<br><b>Referred By:</b> ${ref.value}</div><div><b>Date:</b> ${pDate.value}</div></div><hr style="margin-bottom:15px">`;
  let body=formatReport(rText.value);
- let footer=`<div style="margin-top:60px"><div style="border-top:1px solid #000;width:240px;margin-bottom:5px"></div><b>DR. M. ZEESHAN</b><br>MBBS, DIP SONOGRAPHY<br>GP & SONOLOGIST</div>`;
+ let footer=`<div style="margin-top:80px;text-align:right"><b><u>Sonologist</u></b></div>`;
  document.getElementById('out').innerHTML=info+body+footer;
  document.getElementById('outCard').style.display='block';
  window.scrollTo(0,document.getElementById('outCard').offsetTop);
 }
-function pdf(){
- const{jsPDF}=window.jspdf; let doc=new jsPDF('p','mm','a4');
- let t=document.getElementById('out').innerText;
- doc.text(doc.splitTextToSize(t,180),10,80); // 80mm = 3 inch top space
- doc.save((pName.value||'Report')+'.pdf');
-}
+function pdf(){const{jsPDF}=window.jspdf; let doc=new jsPDF('p','mm','a4'); let t=document.getElementById('out').innerText; doc.text(doc.splitTextToSize(t,180),10,80); doc.save((pName.value||'Report')+'.pdf');}
 function saveR(){let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); a.unshift({n:pName.value,a:pAge.value,g:pGen.value,d:pDate.value,t:uType.value,r:rText.value}); localStorage.setItem('us_rep',JSON.stringify(a)); render(); alert('Report Saved!')}
 function render(){let q=(sBox.value||'').toLowerCase(); let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); list.innerHTML=a.map((x,i)=>`<div style="border:1px solid #ddd;border-radius:10px;padding:8px;margin:6px 0"><b>${x.n}</b> ${x.t} ${x.d} <button class="small" style="background:#0a4eb5" onclick="view(${i})">View</button> <button class="small" style="background:#ff3b30" onclick="del(${i})">Del</button></div>`).filter((_,i)=> (a[i].n+a[i].t).toLowerCase().includes(q)).join('')}
 function view(i){let a=JSON.parse(localStorage.getItem('us_rep')||'[]')[i]; pName.value=a.n; pAge.value=a.a; pGen.value=a.g; pDate.value=a.d; uType.value=a.t; rText.value=a.r; make();}
