@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Ultrasound - Dr. Zeeshan</title>
+<title>Azam Ultrasound - 37 Templates</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 <style>
@@ -13,36 +13,18 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;font-size:16px;margin-top:8px}
 .btn2{background:#ff3b30;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin:8px 0}
 .small{padding:8px 12px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff}
-.report{
- width:210mm; min-height:297mm; margin:auto; background:#fff;
- border:2px solid #0a4eb5; border-radius:12px; padding:0 16mm 16mm 16mm;
- padding-top: 51mm; /* 2 inch top space */
- line-height:1.9; box-sizing:border-box;
-}
-@media print{
-  @page{size:A4; margin:0}
-  body *{visibility:hidden}
-.report,.report *{visibility:visible}
-.report{position:absolute;left:0;top:0;width:210mm;min-height:297mm;border:none;border-radius:0}
-.noPrint{display:none}
-}
+.report{width:210mm;min-height:297mm;margin:auto;background:#fff;border:2px solid #0a4eb5;border-radius:12px;padding:0 16mm 16mm 16mm;padding-top:51mm;line-height:1.9;box-sizing:border-box}
+@media print{@page{size:A4;margin:0}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:210mm;min-height:297mm;border:none}.noPrint{display:none}}
 </style>
 </head>
 <body>
-
-<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;position:relative;display:flex;align-items:center;justify-content:center;gap:15px">
+<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px">
 <img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:65px;height:65px;border-radius:50%;border:2px solid #0a4eb5">
-<div>
-<h2 style="color:#0a4eb5">Azam Medical Centre</h2>
-<p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p>
+<div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p></div>
 </div>
-</div>
-
 <div class="card noPrint">
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-<input id="pName" placeholder="Patient Name *">
-<input id="pAge" placeholder="Age">
-<select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select>
+<input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
 <input id="pDate" type="date"><select id="uType"></select>
@@ -51,19 +33,15 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <input type="file" id="wordUp" accept=".docx" style="display:none">
 <button class="btn2" onclick="document.getElementById('wordUp').click()">📄 Word File Se Template Update Karen</button>
 <b style="font-size:13px;display:block;margin-top:10px">Report Pattern (Editable):</b>
-<textarea id="rText" rows="18" style="font-family:monospace;font-size:13px"></textarea>
+<textarea id="rText" rows="22" style="font-family:monospace;font-size:13px"></textarea>
 <button class="btn" onclick="make()">✅ Final Report Banayen</button>
 </div>
-
-<div class="card" id="outCard" style="display:none">
-<div id="out" class="report"></div>
-<div class="noPrint" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center">
+<div class="card" id="outCard" style="display:none"><div id="out" class="report"></div>
+<div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap">
 <button class="small" style="background:#0a4eb5" onclick="window.print()">Print</button>
 <button class="small" style="background:#f59e0b" onclick="pdf()">PDF Download</button>
 <button class="small" style="background:#10b981" onclick="saveR()">Save Report</button>
-</div>
-</div>
-
+</div></div>
 <div class="card noPrint"><h3>Saved Reports</h3><input id="sBox" placeholder="Search Name" onkeyup="render()"><div id="list"></div></div>
 
 <script>
@@ -79,18 +57,235 @@ URINARY BLADDER: Normal, no calculus.
 PROSTATE: __ gm, normal.
 No ascites, no lymphadenopathy.
 IMPRESSION: Normal Ultrasound Whole Abdomen.`,
-"Upper abdomen":`ULTRASOUND UPPER ABDOMEN\nLIVER: __ cm, homogenous, no focal lesion.\nGALL BLADDER: Normal distended, no stone.\nPANCREAS: Normal.\nSPLEEN: __ cm, normal.\nBOTH KIDNEYS: Normal.\nNo ascites.\nIMPRESSION: Normal Upper Abdomen.`,
-"Lower abdomen":`ULTRASOUND LOWER ABDOMEN\nURINARY BLADDER: __ cc, wall thickness normal.\nPROSTATE: __ gm.\nBOTH KIDNEYS: Normal.\nNo free fluid.\nIMPRESSION: Normal Lower Abdomen.`,
-"KUB":`ULTRASOUND KUB\nRIGHT KIDNEY: __ x __ cm, no calculus, no hydronephrosis.\nLEFT KIDNEY: __ x __ cm, no calculus, no hydronephrosis.\nURINARY BLADDER: Pre-void __ cc, Post-void __ cc, no calculus.\nIMPRESSION: Normal KUB.`,
-"KUB + Prostate":`ULTRASOUND KUB + PROSTATE\nRIGHT KIDNEY: __ x __ cm, no calculus.\nLEFT KIDNEY: __ x __ cm, no calculus.\nURINARY BLADDER: __ cc, normal.\nPROSTATE: __ gm, __ x __ x __ cm, normal echotexture, no focal lesion.\nPost-void residual __ cc.\nIMPRESSION: __`,
-"Prostate":`ULTRASOUND PROSTATE\nPROSTATE: __ gm, measures __ x __ x __ cm.\nEchotexture: Homogenous.\nNo focal lesion, no calcification.\nUrinary bladder normal.\nIMPRESSION: __`,
-"Pelvis":`ULTRASOUND PELVIS\nUTERUS: __ x __ cm, Anteverted, ET __ mm.\nOVARIES: Right __ x __ cm, Left __ x __ cm.\nNo adnexal mass, no free fluid in POD.\nIMPRESSION: Normal Pelvic Scan.`,
-"FWB":`ULTRASOUND FWB\nSingle live intrauterine fetus, Cephalic presentation.\nBPD __ mm, FL __ mm, AC __ mm = __ weeks.\nAFI __ cm, Placenta __, Estimated weight __ gm.\nIMPRESSION: Single live pregnancy __ weeks.`,
-"Thyroids":`ULTRASOUND THYROID\nRIGHT LOBE: __ x __ x __ cm.\nLEFT LOBE: __ x __ x __ cm.\nISTHMUS: __ mm.\nEchotexture homogenous, no nodule.\nNo lymphadenopathy.\nIMPRESSION: Normal Thyroid Scan.`,
-"Breasts":`ULTRASOUND BREASTS\nBoth breasts normal fibroglandular pattern.\nNo focal lesion, no ductal dilatation.\nNo axillary lymphadenopathy.\nIMPRESSION: Normal Breast Scan.`,
-"Axila":`ULTRASOUND AXILLA\nRIGHT AXILLA: No lymphadenopathy.\nLEFT AXILLA: No lymphadenopathy.\nNo collection, no mass.\nIMPRESSION: Normal Axillary Scan.`,
-"Neck":`ULTRASOUND NECK\nThyroid normal, no lymphadenopathy.\nNo collection, salivary glands normal.\nIMPRESSION: Normal Neck Scan.`,
-"Doppler study":`DOPPLER STUDY\nArtery: Normal flow, PSV __, EDV __, RI __.\nVein: Normal compressibility, normal flow.\nNo thrombus, no stenosis.\nIMPRESSION: Normal Doppler Study.`
+
+"Whole Abdomen with Fatty Liver":`ULTRASOUND WHOLE ABDOMEN WITH FATTY LIVER
+LIVER: Enlarged in size __ cm, increased echogenicity, suggestive of Grade __ Fatty Liver. No focal lesion.
+GALL BLADDER: Normally distended, no calculus.
+PANCREAS: Normal.
+SPLEEN: Normal __ cm.
+RIGHT KIDNEY: __ x __ cm, no calculus.
+LEFT KIDNEY: __ x __ cm, no calculus.
+URINARY BLADDER: Normal.
+IMPRESSION: Hepatomegaly with Fatty Liver Grade __.`,
+
+"Whole abdomen with hepatomegaly":`ULTRASOUND WHOLE ABDOMEN WITH HEPATOMEGALY
+LIVER: Enlarged in size __ cm, homogenous texture, no focal lesion, no IHBR dilatation.
+GALL BLADDER: Normal.
+PANCREAS: Normal.
+SPLEEN: Normal __ cm.
+KIDNEYS: Both normal.
+No ascites.
+IMPRESSION: Hepatomegaly __ cm.`,
+
+"Whole abdomen with splenomegaly":`ULTRASOUND WHOLE ABDOMEN WITH SPLENOMEGALY
+LIVER: Normal __ cm.
+SPLEEN: Enlarged in size __ cm, homogenous texture, no focal lesion.
+GALL BLADDER: Normal.
+PANCREAS: Normal.
+KIDNEYS: Normal.
+No ascites.
+IMPRESSION: Splenomegaly __ cm.`,
+
+"Whole abdomen with ascites":`ULTRASOUND WHOLE ABDOMEN WITH ASCITES
+LIVER: Normal __ cm, homogenous.
+GALL BLADDER: Normal.
+PANCREAS: Normal.
+SPLEEN: __ cm.
+KIDNEYS: Both normal.
+PERITONEAL CAVITY: Moderate / Gross free fluid noted in peritoneal cavity suggestive of Ascites.
+IMPRESSION: Ascites with __.`,
+
+"Upper abdomen":`ULTRASOUND UPPER ABDOMEN
+LIVER: __ cm, homogenous, no focal lesion.
+GALL BLADDER: Normal distended, no stone.
+PANCREAS: Normal.
+SPLEEN: __ cm, normal.
+BOTH KIDNEYS: Normal.
+No ascites.
+IMPRESSION: Normal Upper Abdomen.`,
+
+"Lower abdomen":`ULTRASOUND LOWER ABDOMEN (MALE)
+URINARY BLADDER: __ cc, wall thickness normal, no calculus.
+PROSTATE: __ gm, normal.
+BOTH KIDNEYS: Normal.
+No free fluid.
+IMPRESSION: Normal Lower Abdomen.`,
+
+"Lower abdomen female":`ULTRASOUND LOWER ABDOMEN (FEMALE)
+URINARY BLADDER: __ cc, normal.
+UTERUS: __ x __ cm, Anteverted, ET __ mm.
+OVARIES: Right __ x __ cm, Left __ x __ cm.
+No adnexal mass, minimal free fluid in POD.
+IMPRESSION: Normal Lower Abdomen Female.`,
+
+"KUB":`ULTRASOUND KUB
+RIGHT KIDNEY: __ x __ cm, no calculus, no hydronephrosis.
+LEFT KIDNEY: __ x __ cm, no calculus, no hydronephrosis.
+URINARY BLADDER: Pre-void __ cc, Post-void __ cc, no calculus.
+IMPRESSION: Normal KUB.`,
+
+"KUB with Microliths":`ULTRASOUND KUB WITH MICROLITHS
+RIGHT KIDNEY: __ x __ cm, shows tiny echogenic foci __ mm suggestive of Microliths, no hydronephrosis.
+LEFT KIDNEY: __ x __ cm, shows tiny echogenic foci __ mm suggestive of Microliths.
+URINARY BLADDER: Normal, no calculus.
+IMPRESSION: Bilateral Renal Microlithiasis.`,
+
+"KUB with dilated proximal ureter dilation":`ULTRASOUND KUB WITH DILATED PROXIMAL URETER
+RIGHT KIDNEY: __ x __ cm, mild hydronephrosis, proximal ureter dilated up to __ mm.
+LEFT KIDNEY: Normal.
+URINARY BLADDER: Normal.
+IMPRESSION: Right proximal ureteric dilatation with mild hydronephrosis -? Ureteric calculus / obstruction.`,
+
+"KUB with hydronephrosis":`ULTRASOUND KUB WITH HYDRONEPHROSIS
+RIGHT KIDNEY: __ x __ cm, moderate hydronephrosis, no calculus seen.
+LEFT KIDNEY: Normal.
+URINARY BLADDER: Normal.
+IMPRESSION: Right sided hydronephrosis.`,
+
+"KUB with Renal Fullness":`ULTRASOUND KUB WITH RENAL FULLNESS
+RIGHT KIDNEY: __ x __ cm, mild fullness of pelvicalyceal system, no calculus.
+LEFT KIDNEY: __ x __ cm, mild fullness.
+URINARY BLADDER: __ cc.
+IMPRESSION: Bilateral mild renal fullness -? Overhydration / early obstruction.`,
+
+"KUB with Calculus":`ULTRASOUND KUB WITH CALCULUS
+RIGHT KIDNEY: __ x __ cm, echogenic shadow __ x __ mm in middle pole suggestive of calculus, no hydronephrosis.
+LEFT KIDNEY: __ x __ cm, calculus __ mm.
+URINARY BLADDER: Normal, no calculus.
+IMPRESSION: Bilateral Renal Calculus.`,
+
+"KUB with Cortical Simple Cyst":`ULTRASOUND KUB WITH CORTICAL SIMPLE CYST
+RIGHT KIDNEY: __ x __ cm, anechoic thin walled cyst __ x __ mm in cortex, no internal echoes.
+LEFT KIDNEY: Normal.
+URINARY BLADDER: Normal.
+IMPRESSION: Right Renal Cortical Simple Cyst __ mm.`,
+
+"KUB with Complex Cyst":`ULTRASOUND KUB WITH COMPLEX CYST
+RIGHT KIDNEY: __ x __ cm, complex cyst __ x __ mm with internal echoes / septations.
+LEFT KIDNEY: Normal.
+URINARY BLADDER: Normal.
+IMPRESSION: Right Renal Complex Cyst - Advised CT correlation.`,
+
+"KUB with swelled kidney":`ULTRASOUND KUB WITH SWELLED KIDNEY
+RIGHT KIDNEY: Enlarged __ x __ cm, swollen, increased echogenicity, maintained corticomedullary differentiation, no calculus.
+LEFT KIDNEY: Normal.
+IMPRESSION: Right swollen kidney -? Acute Pyelonephritis / Infection.`,
+
+"KUB with Atopic Kidney":`ULTRASOUND KUB WITH ATROPHIC KIDNEY
+RIGHT KIDNEY: Small atrophic __ x __ cm, thinned cortex, increased echogenicity.
+LEFT KIDNEY: Compensatory enlarged __ x __ cm, normal.
+URINARY BLADDER: Normal.
+IMPRESSION: Right Atrophic Kidney.`,
+
+"KUB with Infection":`ULTRASOUND KUB WITH INFECTION
+RIGHT KIDNEY: __ x __ cm, enlarged, increased echogenicity, mild fullness -? Infective changes.
+LEFT KIDNEY: __ x __ cm, similar changes.
+URINARY BLADDER: Thickened wall __ mm, internal echoes -? Cystitis.
+IMPRESSION: Bilateral infective changes with cystitis.`,
+
+"KUB + Enlarged Prostate":`ULTRASOUND KUB + ENLARGED PROSTATE
+RIGHT KIDNEY: __ x __ cm, no calculus.
+LEFT KIDNEY: __ x __ cm, no calculus.
+URINARY BLADDER: __ cc, normal wall, pre-void __, post-void residual __ cc.
+PROSTATE: Enlarged __ gm, measures __ x __ x __ cm, homogenous.
+IMPRESSION: Enlarged Prostate __ gm with significant residual urine.`,
+
+"KUB + Normal Prostate":`ULTRASOUND KUB + NORMAL PROSTATE
+RIGHT KIDNEY: __ x __ cm, no calculus, no hydronephrosis.
+LEFT KIDNEY: __ x __ cm, normal.
+URINARY BLADDER: __ cc, normal.
+PROSTATE: __ gm, normal size and texture.
+IMPRESSION: Normal KUB with Normal Prostate.`,
+
+"Prostate Normal":`ULTRASOUND PROSTATE
+PROSTATE: __ gm, measures __ x __ x __ cm, normal echotexture, no focal lesion.
+Urinary bladder normal, no residual.
+IMPRESSION: Normal Prostate.`,
+
+"Prostate with pre & post void urine":`ULTRASOUND PROSTATE WITH PRE & POST VOID
+PROSTATE: __ gm, __ x __ x __ cm.
+URINARY BLADDER: Pre-void volume __ cc, Post-void residual __ cc.
+IMPRESSION: Prostate __ gm with post-void residual __ cc.`,
+
+"Pelvis Normal":`ULTRASOUND PELVIS NORMAL
+UTERUS: __ x __ cm, Anteverted, ET __ mm, normal echotexture.
+OVARIES: Right __ x __ cm, Left __ x __ cm, normal.
+No adnexal mass, no free fluid in POD.
+IMPRESSION: Normal Pelvic Scan.`,
+
+"Pelvis with PIDs":`ULTRASOUND PELVIS WITH PID
+UTERUS: __ x __ cm, bulky, heterogeneous.
+OVARIES: Both bulky, Right __, Left __.
+POD: Free fluid with internal echoes.
+IMPRESSION: Features suggestive of Pelvic Inflammatory Disease (PID).`,
+
+"Pelvis with Bulky uterus":`ULTRASOUND PELVIS WITH BULKY UTERUS
+UTERUS: Bulky __ x __ cm, Anteverted, ET __ mm, heterogeneous.
+OVARIES: Normal.
+No free fluid.
+IMPRESSION: Bulky Uterus.`,
+
+"Pelvis with Fibroid":`ULTRASOUND PELVIS WITH FIBROID
+UTERUS: __ x __ cm, Anteverted, shows hypoechoic lesion __ x __ mm in anterior / posterior wall suggestive of fibroid.
+ET __ mm.
+OVARIES: Normal.
+IMPRESSION: Uterine Fibroid __ mm.`,
+
+"FWB":`ULTRASOUND FWB (Fetal Well Being)
+Single live intrauterine fetus, Cephalic presentation.
+BPD __ mm, FL __ mm, AC __ mm = __ weeks.
+AFI __ cm, Placenta __, Estimated weight __ gm, FHR __ bpm.
+IMPRESSION: Single live pregnancy __ weeks with good fetal well being.`,
+
+"FWB with anomaly scane":`ULTRASOUND ANOMALY SCAN
+Single live fetus __ weeks.
+Head: Normal, Spine: Normal, Heart: 4 chamber view normal, Abdomen: Stomach, kidneys, bladder normal, Limbs: Normal.
+AFI __ cm, Placenta __.
+IMPRESSION: Anomaly scan normal at __ weeks, no gross anomaly seen.`,
+
+"Thyroids":`ULTRASOUND THYROID
+RIGHT LOBE: __ x __ x __ cm.
+LEFT LOBE: __ x __ x __ cm.
+ISTHMUS: __ mm.
+Echotexture homogenous, no nodule, no lymphadenopathy.
+IMPRESSION: Normal Thyroid Scan.`,
+
+"Breasts Normal":`ULTRASOUND BREASTS NORMAL
+Both breasts normal fibroglandular pattern.
+No focal lesion, no ductal dilatation.
+No axillary lymphadenopathy.
+IMPRESSION: Normal Breast Scan.`,
+
+"Breasts with lymph nodes":`ULTRASOUND BREASTS WITH LYMPH NODES
+Both breasts: __ x __ mm hypoechoic lesion at __ o clock position.
+Bilateral axillary lymph nodes enlarged, largest Right __ mm, Left __ mm, cortex thickened.
+IMPRESSION: Breast lesion with axillary lymphadenopathy - Advised FNAC / Mammography.`,
+
+"Axila Normal":`ULTRASOUND AXILLA NORMAL
+RIGHT AXILLA: No lymphadenopathy.
+LEFT AXILLA: No lymphadenopathy.
+No collection, no mass.
+IMPRESSION: Normal Axillary Scan.`,
+
+"Axila with lymph nodes":`ULTRASOUND AXILLA WITH LYMPH NODES
+RIGHT AXILLA: Multiple enlarged lymph nodes, largest __ x __ mm, hilum preserved / lost.
+LEFT AXILLA: Lymph node __ mm.
+IMPRESSION: Bilateral axillary lymphadenopathy.`,
+
+"Neck Normal":`ULTRASOUND NECK NORMAL
+Thyroid normal, no lymphadenopathy.
+No collection, salivary glands normal.
+IMPRESSION: Normal Neck Scan.`,
+
+"Neck with lymph nodes":`ULTRASOUND NECK WITH LYMPH NODES
+Multiple enlarged cervical lymph nodes seen, largest __ x __ mm at Level __.
+Thyroid normal, no collection.
+IMPRESSION: Cervical lymphadenopathy.`,
+
+"Doppler study":`DOPPLER STUDY
+Artery: Normal flow, PSV __, EDV __, RI __, no stenosis.
+Vein: Normal compressibility, normal flow, no thrombus.
+IMPRESSION: Normal Doppler Study.`
 };
 let custom=JSON.parse(localStorage.getItem('custom_templates')||'{}');Object.assign(T,custom);
 function init(){
@@ -106,7 +301,7 @@ document.getElementById('wordUp').addEventListener('change',async(e)=>{
  let txt=res.value.trim();let name=file.name.replace('.docx','');T[name]=txt;
  let saved=JSON.parse(localStorage.getItem('custom_templates')||'{}');saved[name]=txt;localStorage.setItem('custom_templates',JSON.stringify(saved));
  let s=document.getElementById('uType');if(![...s.options].some(o=>o.value==name)){let o=document.createElement('option');o.value=name;o.textContent=name+' (Imported)';s.appendChild(o);}
- s.value=name;document.getElementById('rText').value=txt;alert('Template "'+name+'" update!');e.target.value='';
+ s.value=name;document.getElementById('rText').value=txt;alert('Template update!');e.target.value='';
 });
 function formatReport(text){
  return text.split('\n').map(line=>{
@@ -115,11 +310,10 @@ function formatReport(text){
     return `<div style="text-align:center;margin:8px 0;font-size:16px"><b><u>${line}</u></b></div>`;
   }
   if(line.startsWith('IMPRESSION')){
-    return `<div style="margin:6px 0"><b><u>${line.split(':')[0]}:</u></b> ${line.split(':').slice(1).join(':')}</div>`;
+    return `<div style="margin:8px 0"><b><u>${line.split(':')[0]}:</u></b> ${line.split(':').slice(1).join(':')}</div>`;
   }
   if(line.includes(':')){
-    let parts=line.split(':'); let head=parts[0]; let rest=parts.slice(1).join(':');
-    return `<div style="margin:3px 0"><b><u>${head}:</u></b> ${rest}</div>`;
+    let p=line.split(':'); return `<div style="margin:3px 0"><b><u>${p[0]}:</u></b> ${p.slice(1).join(':')}</div>`;
   }
   return `<div>${line}</div>`;
  }).join('');
