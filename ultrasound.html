@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Azam Ultrasound - Dr. Zeeshan</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#eef4ff;padding:10px}
+.card{background:#fff;border-radius:16px;padding:14px;margin:10px auto;max-width:1100px;box-shadow:0 6px 18px #0001}
+input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px solid #cbd5e1;margin:6px 0;font-size:14px}
+.btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;font-size:16px;margin-top:8px}
+.btn2{background:#ff3b30;color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin:8px 0}
+.small{padding:8px 12px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff}
+.report{border:2px solid #0a4eb5;border-radius:12px;padding:16px;background:#fff;line-height:1.8}
+@media print{body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:100%}}
+</style>
+</head>
+<body>
+
+<div class="card" style="text-align:center;border:3px solid #1e90ff">
+<h2 style="color:#0a4eb5">Azam Medical Centre</h2>
+<p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p>
+<h3 style="color:#000">Dr. Muhammad Zeeshan - MBBS, RMP, Sonologist</h3>
+<p>Timings: 4PM to 10PM</p>
+</div>
+
+<div class="card">
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+<input id="pName" placeholder="Patient Name *">
+<input id="pAge" placeholder="Age">
+<select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<input id="pDate" type="date">
+<select id="uType"></select>
+</div>
+<input id="ref" placeholder="Referred By Dr.">
+
+<input type="file" id="wordUp" accept=".docx" style="display:none">
+<button class="btn2" onclick="document.getElementById('wordUp').click()">📄 Apni Word File (.docx) Se Template Banao</button>
+<small style="color:#666">Aapki jo 12 Word files hain, unko ek ek karke yahan select karen, wo auto template ban jayega.</small>
+
+<b style="font-size:13px;display:block;margin-top:10px">Report Pattern (Editable) - __ me size likhen:</b>
+<textarea id="rText" rows="18" style="font-family:monospace;font-size:13px"></textarea>
+<button class="btn" onclick="make()">✅ Final Report Banayen</button>
+</div>
+
+<div class="card" id="outCard" style="display:none">
+<div id="out" class="report"></div>
+<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+<button class="small" style="background:#0a4eb5" onclick="window.print()">Print</button>
+<button class="small" style="background:#f59e0b" onclick="pdf()">PDF Download</button>
+<button class="small" style="background:#10b981" onclick="saveR()">Save Record</button>
+</div>
+</div>
+
+<div class="card"><h3>Saved Reports</h3><input id="sBox" placeholder="Search Name" onkeyup="render()"><div id="list"></div></div>
+
+<script>
+let T={
+"Whole Abdomen":`ULTRASOUND WHOLE ABDOMEN
+LIVER: Normal in size __ cm, homogeneous, no focal lesion.
+GALL BLADDER: Normal distended, no calculus.
+PANCREAS: Normal.
+SPLEEN: Normal __ cm.
+KIDNEYS: Right __ cm, Left __ cm, no stone, no hydronephrosis.
+BLADDER: Normal, no calculus.
+PROSTATE: __ gm, normal.
+No ascites.
+IMPRESSION: Normal Scan.`,
+
+"KUB":`ULTRASOUND KUB
+RIGHT KIDNEY: __ x __ cm, no calculus.
+LEFT KIDNEY: __ x __ cm, no calculus.
+BLADDER: Pre-void __ cc, Post-void __ cc.
+PROSTATE: __ gm.
+IMPRESSION: Normal KUB.`,
+
+"Pregnancy":`ULTRASOUND PREGNANCY
+Single live intrauterine fetus, CRL __ mm = __ weeks.
+Cardiac activity present.
+Placenta: __, AFI __ cm.
+IMPRESSION: Single live pregnancy __ weeks.`,
+
+"Female Pelvis":`ULTRASOUND PELVIS FEMALE
+UTERUS: __ x __ cm, ET __ mm.
+OVARIES: Right __, Left __.
+No free fluid.
+IMPRESSION: Normal Pelvis.`
+};
+
+// Load custom templates from storage
+let custom=JSON.parse(localStorage.getItem('custom_templates')||'{}');
+Object.assign(T,custom);
+
+function init(){
+ let s=document.getElementById('uType'); s.innerHTML='';
+ Object.keys(T).forEach(k=>{let o=document.createElement('option'); o.value=k; o.textContent=k; s.appendChild(o);});
+ document.getElementById('pDate').valueAsDate=new Date();
+ if(Object.keys(T).length>0) document.getElementById('rText').value=T[Object.keys(T)[0]];
+ render();
+}
+function load(){ document.getElementById('rText').value=T[document.getElementById('uType').value]||'' }
+document.getElementById('uType').addEventListener('change',load);
+
+document.getElementById('wordUp').addEventListener('change', async (e)=>{
+ let file=e.target.files[0]; if(!file) return;
+ let buf=await file.arrayBuffer();
+ let res=await mammoth.extractRawText({arrayBuffer:buf});
+ let txt=res.value.trim();
+ if(txt.length<20){ alert('File khali hai'); return; }
+ let name=file.name.replace('.docx','').replace('.doc','').replace('.zip','');
+ T[name]=txt;
+ let saved=JSON.parse(localStorage.getItem('custom_templates')||'{}'); saved[name]=txt; localStorage.setItem('custom_templates',JSON.stringify(saved));
+ let s=document.getElementById('uType');
+ if(![...s.options].some(o=>o.value==name)){ let o=document.createElement('option'); o.value=name; o.textContent=name+' (Imported)'; s.appendChild(o); }
+ s.value=name; document.getElementById('rText').value=txt;
+ alert('✅ Template "'+name+'" add ho gaya! Ab aap isko edit karke use kar sakte hain.');
+ e.target.value='';
+});
+
+function make(){
+ let html=`<div style="text-align:center;border-bottom:3px double #0a4eb5;padding-bottom:8px"><b style="font-size:18px">Azam Medical Centre</b><br><small>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</small><br><b>Dr. M. Zeeshan (Sonologist)</b></div>
+ <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:14px"><div><b>Patient:</b> ${pName.value} (${pAge.value}/${pGen.value})<br><b>Ref:</b> ${ref.value}</div><div><b>Date:</b> ${pDate.value}<br><b>Type:</b> ${uType.value}</div></div><hr style="margin:10px 0">
+ <pre style="white-space:pre-wrap;font-family:system-ui;font-size:14px">${rText.value}</pre>
+ <div style="margin-top:40px;text-align:right"><b>Dr. Muhammad Zeeshan</b><br><small>MBBS, RMP, Sonologist</small></div>`;
+ document.getElementById('out').innerHTML=html; document.getElementById('outCard').style.display='block'; window.scrollTo(0,document.body.scrollHeight);
+}
+function pdf(){const{jsPDF}=window.jspdf; let doc=new jsPDF(); let t=document.getElementById('out').innerText; let l=doc.splitTextToSize(t,180); doc.text(l,10,10); doc.save((pName.value||'Report')+'.pdf')}
+function saveR(){let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); a.unshift({n:pName.value,a:pAge.value,g:pGen.value,d:pDate.value,t:uType.value,r:rText.value}); localStorage.setItem('us_rep',JSON.stringify(a)); render(); alert('Saved')}
+function render(){let q=(sBox.value||'').toLowerCase(); let a=JSON.parse(localStorage.getItem('us_rep')||'[]'); list.innerHTML=a.filter(x=>(x.n+x.t).toLowerCase().includes(q)).map((x,i)=>`<div style="border:1px solid #ddd;border-radius:10px;padding:8px;margin:6px 0"><b>${x.n}</b> ${x.t} ${x.d} <button class="small" style="background:#0a4eb5" onclick="view(${i})">View</button></div>`).join('')}
+function view(i){let a=JSON.parse(localStorage.getItem('us_rep')||'[]')[i]; pName.value=a.n; pAge.value=a.a; pGen.value=a.g; pDate.value=a.d; uType.value=a.t; rText.value=a.r; make()}
+init();
+</script>
+</body>
+</html>
