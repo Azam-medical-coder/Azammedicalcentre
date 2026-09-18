@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Ultrasound - HC AC FL Auto Calc</title>
+<title>Azam Ultrasound - Final Fixed</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
 <style>
@@ -38,21 +38,21 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <button class="btn2" onclick="document.getElementById('wordUp').click()">📄 Word File Se Template Update Karen</button>
 
 <div id="fetalCalc" class="calcBox" style="display:none">
-<h4>🤰 Gynae / FWB Calculator - Sirf HC, AC, FL likhen - Age & Weight Auto</h4>
+<h4>🤰 Gynae / FWB Calculator - Sirf HC, AC, FL mm likhen</h4>
 <div class="calcGrid">
 <input id="cHC" type="number" placeholder="HC mm *" oninput="calcFWB()">
 <input id="cAC" type="number" placeholder="AC mm *" oninput="calcFWB()">
 <input id="cFL" type="number" placeholder="FL mm *" oninput="calcFWB()">
 <input id="cCRL" type="number" placeholder="CRL mm (early)" oninput="calcFWB()">
 <input id="cBPD" type="number" placeholder="BPD mm (optional)" oninput="calcFWB()">
-<input id="cAFI" type="number" placeholder="AFI cm" oninput="calcFWB()">
+<input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()">
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
 <div class="calcRes" id="resGA">GA: -- weeks</div>
 <div class="calcRes" id="resEDD">EDD: --</div>
 <div class="calcRes" id="resEFW">Weight: -- gm</div>
 </div>
-<div style="font-size:11px;color:#0a4eb5;margin-top:6px;text-align:center">* HC, AC, FL likhte hi neeche report me khud lag jayega</div>
+<button class="small" style="background:#10b981;width:100%;margin-top:10px;padding:12px;font-size:14px" onclick="applyCalc()">✅ Calculation Report Me Lagayen</button>
 </div>
 
 <b style="font-size:13px;display:block;margin-top:10px">Report Pattern (Editable):</b>
@@ -304,34 +304,34 @@ IMPRESSION: Mature follicle __ mm - ready for ovulation.`,
 "FWB":`ULTRASOUND FWB
 Single live fetus, Cephalic.
 BPD __ mm, HC __ mm, AC __ mm, FL __ mm = __ weeks.
-AFI __ cm, Placenta __, Weight __ gm, FHR __ bpm.
+AFI __ mm, Placenta __, Weight __ gm, FHR __ bpm.
 IMPRESSION: Single live __ weeks.`,
 "FWB with anomaly scane":`ULTRASOUND ANOMALY SCAN
 Single live fetus __ weeks, Head, Spine, Heart 4-chamber, Abdomen, Limbs normal.
-AFI __ cm, Placenta __.
+AFI __ mm, Placenta __.
 IMPRESSION: Normal anomaly scan __ weeks.`,
 "FWB with 15 weeks of pregnancy":`ULTRASOUND FWB 15 WEEKS
 Single live intrauterine fetus 15 weeks.
 CRL __ mm, BPD __ mm, FL __ mm.
 Cardiac activity present, FHR __ bpm.
-Placenta __, AFI __ cm, Cervix __ mm.
+Placenta __, AFI __ mm, Cervix __ mm.
 IMPRESSION: Single live pregnancy 15 weeks 0 days.`,
 "FWB with 20 weeks of pregnancy":`ULTRASOUND FWB 20 WEEKS
 Single live fetus 20 weeks, Cephalic / Breech.
 BPD __ mm, HC __ mm, AC __ mm, FL __ mm = 20 weeks.
-AFI __ cm, Placenta __ anterior/posterior, Grade __.
+AFI __ mm, Placenta __ anterior/posterior, Grade __.
 Anomaly: No gross anomaly seen.
 IMPRESSION: Single live 20 weeks pregnancy.`,
 "FWB with 25 weeks of pregnancy":`ULTRASOUND FWB 25 WEEKS
 Single live fetus 25 weeks.
 BPD __ mm, FL __ mm, AC __ mm, Estimated weight __ gm.
-Placenta __, AFI __ cm, FHR __ bpm.
+Placenta __, AFI __ mm, FHR __ bpm.
 Presentation Cephalic.
 IMPRESSION: Single live 25 weeks.`,
 "FWB with 30 weeks of pregnancy":`ULTRASOUND FWB 30 WEEKS
 Single live fetus 30 weeks, Cephalic.
 BPD __ mm, HC __ mm, AC __ mm, FL __ mm, Weight __ gm.
-AFI __ cm, Placenta __, Grade __.
+AFI __ mm, Placenta __, Grade __.
 Doppler: Normal.
 IMPRESSION: Single live 30 weeks with adequate growth.`,
 "FWB with CRL":`ULTRASOUND FWB WITH CRL
@@ -358,13 +358,13 @@ IMPRESSION: Single live __ weeks pregnancy with IUD in situ.`,
 "FWB with Cephalic presentation":`ULTRASOUND FWB WITH CEPHALIC PRESENTATION
 Single live fetus, Cephalic presentation, longitudinal lie.
 BPD __ mm, FL __ mm, AC __ mm = __ weeks.
-AFI __ cm, Placenta __, FHR __ bpm.
+AFI __ mm, Placenta __, FHR __ bpm.
 Head engaged / not engaged.
 IMPRESSION: Single live cephalic presentation __ weeks.`,
 "FWB with Breech presentation":`ULTRASOUND FWB WITH BREECH PRESENTATION
 Single live fetus, Breech presentation, longitudinal lie, extended legs.
 BPD __ mm, FL __ mm = __ weeks.
-AFI __ cm, Placenta __.
+AFI __ mm, Placenta __.
 IMPRESSION: Single live breech presentation __ weeks.`,
 "FWB with complete fetus calculation":`ULTRASOUND FWB WITH COMPLETE FETAL BIOMETRY
 Single live fetus cephalic.
@@ -373,34 +373,34 @@ HC __ mm = __ w __ d
 AC __ mm = __ w __ d
 FL __ mm = __ w __ d
 HL __ mm
-AFI __ cm, Placenta __, FHR __ bpm, EDD __.
+AFI __ mm, Placenta __, FHR __ bpm, EDD __.
 IMPRESSION: Single live __ weeks as per composite.`,
 "FWB with fetus weight":`ULTRASOUND FWB WITH FETAL WEIGHT
 Single live fetus __ weeks cephalic.
-Biometry: BPD __, FL __, AC __.
+Biometry: BPD __ mm, FL __ mm, AC __ mm.
 Estimated Fetal Weight __ gm +/- __ gm (Hadlock).
-AFI __ cm, Placenta __.
+AFI __ mm, Placenta __.
 Growth adequate for gestational age.
 IMPRESSION: Single live __ weeks, EFW __ gm.`,
 "FWB for adequate fetus liquid amniotic fluid":`ULTRASOUND FWB FOR ADEQUATE LIQUOR
 Single live fetus __ weeks cephalic.
-AFI __ cm (Normal 8-18 cm), adequate liquor, clear.
+AFI __ mm (Normal 80-180 mm), adequate liquor, clear.
 Placenta __, FHR __ bpm.
-IMPRESSION: Single live __ weeks with adequate amniotic fluid AFI __ cm.`,
+IMPRESSION: Single live __ weeks with adequate amniotic fluid AFI __ mm.`,
 "FWB for Oligohydramnios fetus liquid amniotic fluid":`ULTRASOUND FWB FOR OLIGOHYDRAMNIOS
 Single live fetus __ weeks.
-AFI __ cm (Low <5 cm), reduced liquor, suggestive of Oligohydramnios.
+AFI __ mm (Low <50 mm), reduced liquor, suggestive of Oligohydramnios.
 Placenta __, FHR __ bpm, Weight __ gm.
-IMPRESSION: Single live __ weeks with Oligohydramnios AFI __ cm.`,
+IMPRESSION: Single live __ weeks with Oligohydramnios AFI __ mm.`,
 "FWB for Polyhydramnios fetus liquid amniotic fluid":`ULTRASOUND FWB FOR POLYHYDRAMNIOS
 Single live fetus __ weeks.
-AFI __ cm (High >24 cm), increased liquor, suggestive of Polyhydramnios.
+AFI __ mm (High >240 mm), increased liquor, suggestive of Polyhydramnios.
 Placenta __, Weight __ gm.
-IMPRESSION: Single live __ weeks with Polyhydramnios AFI __ cm.`,
+IMPRESSION: Single live __ weeks with Polyhydramnios AFI __ mm.`,
 "FWB with Nuchal Cord":`ULTRASOUND FWB WITH NUCHAL CORD
 Single live fetus __ weeks, Cephalic presentation.
 BPD __ mm, HC __ mm, AC __ mm, FL __ mm = __ weeks.
-AFI __ cm, Placenta __, Estimated Weight __ gm, FHR __ bpm.
+AFI __ mm, Placenta __, Estimated Weight __ gm, FHR __ bpm.
 COLOR DOPPLER: Single loop / Double loop of umbilical cord seen around fetal neck - Nuchal cord present.
 No true knot.
 IMPRESSION: Single live __ weeks with Nuchal Cord (Single Loop).`,
@@ -474,7 +474,6 @@ IMPRESSION: Normal Testicular Doppler.`
 };
 
 let fetalData={};
-let autoApply=true;
 
 function calcFWB(){
  let bpd=parseFloat(document.getElementById('cBPD').value)||0;
@@ -485,20 +484,17 @@ function calcFWB(){
  let afi=parseFloat(document.getElementById('cAFI').value)||0;
 
  let gas=[];
- // Standard formulas - only HC AC FL as you requested
- if(hc>0){ let ga_hc = (hc * 0.111) + 5.5; gas.push(ga_hc); } // ~ HC 200=27.7w
- if(ac>0){ let ga_ac = (ac * 0.117) + 3.8; gas.push(ga_ac); } // ~ AC 250=33w
- if(fl>0){ let ga_fl = (fl * 0.4) + 9.5; gas.push(ga_fl); } // FL 55=31.5w
+ if(hc>0){ let ga_hc = (hc * 0.111) + 5.5; gas.push(ga_hc); }
+ if(ac>0){ let ga_ac = (ac * 0.117) + 3.8; gas.push(ga_ac); }
+ if(fl>0){ let ga_fl = (fl * 0.4) + 9.5; gas.push(ga_fl); }
  if(crl>0){ let ga_crl = (crl * 0.16) + 6.8; gas.push(ga_crl); }
  if(bpd>0 && gas.length<2){ let ga_bpd = (bpd * 0.33) + 4; gas.push(ga_bpd); }
 
  let avgGA = gas.length? (gas.reduce((a,b)=>a+b,0)/gas.length) : 0;
 
- // EFW - Hadlock 3 params HC,AC,FL in CM - FIXED
  let efw=0;
  if(hc>0 && ac>0 && fl>0){
    let hc_cm = hc/10, ac_cm = ac/10, fl_cm = fl/10;
-   // Hadlock formula: log10(EFW) = 1.326 -0.00326*AC*FL +0.0107*HC +0.0438*AC +0.158*FL
    let log10efw = 1.326 - (0.00326*ac_cm*fl_cm) + (0.0107*hc_cm) + (0.0438*ac_cm) + (0.158*fl_cm);
    efw = Math.pow(10, log10efw);
  }
@@ -515,44 +511,42 @@ function calcFWB(){
  document.getElementById('resGA').innerText = avgGA? `GA: ${avgGA.toFixed(1)}w (${Math.floor(avgGA)}w${Math.round((avgGA%1)*7)}d)` : 'GA: -- weeks';
  document.getElementById('resEDD').innerText = `EDD: ${eddStr}`;
  document.getElementById('resEFW').innerText = efw? `Weight: ${Math.round(efw)} gm` : 'Weight: -- gm';
-
- // AUTO APPLY TO REPORT PATTERN - Sirf HC AC FL se
- if(autoApply && (hc>0 || ac>0 || fl>0)){
-   autoUpdateReport();
- }
 }
 
-function autoUpdateReport(){
- let t=document.getElementById('rType')? '':''; // dummy
- let txt = document.getElementById('rText').value;
+function applyCalc(){
+ if(!fetalData.ga &&!fetalData.efw){ alert('Pehle HC, AC, FL mm me likhen!'); return; }
  let ga = fetalData.ga;
- let w = fetalData.efw? Math.round(fetalData.efw)+' gm' : '__ gm';
- let gaFull = ga? `${ga.toFixed(1)} weeks` : '__ weeks';
- let afi = fetalData.afi? `${fetalData.afi} cm` : '__ cm';
+ let gaFull = ga? `${ga.toFixed(1)} weeks (${Math.floor(ga)} weeks ${Math.round((ga%1)*7)} days)` : '__ weeks';
+ let w = fetalData.efw? `${Math.round(fetalData.efw)} gm` : '__ gm';
+ let afiTxt = fetalData.afi? `${fetalData.afi} mm` : '__ mm';
 
- // Replace only if fields contain __
- if(fetalData.hc) txt = txt.replace(/HC __ mm/, `HC ${fetalData.hc} mm`).replace(/HC __/, `HC ${fetalData.hc} mm`);
- if(fetalData.ac) txt = txt.replace(/AC __ mm/, `AC ${fetalData.ac} mm`).replace(/AC __/, `AC ${fetalData.ac} mm`);
- if(fetalData.fl) txt = txt.replace(/FL __ mm/, `FL ${fetalData.fl} mm`).replace(/FL __/, `FL ${fetalData.fl} mm`);
- if(fetalData.bpd) txt = txt.replace(/BPD __ mm/, `BPD ${fetalData.bpd} mm`);
- if(fetalData.crl) txt = txt.replace(/CRL __ mm/, `CRL ${fetalData.crl} mm`);
+ let txt = document.getElementById('rText').value;
 
- // Update weight and AFI in common lines
+ // HC AC FL BPD CRL in mm
+ if(fetalData.hc) txt = txt.replace(/HC __ mm/g, `HC ${fetalData.hc} mm`);
+ if(fetalData.ac) txt = txt.replace(/AC __ mm/g, `AC ${fetalData.ac} mm`);
+ if(fetalData.fl) txt = txt.replace(/FL __ mm/g, `FL ${fetalData.fl} mm`);
+ if(fetalData.bpd) txt = txt.replace(/BPD __ mm/g, `BPD ${fetalData.bpd} mm`);
+ if(fetalData.crl) txt = txt.replace(/CRL __ mm/g, `CRL ${fetalData.crl} mm`);
+
+ // AFI mm
+ if(fetalData.afi) txt = txt.replace(/AFI __ mm/g, `AFI ${afiTxt}`).replace(/AFI __ cm/g, `AFI ${afiTxt}`);
+
+ // Weight
  if(fetalData.efw) txt = txt.replace(/Weight __ gm/g, `Weight ${w}`).replace(/Estimated Weight __ gm/g, `Estimated Weight ${w}`).replace(/Estimated weight __ gm/g, `Estimated weight ${w}`);
- if(fetalData.afi) txt = txt.replace(/AFI __ cm/g, `AFI ${afi}`);
 
- // Update = __ weeks line
+ // Weeks
  if(ga){
    txt = txt.replace(/= __ weeks/g, `= ${gaFull}`);
-   // Update IMPRESSION last __ weeks
-   txt = txt.replace(/IMPRESSION: Single live __ weeks\./, `IMPRESSION: Single live ${gaFull}, EFW ${w}, AFI ${afi}.`);
-   txt = txt.replace(/IMPRESSION: Single live __ weeks/, `IMPRESSION: Single live ${gaFull}, EFW ${w}`);
-   if(txt.includes('IMPRESSION: Single live fetus')){
-     txt = txt.replace(/IMPRESSION: Single live fetus __ weeks[\s\S]*/, `IMPRESSION: Single live fetus ${gaFull}, EFW ${w}, AFI ${afi}, EDD ${fetalData.edd}.`);
+   txt = txt.replace(/IMPRESSION: Single live __ weeks\./g, `IMPRESSION: Single live ${gaFull}, EFW ${w}, AFI ${afiTxt}.`);
+   txt = txt.replace(/IMPRESSION: Single live __ weeks/g, `IMPRESSION: Single live ${gaFull}, EFW ${w}`);
+   if(txt.includes('IMPRESSION: Single live fetus __ weeks')){
+     txt = txt.replace(/Single live fetus __ weeks.*/, `Single live fetus ${gaFull}, EFW ${w}, AFI ${afiTxt}, EDD ${fetalData.edd}.`);
    }
  }
 
  document.getElementById('rText').value = txt;
+ alert('✅ Calculations mm me report me lag gayi! Ab Final Report banayen.');
 }
 
 let custom=JSON.parse(localStorage.getItem('custom_templates')||'{}');Object.assign(T,custom);
@@ -564,11 +558,8 @@ function init(){
 }
 function checkFetal(){
  let v=document.getElementById('uType').value.toLowerCase();
- if(v.includes('fwb')){
-   document.getElementById('fetalCalc').style.display='block';
- } else {
-   document.getElementById('fetalCalc').style.display='none';
- }
+ if(v.includes('fwb')){ document.getElementById('fetalCalc').style.display='block'; }
+ else { document.getElementById('fetalCalc').style.display='none'; }
 }
 function load(){document.getElementById('rText').value=T[document.getElementById('uType').value]||''; checkFetal();}
 document.getElementById('uType').addEventListener('change',load);
@@ -597,7 +588,7 @@ function formatReport(text){
 function make(){
  let info=`<div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:15px"><div><b>Patient Name:</b> ${pName.value} &nbsp; <b>Age/Sex:</b> ${pAge.value}/${pGen.value}<br><b>Referred By:</b> ${ref.value}</div><div><b>Date:</b> ${pDate.value}</div></div><hr style="margin-bottom:15px">`;
  let body=formatReport(rText.value);
- let footer=`<div style="margin-top:80px;text-align:center;font-size:11px;color:#555"><i>This is computer generated no signature required</i></div>`;
+ let footer=`<div style="margin-top:80px;text-align:center;font-size:11px;color:#555"><i>This is computer generated report no signature required</i></div>`;
  document.getElementById('out').innerHTML=info+body+footer;
  document.getElementById('outCard').style.display='block';
  window.scrollTo(0,document.getElementById('outCard').offsetTop);
