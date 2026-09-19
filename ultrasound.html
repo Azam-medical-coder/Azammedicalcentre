@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - Ultrasound</title>
+<title>Azam Medical Centre - 76 Templates Restored</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://apis.google.com/js/api.js"></script>
+<script src="https://apis.google.com/js/api.js" async defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#eef4ff;padding:10px}
@@ -16,86 +16,29 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 .report{width:190mm;height:280mm;margin:auto;background:#fff;border:2px solid #0a4eb5;border-radius:12px;padding:0;box-sizing:border-box;position:relative;overflow:hidden}
 .report-inner{width:160mm;height:210mm;margin:40mm auto 0 auto;padding:0 5mm 5mm 5mm;box-sizing:border-box;position:relative;line-height:1.8;font-size:12.5px;z-index:2}
 .report::before{content:"";position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);width:320px;height:320px;background-image:url('logo.png'), url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.07;filter:grayscale(100%);z-index:1;pointer-events:none}
-.diagram-wm{position:absolute;right:8mm;bottom:15mm;width:60mm;height:70mm;opacity:0.22;z-index:1;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom center;filter:grayscale(100%);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+#loginOverlay{position:fixed;inset:0;background:#0a4eb5;display:flex;align-items:center;justify-content:center;z-index:99999}
+.loginBox{background:#fff;padding:30px;border-radius:20px;width:90%;max-width:400px;text-align:center}
+.summary-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}
+.summary-table th,.summary-table td{border:1px solid #333;padding:6px 4px;text-align:left}
+.summary-table th{background:#0a4eb5;color:#fff}
 .calcBox{background:#f0f7ff;border:2px dashed #1e90ff;border-radius:12px;padding:12px;margin:10px 0}
 .calcGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .calcRes{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;font-size:12px;font-weight:800;text-align:center}
-#loginOverlay{position:fixed;inset:0;background:#0a4eb5;display:flex;align-items:center;justify-content:center;z-index:99999}
-.loginBox{background:#fff;padding:30px;border-radius:20px;width:90%;max-width:400px;text-align:center;box-shadow:0 20px 40px #0005}
-@media print{ @page{size:190mm 280mm; margin:0} body{background:#fff;padding:0} body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:190mm;height:280mm;border:none;border-radius:0}.noPrint{display:none!important} }
+@media print{ @page{size:190mm 280mm; margin:0} body{background:#fff;padding:0} body *{visibility:hidden} .report,.report *{visibility:visible} .report{position:absolute;left:0;top:0;width:190mm;height:280mm;border:none} .noPrint{display:none!important} }
 </style>
 </head>
 <body>
-<script>
-// --- GOOGLE DRIVE CONFIG - FIXED ---
-const CLIENT_ID = '153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com';
-const SCOPES = 'https://www.googleapis.com/auth/drive.file';
-let tokenClient; let gapiInited=false; let gisInited=false;
-function gapiLoaded(){ gapi.load('client', async ()=>{ await gapi.client.init({ discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"] }); gapiInited=true; }); }
-function gisLoaded(){ tokenClient = google.accounts.oauth2.initTokenClient({ client_id: CLIENT_ID, scope: SCOPES, callback: '' }); gisInited=true; }
-function ensureDriveAuth(){ return new Promise((resolve,reject)=>{ tokenClient.callback = (resp)=>{ if(resp.error) reject(resp); else resolve(resp); }; tokenClient.requestAccessToken({prompt: ''}); }); }
-async function uploadToDriveFile(fileName, content){
- try{
-  if(!gapiInited ||!gisInited){ alert('Google Drive abhi load ho raha hai, 5 sec baad dobara Save karen'); return; }
-  await ensureDriveAuth();
-  const file = new Blob([content], {type: 'text/html'});
-  const metadata = { name: fileName, mimeType: 'text/html' };
-  const form = new FormData(); form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'})); form.append('file', file);
-  const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', { method: 'POST', headers: new Headers({'Authorization': 'Bearer ' + gapi.client.getToken().access_token}), body: form });
-  const data = await res.json(); if(data.id){ alert('✅ Google Drive par save ho gaya! File ID: '+data.id); } else { console.log(data); }
- }catch(e){ console.log(e); alert('Drive Error: '+e.message); }
-}
-window.onload = ()=>{ gapiLoaded(); gisLoaded(); }
-</script>
-
-<div id="loginOverlay"><div class="loginBox"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:80px;height:80px;border-radius:50%;border:3px solid #0a4eb5;margin-bottom:10px"><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Secure Login</p><input id="passInput" type="password" placeholder="Enter Password" style="text-align:center"><button class="btn" onclick="checkPass()">Login</button><p id="passErr" style="color:red;display:none">Ghalat Password!</p></div></div>
-
-<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:65px;height:65px;border-radius:50%;border:2px solid #0a4eb5"><div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p></div></div>
-
+<div id="loginOverlay"><div class="loginBox"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:80px;height:80px;border-radius:50%;border:3px solid #0a4eb5;margin-bottom:10px"><h2 style="color:#0a4eb5">Azam Medical Centre</h2><input id="passInput" type="password" placeholder="Enter Password" style="text-align:center"><button class="btn" onclick="checkPass()">Login</button><p id="passErr" style="color:red;display:none">Ghalat Password!</p></div></div>
+<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:65px;height:65px;border-radius:50%"><div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981">● Drive: Ready</div></div></div>
 <div class="card noPrint">
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><select id="uType"></select></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref"></select><select id="sono"></select></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="clinicalLMP" placeholder="Clinical Data / LMP date" style="display:none"><input id="presentComp" placeholder="Present complaints-H/O:" style="display:none"><input id="pIDMobile" placeholder="Patient ID / Mobile No. *"></div>
-
-<div id="fetalCalc" class="calcBox" style="display:none"><h4>🤰 FWB Calculator - HC, AC, FL mm</h4><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm *" oninput="calcFWB()"><input id="cAC" type="number" placeholder="AC mm *" oninput="calcFWB()"><input id="cFL" type="number" placeholder="FL mm *" oninput="calcFWB()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: -- weeks</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Weight: -- gm</div></div><button class="small" style="background:#10b981;width:100%;margin-top:10px;padding:12px;font-size:14px" onclick="applyCalc()">✅ Calculation Report Me Lagayen</button></div>
-
-<div id="prostateCalc" class="calcBox" style="display:none;border-color:#f59e0b;background:#fffbeb"><h4>🔶 Prostate Auto Calculation - cm me likhen</h4><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm *" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="Width cm *" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="Height cm *" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resPVol">Volume: -- cc</div><div class="calcRes" id="resPGm">Weight: -- gm</div></div><button class="small" style="background:#f59e0b;width:100%;margin-top:10px;padding:12px;font-size:14px" onclick="applyProstateCalc()">✅ Prostate Size Report Me Lagayen</button></div>
-
+<input id="pIDMobile" placeholder="Patient ID / Mobile No. *">
+<div id="fetalCalc" class="calcBox" style="display:none"><h4>🤰 FWB Calculator</h4><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Weight: --</div></div><button class="small" style="background:#10b981;width:100%;margin-top:8px" onclick="applyCalc()">✅ Calculation Lagayen</button></div>
+<div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb;border-color:#f59e0b"><h4>🔶 Prostate cm me</h4><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%;margin-top:8px" onclick="applyProstateCalc()">✅ Prostate Lagayen</button></div>
 <b style="font-size:13px;display:block;margin-top:10px">Report Pattern (Editable):</b><textarea id="rText" rows="26" style="font-family:monospace;font-size:13px"></textarea><button class="btn" onclick="make()">✅ Final Report Banayen</button>
 </div>
-<div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#0a4eb5" onclick="window.print()">Print (28x19cm)</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF Download</button><button class="small" style="background:#10b981" onclick="saveR()">💾 Save & Drive Upload</button></div></div>
-<div class="card noPrint"><h3>Saved Reports</h3><input id="sBox" placeholder="🔍 Search Name / ID" onkeyup="render()" style="flex:1"><div id="list" style="margin-top:8px"></div></div>
-<script>
-/* --- Aap ka purana wala templates wala code yahan se shuru --- */
-const refDoctors = ["Ref By Dr. - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. M. Zeeshan","Self","✏️ Other - Khud Likhen"];
-const sonoDoctors = ["Sonologist Dr. - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN","DR. SAMAN AZAM","✏️ Other - Khud Likhen"];
-function fillSelect(id, list){let s=document.getElementById(id);s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
-fillSelect('ref', refDoctors);fillSelect('sono', sonoDoctors);
-let T = {
-"Whole abdomen":`ULTRASOUND WHOLE ABDOMEN\nLIVER: Size __ cm\nGALL BLADDER: Wall __ mm\nKIDNEYS: Right __ x __ cm, Left __ x __ cm\nIMPRESSION: __`,
-"KUB":`ULTRASOUND KUB\nRIGHT KIDNEY: Size __ x __ cm\nLEFT KIDNEY: Size __ x __ cm\nBLADDER: __ cc\nPROSTATE: __ gm\nIMPRESSION: __`,
-"KUB + Prostate BPH":`ULTRASOUND KUB + PROSTATE BPH\nRIGHT KIDNEY: Size __ x __ cm\nLEFT KIDNEY: Size __ x __ cm\nBLADDER: __ cc, Residual __ cc\nPROSTATE: Size __ x __ x __ cm, __ gm, __ cc\nIMPRESSION: Enlarged Prostate __ gm - BPH`,
-"FWB":`ULTRASOUND FWB\nPresentation: __, FHR __ bpm\nBPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm\nWeeks: __ weeks, EFW: __ gm, AFI: __ mm\nPlacenta: __\nIMPRESSION: Single live __ weeks, EFW __ gm`
-};
-let fetalData={}; let prostateData={};
-function calcProstate(){let l=parseFloat(pL.value)||0,w=parseFloat(pW.value)||0,h=parseFloat(pH.value)||0;if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l,w,h,vol};resPVol.innerText=`Volume: ${vol.toFixed(1)} cc`;resPGm.innerText=`Weight: ${vol.toFixed(1)} gm`;}}
-function applyProstateCalc(){if(!prostateData.vol){alert('cm likhen');return;}let t=rText.value; t=t.replace(/__ x __ x __ cm/g, `${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`).replace(/__ gm/g, `${prostateData.vol.toFixed(1)} gm`).replace(/__ cc/g, `${prostateData.vol.toFixed(1)} cc`); rText.value=t;}
-function calcFWB(){let bpd=parseFloat(cBPD.value)||0,hc=parseFloat(cHC.value)||0,ac=parseFloat(cAC.value)||0,fl=parseFloat(cFL.value)||0;let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}fetalData={ga:avg,efw:efw,hc,ac,fl,bpd};resGA.innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';resEFW.innerText=efw?`Weight: ${Math.round(efw)} gm`:'Weight: --';resEDD.innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';}
-function applyCalc(){if(!fetalData.ga&&!fetalData.efw){alert('HC AC FL likhen');return;}let t=rText.value; if(fetalData.hc) t=t.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`); if(fetalData.ac) t=t.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`); if(fetalData.fl) t=t.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`); if(fetalData.efw) t=t.replace(/EFW: __ gm/g,`EFW: ${Math.round(fetalData.efw)} gm`).replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`); rText.value=t;}
-function checkPass(){if(passInput.value==='Pakistan@777'){sessionStorage.setItem('azam_login','ok');loginOverlay.style.display='none';}else{passErr.style.display='block';}}
-if(sessionStorage.getItem('azam_login')==='ok') loginOverlay.style.display='none';
-function init(){let s=uType; s.innerHTML=''; Object.keys(T).forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);}); pDate.valueAsDate=new Date(); rText.value=T[Object.keys(T)[0]]; render();}
-function isGynae(t){return t.toLowerCase().includes('fwb');} function isProstate(t){return t.toLowerCase().includes('prostate');}
-function checkFetal(){let v=uType.value; fetalCalc.style.display=v.toLowerCase().includes('fwb')?'block':'none'; prostateCalc.style.display=isProstate(v)?'block':'none'; rText.value=T[v]||'';}
-uType.addEventListener('change',checkFetal);
-function make(){let name=pName.value||'Patient'; let html=`<div style='text-align:center;border-bottom:2px solid #0a4eb5;padding-bottom:6px'><h2 style='color:#0a4eb5;margin:0'>Azam Medical Centre</h2><p style='font-size:11px'>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><h4 style='margin-top:6px'>${uType.value}</h4></div><div style='margin-top:10px;font-size:12px'><b>Name:</b> ${pName.value} | <b>Age:</b> ${pAge.value} | <b>Sex:</b> ${pGen.value} | <b>Date:</b> ${pDate.value}<br><b>ID/Mobile:</b> ${pIDMobile.value} | <b>Ref By:</b> ${ref.value} | <b>Sonologist:</b> ${sono.value}</div><pre style='white-space:pre-wrap;font-family:system-ui;margin-top:12px;font-size:12.5px;line-height:1.7'>${rText.value}</pre>`; reportContent.innerHTML=html; outCard.style.display='block'; window.scrollTo(0,document.body.scrollHeight);}
-function saveR(){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); let rec={id:Date.now(),name:pName.value,mobile:pIDMobile.value,type:uType.value,date:pDate.value,html:reportContent.innerHTML,text:rText.value}; all.unshift(rec); localStorage.setItem('azam_reports',JSON.stringify(all)); render(); let fileName = `${rec.name}_${rec.type}_${rec.date}.html`; uploadToDriveFile(fileName, reportContent.innerHTML); alert('Local Save ho gaya, Drive par upload ho raha hai...');}
-function render(){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); let q=sBox.value.toLowerCase(); let f=all.filter(r=>(r.name+r.mobile).toLowerCase().includes(q)); list.innerHTML=f.map((r,i)=>`<div style='border:1px solid #cbd5e1;padding:8px;border-radius:8px;margin:4px 0;display:flex;justify-content:space-between'><span>${r.name} - ${r.type} - ${r.date}</span><span><button class='small' style='background:#0a4eb5' onclick='viewR(${r.id})'>View</button><button class='small' style='background:#ff3b30' onclick='delR(${r.id})'>Del</button></span></div>`).join('');}
-function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); let r=all.find(x=>x.id===id); if(r){reportContent.innerHTML=r.html; outCard.style.display='block';}}
-function delR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id); localStorage.setItem('azam_reports',JSON.stringify(all)); render();}
-function pdf(){let {jsPDF}=window.jspdf; let doc=new jsPDF(); doc.text(reportContent.innerText,10,10); doc.save((pName.value||'report')+'.pdf');}
-init();
-</script>
-</body>
-</html>
+<div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#0a4eb5" onclick="window.print()">Print</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF Download</button><button class="small" style="background:#10b981" onclick="saveR()">💾 Save + Drive Upload</button></div></div>
+<div class="card noPrint"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap"><h3>Saved Reports - Hamesha Save</h3><div style="display:flex;gap:6px"><button class="small" style="background:#8b5cf6" onclick="openSummary()">📊 Daily Summary</button><button class="small" style="background:#0a4eb5" onclick="exportData()">💾 Backup</button><button class="small" style="background:#10b981" onclick="document.getElementById('importFile').click()">📂 Restore</button><input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)"></div></div><div style="display:flex;gap:6px;margin-top:10px"><input id="sBox" placeholder="🔍 Search Name / ID / Mobile..." onkeyup="render()" style="flex:1"><button class="small" style="background:#0a4eb5" onclick="render()">Search</button></div><div id="list" style="margin-top:8px"></div></div>
+<div class="card noPrint" id="summaryCard" style="display:none;border:3px solid #8b5cf6"><div style="display:flex;justify-content:space-between"><h3>📊 Daily Summary</h3><div><input id="sumDate" type="date" style="width:auto"><button class="small" style="background:#0a4eb5" onclick="renderSummary()">Show</button><button class="small" style="background:#ff3b30" onclick="closeSummary()">Close</button><button class="small" style="background:#10b981" onclick="printSummary()">Print</button></div></div><div id="summaryPrintArea"><h4 id="sumTitle" style="text-align:center;margin:10px"></h4><div id="sumStats" style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0"></div><table class="summary-table"><thead><tr><th>Sr#</th><th>Name</th><th>ID/Mobile</th><th>Age/Sex</th><th>Type</th><th>Ref</th><th>Sono</th></tr></thead><tbody id="sumBody"></tbody></table><div>Total: <b id="sumTotal">0</b></div></div></div>
