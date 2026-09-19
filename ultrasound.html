@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - FINAL COMPLAINT + SEARCH + CLEAR DIAGRAM</title>
+<title>Azam Medical Centre - FINAL COMPLETE</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -16,7 +16,7 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 .report{width:190mm;height:280mm;margin:auto;background:#fff;border:2px solid #0a4eb5;border-radius:12px;padding:0;box-sizing:border-box;position:relative;overflow:hidden}
 .report-inner{width:160mm;height:210mm;margin:40mm auto 0 auto;padding:0 5mm 5mm 5mm;box-sizing:border-box;position:relative;line-height:1.6;font-size:11.2px;z-index:2}
 .report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;background-image:url('logo.png'), url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.06;filter:grayscale(100%);z-index:1;pointer-events:none}
-.diagram-wm{position:absolute;right:8mm;bottom:8mm;width:72mm;height:82mm;opacity:0.28;z-index:1;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom right;filter:grayscale(0%);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.diagram-wm{position:absolute;right:8mm;bottom:8mm;width:72mm;height:82mm;opacity:0.28;z-index:1;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom right;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @media print{@page{size:190mm 280mm; margin:0}body{background:#fff;padding:0}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:190mm;height:280mm;border:none;border-radius:0}.report::before{opacity:0.06!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.diagram-wm{opacity:0.30!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.noPrint{display:none!important}}
 .calcBox{background:#f0f7ff;border:2px dashed #1e90ff;border-radius:12px;padding:12px;margin:10px 0}
 .calcGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
@@ -26,30 +26,25 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 </style>
 </head>
 <body>
-<div id="loginOverlay"><div class="loginBox"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:80px;height:80px;border-radius:50%;border:3px solid #0a4eb5"><h2 style="color:#0a4eb5">Azam Medical Centre</h2><input id="passInput" type="password" placeholder="Enter Password" style="text-align:center"><button class="btn" onclick="checkPass()">Login</button><p id="passErr" style="color:red;display:none">Ghalat Password!</p></div></div>
+<div id="loginOverlay"><div class="loginBox"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:80px;height:80px;border-radius:50%;border:3px solid #0a4eb5"><h2 style="color:#0a4eb5;margin:10px 0">Azam Medical Centre</h2><input id="passInput" type="password" placeholder="Enter Password" style="text-align:center;font-size:16px"><button class="btn" onclick="checkPass()" type="button">Login</button><p id="passErr" style="color:red;display:none;margin-top:10px;font-weight:700">Ghalat Password! Pakistan@777 likhen</p></div></div>
 <div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:65px;height:65px;border-radius:50%;border:2px solid #0a4eb5"><div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p><div id="driveStatus" style="font-size:11px;color:#10b981;margin-top:4px">● Drive: Ready</div></div></div>
-
 <div class="card noPrint">
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><input id="pIDMobile" placeholder="Patient ID / Mobile No."></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref"></select><select id="sono"></select></div>
-
 <div style="border:2px solid #8b5cf6;border-radius:12px;padding:10px;margin:8px 0;background:#f8f7ff">
 <label style="font-weight:800;color:#7c3aed;font-size:12px">🔍 Template Search + Select</label>
-<input id="tSearch" placeholder="Search template e.g. whole, kub, fatty, cyst, fwb..." onkeyup="filterTemplates()" style="border-color:#8b5cf6">
+<input id="tSearch" placeholder="Search e.g. whole, kub, fatty, cyst, fwb..." onkeyup="filterTemplates()" style="border-color:#8b5cf6">
 <select id="uType" size="6" style="height:140px;font-size:13px"></select>
 </div>
-
 <div id="complaintBox" style="border:2px solid #f59e0b;border-radius:12px;padding:10px;margin:8px 0;background:#fffbeb;display:none">
-<label style="font-weight:800;color:#d97706;font-size:12px">📝 Present Complaint / H/O - (Whole Abdomen & KUB ke liye)</label>
-<textarea id="pComplaint" rows="2" placeholder="e.g. Pain abdomen since 2 days, Fever, Flank pain, Burning micturition, H/O calculi..."></textarea>
+<label style="font-weight:800;color:#d97706;font-size:12px">📝 Present Complaint / H/O - Whole Abdomen & KUB</label>
+<textarea id="pComplaint" rows="2" placeholder="e.g. Pain abdomen 2 days, Flank pain, Burning micturition, H/O calculi..."></textarea>
 </div>
-
 <div id="fetalCalc" class="calcBox" style="display:none"><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Wt: --</div></div><button class="small" style="background:#10b981;width:100%" onclick="applyCalc()">Calculation Lagayen</button></div>
 <div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Prostate Lagayen</button></div>
 <textarea id="rText" rows="22" style="font-family:monospace;font-size:13px"></textarea><button class="btn" onclick="make()">✅ Final Report Banayen</button>
 </div>
-
 <div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#0a4eb5" onclick="window.print()">Print Final (28x19)</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF</button><button class="small" style="background:#10b981" onclick="saveR()">Save + Drive Upload</button></div></div>
 <div class="card noPrint"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h3>Saved Reports</h3><div style="display:flex;gap:6px"><button class="small" style="background:#0a4eb5;padding:12px" onclick="loadFromDrive()">☁️ Drive se Load</button><button class="small" style="background:#8b5cf6;padding:10px" onclick="openSummary()">📊 Summary</button></div></div><input id="sBox" placeholder="Search Name / ID / Mobile" onkeyup="render()" style="margin-top:8px"><div id="list"></div></div>
 <div class="card noPrint" id="summaryCard" style="display:none;border:3px solid #8b5cf6"><div style="display:flex;justify-content:space-between"><h3>Daily Summary</h3><div style="display:flex;gap:6px"><input id="sumDate" type="date" style="width:auto"><button class="small" style="background:#0a4eb5" onclick="renderSummary()">Show</button><button class="small" style="background:#10b981" onclick="printSummary()">Print</button><button class="small" style="background:#ff3b30" onclick="closeSummary()">Close</button></div></div><div id="summaryPrintArea"><h4 id="sumTitle" style="text-align:center"></h4><table style="width:100%;border-collapse:collapse;font-size:12px" border="1"><thead><tr><th>Sr#</th><th>Name</th><th>ID/Mobile</th><th>Age/Sex</th><th>Type</th><th>Ref</th><th>Sono</th></tr></thead><tbody id="sumBody"></tbody></table><div>Total: <b id="sumTotal">0</b></div></div></div>
@@ -65,9 +60,26 @@ async function getOrCreateFolder(){if(driveFolderId)return driveFolderId;try{let
 async function uploadToDriveFile(name,content){try{if(!gapiInited||!gisInited)return;updateDriveStatus('Uploading...',' #f59e0b');await ensureDriveAuth();let folderId=await getOrCreateFolder();const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents: folderId?[folderId]:[]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file);await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+gapi.client.getToken().access_token}),body:form});updateDriveStatus('Saved to Drive',' #10b981');}catch(e){}}
 async function loadFromDrive(){try{if(!gapiInited||!gisInited){alert('Drive load ho raha');return;}await ensureDriveAuth();let folderId=await getOrCreateFolder();let listResp=await gapi.client.drive.files.list({q:`'${folderId}' in parents and trashed=false`,fields:"files(id,name)",pageSize:100});let files=listResp.result.files||[];if(files.length===0){alert('Drive khali');return;}let existing=JSON.parse(localStorage.getItem('azam_reports')||'[]');let ids=new Set(existing.map(r=>r.id));let loaded=0;for(let f of files){try{let resp=await fetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`,{headers:{'Authorization':'Bearer '+gapi.client.getToken().access_token}});if(!resp.ok)continue;let data=await resp.json();if(data&&data.id&&!ids.has(data.id)){existing.unshift(data);ids.add(data.id);loaded++;}}catch(e){}}localStorage.setItem('azam_reports',JSON.stringify(existing));render();alert(`Drive se ${loaded} loaded`);}catch(e){alert('Drive error');}}
 window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1200);});
-function checkPass(){if(passInput.value==='Pakistan@777'){sessionStorage.setItem('azam_login','ok');loginOverlay.style.display='none';}else{passErr.style.display='block';}}
-if(sessionStorage.getItem('azam_login')==='ok'){loginOverlay.style.display='none';}
-passInput.addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});
+function checkPass(){
+  let p = document.getElementById('passInput').value.trim();
+  if(p === 'Pakistan@777'){
+    sessionStorage.setItem('azam_login','ok');
+    document.getElementById('loginOverlay').style.display='none';
+    document.getElementById('passErr').style.display='none';
+  }else{
+    document.getElementById('passErr').style.display='block';
+  }
+}
+(function(){
+  if(sessionStorage.getItem('azam_login')==='ok'){
+    let ov = document.getElementById('loginOverlay');
+    if(ov) ov.style.display='none';
+  }
+})();
+document.addEventListener('DOMContentLoaded',()=>{
+  let pi=document.getElementById('passInput');
+  if(pi){pi.addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});}
+});
 const refDoctors=["Ref By Dr. - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel Arain","Dr. Aqsa Gull","Dr. Shahzad Sadaqat","Dr. Bilal","Dr. Sofia Butt","Dr. Talha Bhatti","Dr. Irfan","Dr. Raheel Arain","Self","Other"];
 const sonoDoctors=["Sonologist Dr. - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN","DR. SAMAN AZAM","Other"];
 function fillSelect(id,list){let s=document.getElementById(id);s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
@@ -76,27 +88,19 @@ let prostateData={};
 function calcProstate(){let l=parseFloat(pL.value)||0,w=parseFloat(pW.value)||0,h=parseFloat(pH.value)||0;if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};resPVol.innerText=`Volume: ${vol.toFixed(1)} cc`;resPGm.innerText=`Weight: ${vol.toFixed(1)} gm`;}}
 function applyProstateCalc(){if(!prostateData.vol){alert('cm likhen');return;}let txt=rText.value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);rText.value=txt;}
 const DIAGRAMS={
-whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='260' viewBox='0 0 220 260'><rect x='10' y='10' width='200' height='240' rx='20' fill='none' stroke='%23999' stroke-width='1.2' stroke-dasharray='6 4'/><text x='110' y='26' text-anchor='middle' font-size='9' font-weight='800' fill='%23666'>WHOLE ABDOMEN - COMPLETE</text><path d='M30 40 Q60 35 90 42 Q110 48 105 75 Q95 90 70 88 Q40 85 30 60 Z' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='68' y='68' font-size='7' fill='%23888'>LIVER</text><ellipse cx='145' cy='60' rx='18' ry='12' fill='none' stroke='%23aaa' stroke-width='1.3'/><text x='135' y='64' font-size='6' fill='%23888'>GB</text><path d='M50 100 Q70 95 90 100 Q85 125 65 128 Q45 125 50 100' fill='none' stroke='%23aaa' stroke-width='1.3'/><text x='56' y='115' font-size='6' fill='%23888'>PANCREAS</text><ellipse cx='165' cy='105' rx='20' ry='12' fill='none' stroke='%23aaa' stroke-width='1.3'/><text x='150' y='108' font-size='6' fill='%23888'>SPLEEN</text><path d='M35 135 Q45 130 60 135 Q62 165 50 175 Q35 170 35 150 Z' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='38' y='158' font-size='6' fill='%23888'>R.KIDNEY</text><path d='M140 135 Q155 130 170 135 Q172 165 160 175 Q140 170 140 150 Z' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='142' y='158' font-size='6' fill='%23888'>L.KIDNEY</text><ellipse cx='100' cy='200' rx='35' ry='22' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='78' y='203' font-size='7' fill='%23888'>BLADDER</text><ellipse cx='100' cy='225' rx='18' ry='10' fill='none' stroke='%23aaa' stroke-width='1.2'/><text x='82' y='228' font-size='5.5' fill='%23888'>PROSTATE</text></svg>`,
-kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='260' viewBox='0 0 220 260'><rect x='10' y='10' width='200' height='240' rx='20' fill='none' stroke='%23999' stroke-width='1.2' stroke-dasharray='6 4'/><text x='110' y='28' text-anchor='middle' font-size='10' font-weight='800' fill='%23666'>KUB - KIDNEY URETER BLADDER</text><path d='M30 45 Q40 40 65 45 Q70 80 65 105 Q50 115 30 105 Q25 80 30 45 Z' fill='none' stroke='%23aaa' stroke-width='1.6'/><path d='M40 60 Q55 62 55 80 Q50 90 40 88' fill='none' stroke='%23bbb' stroke-width='1'/><text x='35' y='80' font-size='7' fill='%23888'>RT KIDNEY</text><path d='M150 45 Q175 40 195 50 Q200 80 195 105 Q175 115 150 105 Q145 80 150 45 Z' fill='none' stroke='%23aaa' stroke-width='1.6'/><path d='M170 60 Q180 62 180 80 Q175 90 165 88' fill='none' stroke='%23bbb' stroke-width='1'/><text x='155' y='80' font-size='7' fill='%23888'>LT KIDNEY</text><path d='M65 105 Q75 110 110 112 Q145 110 155 105' fill='none' stroke='%23aaa' stroke-width='1' stroke-dasharray='3 3'/><text x='100' y='120' font-size='6' fill='%23999'>URETERS</text><ellipse cx='110' cy='180' rx='42' ry='30' fill='none' stroke='%23aaa' stroke-width='1.6'/><text x='88' y='183' font-size='8' fill='%23888'>URINARY BLADDER</text><ellipse cx='110' cy='215' rx='22' ry='12' fill='none' stroke='%23aaa' stroke-width='1.4'/><text x='90' y='218' font-size='6.5' fill='%23888'>PROSTATE</text></svg>`,
-kub_prostate:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='260' viewBox='0 0 220 260'><rect x='10' y='10' width='200' height='240' rx='20' fill='none' stroke='%23999' stroke-width='1.2' stroke-dasharray='6 4'/><text x='110' y='28' text-anchor='middle' font-size='9' font-weight='800' fill='%23666'>KUB + PROSTATE - BPH</text><path d='M35 45 Q50 40 65 50 Q70 75 62 95 Q48 100 35 90 Q28 70 35 45' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='30' y='75' font-size='6' fill='%23888'>R.KIDNEY</text><path d='M155 45 Q170 40 190 50 Q195 75 187 95 Q170 100 155 90 Q148 70 155 45' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='155' y='75' font-size='6' fill='%23888'>L.KIDNEY</text><ellipse cx='110' cy='155' rx='40' ry='28' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='85' y='158' font-size='7' fill='%23888'>BLADDER __cc</text><ellipse cx='110' cy='190' rx='28' ry='18' fill='none' stroke='%23ff6b6b' stroke-width='1.6' stroke-opacity='0.6'/><text x='88' y='193' font-size='7' font-weight='700' fill='%23cc5555'>PROSTATE __gm</text><text x='70' y='210' font-size='6' fill='%23999'>Residual __cc</text></svg>`,
-pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='260' viewBox='0 0 220 260'><rect x='10' y='10' width='200' height='240' rx='20' fill='none' stroke='%23999' stroke-width='1.2' stroke-dasharray='6 4'/><text x='110' y='28' text-anchor='middle' font-size='10' font-weight='800' fill='%23666'>PELVIS - UTERUS & OVARIES</text><path d='M80 50 Q110 45 140 50 Q145 75 130 85 Q110 90 90 85 Q75 75 80 50' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='95' y='70' font-size='7' fill='%23888'>UTERUS</text><line x1='110' y1='70' x2='110' y2='85' stroke='%23bbb' stroke-width='0.8'/><text x='100' y='88' font-size='5' fill='%23999'>ET __mm</text><ellipse cx='55' cy='95' rx='20' ry='15' fill='none' stroke='%23aaa' stroke-width='1.3'/><text x='38' y='98' font-size='6' fill='%23888'>R.OVARY</text><ellipse cx='165' cy='95' rx='20' ry='15' fill='none' stroke='%23aaa' stroke-width='1.3'/><text x='148' y='98' font-size='6' fill='%23888'>L.OVARY</text><ellipse cx='110' cy='160' rx='35' ry='20' fill='none' stroke='%23aaa' stroke-width='1.4'/><text x='90' y='163' font-size='6' fill='%23888'>BLADDER</text><path d='M70 180 Q110 190 150 180' fill='none' stroke='%23bbb' stroke-width='1' stroke-dasharray='3 3'/><text x='95' y='200' font-size='6' fill='%23999'>POD</text></svg>`,
-fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='260' viewBox='0 0 220 260'><rect x='10' y='10' width='200' height='240' rx='20' fill='none' stroke='%23999' stroke-width='1.2' stroke-dasharray='6 4'/><text x='110' y='28' text-anchor='middle' font-size='10' font-weight='800' fill='%23666'>FWB - FETAL WELL BEING</text><ellipse cx='110' cy='90' rx='55' ry='60' fill='none' stroke='%23aaa' stroke-width='1.5'/><ellipse cx='110' cy='75' rx='25' ry='22' fill='none' stroke='%23aaa' stroke-width='1.2'/><text x='95' y='78' font-size='6' fill='%23888'>HEAD</text><text x='90' y='95' font-size='5' fill='%23999'>BPD/HC</text><ellipse cx='110' cy='120' rx='30' ry='18' fill='none' stroke='%23aaa' stroke-width='1.2'/><text x='98' y='123' font-size='5.5' fill='%23888'>AC __mm</text><line x1='85' y1='135' x2='75' y2='160' stroke='%23aaa' stroke-width='1.2'/><line x1='135' y1='135' x2='145' y2='160' stroke='%23aaa' stroke-width='1.2'/><text x='70' y='172' font-size='5.5' fill='%23888'>FL __mm</text><ellipse cx='110' cy='185' rx='50' ry='35' fill='none' stroke='%23aaa' stroke-width='1' stroke-dasharray='4 3'/><text x='88' y='188' font-size='6' fill='%23999'>AFI __mm</text><text x='85' y='205' font-size='6' fill='%23888'>EFW __gm</text><text x='80' y='220' font-size='6' font-weight='700' fill='%23666'>GA __wks</text></svg>`,
-thyroid:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='260' viewBox='0 0 220 260'><rect x='10' y='10' width='200' height='240' rx='20' fill='none' stroke='%23999' stroke-width='1.2' stroke-dasharray='6 4'/><text x='110' y='28' text-anchor='middle' font-size='10' font-weight='800' fill='%23666'>THYROID - NECK</text><path d='M60 60 Q70 50 90 55 Q100 65 95 90 Q85 105 65 100 Q50 90 60 60' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='62' y='85' font-size='6' fill='%23888'>RT LOBE</text><path d='M130 55 Q150 50 160 60 Q170 90 155 100 Q135 105 125 90 Q120 65 130 55' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='132' y='85' font-size='6' fill='%23888'>LT LOBE</text><rect x='90' y='75' width='40' height='12' rx='6' fill='none' stroke='%23aaa' stroke-width='1.2'/><text x='98' y='83' font-size='5' fill='%23888'>ISTHMUS</text><circle cx='75' cy='95' r='4' fill='none' stroke='%23ff6b6b' stroke-width='1' stroke-opacity='0.5'/><text x='65' y='112' font-size='5' fill='%23cc5555'>Nodule</text></svg>`,
-breast:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='260' viewBox='0 0 220 260'><rect x='10' y='10' width='200' height='240' rx='20' fill='none' stroke='%23999' stroke-width='1.2' stroke-dasharray='6 4'/><text x='110' y='28' text-anchor='middle' font-size='10' font-weight='800' fill='%23666'>BREAST - BILATERAL</text><path d='M30 50 Q55 40 80 50 Q85 80 70 100 Q45 110 30 90 Q25 70 30 50' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='40' y='80' font-size='6' fill='%23888'>RIGHT</text><path d='M140 50 Q165 40 190 50 Q195 70 180 90 Q155 110 135 100 Q130 80 140 50' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='150' y='80' font-size='6' fill='%23888'>LEFT</text><ellipse cx='60' cy='135' rx='18' ry='12' fill='none' stroke='%23aaa' stroke-width='1'/><text x='45' y='138' font-size='5' fill='%23999'>AXILLA</text><ellipse cx='160' cy='135' rx='18' ry='12' fill='none' stroke='%23aaa' stroke-width='1'/><text x='145' y='138' font-size='5' fill='%23999'>AXILLA</text></svg>`,
-testis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='260' viewBox='0 0 220 260'><rect x='10' y='10' width='200' height='240' rx='20' fill='none' stroke='%23999' stroke-width='1.2' stroke-dasharray='6 4'/><text x='110' y='28' text-anchor='middle' font-size='10' font-weight='800' fill='%23666'>SCROTUM - TESTIS</text><ellipse cx='110' cy='60' rx='60' ry='40' fill='none' stroke='%23aaa' stroke-width='1.4'/><ellipse cx='70' cy='110' rx='30' ry='40' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='55' y='113' font-size='7' fill='%23888'>RT TESTIS</text><text x='55' y='125' font-size='5' fill='%23999'>__ ml</text><ellipse cx='150' cy='110' rx='30' ry='40' fill='none' stroke='%23aaa' stroke-width='1.5'/><text x='135' y='113' font-size='7' fill='%23888'>LT TESTIS</text><text x='135' y='125' font-size='5' fill='%23999'>__ ml</text><path d='M40 70 Q30 100 35 140' fill='none' stroke='%23bbb' stroke-width='1' stroke-dasharray='3 3'/><text x='20' y='115' font-size='5' fill='%23999'>CORD</text></svg>`
-};
-function getDiagramForType(t){t=t.toLowerCase();if(t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('kub'))return DIAGRAMS.kub;if(t.includes('pelvis'))return DIAGRAMS.pelvis;if(t.includes('fwb'))return DIAGRAMS.fwb;if(t.includes('whole')||t.includes('upper')||t.includes('lower'))return DIAGRAMS.whole;if(t.includes('thyroid'))return DIAGRAMS.thyroid;if(t.includes('breast'))return DIAGRAMS.breast;if(t.includes('testis')||t.includes('scrotum'))return DIAGRAMS.testis;return DIAGRAMS.whole;}
-let T={fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 180'><g fill='none' stroke='%23999' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M80 15 C50 15 38 35 42 55 C48 75 62 85 80 90 C98 85 112 75 118 55 C122 35 110 15 80 15 Z'/><path d='M42 55 C35 62 30 75 32 88 C35 100 48 108 62 112'/><path d='M118 55 C125 62 130 75 128 88 C125 100 112 108 98 112'/><ellipse cx='80' cy='135' rx='38' ry='32'/><path d='M55 125 C45 115 42 105 48 95'/><path d='M105 125 C115 115 118 105 112 95'/><text x='80' y='170' text-anchor='middle' font-size='11' fill='%23888' font-weight='700'>FWB</text></g></svg>`,
-thyroid:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 120'><g fill='none' stroke='%23999' stroke-width='1.8'><path d='M20 30 Q40 15 65 25 Q70 50 60 75 Q35 85 20 70 Z'/><path d='M140 30 Q120 15 95 25 Q90 50 100 75 Q125 85 140 70 Z'/><rect x='60' y='40' width='40' height='18' rx='6'/><text x='80' y='110' text-anchor='middle' font-size='11' fill='%23888' font-weight='700'>THYROID</text></g></svg>`,
-breast:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 130'><g fill='none' stroke='%23999' stroke-width='1.8'><path d='M30 20 Q80 10 130 20 Q135 55 120 85 Q80 105 40 85 Q25 55 30 20 Z'/><circle cx='80' cy='55' r='12'/><text x='80' y='120' text-anchor='middle' font-size='11' fill='%23888' font-weight='700'>BREAST</text></g></svg>`,
-testis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 150'><g fill='none' stroke='%23999' stroke-width='1.8'><ellipse cx='55' cy='65' rx='28' ry='38'/><ellipse cx='105' cy='65' rx='28' ry='38'/><path d='M55 30 C55 10 45 5 35 12'/><path d='M105 30 C105 10 115 5 125 12'/><path d='M30 95 Q55 110 80 95 Q105 110 130 95'/><text x='80' y='135' text-anchor='middle' font-size='11' fill='%23888' font-weight='700'>SCROTUM</text></g></svg>`
+whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'><g fill='none' stroke='%236b7280' stroke-width='1.6' stroke-linecap='round'><path d='M25 25 Q35 18 55 20 L120 20 Q135 20 135 35 L135 85 Q135 95 125 100 L85 115 Q75 120 60 115 L25 95 Q18 90 18 75 Z'/><path d='M90 45 Q115 42 125 55 Q130 65 118 75 Q100 85 85 75'/><ellipse cx='105' cy='60' rx='8' ry='5'/><path d='M45 55 Q55 48 68 52 Q72 58 62 65 Q50 68 42 60 Z' fill='%23e5e7eb' stroke='%236b7280'/><path d='M140 50 Q155 45 165 55 Q170 65 160 75 Q145 80 135 70 Z'/><ellipse cx='150' cy='95' rx='18' ry='12'/><path d='M30 105 Q40 100 55 105 Q70 110 68 125 Q60 135 40 132 Q22 128 22 115 Z'/><path d='M150 105 Q165 102 178 110 Q182 125 170 135 Q155 140 142 130 Z'/><path d='M75 135 Q90 132 105 138 Q112 150 100 160 Q80 165 68 152 Z'/><rect x='85' y='165' width='30' height='22' rx='8'/></g><g font-size='7' fill='%23374151' font-weight='700'><text x='50' y='32'>LIVER</text><text x='42' y='118'>R.KIDNEY</text><text x='148' y='118'>L.KIDNEY</text><text x='82' y='180'>BLADDER</text><text x='135' y='55'>SPLEEN</text><text x='135' y='95'>PANCREAS</text></g></svg>`,
+kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%236b7280' stroke-width='1.7'><path d='M25 30 Q35 25 55 30 Q70 35 68 55 Q62 75 42 78 Q22 75 20 55 Z'/><path d='M125 30 Q145 25 165 35 Q172 55 160 75 Q140 82 125 70 Q115 55 125 30 Z'/><path d='M40 38 Q50 45 55 Q35 60 30 48 Z'/><path d='M145 38 Q155 45 150 55 Q140 60 135 48 Z'/><path d='M75 95 L75 135 Q75 145 85 150 L115 150 Q125 145 125 135 L125 95 Q125 85 100 85 Q75 85 75 95 Z'/><ellipse cx='100' cy='158' rx='18' ry='10'/></g><g font-size='8' fill='%23374151' font-weight='700'><text x='22' y='92'>R.KIDNEY</text><text x='125' y='92'>L.KIDNEY</text><text x='72' y='122'>BLADDER</text><text x='82' y='175'>PROSTATE</text></g></svg>`,
+kub_prostate:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%236b7280' stroke-width='1.7'><path d='M25 30 Q35 25 55 30 Q70 35 68 55 Q62 75 42 78 Q22 75 20 55 Z'/><path d='M125 30 Q145 25 165 35 Q172 55 160 75 Q140 82 125 70 Q115 55 125 30 Z'/><path d='M75 95 L75 135 Q75 145 85 150 L115 150 Q125 145 125 135 L125 95 Q125 85 100 85 Q75 85 75 95 Z'/><ellipse cx='100' cy='158' rx='22' ry='14' fill='%23e5e7eb'/></g><g font-size='8' fill='%23374151' font-weight='700'><text x='22' y='92'>R.KIDNEY</text><text x='125' y='92'>L.KIDNEY</text><text x='72' y='122'>BLADDER</text><text x='75' y='162'>PROSTATE ENLARGED</text></g></svg>`,
+pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%236b7280' stroke-width='1.6'><path d='M60 40 Q100 30 140 40 Q150 60 135 85 Q100 95 65 85 Q50 65 60 40 Z'/><path d='M70 55 Q100 50 130 55 Q135 65 120 75 Q100 80 80 75 Q65 65 70 55 Z'/><ellipse cx='45' cy='105' rx='18' ry='14'/><ellipse cx='155' cy='105' rx='18' ry='14'/><path d='M75 125 Q100 120 125 125 Q130 135 100 145 Q70 135 75 125 Z'/></g><g font-size='7' fill='%23374151' font-weight='700'><text x='85' y='35'>UTERUS</text><text x='22' y='108'>R.OVARY</text><text x='132' y='108'>L.OVARY</text><text x='85' y='138'>BLADDER</text></g></svg>`,
+fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%236b7280' stroke-width='1.6'><circle cx='100' cy='70' r='35'/><path d='M65 65 Q55 55 60 45 Q70 35 85 40'/><path d='M135 65 Q145 55 140 45 Q130 35 115 40'/><path d='M100 105 Q80 115 60 130 Q50 150 70 160 Q100 170 130 160 Q150 150 140 130 Q120 115 100 105 Z'/><path d='M70 125 Q100 135 130 125'/><path d='M80 145 Q100 155 120 145'/></g><g font-size='8' fill='%23374151' font-weight='700'><text x='82' y='75'>FETUS HEAD</text><text x='78' y='140'>FETUS BODY</text></g></svg>`,
+thyroid:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160'><g fill='none' stroke='%236b7280' stroke-width='1.6'><path d='M40 30 Q50 25 65 30 Q75 40 70 65 Q60 80 40 75 Q25 65 30 45 Z'/><path d='M110 30 Q125 25 140 35 Q150 55 135 75 Q115 80 105 65 Q100 45 110 30 Z'/><rect x='70' y='45' width='35' height='12' rx='6'/></g><g font-size='7' fill='%23374151' font-weight='700'><text x='32' y='90'>R.LOBE</text><text x='108' y='90'>L.LOBE</text><text x='72' y='40'>ISTHMUS</text></g></svg>`,
+breast:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160'><g fill='none' stroke='%236b7280' stroke-width='1.5'><path d='M20 80 Q40 30 100 25 Q160 30 180 80 Q160 120 100 125 Q40 120 20 80 Z'/><circle cx='100' cy='80' r='18'/><circle cx='100' cy='80' r='6' fill='%23e5e7eb'/></g><g font-size='7' fill='%23374151' font-weight='700'><text x='80' y='20'>BREAST</text></g></svg>`,
+testis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 180'><g fill='none' stroke='%236b7280' stroke-width='1.6'><ellipse cx='70' cy='80' rx='28' ry='40'/><ellipse cx='130' cy='80' rx='28' ry='40'/><path d='M42 40 Q70 20 98 40'/><path d='M102 40 Q130 20 158 40'/><path d='M70 120 Q100 135 130 120'/></g><g font-size='7' fill='%23374151' font-weight='700'><text x='50' y='130'>R.TESTIS</text><text x='110' y='130'>L.TESTIS</text></g></svg>`
 };
 function getDiagramForType(t){t=t.toLowerCase();if(t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('kub'))return DIAGRAMS.kub;if(t.includes('pelvis'))return DIAGRAMS.pelvis;if(t.includes('fwb'))return DIAGRAMS.fwb;if(t.includes('thyroid'))return DIAGRAMS.thyroid;if(t.includes('breast'))return DIAGRAMS.breast;if(t.includes('testis')||t.includes('scrotum'))return DIAGRAMS.testis;if(t.includes('whole')||t.includes('upper')||t.includes('lower'))return DIAGRAMS.whole;return DIAGRAMS.whole;}
-
-let T={
-"KUB with parenchymal changes grade wise":`ULTRASOUND KUB WITH PARENCHYMAL CHANGES - GRADE WISE
+let T={"KUB with parenchymal changes grade wise":`ULTRASOUND KUB WITH PARENCHYMAL CHANGES - GRADE WISE
 RIGHT KIDNEY: __ x __ cm, Parenchymal thickness __ mm, Cortical thickness __ mm, Echogenicity Increased, CMD Poor / Lost, Grade __, No calculus, No hydronephrosis
-LEFT KIDNEY: __ x __ cm, Parenchymal thickness __ mm, Grade __
+LEFT KIDNEY: __ x __ cm, Parenchymal thickness __ mm, Grade __, No calculus
 URINARY BLADDER: Capacity __ cc, Wall __ mm, No calculus
 PROSTATE: __ gm
 IMPRESSION: Bilateral Renal Parenchymal Changes Grade __
@@ -190,7 +194,7 @@ IMPRESSION: Normal Lower Abdomen`,
 URINARY BLADDER: Capacity __ cc, Wall normal, UTERUS: Anteverted, Size __ x __ cm, Endometrial thickness __ mm, Myometrium homogenous, OVARIES: Right __ x __ cm, Left __ x __ cm, No adnexal mass, POD: No free fluid
 IMPRESSION: Normal Lower Abdomen Female`,
 "KUB":`ULTRASOUND KUB
-RIGHT KIDNEY: __ x __ cm, Normal size, shape and echotexture, No calculus, No hydronephrosis, No focal lesion
+RIGHT KIDNEY: __ x __ cm, Normal size, shape and echotexture, No calculus, No hydronephrosis
 LEFT KIDNEY: __ x __ cm, Normal, No calculus
 URINARY BLADDER: Capacity __ cc, Wall normal, Lumen clear
 PROSTATE: __ gm, Normal
@@ -296,7 +300,7 @@ UTERUS: __ x __ cm, Anteverted, Myometrium shows well defined hypoechoic lesion 
 IMPRESSION: Uterine Fibroid __ x __ mm at __
 Advice: Gynecologist consultation, Follow-up USG after 3 months`,
 "Pelvis with ovarian cyst":`ULTRASOUND PELVIS WITH OVARIAN CYST
-UTERUS: __ x __ cm, ET __ mm, Normal, OVARY: Right / Left ovary shows well defined anechoic thin walled cyst __ x __ mm, No internal echoes, No septations
+UTERUS: __ x __ cm, ET __ mm, Normal, OVARY: Right / Left ovary shows well defined anechoic thin walled cyst __ x __ mm, No internal echoes
 IMPRESSION: Right / Left Ovarian Simple Cyst __ x __ mm
 Advice: Gynecologist consultation, Follow-up after 3 months`,
 "Pelvis with RPCOs":`ULTRASOUND PELVIS WITH PCOS
@@ -370,20 +374,20 @@ Advice: Blood sugar, HbA1c, Detailed anomaly scan, Gynecologist consultation`,
 Fetus: Single Alive, FHR __ bpm, Presentation: Cephalic, BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm, Color Doppler: Single / Double loop of umbilical cord seen around fetal neck - Nuchal cord, Placenta: __, Cervix: Closed
 IMPRESSION: Single live pregnancy __ weeks with Nuchal Cord - Single Loop`,
 "Thyroids":`ULTRASOUND THYROID
-RIGHT LOBE: __ x __ x __ cm, Volume __ ml, Homogenous, No focal lesion / Nodule __ x __ mm, TIRADS __, Vascularity normal
+RIGHT LOBE: __ x __ x __ cm, Volume __ ml, Homogenous, No focal lesion / Nodule __ x __ mm, TIRADS __
 LEFT LOBE: __ x __ x __ cm, Volume __ ml, Nodule __ x __ mm, TIRADS __
 ISTHMUS: __ mm, Normal, No lymphadenopathy
 IMPRESSION: Thyroid __ - TIRADS __
 Advice: TFTs, TSH, Free T3 T4, Endocrinologist consultation, Follow-up USG`,
 "Breasts Normal":`ULTRASOUND BREASTS NORMAL
-RIGHT BREAST: No focal lesion, No ductal dilatation, No calcification, Retroareolar region normal
+RIGHT BREAST: No focal lesion, No ductal dilatation
 LEFT BREAST: No focal lesion
 AXILLA: Right axilla no significant lymph nodes, Left axilla no significant nodes
 IMPRESSION: Normal Breast Scan - BIRADS I`,
 "Breasts with lymph nodes":`ULTRASOUND BREASTS WITH LYMPH NODES
 RIGHT BREAST: Hypoechoic lesion __ x __ mm at __ o'clock position __ cm from nipple, Margins __, Vascularity __, BIRADS __
 LEFT BREAST: No lesion / Lesion __ mm BIRADS __
-AXILLA: Right axillary lymph nodes __ x __ mm, Cortical thickness __ mm, Hilum preserved / Lost
+AXILLA: Right axillary lymph nodes __ x __ mm, Cortical thickness __ mm
 IMPRESSION: Breast lesion __ mm BIRADS __ with axillary lymphadenopathy __ mm
 Advice: Mammography, FNAC / Core biopsy, Breast surgeon consultation`,
 "Axila Normal":`ULTRASOUND AXILLA NORMAL
@@ -399,7 +403,7 @@ Advice: FNAC, CBC, Physician consultation`,
 THYROID: Normal, No nodule, CERVICAL LYMPH NODES: No significant cervical lymphadenopathy, No abscess
 IMPRESSION: Normal Neck Ultrasound`,
 "Neck with lymph nodes":`ULTRASOUND NECK WITH LYMPH NODES
-CERVICAL LYMPH NODES: Enlarged lymph nodes __ x __ mm at Level __, Side Right / Left, Matted / Discrete
+CERVICAL LYMPH NODES: Enlarged lymph nodes __ x __ mm at Level __, Side Right / Left
 THYROID: Normal
 IMPRESSION: Cervical lymphadenopathy __ x __ mm at Level __
 Advice: FNAC, CBC, ESR, Physician / ENT consultation`,
@@ -412,19 +416,19 @@ RIGHT ILIAC FOSSA: Appendix visualized, Diameter __ mm, Wall thickness __ mm, No
 IMPRESSION: Acute Appendicitis - Appendix __ mm, Non-compressible
 Advice: CBC, CRP, Urgent Surgical consultation`,
 "Umbilical Hernia":`ULTRASOUND UMBILICAL HERNIA
-UMBILICAL REGION: Anterior abdominal wall defect __ mm at umbilicus, Hernial sac __ x __ mm containing omental fat / bowel loops, Reducible / Non-reducible
+UMBILICAL REGION: Anterior abdominal wall defect __ mm at umbilicus, Hernial sac __ x __ mm containing omental fat / bowel loops, Reducible
 IMPRESSION: Umbilical Hernia - Defect __ mm, Sac __ x __ mm
 Advice: Surgical consultation`,
 "Inguainal Hernia":`ULTRASOUND INGUINAL HERNIA
-INGUINAL REGION: Right / Left inguinal region, Defect __ mm, Hernial sac __ x __ mm containing omental fat / bowel, Extending into scrotum / labia, Reducible, Valsalva positive
+INGUINAL REGION: Right / Left inguinal region, Defect __ mm, Hernial sac __ x __ mm containing omental fat / bowel, Reducible, Valsalva positive
 IMPRESSION: Right / Left Inguinal Hernia - Defect __ mm
 Advice: Surgical consultation`,
 "Scrotum Normal":`ULTRASOUND SCROTUM NORMAL
-RIGHT TESTIS: __ x __ x __ mm, Volume __ ml, Normal size, shape and echotexture, No focal lesion, No hydrocele
+RIGHT TESTIS: __ x __ x __ mm, Volume __ ml, Normal, No hydrocele
 LEFT TESTIS: __ x __ x __ mm, Volume __ ml, Normal, No varicocele
 IMPRESSION: Normal Scrotum - Right __ ml, Left __ ml`,
 "Testis Normal":`ULTRASOUND TESTIS NORMAL
-RIGHT TESTIS: __ x __ x __ mm, Volume __ ml, Normal homogenous echotexture, No focal lesion
+RIGHT TESTIS: __ x __ x __ mm, Volume __ ml, Normal homogenous echotexture
 LEFT TESTIS: __ x __ x __ mm, Volume __ ml, Normal
 IMPRESSION: Normal Testes`,
 "Testis with varicocele":`ULTRASOUND TESTIS WITH VARICOCELE
@@ -437,7 +441,7 @@ LEFT TESTIS: __ x __ mm
 IMPRESSION: Right / Left Hydrocele __ cc
 Advice: Urologist consultation`,
 "Testis with swelling":`ULTRASOUND TESTIS WITH SWELLING
-RIGHT TESTIS: Enlarged __ x __ x __ mm, Heterogeneous echotexture, Swollen, No focal lesion
+RIGHT TESTIS: Enlarged __ x __ x __ mm, Heterogeneous echotexture, Swollen
 LEFT TESTIS: Normal
 IMPRESSION: Right testicular swelling __ x __ mm -? Orchitis
 Advice: Doppler study, CBC, Urologist consultation`,
@@ -453,26 +457,21 @@ IMPRESSION: Testicular Doppler - Right RI __, Left RI __, Normal flow`
 };
 let allTemplates=Object.keys(T);
 let fetalData={},editId=null;
-
 function filterTemplates(){
  let q=(tSearch.value||'').toLowerCase();
  let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));
- let s=uType;
- let current=s.value;
+ let s=uType; let current=s.value;
  s.innerHTML='';
  filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
  if(filtered.includes(current)){s.value=current;}
  if(filtered.length>0 &&!filtered.includes(current)){rText.value=T[filtered[0]];checkFetal();}
+ if(filtered.length===0){s.innerHTML='<option>No match</option>';}
 }
 function calcFWB(){let bpd=parseFloat(cBPD.value)||0,hc=parseFloat(cHC.value)||0,ac=parseFloat(cAC.value)||0,fl=parseFloat(cFL.value)||0,crl=parseFloat(cCRL.value)||0,afi=parseFloat(cAFI.value)||0;let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);if(crl>0)gas.push(crl*0.16+6.8);if(bpd>0)gas.push(bpd*0.33+4);let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}fetalData={ga:avg,efw:efw,hc,ac,fl,bpd,crl,afi};resGA.innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';resEFW.innerText=efw?`Wt: ${Math.round(efw)} gm`:'Wt: --';resEDD.innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';}
-function applyCalc(){if(!fetalData.ga&&!fetalData.efw){alert('HC AC FL likhen');return;}let txt=rText.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`).replace(/HC __ mm/g,`HC ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rText.value=txt;}
-function init(){
- let s=uType;s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
- pDate.valueAsDate=new Date();sumDate.valueAsDate=new Date();rText.value=T[allTemplates[0]];checkFetal();render();
-}
+function applyCalc(){if(!fetalData.ga&&!fetalData.efw){alert('HC AC FL likhen');return;}let txt=rText.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rText.value=txt;}
+function init(){let s=uType;s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});pDate.valueAsDate=new Date();sumDate.valueAsDate=new Date();rText.value=T[allTemplates[0]];checkFetal();render();}
 function checkFetal(){
- let v=uType.value;
- rText.value=T[v]||'';
+ let v=uType.value; rText.value=T[v]||'';
  let isFWB=v.toLowerCase().includes('fwb');
  let isProstate=v.toLowerCase().includes('prostate');
  let isWhole=v.toLowerCase().includes('whole')||v.toLowerCase().includes('kub');
@@ -482,34 +481,15 @@ function checkFetal(){
  document.getElementById('diagramWM').style.backgroundImage=`url("${getDiagramForType(v)}")`;
 }
 uType.addEventListener('change',checkFetal);
-
 function formatReportToHTML(text){
- let lines=text.split('\n');
- let html='';
- lines.forEach(line=>{
-  line=line.trim();
-  if(!line){html+='<div style="height:5px"></div>';return;}
-  if(line.startsWith('ULTRASOUND')||line.startsWith('DOPPLER')){
-    html+=`<div style="text-align:center;margin:10px 0 8px 0;font-size:13px;font-weight:900;text-decoration:underline;color:#0a4eb5">${line}</div>`;return;
-  }
-  if(line.startsWith('IMPRESSION:')){
-    let val=line.replace('IMPRESSION:','').trim();
-    html+=`<div style="margin-top:12px"><b><u>IMPRESSION</u>:</b> ${val}</div>`;return;
-  }
-  if(line.startsWith('Advice:')){
-    let val=line.replace('Advice:','').trim();
-    html+=`<div style="margin-top:6px"><b><u>Advice</u>:</b> ${val}</div>`;return;
-  }
-  if(line.includes(':')){
-    let idx=line.indexOf(':');
-    let label=line.substring(0,idx).trim();
-    let value=line.substring(idx+1).trim();
-    html+=`<div style="margin:2px 0"><b><u>${label}</u>:</b> ${value}</div>`;
-  }else{html+=`<div>${line}</div>`;}
- });
- return html;
+ let lines=text.split('\n'); let html='';
+ lines.forEach(line=>{line=line.trim(); if(!line){html+='<div style="height:5px"></div>';return;}
+ if(line.startsWith('ULTRASOUND')||line.startsWith('DOPPLER')){html+=`<div style="text-align:center;margin:10px 0 8px 0;font-size:13px;font-weight:900;text-decoration:underline;color:#0a4eb5">${line}</div>`;return;}
+ if(line.startsWith('IMPRESSION:')){let val=line.replace('IMPRESSION:','').trim(); html+=`<div style="margin-top:12px"><b><u>IMPRESSION</u>:</b> ${val}</div>`;return;}
+ if(line.startsWith('Advice:')){let val=line.replace('Advice:','').trim(); html+=`<div style="margin-top:6px"><b><u>Advice</u>:</b> ${val}</div>`;return;}
+ if(line.includes(':')){let idx=line.indexOf(':');let label=line.substring(0,idx).trim();let value=line.substring(idx+1).trim();html+=`<div style="margin:2px 0"><b><u>${label}</u>:</b> ${value}</div>`;}else{html+=`<div>${line}</div>`;}
+ });return html;
 }
-
 function make(){
  if(!pName.value){alert('Patient Name likhen');return;}
  document.getElementById('diagramWM').style.backgroundImage=`url("${getDiagramForType(uType.value)}")`;
@@ -520,29 +500,14 @@ function make(){
  if(complaintText && complaintBox.style.display!=='none'){
    complaintHTML=`<div style="border:1.5px dashed #f59e0b;border-radius:6px;padding:6px 8px;margin-bottom:8px;background:#fffbeb;font-size:11px"><b><u>Present Complaint / H/O</u>:</b> ${complaintText}</div>`;
  }
- let patientBorder=`<div style="border:2px solid #0a4eb5;border-radius:8px;padding:8px 10px;margin-bottom:8px;background:#f8fbff">
- <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:11px"><span><b><u>Name</u>:</b> ${pName.value}</span> | <span><b><u>Age</u>:</b> ${pAge.value}</span> | <span><b><u>Sex</u>:</b> ${pGen.value}</span> | <span><b><u>Date</u>:</b> ${pDate.value}</span> | <span><b><u>ID/Mobile</u>:</b> ${pid}</span></div>
- <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:11px;margin-top:4px"><span><b><u>Ref By</u>:</b> ${ref.value}</span> | <span><b><u>Sonologist</u>:</b> ${sono.value}</span></div>
- </div>`;
+ let patientBorder=`<div style="border:2px solid #0a4eb5;border-radius:8px;padding:8px 10px;margin-bottom:8px;background:#f8fbff"><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:11px"><span><b><u>Name</u>:</b> ${pName.value}</span> | <span><b><u>Age</u>:</b> ${pAge.value}</span> | <span><b><u>Sex</u>:</b> ${pGen.value}</span> | <span><b><u>Date</u>:</b> ${pDate.value}</span> | <span><b><u>ID/Mobile</u>:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:11px;margin-top:4px"><span><b><u>Ref By</u>:</b> ${ref.value}</span> | <span><b><u>Sonologist</u>:</b> ${sono.value}</span></div></div>`;
  let bodyHTML=formatReportToHTML(rText.value);
- let footer=`<div style="margin-top:18px;border-top:2px solid #0a4eb5;padding-top:8px;text-align:center;font-size:10px;line-height:1.6">
- <div><b><i>This report is computer generated, signature not required</i></b></div>
- <div style="margin-top:4px;font-size:11px;font-weight:800">Thanks for availing our service</div>
- </div>`;
+ let footer=`<div style="margin-top:18px;border-top:2px solid #0a4eb5;padding-top:8px;text-align:center;font-size:10px;line-height:1.6"><div><b><i>This report is computer generated, signature not required</i></b></div><div style="margin-top:4px;font-size:11px;font-weight:800">Thanks for availing our service</div></div>`;
  document.getElementById('reportContent').innerHTML=patientBorder+complaintHTML+bodyHTML+footer;
  document.getElementById('outCard').style.display='block';
  document.getElementById('outCard').scrollIntoView({behavior:'smooth'});
 }
-function saveR(){
- if(!pName.value){alert('Name likhen');return;}
- let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');
- let rec={id:Date.now(),name:pName.value,age:pAge.value,gen:pGen.value,mobile:pIDMobile.value,type:uType.value,date:pDate.value,ref:ref.value,sono:sono.value,text:rText.value,complaint:pComplaint.value,html:document.getElementById('reportContent').innerHTML};
- if(editId){let i=all.findIndex(x=>x.id===editId);if(i>=0)all[i]=rec;editId=null;}else{all.unshift(rec);}
- localStorage.setItem('azam_reports',JSON.stringify(all));
- render();
- uploadToDriveFile(`report_${rec.id}_${rec.name}.json`,JSON.stringify(rec));
- alert('✅ Save ho gaya!');
-}
+function saveR(){if(!pName.value){alert('Name likhen');return;}let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let rec={id:Date.now(),name:pName.value,age:pAge.value,gen:pGen.value,mobile:pIDMobile.value,type:uType.value,date:pDate.value,ref:ref.value,sono:sono.value,text:rText.value,complaint:pComplaint.value,html:document.getElementById('reportContent').innerHTML};if(editId){let i=all.findIndex(x=>x.id===editId);if(i>=0)all[i]=rec;editId=null;}else{all.unshift(rec);}localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile(`report_${rec.id}_${rec.name}.json`,JSON.stringify(rec));alert('✅ Save ho gaya!');}
 function render(){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let q=(sBox.value||'').toLowerCase();let f=all.filter(r=>(r.name+' '+r.mobile+' '+r.type).toLowerCase().includes(q));if(f.length===0){list.innerHTML='<p style="text-align:center;color:#888;padding:20px">Koi report nahi mili. Drive se Load dabayen.</p>';return;}list.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between"><div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}${r.complaint?' | H/O:'+r.complaint.substring(0,20):''}</small></div><div><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="viewR(${r.id});setTimeout(()=>window.print(),600)">Print</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}
 function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;pName.value=r.name;pAge.value=r.age;pGen.value=r.gen;pIDMobile.value=r.mobile;uType.value=r.type;pDate.value=r.date;ref.value=r.ref;sono.value=r.sono;rText.value=r.text;pComplaint.value=r.complaint||'';checkFetal();make();}
 function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();}
