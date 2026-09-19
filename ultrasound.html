@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - With Hemangioma Template</title>
+<title>Azam Medical Centre - 28x19 Print Fixed</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
@@ -11,10 +11,68 @@ body{background:#eef4ff;padding:10px}
 input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px solid #cbd5e1;margin:6px 0;font-size:14px}
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;font-size:16px;margin-top:8px}
 .small{padding:8px 10px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff;font-size:12px}
-.report{width:210mm;min-height:297mm;margin:auto;background:#fff;border:2px solid #0a4eb5;border-radius:12px;padding:0 16mm 16mm 16mm;padding-top:51mm;line-height:1.9;box-sizing:border-box;position:relative;overflow:hidden}
-.report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background-image:url('logo.png'), url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.04;filter:grayscale(100%);z-index:0;pointer-events:none}
-.report > *{position:relative;z-index:1}
-.diagram-wm{position:absolute;right:12mm;bottom:38mm;top:auto;width:62mm;height:72mm;opacity:0.32;z-index:0;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom center;filter:grayscale(100%)}
+
+/* ===== PRINT PAGE SETTING - 28cm x 19cm ===== */
+.report{
+width:190mm; /* 19cm */
+height:280mm; /* 28cm */
+margin:auto;
+background:#fff;
+border:2px solid #0a4eb5;
+border-radius:12px;
+padding:0;
+box-sizing:border-box;
+position:relative;
+overflow:hidden;
+}
+/* Andar reporting area 16cm x 21cm, upar se 4cm */
+.report-inner{
+width:160mm; /* 16cm */
+height:210mm; /* 21cm */
+margin:40mm auto 0 auto; /* Upar se 4cm = 40mm */
+padding:0 5mm 5mm 5mm;
+box-sizing:border-box;
+position:relative;
+line-height:1.7;
+font-size:13px;
+z-index:2;
+}
+/* Center AMC watermark - jaise screenshot me */
+.report::before{
+content:"";
+position:absolute;
+top:52%;
+left:50%;
+transform:translate(-50%,-50%);
+width:320px;
+height:320px;
+background-image:url('logo.png'), url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');
+background-repeat:no-repeat;
+background-position:center;
+background-size:contain;
+opacity:0.07;
+filter:grayscale(100%);
+z-index:1;
+pointer-events:none;
+}
+/* Right side diagram - FWB / KUB / Whole etc */
+.diagram-wm{
+position:absolute;
+right:8mm;
+bottom:15mm;
+width:60mm;
+height:70mm;
+opacity:0.22;
+z-index:1;
+pointer-events:none;
+background-repeat:no-repeat;
+background-size:contain;
+background-position:bottom center;
+filter:grayscale(100%);
+-webkit-print-color-adjust:exact;
+print-color-adjust:exact;
+}
+
 .calcBox{background:#f0f7ff;border:2px dashed #1e90ff;border-radius:12px;padding:12px;margin:10px 0}
 .calcGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .calcRes{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;font-size:12px;font-weight:800;text-align:center}
@@ -23,6 +81,18 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 .summary-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}
 .summary-table th,.summary-table td{border:1px solid #333;padding:6px 4px;text-align:left}
 .summary-table th{background:#0a4eb5;color:#fff;font-size:11px}
+
+@media print{
+@page{size:190mm 280mm; margin:0}
+body{background:#fff;padding:0}
+body *{visibility:hidden}
+.report,.report *{visibility:visible}
+.report{position:absolute;left:0;top:0;width:190mm;height:280mm;border:none;border-radius:0;box-shadow:none}
+.report-inner{visibility:visible}
+.report::before{opacity:0.07!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.diagram-wm{opacity:0.22!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.noPrint{display:none!important}
+}
 </style>
 </head>
 <body>
@@ -98,12 +168,18 @@ input,select,textarea{width:100%;padding:12px;border-radius:10px;border:2px soli
 <button class="btn" onclick="make()">✅ Final Report Banayen</button>
 </div>
 
-<div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent"></div></div>
+<div class="card" id="outCard" style="display:none">
+<div id="out" class="report">
+<div id="diagramWM" class="diagram-wm"></div>
+<div id="reportContent" class="report-inner"></div>
+</div>
 <div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap">
-<button class="small" style="background:#0a4eb5" onclick="window.print()">Print</button>
+<button class="small" style="background:#0a4eb5" onclick="window.print()">Print (28x19cm)</button>
 <button class="small" style="background:#f59e0b" onclick="pdf()">PDF Download</button>
 <button class="small" style="background:#10b981" onclick="saveR()">Save Report</button>
-</div></div>
+</div>
+<p class="noPrint" style="text-align:center;font-size:11px;color:#666;margin-top:8px">Page Size: 19cm x 28cm | Reporting Area: 16cm x 21cm | Top Margin: 4cm - Aap ke letter head ke liye ready</p>
+</div>
 
 <div class="card noPrint">
 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
@@ -161,14 +237,14 @@ function calcProstate(){let l=parseFloat(pL.value)||0,w=parseFloat(pW.value)||0,
 function applyProstateCalc(){if(!prostateData.vol){alert('Length, Width, Height cm me likhen!');return;}let l=prostateData.l,w=prostateData.w,h=prostateData.h,gm=prostateData.gm.toFixed(1),vol=prostateData.vol.toFixed(1);let lmm=(l*10).toFixed(0),wmm=(w*10).toFixed(0),hmm=(h*10).toFixed(0);let txt=rText.value;txt=txt.replace(/__ x __ x __ cm/g, `${l} x ${w} x ${h} cm`);txt=txt.replace(/__ x __ x __ mm/g, `${lmm} x ${wmm} x ${hmm} mm`);txt=txt.replace(/__ gm/g, `${gm} gm`);txt=txt.replace(/__ cc/g, `${vol} cc`);rText.value=txt;alert(`✅ Prostate ${l} x ${w} x ${h} cm = ${gm} gm report me lag gaya!`);}
 
 const DIAGRAMS = {
-kub: `data:image/svg+xml;utf8,[STRIPPED]`,
-kub_prostate: `data:image/svg+xml;utf8,[STRIPPED]`,
-whole: `data:image/svg+xml;utf8,[STRIPPED]`,
-pelvis: `data:image/svg+xml;utf8,[STRIPPED]`,
-fwb: `data:image/svg+xml;utf8,[STRIPPED]`,
-thyroid: `data:image/svg+xml;utf8,[STRIPPED]`,
-breast: `data:image/svg+xml;utf8,[STRIPPED]`,
-testis: `data:image/svg+xml;utf8,[STRIPPED]`
+kub: `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g stroke='%23000' stroke-width='2' fill='none'><path d='M40 40 Q20 20 40 10 Q70 5 80 30 T100 60 T120 30 Q150 5 160 20 Q180 40 160 60'/><ellipse cx='60' cy='100' rx='22' ry='35'/><ellipse cx='140' cy='100' rx='22' ry='35'/><path d='M60 135 Q100 155 140 135'/><path d='M85 155 Q100 175 115 155' stroke-width='1.5'/></g><text x='100' y='200' text-anchor='middle' font-size='12' fill='%23000'>KUB</text></svg>`,
+kub_prostate: `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g stroke='%23000' stroke-width='2' fill='none'><ellipse cx='60' cy='95' rx='20' ry='32'/><ellipse cx='140' cy='95' rx='20' ry='32'/><path d='M60 127 Q100 145 140 127'/><ellipse cx='100' cy='160' rx='18' ry='14'/></g><text x='100' y='200' text-anchor='middle' font-size='10' fill='%23000'>KUB+PROSTATE</text></svg>`,
+whole: `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g stroke='%23000' stroke-width='1.8' fill='none'><path d='M30 20 Q100 5 170 20 L170 60 Q100 75 30 60 Z'/><ellipse cx='55' cy='100' rx='18' ry='30'/><ellipse cx='145' cy='105' rx='18' ry='30'/><path d='M70 140 Q100 160 130 140'/></g><text x='100' y='200' text-anchor='middle' font-size='10' fill='%23000'>WHOLE ABDOMEN</text></svg>`,
+pelvis: `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g stroke='%23000' stroke-width='2' fill='none'><path d='M30 50 Q100 30 170 50 L160 160 Q100 180 40 160 Z'/><ellipse cx='100' cy='90' rx='35' ry='22'/><ellipse cx='65' cy='125' rx='15' ry='12'/><ellipse cx='135' cy='125' rx='15' ry='12'/></g><text x='100' y='200' text-anchor='middle' font-size='10' fill='%23000'>PELVIS</text></svg>`,
+fwb: `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g stroke='%23000' stroke-width='1.8' fill='none'><circle cx='100' cy='60' r='25'/><path d='M70 85 Q100 110 130 85 L120 140 Q100 160 80 140 Z'/><path d='M80 140 L70 170'/><path d='M120 140 L130 170'/></g><text x='100' y='200' text-anchor='middle' font-size='11' fill='%23000'>FWB</text></svg>`,
+thyroid: `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g stroke='%23000' stroke-width='2' fill='none'><path d='M60 60 Q50 90 60 120 Q70 130 80 120 Q90 90 80 60 Z'/><path d='M140 60 Q150 90 140 120 Q130 130 120 120 Q110 90 120 60 Z'/><path d='M80 85 Q100 95 120 85'/></g><text x='100' y='200' text-anchor='middle' font-size='10' fill='%23000'>THYROID</text></svg>`,
+breast: `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g stroke='%23000' stroke-width='1.8' fill='none'><path d='M30 70 Q50 40 100 50 Q150 40 170 70 Q160 120 100 130 Q40 120 30 70 Z'/></g><text x='100' y='200' text-anchor='middle' font-size='10' fill='%23000'>BREAST</text></svg>`,
+testis: `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g stroke='%23000' stroke-width='2' fill='none'><ellipse cx='70' cy='100' rx='20' ry='35'/><ellipse cx='130' cy='100' rx='20' ry='35'/></g><text x='100' y='200' text-anchor='middle' font-size='10' fill='%23000'>SCROTUM</text></svg>`
 };
 
 function getDiagramForType(t){
@@ -178,7 +254,7 @@ function getDiagramForType(t){
  if(t.includes('kub')) return DIAGRAMS.kub;
  if(t.includes('pelvis')||t.includes('uterus')||t.includes('ovarian')||t.includes('fibroid')||t.includes('rpco')||t.includes('follicle')) return DIAGRAMS.pelvis;
  if(t.includes('fwb')) return DIAGRAMS.fwb;
- if(t.includes('whole abdomen')||t.includes('upper abdomen')||t.includes('lower abdomen')||t.includes('hepatomegaly')||t.includes('splenomegaly')||t.includes('pancreatitis')||t.includes('cholelithiasis')||t.includes('ascites')||t.includes('hemangioma')||t.includes('hyper echoic')||t.includes('mass /lesion')) return DIAGRAMS.whole;
+ if(t.includes('whole abdomen')||t.includes('upper abdomen')||t.includes('lower abdomen')||t.includes('hepatomegaly')||t.includes('splenomegaly')||t.includes('pancreatitis')||t.includes('cholelithiasis')||t.includes('ascites')||t.includes('hemangioma')||t.includes('hyper echoic')||t.includes('mass /lesion')||t.includes('parenchymal')) return DIAGRAMS.whole;
  if(t.includes('thyroid')||t.includes('neck')) return DIAGRAMS.thyroid;
  if(t.includes('breast')||t.includes('axila')) return DIAGRAMS.breast;
  if(t.includes('testis')||t.includes('scrotum')||t.includes('varicocele')||t.includes('hydrocele')) return DIAGRAMS.testis;
@@ -186,49 +262,54 @@ function getDiagramForType(t){
 }
 
 let T={
-"Whole abdomen with hemangioma + fatty sparing + hyper echoic mass /lesion":`ULTRASOUND WHOLE ABDOMEN WITH HYPERECHOIC MASS / LESION - HEMANGIOMA / FATTY SPARING - HIGH RISK (Hepatitis C+)
 
+"KUB with parenchymal changes grade wise":`ULTRASOUND KUB WITH PARENCHYMAL CHANGES - GRADE WISE (RENAL PARENCHYMAL DISEASE / MEDICAL RENAL DISEASE)
+Clinical History: __, Known HTN / Diabetes / CKD
+RIGHT KIDNEY: __ x __ cm (N: 9-12 cm length, Width 4-6 cm), Parenchymal thickness __ mm (N: 15-20 mm), Cortical thickness __ mm (N: 7-10 mm)
+- Echogenicity: Increased (brighter than liver / spleen) (N: Less than liver)
+- Corticomedullary Differentiation (CMD): Maintained / Partially maintained / Poor / Lost (N: Well maintained)
+- Cortical Outline: Smooth / Slightly irregular / Irregular (N: Smooth)
+- Parenchymal Changes Grade: Grade __ (See grading below)
+- No calculus (N: No stone), No hydronephrosis (N: No hydronephrosis), No focal lesion (N: No lesion)
+- Color Doppler: Normal vascularity / Increased RI __ (N: RI <0.70), Reduced vascularity
+LEFT KIDNEY: __ x __ cm (N: 9-12 cm length), Parenchymal thickness __ mm (N: 15-20 mm), Cortical thickness __ mm (N: 7-10 mm)
+- Echogenicity: Increased (N: Less than liver)
+- Corticomedullary Differentiation (CMD): Maintained / Partially maintained / Poor / Lost (N: Well maintained)
+- Parenchymal Changes Grade: Grade __
+- No calculus (N: No stone), No hydronephrosis (N: No hydronephrosis)
+URINARY BLADDER: Normal distended, Capacity __ cc (N: 300-500 cc), Wall thickness __ mm (N: <3 mm full, <5 mm empty), No calculus (N: No stone), No debris.
+Pre-void __ cc (N: 300-500 cc), Post-void residual __ cc (N: <50 cc, Significant >100 cc)
+PROSTATE (if male): __ x __ x __ mm (N: <45 x <35 x <30 mm), __ gm (N: <25-30 gm), Volume __ cc (N: <30 cc) (Options: Normal / Enlarged __ gm BPH)
+No ascites, No pleural effusion, No perinephric collection (N: No collection)
+Grade I (Mild): Slight increase in cortical echogenicity, echogenicity slightly greater than liver, CMD well maintained, Kidney size normal __ cm (N: 9-12 cm), Cortical thickness normal 7-10 mm (N: 7-10 mm), Parenchymal thickness normal 15-20 mm (N: 15-20 mm)
+Grade II (Moderate): Moderate increase in echogenicity, echogenicity moderately greater than liver, CMD partially lost / blurred, Kidney size normal / slightly reduced, Cortical thickness mildly reduced __ mm
+Grade III (Severe): Markedly increased echogenicity, CMD poor / almost lost, Kidney size reduced __ cm (<9 cm), Cortical thickness reduced __ mm (<7 mm), Parenchymal thickness reduced __ mm (<12 mm)
+Grade IV (End Stage): Severely increased echogenicity, CMD completely lost, Small shrunken kidney __ x __ cm (<8 cm), Cortical thickness markedly reduced __ mm (<5 mm), Parenchymal thickness markedly reduced, Irregular outline - End stage renal disease / Chronic kidney disease
+IMPRESSION: Bilateral Renal Parenchymal Changes Grade __ (Grade I / II / III / IV) / Medical Renal Disease Grade __ - Right Kidney: __ x __ cm, Parenchymal thickness __ mm, CMD __, Grade __ parenchymal changes - Left Kidney: __ x __ cm, Parenchymal thickness __ mm, CMD __, Grade __ parenchymal changes - No calculus, No hydronephrosis on both sides.
+Advice: 1. RFTs - Serum Creatinine (N: 0.6-1.2 mg/dl), Blood Urea (N: 15-45 mg/dl), eGFR (N: >90 ml/min), Serum Electrolytes (Na N: 135-145, K N: 3.5-5.0) 2. Urine R/E (N: No protein, No RBC), Urine ACR / Protein Creatinine Ratio (N: ACR <30 mg/g), 24 Hour Urinary Protein (N: <150 mg/day), Urine C/S 3. Blood Pressure Monitoring (N: <130/80 mmHg), Blood Sugar / HbA1c (N: <5.7%), CBC, Serum Calcium / Phosphate / Vitamin D / PTH 4. Nephrologist Consultation urgently 5. Avoid nephrotoxic drugs (NSAIDs, Aminoglycosides), Avoid dehydration, Low salt / Low protein diet as per nephrologist advice, Plenty of fluids if not contraindicated 6. Follow-up Ultrasound KUB with kidney size and parenchymal thickness measurement, Doppler RI (N: <0.70)`,
+
+"Whole abdomen with hemangioma + fatty sparing + hyper echoic mass /lesion":`ULTRASOUND WHOLE ABDOMEN WITH HYPERECHOIC MASS / LESION - HEMANGIOMA / FATTY SPARING - HIGH RISK (Hepatitis C+)
 Clinical History: Known case of Hepatitis C, Present complaints-H/O: __
 LIVER: Normal / Enlarged in size __ cm (N: <15 cm, avg 10-12 cm), parenchymal echotexture heterogeneous / coarse (suggestive of chronic liver parenchymal changes / CLD).
 In Right / Left lobe, Segment __, a well defined solid hyperechoic mass / lesion is noted measuring approx __ x __ mm (N: No focal lesion), (Dist A __ mm x Dist B __ mm).
 - Echogenicity: Hyperechoic (brighter than liver parenchyma) (DD: Hemangioma / Focal fatty sparing / Focal fat deposition / HCC / Metastasis)
 - Margins: Well defined / Ill defined, Thin walled / No capsule
 - Posterior Acoustic: No shadowing / No enhancement
-- Vascularity: No internal vascularity on Color Doppler / Peripheral vascularity (Options as per Doppler)
+- Vascularity: No internal vascularity on Color Doppler / Peripheral vascularity
 - Number: Single / Multiple ( __ in number, largest __ mm )
-- Surrounding liver: No halo / Hypoechoic halo present, No perilesional edema
-Rest of liver shows no other focal lesion, no dilated IHBR (N: <2 mm), Portal vein normal __ mm (N: <13 mm), No periportal cuffing.
-
-Differential Diagnosis in this Hepatitis C positive patient:
-1. Hepatic Hemangioma (Benign, most common hyperechoic lesion, N: <30 mm usually)
-2. Focal Fatty Sparing / Focal Fatty Infiltration (Hyperechoic area due to fat deposition / sparing)
-3. Hepatocellular Carcinoma (HCC) - Must be ruled out in HCV+ / CLD liver (HCC can be hyperechoic in early stage)
-4. Focal Nodular Hyperplasia / Adenoma / Metastasis
-
-GALL BLADDER: Normally distended, wall thickness __ mm (N: <3 mm), no calculus, no pericholecystic fluid.
-CBD: __ mm (N: <6 mm, post-chole <8 mm), no calculus.
+Rest of liver shows no other focal lesion, no dilated IHBR (N: <2 mm), Portal vein normal __ mm (N: <13 mm).
+Differential Diagnosis in this Hepatitis C positive patient: 1. Hepatic Hemangioma 2. Focal Fatty Sparing / Focal Fatty Infiltration 3. Hepatocellular Carcinoma (HCC) - Must be ruled out in HCV+ / CLD liver 4. Focal Nodular Hyperplasia / Adenoma / Metastasis
+GALL BLADDER: Normally distended, wall thickness __ mm (N: <3 mm), no calculus.
+CBD: __ mm (N: <6 mm, post-chole <8 mm).
 PANCREAS: Normal in size Head <30 mm (N: <30 mm), Body <25 mm (N: <25 mm), Tail <28 mm (N: <28 mm), homogenous.
-SPLEEN: Normal / Enlarged __ cm (N: <12-13 cm), no focal lesion, splenic vein normal.
+SPLEEN: Normal / Enlarged __ cm (N: <12-13 cm).
 RIGHT KIDNEY: __ x __ cm (N: 9-12 cm length), cortex __ mm (N: 7-10 mm), no calculus, no hydronephrosis.
 LEFT KIDNEY: __ x __ cm (N: 9-12 cm length), no calculus, no hydronephrosis.
-URINARY BLADDER: Normal, wall __ mm (N: <3 mm distended), capacity __ cc (N: 300-500 cc), no calculus.
+URINARY BLADDER: Normal, wall __ mm (N: <3 mm distended), capacity __ cc (N: 300-500 cc).
 PROSTATE: __ x __ x __ mm (N: <45 x <35 x <30 mm), __ gm (N: <25-30 gm), normal.
-No ascites, No lymphadenopathy, No pleural effusion.
-
-IMPRESSION:
-- Hyperechoic solid mass / lesion measuring approx __ x __ mm (__ x __ cm) in Right / Left lobe of liver -? Hemangioma / Focal fatty sparing.
-- In view of Hepatitis C positive status and coarse liver echotexture, Hepatocellular Carcinoma (HCC) cannot be excluded - Needs further evaluation.
-- Heterogeneous / Coarse liver echotexture -? Chronic liver parenchymal disease / CLD secondary to HCV.
-
-Advice:
-1. Triphasic CT Scan Liver / Dynamic Contrast Enhanced MRI Liver with contrast (Most important to rule out HCC)
-2. Serum AFP (Alpha Fetoprotein) (N: <10 ng/ml) - Tumour Marker
-3. LFTs (N: Bilirubin <1.2 mg/dl, ALT <40 U/L, AST <40 U/L), CBC, PT/INR, Hepatitis C Viral Load (HCV RNA PCR Quant), HBsAg, FibroScan / Liver Elastography
-4. Urgent Hepatologist / Gastroenterologist Consultation
-5. Avoid hepatotoxic drugs / alcohol, Plenty of fluids
-6. Follow-up Ultrasound after 1 month with comparison and correlation with CT/MRI
-
-Note: Definitive diagnosis requires histopathology / contrast imaging correlation. This ultrasound finding is not final diagnosis, please correlate clinically.`,
+No ascites, No lymphadenopathy.
+IMPRESSION: Hyperechoic solid mass / lesion measuring approx __ x __ mm in Right / Left lobe of liver -? Hemangioma / Focal fatty sparing. In view of Hepatitis C positive status and coarse liver echotexture, Hepatocellular Carcinoma (HCC) cannot be excluded - Needs further evaluation. Heterogeneous / Coarse liver echotexture -? Chronic liver parenchymal disease / CLD secondary to HCV.
+Advice: 1. Triphasic CT Scan Liver / Dynamic MRI Liver 2. Serum AFP (N: <10 ng/ml) 3. LFTs, CBC, PT/INR, Hepatitis C Viral Load (HCV RNA PCR Quant), HBsAg, FibroScan 4. Urgent Hepatologist Consultation 5. Avoid hepatotoxic drugs / alcohol 6. Follow-up USG after 1 month with CT/MRI correlation`,
 
 "Whole abdomen":`ULTRASOUND WHOLE ABDOMEN
 LIVER: Normal in size __ cm (N: <15 cm, avg 10-12 cm), homogenous texture, no focal lesion.
@@ -896,22 +977,23 @@ function init(){let s=uType;s.innerHTML='';Object.keys(T).forEach(k=>{let o=docu
 function checkFetal(){let v=uType.value;let gyn=isGynae(v);let pros=isProstate(v);fetalCalc.style.display=v.toLowerCase().includes('fwb')?'block':'none';prostateCalc.style.display=pros?'block':'none';clinicalLMP.style.display=gyn?'block':'none';presentComp.style.display=!gyn?'block':'none';}
 function load(){rText.value=T[uType.value]||'';checkFetal();}
 uType.addEventListener('change',load);
-function formatReport(text){return text.split('\n').map(line=>{line=line.trim();if(!line)return'<br>';if(line.startsWith('ULTRASOUND')||line.startsWith('DOPPLER')){return `<div style="text-align:center;margin:8px 0;font-size:16px"><b><u>${line}</u></b></div>`;}if(line.startsWith('IMPRESSION')||line.startsWith('Advice')){return `<div style="margin:8px 0"><b><u>${line.split(':')[0]}:</u></b> ${line.split(':').slice(1).join(':')}</div>`;}if(line.includes(':')){let p=line.split(':');return `<div style="margin:3px 0"><b><u>${p[0]}:</u></b> ${p.slice(1).join(':')}</div>`;}return `<div>${line}</div>`;}).join('');}
+function formatReport(text){return text.split('\n').map(line=>{line=line.trim();if(!line)return'<br>';if(line.startsWith('ULTRASOUND')||line.startsWith('DOPPLER')){return `<div style="text-align:center;margin:8px 0;font-size:14px"><b><u>${line}</u></b></div>`;}if(line.startsWith('IMPRESSION')||line.startsWith('Advice')||line.startsWith('---')){return `<div style="margin:8px 0"><b><u>${line.split(':')[0]}:</u></b> ${line.split(':').slice(1).join(':')}</div>`;}if(line.includes(':')){let p=line.split(':');return `<div style="margin:2px 0"><b><u>${p[0]}:</u></b> ${p.slice(1).join(':')}</div>`;}return `<div>${line}</div>`;}).join('');}
 function make(){
 let type=uType.value;
 let diagramUrl = getDiagramForType(type);
 document.getElementById('diagramWM').style.backgroundImage = `url("${diagramUrl}")`;
+document.getElementById('diagramWM').style.display='block';
 let gyn=isGynae(type);
 let clinicalHTML='';if(gyn){clinicalHTML=`<div style="margin:3px 0"><b><u>Clinical Data/LMP date:</u></b> ${clinicalLMP.value||'__'}</div>`;}else{clinicalHTML=`<div style="margin:3px 0"><b><u>Present complaints-H/O:</u></b> ${presentComp.value||'__'}</div>`;}
 let pidVal = document.getElementById('pIDMobile').value || '';
-let info=`<div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:10px"><div><b>Patient Name:</b> ${pName.value} &nbsp; <b>Age/Sex:</b> ${pAge.value}/${pGen.value} &nbsp; <b>ID/Mobile:</b> ${pidVal||'__'}<br><b>Ref By Dr.:</b> ${ref.value} &nbsp; <b>Sonologist Dr.:</b> ${sono.value}</div><div><b>Date:</b> ${pDate.value}</div></div><hr style="margin-bottom:10px">${clinicalHTML}<hr style="margin:10px 0">`;
+let info=`<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><div><b>Patient Name:</b> ${pName.value} &nbsp; <b>Age/Sex:</b> ${pAge.value}/${pGen.value} &nbsp; <b>ID/Mobile:</b> ${pidVal||'__'}<br><b>Ref By Dr.:</b> ${ref.value} &nbsp; <b>Sonologist Dr.:</b> ${sono.value}</div><div><b>Date:</b> ${pDate.value}</div></div><hr style="margin-bottom:6px">${clinicalHTML}<hr style="margin:6px 0">`;
 let body=formatReport(rText.value);
-let footer=`<div style="margin-top:60px;text-align:center;font-size:10px;color:#555"><i>This is computer generated report no signature required</i></div>
-<div style="margin-top:8px;text-align:center;font-size:8.5px;color:#333;white-space:nowrap;letter-spacing:0.2px;line-height:1.2">Please keep this report safely in your records. We pray that God grants you a speedy and complete recovery. We appreciate you availing our services. Thank you.</div>`;
+let footer=`<div style="margin-top:30px;text-align:center;font-size:9px;color:#555"><i>This is computer generated report no signature required</i></div>
+<div style="margin-top:4px;text-align:center;font-size:7.5px;color:#333;white-space:nowrap;letter-spacing:0.1px;line-height:1.1">Please keep this report safely in your records. We pray that God grants you a speedy and complete recovery. We appreciate you availing our services. Thank you.</div>`;
 document.getElementById('reportContent').innerHTML=info+body+footer;
 outCard.style.display='block';window.scrollTo(0,outCard.offsetTop);
 }
-function pdf(){const{jsPDF}=window.jspdf;let doc=new jsPDF('p','mm','a4');let t=document.getElementById('reportContent').innerText;doc.text(doc.splitTextToSize(t,180),10,52);doc.save((pName.value||'Report')+'.pdf');}
+function pdf(){const{jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[190,280]);let t=document.getElementById('reportContent').innerText;doc.text(doc.splitTextToSize(t,150),10,45);doc.save((pName.value||'Report')+'.pdf');}
 function saveR(){
  let a=JSON.parse(localStorage.getItem('us_rep')||'[]');
  let obj={n:pName.value,a:pAge.value,g:pGen.value,d:pDate.value,t:uType.value,r:rText.value,lmp:clinicalLMP.value,comp:presentComp.value,pid:pIDMobile.value,ref:ref.value,sono:sono.value};
