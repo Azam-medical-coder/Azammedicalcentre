@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - FINAL COMPLETE</title>
+<title>Azam Medical Centre - FINAL REAL DIAGRAM + NO BOX</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -16,8 +16,8 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 .report{width:190mm;height:280mm;margin:auto;background:#fff;border:2px solid #0a4eb5;border-radius:12px;padding:0;box-sizing:border-box;position:relative;overflow:hidden}
 .report-inner{width:160mm;height:210mm;margin:40mm auto 0 auto;padding:0 5mm 5mm 5mm;box-sizing:border-box;position:relative;line-height:1.6;font-size:11.2px;z-index:2}
 .report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;background-image:url('logo.png'), url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.06;filter:grayscale(100%);z-index:1;pointer-events:none}
-.diagram-wm{position:absolute;right:8mm;bottom:8mm;width:72mm;height:82mm;opacity:0.28;z-index:1;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom right;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-@media print{@page{size:190mm 280mm; margin:0}body{background:#fff;padding:0}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:190mm;height:280mm;border:none;border-radius:0}.report::before{opacity:0.06!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.diagram-wm{opacity:0.30!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.noPrint{display:none!important}}
+.diagram-wm{position:absolute;right:8mm;bottom:8mm;width:68mm;height:78mm;opacity:0.32;z-index:1;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom right;-webkit-print-color-adjust:exact;print-color-adjust:exact;filter: drop-shadow(0 2px 4px #0001);}
+@media print{@page{size:190mm 280mm; margin:0}body{background:#fff;padding:0}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:190mm;height:280mm;border:none;border-radius:0}.report::before{opacity:0.06!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.diagram-wm{opacity:0.35!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.noPrint{display:none!important}}
 .calcBox{background:#f0f7ff;border:2px dashed #1e90ff;border-radius:12px;padding:12px;margin:10px 0}
 .calcGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .calcRes{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;font-size:12px;font-weight:800;text-align:center}
@@ -38,8 +38,8 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 <select id="uType" size="6" style="height:140px;font-size:13px"></select>
 </div>
 <div id="complaintBox" style="border:2px solid #f59e0b;border-radius:12px;padding:10px;margin:8px 0;background:#fffbeb;display:none">
-<label style="font-weight:800;color:#d97706;font-size:12px">📝 Present Complaint / H/O - Whole Abdomen & KUB</label>
-<textarea id="pComplaint" rows="2" placeholder="e.g. Pain abdomen 2 days, Flank pain, Burning micturition, H/O calculi..."></textarea>
+<label style="font-weight:800;color:#d97706;font-size:12px">📝 Present Complaint / H/O - Whole Abdomen & KUB (Report par box ke baghair ayega)</label>
+<textarea id="pComplaint" rows="2" placeholder="e.g. Epigastric pain, Flank pain, Burning micturition, H/O calculi..."></textarea>
 </div>
 <div id="fetalCalc" class="calcBox" style="display:none"><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Wt: --</div></div><button class="small" style="background:#10b981;width:100%" onclick="applyCalc()">Calculation Lagayen</button></div>
 <div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Prostate Lagayen</button></div>
@@ -60,26 +60,9 @@ async function getOrCreateFolder(){if(driveFolderId)return driveFolderId;try{let
 async function uploadToDriveFile(name,content){try{if(!gapiInited||!gisInited)return;updateDriveStatus('Uploading...',' #f59e0b');await ensureDriveAuth();let folderId=await getOrCreateFolder();const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents: folderId?[folderId]:[]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file);await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+gapi.client.getToken().access_token}),body:form});updateDriveStatus('Saved to Drive',' #10b981');}catch(e){}}
 async function loadFromDrive(){try{if(!gapiInited||!gisInited){alert('Drive load ho raha');return;}await ensureDriveAuth();let folderId=await getOrCreateFolder();let listResp=await gapi.client.drive.files.list({q:`'${folderId}' in parents and trashed=false`,fields:"files(id,name)",pageSize:100});let files=listResp.result.files||[];if(files.length===0){alert('Drive khali');return;}let existing=JSON.parse(localStorage.getItem('azam_reports')||'[]');let ids=new Set(existing.map(r=>r.id));let loaded=0;for(let f of files){try{let resp=await fetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`,{headers:{'Authorization':'Bearer '+gapi.client.getToken().access_token}});if(!resp.ok)continue;let data=await resp.json();if(data&&data.id&&!ids.has(data.id)){existing.unshift(data);ids.add(data.id);loaded++;}}catch(e){}}localStorage.setItem('azam_reports',JSON.stringify(existing));render();alert(`Drive se ${loaded} loaded`);}catch(e){alert('Drive error');}}
 window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1200);});
-function checkPass(){
-  let p = document.getElementById('passInput').value.trim();
-  if(p === 'Pakistan@777'){
-    sessionStorage.setItem('azam_login','ok');
-    document.getElementById('loginOverlay').style.display='none';
-    document.getElementById('passErr').style.display='none';
-  }else{
-    document.getElementById('passErr').style.display='block';
-  }
-}
-(function(){
-  if(sessionStorage.getItem('azam_login')==='ok'){
-    let ov = document.getElementById('loginOverlay');
-    if(ov) ov.style.display='none';
-  }
-})();
-document.addEventListener('DOMContentLoaded',()=>{
-  let pi=document.getElementById('passInput');
-  if(pi){pi.addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});}
-});
+function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';document.getElementById('passErr').style.display='none';}else{document.getElementById('passErr').style.display='block';}}
+(function(){if(sessionStorage.getItem('azam_login')==='ok'){let ov=document.getElementById('loginOverlay');if(ov) ov.style.display='none';}})();
+document.addEventListener('DOMContentLoaded',()=>{let pi=document.getElementById('passInput');if(pi){pi.addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});}});
 const refDoctors=["Ref By Dr. - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel Arain","Dr. Aqsa Gull","Dr. Shahzad Sadaqat","Dr. Bilal","Dr. Sofia Butt","Dr. Talha Bhatti","Dr. Irfan","Dr. Raheel Arain","Self","Other"];
 const sonoDoctors=["Sonologist Dr. - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN","DR. SAMAN AZAM","Other"];
 function fillSelect(id,list){let s=document.getElementById(id);s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
@@ -87,15 +70,17 @@ fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
 let prostateData={};
 function calcProstate(){let l=parseFloat(pL.value)||0,w=parseFloat(pW.value)||0,h=parseFloat(pH.value)||0;if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};resPVol.innerText=`Volume: ${vol.toFixed(1)} cc`;resPGm.innerText=`Weight: ${vol.toFixed(1)} gm`;}}
 function applyProstateCalc(){if(!prostateData.vol){alert('cm likhen');return;}let txt=rText.value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);rText.value=txt;}
+
+// === REALISTIC DIAGRAMS - AAP WALI PICTURE JAISA STYLE ===
 const DIAGRAMS={
-whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'><g fill='none' stroke='%236b7280' stroke-width='1.6' stroke-linecap='round'><path d='M25 25 Q35 18 55 20 L120 20 Q135 20 135 35 L135 85 Q135 95 125 100 L85 115 Q75 120 60 115 L25 95 Q18 90 18 75 Z'/><path d='M90 45 Q115 42 125 55 Q130 65 118 75 Q100 85 85 75'/><ellipse cx='105' cy='60' rx='8' ry='5'/><path d='M45 55 Q55 48 68 52 Q72 58 62 65 Q50 68 42 60 Z' fill='%23e5e7eb' stroke='%236b7280'/><path d='M140 50 Q155 45 165 55 Q170 65 160 75 Q145 80 135 70 Z'/><ellipse cx='150' cy='95' rx='18' ry='12'/><path d='M30 105 Q40 100 55 105 Q70 110 68 125 Q60 135 40 132 Q22 128 22 115 Z'/><path d='M150 105 Q165 102 178 110 Q182 125 170 135 Q155 140 142 130 Z'/><path d='M75 135 Q90 132 105 138 Q112 150 100 160 Q80 165 68 152 Z'/><rect x='85' y='165' width='30' height='22' rx='8'/></g><g font-size='7' fill='%23374151' font-weight='700'><text x='50' y='32'>LIVER</text><text x='42' y='118'>R.KIDNEY</text><text x='148' y='118'>L.KIDNEY</text><text x='82' y='180'>BLADDER</text><text x='135' y='55'>SPLEEN</text><text x='135' y='95'>PANCREAS</text></g></svg>`,
-kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%236b7280' stroke-width='1.7'><path d='M25 30 Q35 25 55 30 Q70 35 68 55 Q62 75 42 78 Q22 75 20 55 Z'/><path d='M125 30 Q145 25 165 35 Q172 55 160 75 Q140 82 125 70 Q115 55 125 30 Z'/><path d='M40 38 Q50 45 55 Q35 60 30 48 Z'/><path d='M145 38 Q155 45 150 55 Q140 60 135 48 Z'/><path d='M75 95 L75 135 Q75 145 85 150 L115 150 Q125 145 125 135 L125 95 Q125 85 100 85 Q75 85 75 95 Z'/><ellipse cx='100' cy='158' rx='18' ry='10'/></g><g font-size='8' fill='%23374151' font-weight='700'><text x='22' y='92'>R.KIDNEY</text><text x='125' y='92'>L.KIDNEY</text><text x='72' y='122'>BLADDER</text><text x='82' y='175'>PROSTATE</text></g></svg>`,
-kub_prostate:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%236b7280' stroke-width='1.7'><path d='M25 30 Q35 25 55 30 Q70 35 68 55 Q62 75 42 78 Q22 75 20 55 Z'/><path d='M125 30 Q145 25 165 35 Q172 55 160 75 Q140 82 125 70 Q115 55 125 30 Z'/><path d='M75 95 L75 135 Q75 145 85 150 L115 150 Q125 145 125 135 L125 95 Q125 85 100 85 Q75 85 75 95 Z'/><ellipse cx='100' cy='158' rx='22' ry='14' fill='%23e5e7eb'/></g><g font-size='8' fill='%23374151' font-weight='700'><text x='22' y='92'>R.KIDNEY</text><text x='125' y='92'>L.KIDNEY</text><text x='72' y='122'>BLADDER</text><text x='75' y='162'>PROSTATE ENLARGED</text></g></svg>`,
-pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%236b7280' stroke-width='1.6'><path d='M60 40 Q100 30 140 40 Q150 60 135 85 Q100 95 65 85 Q50 65 60 40 Z'/><path d='M70 55 Q100 50 130 55 Q135 65 120 75 Q100 80 80 75 Q65 65 70 55 Z'/><ellipse cx='45' cy='105' rx='18' ry='14'/><ellipse cx='155' cy='105' rx='18' ry='14'/><path d='M75 125 Q100 120 125 125 Q130 135 100 145 Q70 135 75 125 Z'/></g><g font-size='7' fill='%23374151' font-weight='700'><text x='85' y='35'>UTERUS</text><text x='22' y='108'>R.OVARY</text><text x='132' y='108'>L.OVARY</text><text x='85' y='138'>BLADDER</text></g></svg>`,
-fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%236b7280' stroke-width='1.6'><circle cx='100' cy='70' r='35'/><path d='M65 65 Q55 55 60 45 Q70 35 85 40'/><path d='M135 65 Q145 55 140 45 Q130 35 115 40'/><path d='M100 105 Q80 115 60 130 Q50 150 70 160 Q100 170 130 160 Q150 150 140 130 Q120 115 100 105 Z'/><path d='M70 125 Q100 135 130 125'/><path d='M80 145 Q100 155 120 145'/></g><g font-size='8' fill='%23374151' font-weight='700'><text x='82' y='75'>FETUS HEAD</text><text x='78' y='140'>FETUS BODY</text></g></svg>`,
-thyroid:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160'><g fill='none' stroke='%236b7280' stroke-width='1.6'><path d='M40 30 Q50 25 65 30 Q75 40 70 65 Q60 80 40 75 Q25 65 30 45 Z'/><path d='M110 30 Q125 25 140 35 Q150 55 135 75 Q115 80 105 65 Q100 45 110 30 Z'/><rect x='70' y='45' width='35' height='12' rx='6'/></g><g font-size='7' fill='%23374151' font-weight='700'><text x='32' y='90'>R.LOBE</text><text x='108' y='90'>L.LOBE</text><text x='72' y='40'>ISTHMUS</text></g></svg>`,
-breast:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 160'><g fill='none' stroke='%236b7280' stroke-width='1.5'><path d='M20 80 Q40 30 100 25 Q160 30 180 80 Q160 120 100 125 Q40 120 20 80 Z'/><circle cx='100' cy='80' r='18'/><circle cx='100' cy='80' r='6' fill='%23e5e7eb'/></g><g font-size='7' fill='%23374151' font-weight='700'><text x='80' y='20'>BREAST</text></g></svg>`,
-testis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 180'><g fill='none' stroke='%236b7280' stroke-width='1.6'><ellipse cx='70' cy='80' rx='28' ry='40'/><ellipse cx='130' cy='80' rx='28' ry='40'/><path d='M42 40 Q70 20 98 40'/><path d='M102 40 Q130 20 158 40'/><path d='M70 120 Q100 135 130 120'/></g><g font-size='7' fill='%23374151' font-weight='700'><text x='50' y='130'>R.TESTIS</text><text x='110' y='130'>L.TESTIS</text></g></svg>`
+whole:`https://azam-medical-coder.github.io/Azammedicalcentre/diagrams/whole.png`,
+kub:`https://azam-medical-coder.github.io/Azammedicalcentre/diagrams/kub.png`,
+kub_prostate:`https://azam-medical-coder.github.io/Azammedicalcentre/diagrams/kub.png`,
+pelvis:`https://azam-medical-coder.github.io/Azammedicalcentre/diagrams/pelvis.png`,
+fwb:`https://azam-medical-coder.github.io/Azammedicalcentre/diagrams/whole.png`,
+thyroid:`https://azam-medical-coder.github.io/Azammedicalcentre/diagrams/pelvis.png`,
+breast:`https://azam-medical-coder.github.io/Azammedicalcentre/diagrams/pelvis.png`,
+testis:`https://azam-medical-coder.github.io/Azammedicalcentre/diagrams/kub.png`
 };
 function getDiagramForType(t){t=t.toLowerCase();if(t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('kub'))return DIAGRAMS.kub;if(t.includes('pelvis'))return DIAGRAMS.pelvis;if(t.includes('fwb'))return DIAGRAMS.fwb;if(t.includes('thyroid'))return DIAGRAMS.thyroid;if(t.includes('breast'))return DIAGRAMS.breast;if(t.includes('testis')||t.includes('scrotum'))return DIAGRAMS.testis;if(t.includes('whole')||t.includes('upper')||t.includes('lower'))return DIAGRAMS.whole;return DIAGRAMS.whole;}
 let T={"KUB with parenchymal changes grade wise":`ULTRASOUND KUB WITH PARENCHYMAL CHANGES - GRADE WISE
@@ -498,7 +483,8 @@ function make(){
  let complaintText=(pComplaint.value||'').trim();
  let complaintHTML='';
  if(complaintText && complaintBox.style.display!=='none'){
-   complaintHTML=`<div style="border:1.5px dashed #f59e0b;border-radius:6px;padding:6px 8px;margin-bottom:8px;background:#fffbeb;font-size:11px"><b><u>Present Complaint / H/O</u>:</b> ${complaintText}</div>`;
+   // BOX HATA DIYA - SIRF BOLD UNDERLINE PLAIN LINE
+   complaintHTML=`<div style="margin-bottom:8px;font-size:11px"><b><u>Present Complaint / H/O</u>:</b> ${complaintText}</div>`;
  }
  let patientBorder=`<div style="border:2px solid #0a4eb5;border-radius:8px;padding:8px 10px;margin-bottom:8px;background:#f8fbff"><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:11px"><span><b><u>Name</u>:</b> ${pName.value}</span> | <span><b><u>Age</u>:</b> ${pAge.value}</span> | <span><b><u>Sex</u>:</b> ${pGen.value}</span> | <span><b><u>Date</u>:</b> ${pDate.value}</span> | <span><b><u>ID/Mobile</u>:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:11px;margin-top:4px"><span><b><u>Ref By</u>:</b> ${ref.value}</span> | <span><b><u>Sonologist</u>:</b> ${sono.value}</span></div></div>`;
  let bodyHTML=formatReportToHTML(rText.value);
