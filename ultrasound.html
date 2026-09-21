@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - DRIVE LOAD FIX FINAL</title>
+<title> </title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -13,11 +13,21 @@ body{background:#eef4ff;padding:10px}
 input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px solid #cbd5e1;margin:5px 0;font-size:14px}
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;font-size:16px;margin-top:8px}
 .small{padding:8px 10px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff;font-size:12px}
-.report{width:190mm;height:280mm;margin:auto;background:#fff;border:2px solid #0a4eb5;border-radius:12px;padding:0;box-sizing:border-box;position:relative;overflow:hidden}
-.report-inner{width:160mm;height:210mm;margin:45mm auto 0 auto;padding:0 5mm 5mm 5mm;box-sizing:border-box;position:relative;line-height:1.75;font-size:12.5px;z-index:2}
-.report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;background-image:url('logo.png'), url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.06;filter:grayscale(100%);z-index:1;pointer-events:none}
-.diagram-wm{position:absolute;right:6mm;bottom:6mm;width:70mm;height:80mm;opacity:0.38;z-index:1;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom right;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-@media print{@page{size:190mm 280mm; margin:0}body{background:#fff;padding:0}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:190mm;height:280mm;border:none;border-radius:0}.report::before{opacity:0.06!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.diagram-wm{opacity:0.40!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;display:block!important}.noPrint{display:none!important}}
+.report{width:190mm;height:280mm;margin:auto;background:#fff;border:2px solid #000;border-radius:0;padding:0;box-sizing:border-box;position:relative;overflow:hidden}
+.report-inner{width:160mm;height:210mm;margin:45mm auto 0 auto;padding:0 5mm 5mm 5mm;box-sizing:border-box;position:relative;line-height:1.75;font-size:12.5px;z-index:2;color:#000}
+.report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;height:340px;background-image:url('logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.05;filter:grayscale(100%);z-index:1;pointer-events:none}
+.diagram-wm{position:absolute;right:5mm;bottom:12mm;width:75mm;height:85mm;opacity:0.22;z-index:1;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom right;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@media print{
+ @page{size:190mm 280mm; margin:0}
+ html,body{margin:0!important;padding:0!important;height:100%}
+ body{background:#fff;padding:0}
+ body *{visibility:hidden}
+.report,.report *{visibility:visible}
+.report{position:absolute;left:0;top:0;width:190mm;height:280mm;border:none;border-radius:0}
+.report::before{opacity:0.05!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.diagram-wm{opacity:0.25!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;display:block!important}
+.noPrint{display:none!important}
+}
 .calcBox{background:#f0f7ff;border:2px dashed #1e90ff;border-radius:12px;padding:12px;margin:10px 0}
 .calcGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .calcRes{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;font-size:12px;font-weight:800;text-align:center}
@@ -51,13 +61,13 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 <textarea id="rText" rows="22" style="font-family:monospace;font-size:13px" oninput="autoSaveDraft()"></textarea>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="finalBtn" class="btn" onclick="make()">✅ Final Report Banayen</button><button class="btn" style="background:#10b981" onclick="saveR()">💾 Save + Drive Upload</button></div>
 </div>
-<div class="card" id="outCard" style="display:none"><div class="boxTitle noPrint"><span>🖨️ BOX 3: Final Preview</span></div><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#0a4eb5" onclick="window.print()">Print Final (28x19)</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF</button><button class="small" style="background:#10b981" onclick="saveR()">Save + Drive Upload</button><button class="small" style="background:#8b5cf6" onclick="editCurrent()">✏️ Wapis Edit Karen</button></div></div>
+<div class="card" id="outCard" style="display:none"><div class="boxTitle noPrint"><span>🖨️ BOX 3: Final Preview (Black & White)</span></div><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#000" onclick="window.print()">Print Final (No Header)</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF</button><button class="small" style="background:#10b981" onclick="saveR()">Save + Drive Upload</button><button class="small" style="background:#8b5cf6" onclick="editCurrent()">✏️ Wapis Edit Karen</button></div></div>
 <div class="card noPrint"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h3>📂 BOX 4: Saved Reports</h3><div style="display:flex;gap:6px"><button class="small" style="background:#0a4eb5;padding:12px" onclick="loadFromDrive()">☁️ Drive se Load</button><button class="small" style="background:#8b5cf6;padding:10px" onclick="openSummary()">📊 Summary</button><button class="small" style="background:#ff3b30;padding:10px" onclick="clearDraft()">🗑️ Clear Draft</button></div></div><input id="sBox" placeholder="Search Name / ID / Mobile" onkeyup="render()" style="margin-top:8px"><div id="list"></div></div>
 <div class="card noPrint" id="summaryCard" style="display:none;border:3px solid #8b5cf6"><div style="display:flex;justify-content:space-between"><h3>Daily Summary</h3><div style="display:flex;gap:6px"><input id="sumDate" type="date" style="width:auto"><button class="small" style="background:#0a4eb5" onclick="renderSummary()">Show</button><button class="small" style="background:#10b981" onclick="printSummary()">Print</button><button class="small" style="background:#ff3b30" onclick="closeSummary()">Close</button></div></div><div id="summaryPrintArea"><h4 id="sumTitle" style="text-align:center"></h4><table style="width:100%;border-collapse:collapse;font-size:12px" border="1"><thead><tr><th>Sr#</th><th>Name</th><th>ID/Mobile</th><th>Age/Sex</th><th>Type</th><th>Ref</th><th>Sono</th></tr></thead><tbody id="sumBody"></tbody></table><div>Total: <b id="sumTotal">0</b></div></div></div>
 <script>
 const CLIENT_ID='153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com';
 const SCOPES='https://www.googleapis.com/auth/drive.file';
-let tokenClient,gapiInited=false,gisInited=false,driveFolderId=null,driveBackupFileId=null;
+let tokenClient,gapiInited=false,gisInited=false,driveFolderId=null;
 function updateDriveStatus(m,c){let e=document.getElementById('driveStatus'); if(e){e.innerText='● Drive: '+m+' | Auto-Save: ON (Ctrl+S)'; e.style.color=c||'#10b981';}}
 function gapiLoaded(){gapi.load('client', async()=>{try{await gapi.client.init({discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]});gapiInited=true;updateDriveStatus('Ready',' #10b981');}catch(e){updateDriveStatus('Drive Init Error',' #ff3b30');}});}
 function gisLoaded(){try{tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID, scope:SCOPES, callback:''});gisInited=true;}catch(e){}}
@@ -70,11 +80,9 @@ async function uploadToDriveFile(name,content){
   await ensureDriveAuth();
   let folderId=await getOrCreateFolder(); if(!folderId) return;
   let token=gapi.client.getToken(); if(!token||!token.access_token) return;
-  // Backup file ko update karo, naya create nahi
   if(name==='Azam_Medical_Backup_ALL.json'){
    let existing=await findFileInFolder(folderId,name);
    if(existing){
-    // UPDATE existing file
     await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=media`,{method:'PATCH',headers:{'Authorization':'Bearer '+token.access_token,'Content-Type':'application/json'},body:content});
     updateDriveStatus('Backup Updated to Drive',' #10b981'); return;
    }
@@ -82,10 +90,8 @@ async function uploadToDriveFile(name,content){
   const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents:[folderId]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file);
   await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form});
   updateDriveStatus('Saved to Drive',' #10b981');
- }catch(e){console.log('Drive error',e);updateDriveStatus('Local Saved, Drive Pending',' #f59e0b');}
+ }catch(e){updateDriveStatus('Local Saved, Drive Pending',' #f59e0b');}
 }
-
-// ===== NAYA FIXED LOAD FUNCTION =====
 async function loadFromDrive(){
  try{
   if(!gapiInited||!gisInited){alert('Drive load ho raha hai, 2 second baad try karen');return;}
@@ -94,55 +100,35 @@ async function loadFromDrive(){
   let folderId=await getOrCreateFolder(); if(!folderId){alert('Folder nahi mila');return;}
   let listResp=await gapi.client.drive.files.list({q:`'${folderId}' in parents and trashed=false`,fields:"files(id,name,modifiedTime)",pageSize:100,orderBy:"modifiedTime desc"});
   let files=listResp.result.files||[];
-  if(files.length===0){alert('Drive khali hai - Folder me koi file nahi');updateDriveStatus('Drive Empty',' #ff3b30');return;}
-  let existing=[];
-  try{ existing=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){ existing=[]; }
+  if(files.length===0){alert('Drive khali hai');updateDriveStatus('Drive Empty',' #ff3b30');return;}
+  let existing=[];try{ existing=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){ existing=[]; }
   let ids=new Set(existing.map(r=>String(r.id)));
   let loaded=0;
-
   for(let f of files){
    try{
     let token=gapi.client.getToken();
     let resp=await fetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`,{headers:{'Authorization':'Bearer '+token.access_token}});
     if(!resp.ok) continue;
     let text=await resp.text();
-    let data;
-    try{ data=JSON.parse(text); }catch(e){ continue; }
-
-    // CASE 1: Backup file - ye array hai
+    let data; try{ data=JSON.parse(text); }catch(e){ continue; }
     if(Array.isArray(data)){
-     for(let rep of data){
-      if(rep && rep.id &&!ids.has(String(rep.id))){
-       existing.unshift(rep);
-       ids.add(String(rep.id));
-       loaded++;
-      }
-     }
-    } else if(data && data.id){
-     // CASE 2: Single report file
-     if(!ids.has(String(data.id))){
-      existing.unshift(data);
-      ids.add(String(data.id));
-      loaded++;
-     }
-    }
-   }catch(e){ console.log('file load error',e); }
+     for(let rep of data){ if(rep && rep.id &&!ids.has(String(rep.id))){ existing.unshift(rep); ids.add(String(rep.id)); loaded++; } }
+    } else if(data && data.id){ if(!ids.has(String(data.id))){ existing.unshift(data); ids.add(String(data.id)); loaded++; } }
+   }catch(e){}
   }
   localStorage.setItem('azam_reports',JSON.stringify(existing));
   render();
   updateDriveStatus(`Drive se ${loaded} Loaded - Total ${existing.length}`,' #10b981');
-  alert(`Drive se ${loaded} nayi reports loaded! Total ${existing.length} reports ab is PC par hain.`);
- }catch(e){
-  console.log(e);
-  alert('Drive error: '+(e.message||e));
-  updateDriveStatus('Drive Load Error',' #ff3b30');
- }
+  alert(`Drive se ${loaded} nayi reports loaded! Total ${existing.length}`);
+ }catch(e){alert('Drive error: '+(e.message||e));updateDriveStatus('Drive Load Error',' #ff3b30');}
 }
-
 window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1200);});
-function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';let e=document.getElementById('passErr'); if(e) e.style.display='none';}else{let er=document.getElementById('passErr'); if(er) er.style.display='block';}}
+// Hide browser header/footer title
+window.addEventListener('beforeprint',()=>{document.title=' ';});
+window.addEventListener('afterprint',()=>{document.title=' ';});
+function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';}else{document.getElementById('passErr').style.display='block';}}
 (function(){if(sessionStorage.getItem('azam_login')==='ok'){let ov=document.getElementById('loginOverlay');if(ov) ov.style.display='none';}})();
-document.addEventListener('DOMContentLoaded',()=>{let pi=document.getElementById('passInput');if(pi){pi.addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});}});
+document.addEventListener('DOMContentLoaded',()=>{let pi=document.getElementById('passInput');if(pi){pi.addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});}document.title=' ';});
 const refDoctors=["Ref By Dr. - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel Arain","Dr. Aqsa Gull","Dr. Shahzad Sadaqat","Dr. Bilal","Dr. Sofia Butt","Dr. Talha Bhatti","Dr. Irfan","Dr. Raheel Arain","Self","Other"];
 const sonoDoctors=["Sonologist Dr. - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN","DR. SAMAN AZAM","Other"];
 function fillSelect(id,list){let s=document.getElementById(id);if(!s)return;s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
@@ -150,13 +136,12 @@ fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
 let prostateData={};
 function calcProstate(){try{let l=parseFloat(document.getElementById('pL')?.value)||0,w=parseFloat(document.getElementById('pW')?.value)||0,h=parseFloat(document.getElementById('pH')?.value)||0;if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};let e1=document.getElementById('resPVol'); if(e1) e1.innerText=`Volume: ${vol.toFixed(1)} cc`;let e2=document.getElementById('resPGm'); if(e2) e2.innerText=`Weight: ${vol.toFixed(1)} gm`;}}catch(e){}}
 function applyProstateCalc(){if(!prostateData.vol){alert('cm likhen');return;}let txt=document.getElementById('rText').value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);document.getElementById('rText').value=txt;autoSaveDraft();}
-
 const DIAGRAMS={
-whole:`data:image/svg+xml;utf8,[STRIPPED]`,
-kub:`data:image/svg+xml;utf8,[STRIPPED]`,
-kub_prostate:`data:image/svg+xml;utf8,[STRIPPED]`,
-pelvis:`data:image/svg+xml;utf8,[STRIPPED]`,
-fwb:`data:image/svg+xml;utf8,[STRIPPED]`
+whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g fill='none' stroke='black' stroke-width='1.2' opacity='0.9'><path d='M40 40 Q100 20 160 40 Q170 100 160 170 Q100 200 40 170 Q30 100 40 40'/><ellipse cx='70' cy='65' rx='25' ry='18'/><path d='M100 60 Q130 65 140 75'/><ellipse cx='55' cy='130' rx='15' ry='10'/><ellipse cx='145' cy='130' rx='15' ry='10'/><path d='M90 150 Q100 160 110 150'/></g></svg>`,
+kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g fill='none' stroke='black' stroke-width='1.3' opacity='0.9'><path d='M45 50 Q35 90 45 140 Q55 150 65 140 Q75 90 65 50 Q55 45 45 50'/><path d='M135 50 Q125 90 135 140 Q145 150 155 140 Q165 90 155 50 Q145 45 135 50'/><path d='M70 160 Q100 175 130 160 Q125 200 100 205 Q75 200 70 160'/><circle cx='52' cy='80' r='3' fill='black'/></g></svg>`,
+kub_prostate:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g fill='none' stroke='black' stroke-width='1.3' opacity='0.9'><path d='M45 40 Q35 80 45 120 Q55 130 65 120 Q75 80 65 40 Q55 35 45 40'/><path d='M135 40 Q125 80 135 120 Q145 130 155 120 Q165 80 155 40 Q145 35 135 40'/><path d='M70 150 Q100 165 130 150 Q130 185 100 195 Q70 185 70 150'/><ellipse cx='100' cy='175' rx='18' ry='12'/></g></svg>`,
+pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g fill='none' stroke='black' stroke-width='1.2' opacity='0.9'><path d='M30 30 Q100 10 170 30 Q180 110 170 190 Q100 210 30 190 Q20 110 30 30'/><path d='M70 80 Q100 70 130 80 Q135 100 130 115 Q100 125 70 115 Q65 100 70 80'/><ellipse cx='60' cy='135' rx='18' ry='14'/><ellipse cx='140' cy='135' rx='18' ry='14'/><path d='M85 170 Q100 175 115 170'/></g></svg>`,
+fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g fill='none' stroke='black' stroke-width='1.2' opacity='0.9'><circle cx='100' cy='60' r='22'/><path d='M100 82 Q100 130 90 170 Q85 185 80 190'/><path d='M100 82 Q105 120 150 Q130 160 135 150'/><path d='M70 95 Q55 105 50 115'/><path d='M130 95 Q145 105 150 115'/><ellipse cx='100' cy='175' rx='40' ry='12' stroke-dasharray='4 3'/></g></svg>`
 };
 function getDiagramForType(t){t=(t||'').toLowerCase();if(t.includes('kub')&&t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('kub'))return DIAGRAMS.kub;if(t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('pelvis')||t.includes('gynae')||t.includes('uterus')||t.includes('ovary')||t.includes('fibroid')||t.includes('pcos'))return DIAGRAMS.pelvis;if(t.includes('fwb')||t.includes('anomaly')||t.includes('ob')||t.includes('pregnancy')||t.includes('weeks')||t.includes('crl')||t.includes('breech')||t.includes('cephalic')||t.includes('placenta'))return DIAGRAMS.fwb;return DIAGRAMS.whole;}
 let T={"WHOLE ABDOMEN - Normal":`ULTRASOUND WHOLE ABDOMEN
@@ -298,8 +283,64 @@ function calcFWB(){try{let bpd=parseFloat(document.getElementById('cBPD')?.value
 function applyCalc(){try{if(!fetalData.ga&&!fetalData.efw){alert('HC AC FL likhen');return;}let rt=document.getElementById('rText');if(!rt)return;let txt=rt.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rt.value=txt;autoSaveDraft();}catch(e){}}
 function init(){try{let s=document.getElementById('uType');if(s){s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate'); if(pd) pd.valueAsDate=new Date();let sd=document.getElementById('sumDate'); if(sd) sd.valueAsDate=new Date();let tc=document.getElementById('templateCount'); if(tc) tc.innerText=allTemplates.length+' Templates';loadDraft();checkFetal(true);render();}catch(e){console.log('init error',e);}}
 function checkFetal(preserveText){try{let sel=document.getElementById('uType');let v=sel?.value||allTemplates[0];let isFWB=v.toLowerCase().includes('fwb')||v.toLowerCase().includes('ob')||v.toLowerCase().includes('pregnancy');let isProstate=v.toLowerCase().includes('prostate');let isWhole=v.toLowerCase().includes('whole')||v.toLowerCase().includes('kub')||v.toLowerCase().includes('pelvis')||v.toLowerCase().includes('gynae');let fc=document.getElementById('fetalCalc'); if(fc) fc.style.display=isFWB?'block':'none';let pc=document.getElementById('prostateCalc'); if(pc) pc.style.display=isProstate?'block':'none';let cb=document.getElementById('complaintBox'); if(cb) cb.style.display=isWhole?'block':'none';let d = getDiagramForType(v);let wm=document.getElementById('diagramWM'); if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}}catch(e){}}
-function formatReportToHTML(text){try{let lines=text.split('\n'); let html='';lines.forEach(line=>{let originalLine=line.trim();if(!originalLine){html+='<div style="height:6px"></div>';return;}let lineForPrint = originalLine.replace(/\[.*?\]/g,'').trim();if(lineForPrint.startsWith('ULTRASOUND')||lineForPrint.startsWith('DOPPLER')){html+=`<div style="text-align:center;margin:12px 0 10px 0;font-size:14px;font-weight:900;text-decoration:underline;color:#0a4eb5">${lineForPrint}</div>`;return;}if(lineForPrint.startsWith('IMPRESSION:')){let val=lineForPrint.replace('IMPRESSION:','').trim(); html+=`<div style="margin-top:14px;font-size:13px"><b><u>IMPRESSION</u>:</b> ${val}</div>`;return;}if(lineForPrint.startsWith('Advice:')){let val=lineForPrint.replace('Advice:','').trim(); html+=`<div style="margin-top:8px;font-size:12.5px"><b><u>Advice</u>:</b> ${val}</div>`;return;}if(lineForPrint.includes(':')){let idx=lineForPrint.indexOf(':');let label=lineForPrint.substring(0,idx).trim();let value=lineForPrint.substring(idx+1).trim();html+=`<div style="margin:3px 0"><b><u>${label}</u>:</b> ${value}</div>`;}else{html+=`<div>${lineForPrint}</div>`;}});return html;}catch(e){return text;}}
-function make(){try{let pn=document.getElementById('pName');if(!pn?.value){alert('Patient Name likhen');return;}let d = getDiagramForType(document.getElementById('uType')?.value);let wm = document.getElementById('diagramWM');if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}let pid=document.getElementById('pIDMobile')?.value||'__';let complaintText=(document.getElementById('pComplaint')?.value||'').trim();let complaintHTML='';let cb=document.getElementById('complaintBox');if(complaintText && cb && cb.style.display!=='none'){complaintHTML=`<div style="margin-bottom:10px;font-size:12.5px"><b><u>Present Complaint / H/O</u>:</b> ${complaintText}</div>`;}let patientBorder=`<div style="border:2px solid #0a4eb5;border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#f8fbff"><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px"><span><b><u>Name</u>:</b> ${document.getElementById('pName').value}</span> | <span><b><u>Age</u>:</b> ${document.getElementById('pAge').value}</span> | <span><b><u>Sex</u>:</b> ${document.getElementById('pGen').value}</span> | <span><b><u>Date</u>:</b> ${document.getElementById('pDate').value}</span> | <span><b><u>ID/Mobile</u>:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;margin-top:4px"><span><b><u>Ref By</u>:</b> ${document.getElementById('ref').value}</span> | <span><b><u>Sonologist</u>:</b> ${document.getElementById('sono').value}</span></div></div>`;let bodyHTML=formatReportToHTML(document.getElementById('rText').value);let footer=`<div style="margin-top:20px;border-top:2px solid #0a4eb5;padding-top:10px;text-align:center;font-size:11px;line-height:1.6"><div><b><i>This report is computer generated, signature not required</i></b></div><div style="margin-top:4px;font-size:12px;font-weight:800">Thanks for availing our service</div></div>`;let rc=document.getElementById('reportContent');if(rc) rc.innerHTML=patientBorder+complaintHTML+bodyHTML+footer;let oc=document.getElementById('outCard'); if(oc) oc.style.display='block';setTimeout(()=>{let w=document.getElementById('diagramWM'); if(w){w.style.backgroundImage=`url("${d}")`; w.style.display='block';}},100);if(oc) oc.scrollIntoView({behavior:'smooth'});autoSaveDraft();}catch(e){alert('Make error: '+e.message);}}
+
+// ===== FINAL FIX: BLACK HEADINGS + NO COLOR BOX =====
+function formatReportToHTML(text){
+ try{
+  let lines=text.split('\n'); let html='';
+  lines.forEach(line=>{
+   let originalLine=line.trim();
+   if(!originalLine){html+='<div style="height:6px"></div>';return;}
+   let lineForPrint = originalLine.replace(/\[.*?\]/g,'').trim();
+   if(lineForPrint.startsWith('ULTRASOUND')||lineForPrint.startsWith('DOPPLER')){
+     html+=`<div style="text-align:center;margin:12px 0 10px 0;font-size:14px;font-weight:900;text-decoration:underline;color:#000">${lineForPrint}</div>`;return;
+   }
+   if(lineForPrint.startsWith('IMPRESSION:')){
+     let val=lineForPrint.replace('IMPRESSION:','').trim();
+     html+=`<div style="margin-top:14px;font-size:13px;color:#000"><b><u>IMPRESSION</u>:</b> ${val}</div>`;return;
+   }
+   if(lineForPrint.startsWith('Advice:')){
+     let val=lineForPrint.replace('Advice:','').trim();
+     html+=`<div style="margin-top:8px;font-size:12.5px;color:#000"><b><u>Advice</u>:</b> ${val}</div>`;return;
+   }
+   if(lineForPrint.includes(':')){
+     let idx=lineForPrint.indexOf(':');
+     let label=lineForPrint.substring(0,idx).trim();
+     let value=lineForPrint.substring(idx+1).trim();
+     html+=`<div style="margin:3px 0;color:#000"><b><u>${label}</u>:</b> ${value}</div>`;
+   }else{
+     html+=`<div style="color:#000">${lineForPrint}</div>`;
+   }
+  });return html;
+ }catch(e){return text;}
+}
+
+function make(){
+ try{
+  let pn=document.getElementById('pName');
+  if(!pn?.value){alert('Patient Name likhen');return;}
+  let d = getDiagramForType(document.getElementById('uType')?.value);
+  let wm = document.getElementById('diagramWM');
+  if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}
+  let pid=document.getElementById('pIDMobile')?.value||'__';
+  let complaintText=(document.getElementById('pComplaint')?.value||'').trim();
+  let complaintHTML='';
+  let cb=document.getElementById('complaintBox');
+  if(complaintText && cb && cb.style.display!=='none'){
+   complaintHTML=`<div style="margin-bottom:10px;font-size:12.5px;color:#000"><b><u>Present Complaint / H/O</u>:</b> ${complaintText}</div>`;
+  }
+  // NO COLOR PATIENT BOX - WHITE + BLACK BORDER
+  let patientBorder=`<div style="border:1.5px solid #000;border-radius:6px;padding:10px 12px;margin-bottom:10px;background:#fff;color:#000"><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;color:#000"><span><b><u>Name</u>:</b> ${document.getElementById('pName').value}</span> | <span><b><u>Age</u>:</b> ${document.getElementById('pAge').value}</span> | <span><b><u>Sex</u>:</b> ${document.getElementById('pGen').value}</span> | <span><b><u>Date</u>:</b> ${document.getElementById('pDate').value}</span> | <span><b><u>ID/Mobile</u>:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;margin-top:4px;color:#000"><span><b><u>Ref By</u>:</b> ${document.getElementById('ref').value}</span> | <span><b><u>Sonologist</u>:</b> ${document.getElementById('sono').value}</span></div></div>`;
+  let bodyHTML=formatReportToHTML(document.getElementById('rText').value);
+  let footer=`<div style="margin-top:22px;border-top:1.5px solid #000;padding-top:8px;text-align:center;font-size:11px;line-height:1.6;color:#000"><div><b><i>This report is computer generated, signature not required</i></b></div><div style="margin-top:4px;font-size:12px;font-weight:800;color:#000">Thanks for availing our service</div></div>`;
+  let rc=document.getElementById('reportContent');
+  if(rc) rc.innerHTML=patientBorder+complaintHTML+bodyHTML+footer;
+  let oc=document.getElementById('outCard'); if(oc) oc.style.display='block';
+  setTimeout(()=>{let w=document.getElementById('diagramWM'); if(w){w.style.backgroundImage=`url("${d}")`; w.style.display='block';}},100);
+  if(oc) oc.scrollIntoView({behavior:'smooth'});
+  autoSaveDraft();
+ }catch(e){alert('Make error: '+e.message);}
+}
 function autoSaveDraft(){try{let draft={name:document.getElementById('pName')?.value||'',age:document.getElementById('pAge')?.value||'',gen:document.getElementById('pGen')?.value||'',mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',ref:document.getElementById('ref')?.value||'',sono:document.getElementById('sono')?.value||'',text:document.getElementById('rText')?.value||'',complaint:document.getElementById('pComplaint')?.value||'',editId:editId};localStorage.setItem('azam_draft',JSON.stringify(draft));let ds=document.getElementById('draftStatus'); if(ds){ds.innerText='Draft Saved: '+new Date().toLocaleTimeString(); ds.style.color='#10b981';}}catch(e){}}
 function loadDraft(){try{let d=localStorage.getItem('azam_draft');if(!d) return;let draft=JSON.parse(d);if(draft.name) document.getElementById('pName').value=draft.name;if(draft.age) document.getElementById('pAge').value=draft.age;if(draft.gen) document.getElementById('pGen').value=draft.gen;if(draft.mobile) document.getElementById('pIDMobile').value=draft.mobile;if(draft.type) document.getElementById('uType').value=draft.type;if(draft.date) document.getElementById('pDate').value=draft.date;if(draft.ref) document.getElementById('ref').value=draft.ref;if(draft.sono) document.getElementById('sono').value=draft.sono;if(draft.text) document.getElementById('rText').value=draft.text;if(draft.complaint) document.getElementById('pComplaint').value=draft.complaint;if(draft.editId) {editId=draft.editId; let eb=document.getElementById('editBanner'); if(eb) eb.style.display='block'; let es=document.getElementById('editIdShow'); if(es) es.innerText=editId; }let ds=document.getElementById('draftStatus'); if(ds) ds.innerText='Draft Restored: '+new Date().toLocaleTimeString();}catch(e){}}
 function clearDraft(){if(confirm('Draft clear karna hai?')){localStorage.removeItem('azam_draft');location.reload();}}
