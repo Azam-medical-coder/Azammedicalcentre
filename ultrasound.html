@@ -16,7 +16,7 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 .report{width:190mm;height:280mm;margin:auto;background:#fff;border:1px solid #000;border-radius:0;padding:0;box-sizing:border-box;position:relative;overflow:hidden}
 .report-inner{width:180mm;height:210mm;margin:40mm auto 0 auto;padding:5mm 6mm 6mm 6mm;box-sizing:border-box;position:relative;line-height:1.7;font-size:13.5px;z-index:2;color:#000;font-family:Arial, sans-serif}
 .report::before{content:"";position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:360px;height:360px;background-image:url('logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.05;filter:grayscale(100%);z-index:1;pointer-events:none}
-.diagram-wm{position:absolute;right:4mm;bottom:8mm;width:70mm;height:85mm;opacity:0.13;z-index:1;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom right;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.diagram-wm{position:absolute;right:4mm;bottom:8mm;width:78mm;height:92mm;opacity:0.13;z-index:1;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom right;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @media print{
  @page{size:190mm 280mm; margin:0!important}
  html,body{margin:0!important;padding:0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -55,11 +55,11 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref" onchange="autoSaveDraft()"></select><select id="sono" onchange="autoSaveDraft()"></select></div>
 <div id="complaintBox" style="border:2px solid #f59e0b;border-radius:12px;padding:10px;margin:8px 0;background:#fffbeb;display:block">
 <label style="font-weight:800;color:#d97706;font-size:12px">Present Complaint / C/O</label>
-<textarea id="pComplaint" rows="2" placeholder="e.g. Lower abdominal pain..." oninput="autoSaveDraft()"></textarea>
+<textarea id="pComplaint" rows="2" placeholder="e.g. Lumber pain, Lower abdominal pain..." oninput="autoSaveDraft()"></textarea>
 </div>
 <div id="fetalCalc" class="calcBox" style="display:none"><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Wt: --</div></div><button class="small" style="background:#10b981;width:100%" onclick="applyCalc()">Apply Calculation</button></div>
 <div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Apply Prostate Size</button></div>
-<textarea id="rText" rows="24" style="font-family:Consolas, monospace;font-size:13px;line-height:1.5" oninput="autoSaveDraft()"></textarea>
+<textarea id="rText" rows="26" style="font-family:Consolas, monospace;font-size:13px;line-height:1.5" oninput="autoSaveDraft()"></textarea>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="finalBtn" class="btn" onclick="make()">Generate Final Report</button><button class="btn" style="background:#10b981" onclick="saveR()">Save + Upload to Drive</button></div>
 </div>
 
@@ -140,29 +140,77 @@ fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
 let prostateData={};
 function calcProstate(){try{let l=parseFloat(document.getElementById('pL')?.value)||0,w=parseFloat(document.getElementById('pW')?.value)||0,h=parseFloat(document.getElementById('pH')?.value)||0;if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};let e1=document.getElementById('resPVol'); if(e1) e1.innerText=`Vol: ${vol.toFixed(1)} cc`;let e2=document.getElementById('resPGm'); if(e2) e2.innerText=`Wt: ${vol.toFixed(1)} gm`;}}catch(e){}}
 function applyProstateCalc(){if(!prostateData.vol){alert('Enter cm');return;}let txt=document.getElementById('rText').value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);document.getElementById('rText').value=txt;autoSaveDraft();}
+
+// REALISTIC DIAGRAMS - Professional line art for watermark
 const DIAGRAMS={
-whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g opacity='0.5' fill='none' stroke='%23000' stroke-width='1.2'><ellipse cx='100' cy='50' rx='55' ry='35'/><path d='M45 85 Q100 110 155 85'/><ellipse cx='70' cy='105' rx='18' ry='12'/><ellipse cx='130' cy='105' rx='18' ry='12'/><path d='M40 130 Q100 150 160 130'/></g></svg>`,
-kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g opacity='0.5' fill='none' stroke='%23000' stroke-width='1.2'><path d='M60 40 Q50 100 60 160 Q70 170 90 160'/><path d='M140 40 Q150 100 140 160 Q130 170 110 160'/><ellipse cx='100' cy='180' rx='30' ry='18'/></g></svg>`,
-kub_prostate:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g opacity='0.5' fill='none' stroke='%23000' stroke-width='1.2'><path d='M60 40 Q50 100 60 160'/><path d='M140 40 Q150 100 140 160'/><ellipse cx='100' cy='180' rx='30' ry='18'/><ellipse cx='100' cy='195' rx='12' ry='10'/></g></svg>`,
-pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g opacity='0.5' fill='none' stroke='%23000' stroke-width='1.2'><path d='M70 50 Q100 30 130 50 Q140 90 100 110 Q60 90 70 50'/><ellipse cx='60' cy='120' rx='18' ry='14'/><ellipse cx='140' cy='120' rx='18' ry='14'/></g></svg>`,
-fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g opacity='0.5' fill='none' stroke='%23000' stroke-width='1.2'><circle cx='100' cy='80' r='25'/><path d='M75 105 Q100 140 125 105'/><path d='M60 110 Q40 130 70 150'/><path d='M140 110 Q160 130 130 150'/></g></svg>`,
-breast:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g opacity='0.5' fill='none' stroke='%23000' stroke-width='1.2'><path d='M50 80 Q100 60 150 80 Q150 130 100 150 Q50 130 50 80'/></g></svg>`,
-thyroid:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g opacity='0.5' fill='none' stroke='%23000' stroke-width='1.2'><path d='M70 60 Q100 50 130 60 Q140 90 120 110 Q100 120 80 110 Q60 90 70 60'/></g></svg>`
+whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><path d='M50 50 C80 40 120 35 150 60 L180 90 L160 140 L120 160 L60 120 Z' /><path d='M200 70 L250 60 L280 90 L260 140 L210 150 L180 110 Z' /><ellipse cx='130' cy='180' rx='35' ry='50'/><ellipse cx='270' cy='190' rx='35' ry='50'/><ellipse cx='200' cy='230' rx='50' ry='30'/><text x='100' y='30' font-size='10' fill='%23000'>LIVER</text><text x='220' y='30' font-size='10' fill='%23000'>GALL BLADDER</text><text x='120' y='170' font-size='9' fill='%23000'>LEFT KIDNEY</text><text x='260' y='180' font-size='9' fill='%23000'>RIGHT KIDNEY</text></g></svg>`,
+kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 350'><g fill='none' stroke='%23000' stroke-width='1.3' opacity='0.75'><path d='M50 40 C50 20 110 10 130 40 C150 70 140 120 110 140 C80 160 40 140 30 100 C20 60 30 50 50 40 Z'/><path d='M270 40 C270 20 330 10 350 40 C370 70 360 120 330 140 C300 160 260 140 250 100 C240 60 250 50 270 40 Z'/><ellipse cx='200' cy='220' rx='70' ry='45'/><ellipse cx='200' cy='290' rx='25' ry='18'/><text x='20' y='20' font-size='10' fill='%23000'>RIGHT KIDNEY</text><text x='270' y='20' font-size='10' fill='%23000'>LEFT KIDNEY</text><text x='170' y='210' font-size='10' fill='%23000'>BLADDER</text><text x='170' y='285' font-size='9' fill='%23000'>PROSTATE</text></g></svg>`,
+scrotum:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><ellipse cx='120' cy='220' rx='55' ry='75'/><ellipse cx='120' cy='220' rx='40' ry='55'/><path d='M120 80 L120 145'/><path d='M100 90 Q120 100 140 90'/><path d='M95 110 Q120 120 145 110'/><ellipse cx='280' cy='220' rx='55' ry='75'/><ellipse cx='280' cy='220' rx='40' ry='55'/><path d='M280 80 L280 145'/><text x='80' y='40' font-size='11' fill='%23000'>RIGHT TESTIS</text><text x='240' y='40' font-size='11' fill='%23000'>LEFT TESTIS</text><text x='90' y='310' font-size='9' fill='%23000'>EPIDIDYMIS</text><text x='250' y='310' font-size='9' fill='%23000'>EPIDIDYMIS</text></g></svg>`,
+pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><path d='M150 80 L250 80 L260 120 L140 120 Z'/><ellipse cx='120' cy='150' rx='35' ry='25'/><ellipse cx='280' cy='150' rx='35' ry='25'/><ellipse cx='200' cy='200' rx='60' ry='20'/><text x='170' y='60' font-size='10' fill='%23000'>UTERUS</text><text x='90' y='140' font-size='9' fill='%23000'>RT OVARY</text><text x='260' y='140' font-size='9' fill='%23000'>LT OVARY</text></g></svg>`,
+fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><ellipse cx='200' cy='150' rx='100' ry='70'/><circle cx='180' cy='130' r='15'/><path d='M200 160 L230 200 L210 210'/><text x='160' y='40' font-size='11' fill='%23000'>FETUS</text><text x='170' y='240' font-size='10' fill='%23000'>PLACENTA</text></g></svg>`,
+breast:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><path d='M100 100 Q150 50 200 100 T300 100 Q280 180 200 200 Q120 180 100 100 Z'/><circle cx='180' cy='130' r='8'/><text x='150' y='50' font-size='11' fill='%23000'>BREAST</text></g></svg>`,
+thyroid:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><path d='M120 80 L140 180 L110 200 L90 100 Z'/><path d='M280 80 L260 180 L290 200 L310 100 Z'/><rect x='140' y='130' width='120' height='20' rx='10'/><text x='160' y='60' font-size='11' fill='%23000'>THYROID</text></g></svg>`
 };
-function getDiagramForType(t){t=(t||'').toLowerCase();if(t.includes('kub')&&t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('kub')||t.includes('bladder'))return DIAGRAMS.kub;if(t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('pelvis')||t.includes('uterus')||t.includes('ovary')||t.includes('fibroid')||t.includes('cyst')||t.includes('pcos'))return DIAGRAMS.pelvis;if(t.includes('fwb')||t.includes('pregnancy')||t.includes('ob'))return DIAGRAMS.fwb;if(t.includes('breast')||t.includes('axilla'))return DIAGRAMS.breast;if(t.includes('thyroid')||t.includes('neck'))return DIAGRAMS.thyroid;return DIAGRAMS.whole;}
+function getDiagramForType(t){t=(t||'').toLowerCase();if(t.includes('scrotum')||t.includes('testis')||t.includes('hydrocele')||t.includes('varicocele')||t.includes('epididymo'))return DIAGRAMS.scrotum;if(t.includes('kub')&&t.includes('prostate'))return DIAGRAMS.kub;if(t.includes('kub')||t.includes('bladder')||t.includes('parenchymal')||t.includes('calculus')||t.includes('hydronephrosis')||t.includes('hydroureter'))return DIAGRAMS.kub;if(t.includes('prostate'))return DIAGRAMS.kub;if(t.includes('pelvis')||t.includes('uterus')||t.includes('ovary')||t.includes('fibroid')||t.includes('cyst')||t.includes('pcos'))return DIAGRAMS.pelvis;if(t.includes('fwb')||t.includes('pregnancy')||t.includes('iugr')||t.includes('placenta')||t.includes('breech'))return DIAGRAMS.fwb;if(t.includes('breast')||t.includes('axilla'))return DIAGRAMS.breast;if(t.includes('thyroid')||t.includes('neck'))return DIAGRAMS.thyroid;return DIAGRAMS.whole;}
 let T={"WHOLE ABDOMEN - Normal":`C/O: Lower abdominal pain.
 
                  ULTRASOUND WHOLE ABDOMEN:
 
 LIVER:
 ➢ Normal in size measuring __ cm [Normal: <14 cm] with homogenous texture.
-➢ No focal lesion. Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm].
+➢ No intrahepatic biliary dilatation. No focal lesion.
+➢ Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], IVC normal, Hepatic veins normal.
 
 GALL BLADDER:
-➢ Normal distended, wall __ mm [Normal: <3 mm], Lumen clear, No calculus, No sludge.
+➢ Normally distended, wall thickness __ mm [Normal: <3 mm].
+➢ Lumen clear, No calculus, No sludge, No mass, No pericholecystic fluid.
+➢ CBD __ mm [Normal: <6 mm].
 
 PANCREAS:
-➢ Normal in size Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], No focal lesion.
+➢ Normal in size Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm].
+➢ Normal echotexture, No focal lesion, No duct dilatation, No calcification.
+
+SPLEEN:
+➢ Normal in size __ cm [Normal: <12 cm], Normal shape and texture.
+➢ Splenic vein __ mm [Normal: <10 mm], No focal lesion.
+
+RIGHT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal in size, shape and texture.
+➢ Cortical thickness __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis, No mass.
+
+LEFT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal in size, shape and texture.
+➢ Cortical thickness __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis.
+
+URINARY BLADDER:
+➢ Normal capacity __ cc [Normal: 300-400 cc], Wall thickness __ mm [Normal: <3 mm].
+➢ Lumen clear, No calculus, No mass, No diverticulum.
+
+PROSTATE:
+➢ __ gm [Normal: 20-25 gm], Normal [Male - if applicable].
+
+PERITONEUM:
+➢ No free fluid, No ascites, No lymphadenopathy, Diaphragm moves normal, No pleural effusion.
+
+CONCLUSION:
+➢ Normal Ultrasound Whole Abdomen - Liver, Gall bladder, Pancreas, Spleen, Both Kidneys & Bladder apparently normal.
+
+ADVICE:
+➢ No significant abnormality. Routine follow-up.`,
+
+"WHOLE ABDOMEN - Fatty Liver Grade 1":`C/O: Right hypochondrial pain.
+
+                 ULTRASOUND WHOLE ABDOMEN:
+
+LIVER:
+➢ Enlarged __ cm [Normal: <14 cm] with Grade 1 fatty liver - minimal increased echogenicity.
+➢ No focal lesion, Portal vein __ mm [Normal: <13 mm], No IHBR dilatation.
+
+GALL BLADDER:
+➢ Normally distended, wall __ mm [Normal: <3 mm], No calculus, No sludge.
+
+PANCREAS:
+➢ Normal in size Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal texture.
 
 SPLEEN:
 ➢ Normal __ cm [Normal: <12 cm], No focal lesion.
@@ -176,369 +224,175 @@ LEFT KIDNEY:
 URINARY BLADDER:
 ➢ __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
 
-PERITONEUM:
-➢ No free fluid, No lymphadenopathy.
-
-CONCLUSION:
-➢ Normal Ultrasound Whole Abdomen.
-
-ADVICE:
-➢ No significant abnormality. Routine follow-up.`,
-
-"WHOLE ABDOMEN - Fatty Liver Grade 1":`C/O: __
-
-            ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Enlarged __ cm [Normal: <14 cm] with Grade 1 fatty liver - minimal increased echogenicity.
-➢ No focal lesion.
-
 CONCLUSION:
 ➢ Hepatomegaly __ cm with Grade 1 fatty liver.
 
 ADVICE:
-➢ Advised LFTs, lipid profile, avoid fatty food, weight reduction.`,
+➢ Advised LFTs, lipid profile, avoid fatty diet, weight reduction.`,
 
 "WHOLE ABDOMEN - Fatty Liver Grade 2":`C/O: __
 
-            ULTRASOUND WHOLE ABDOMEN:
+                 ULTRASOUND WHOLE ABDOMEN:
 
 LIVER:
-➢ Enlarged __ cm [Normal: <14 cm] with Grade 2 fatty liver - moderate increase.
+➢ Enlarged __ cm [Normal: <14 cm] with Grade 2 fatty liver - moderate increase, No focal lesion.
+
+GALL BLADDER:
+➢ Normal distended, wall __ mm [Normal: <3 mm], No calculus.
+
+PANCREAS:
+➢ Normal __ mm [Normal: Head <30 mm], Normal texture.
+
+SPLEEN:
+➢ Normal __ cm [Normal: <12 cm].
+
+RIGHT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal, No calculus.
+
+LEFT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal.
+
+URINARY BLADDER:
+➢ __ cc [Normal: 300-400 cc], Normal.
 
 CONCLUSION:
-➢ Hepatomegaly with Grade 2 fatty liver __ cm.
+➢ Hepatomegaly __ cm with Grade 2 fatty liver.
 
 ADVICE:
-➢ Advised LFTs, lipid profile, diet control, exercise.`,
+➢ Advised LFTs, lipid profile, dietary control.`,
 
 "WHOLE ABDOMEN - Fatty Liver Grade 3":`C/O: __
 
-            ULTRASOUND WHOLE ABDOMEN:
+                 ULTRASOUND WHOLE ABDOMEN:
 
 LIVER:
-➢ Enlarged __ cm [Normal: <14 cm] with Grade 3 fatty liver - markedly increased.
-
-CONCLUSION:
-➢ Hepatomegaly with Grade 3 fatty liver __ cm.
-
-ADVICE:
-➢ Advised LFTs, fibroscan, gastroenterology consultation.`,
-
-"WHOLE ABDOMEN - Hepatomegaly":`C/O: __
-
-                ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Enlarged __ cm [Normal: <14 cm], homogenous.
-
-CONCLUSION:
-➢ Hepatomegaly __ cm.
-
-ADVICE:
-➢ Advised LFTs, clinical correlation.`,
-
-"WHOLE ABDOMEN - Splenomegaly":`C/O: __
-
-                ULTRASOUND WHOLE ABDOMEN:
-
-SPLEEN:
-➢ Enlarged __ cm [Normal: <12 cm].
-
-CONCLUSION:
-➢ Splenomegaly __ cm.
-
-ADVICE:
-➢ Advised CBC, clinical correlation.`,
-
-"WHOLE ABDOMEN - Hepatosplenomegaly":`C/O: __
-
-                ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Enlarged __ cm [Normal: <14 cm].
-
-SPLEEN:
-➢ Enlarged __ cm [Normal: <12 cm].
-
-CONCLUSION:
-➢ Hepatosplenomegaly.
-
-ADVICE:
-➢ Advised LFTs, CBC, clinical correlation.`,
-
-"WHOLE ABDOMEN - Cholelithiasis Single":`C/O: Right hypochondrial pain.
-
-              ULTRASOUND WHOLE ABDOMEN:
+➢ Enlarged __ cm [Normal: <14 cm] with Grade 3 fatty liver - markedly increased echogenicity, No focal lesion.
 
 GALL BLADDER:
-➢ Single calculus __ mm [Normal: No calculus] with posterior acoustic shadowing.
-
-CONCLUSION:
-➢ Cholelithiasis - Single calculus __ mm.
-
-ADVICE:
-➢ Advised surgical consultation, avoid fatty food.`,
-
-"WHOLE ABDOMEN - Cholelithiasis Multiple":`C/O: __
-
-              ULTRASOUND WHOLE ABDOMEN:
-
-GALL BLADDER:
-➢ Multiple calculi largest __ mm [Normal: No calculus] with shadowing.
-
-CONCLUSION:
-➢ Cholelithiasis - Multiple calculi largest __ mm.
-
-ADVICE:
-➢ Advised surgical consultation.`,
-
-"WHOLE ABDOMEN - Gall Bladder Sludge":`C/O: __
-
-              ULTRASOUND WHOLE ABDOMEN:
-
-GALL BLADDER:
-➢ Sludge / low level echoes seen in lumen [Normal: Clear], No calculus.
-
-CONCLUSION:
-➢ Gall bladder sludge.
-
-ADVICE:
-➢ Advised hydration, low fat diet, follow-up.`,
-
-"WHOLE ABDOMEN - Cholecystitis Acute":`C/O: Acute RUQ pain, fever.
-
-              ULTRASOUND WHOLE ABDOMEN:
-
-GALL BLADDER:
-➢ Distended, wall thickened __ mm [Normal: <3 mm], Pericholecystic fluid, Tender on probe pressure.
-
-CONCLUSION:
-➢ Acute cholecystitis with wall thickening __ mm.
-
-ADVICE:
-➢ Advised urgent surgical consultation, antibiotics, NPO as per surgeon.`,
-
-"WHOLE ABDOMEN - Cholecystitis Chronic":`C/O: Chronic RUQ pain.
-
-              ULTRASOUND WHOLE ABDOMEN:
-
-GALL BLADDER:
-➢ Wall thickened __ mm [Normal: <3 mm], Contracted / Distended, No calculus / Calculus.
-
-CONCLUSION:
-➢ Chronic cholecystitis.
-
-ADVICE:
-➢ Advised surgical consultation.`,
-
-"WHOLE ABDOMEN - Gall Bladder Polyp":`C/O: Incidental.
-
-              ULTRASOUND WHOLE ABDOMEN:
-
-GALL BLADDER:
-➢ Echogenic polyp __ mm [Normal: No polyp] attached to wall, No shadowing, Non-mobile.
-
-CONCLUSION:
-➢ Gall bladder polyp __ mm.
-
-ADVICE:
-➢ Advised follow-up after 6 months, surgical opinion if >10 mm.`,
-
-"WHOLE ABDOMEN - CBD Dilated":`C/O: Jaundice.
-
-              ULTRASOUND WHOLE ABDOMEN:
-
-CBD:
-➢ Dilated __ mm [Normal: <6 mm], No calculus / Calculus seen.
-
-LIVER:
-➢ IHBR dilatation seen.
-
-CONCLUSION:
-➢ CBD dilated __ mm with IHBR dilatation.
-
-ADVICE:
-➢ Advised LFTs, MRCP, gastroenterology consultation.`,
-
-"WHOLE ABDOMEN - Pancreatitis Acute":`C/O: Epigastric pain, vomiting.
-
-              ULTRASOUND WHOLE ABDOMEN:
+➢ Normal / Obscured by fatty liver.
 
 PANCREAS:
-➢ Bulky edematous __ cm [Normal: Head <3 cm], Hypoechoic, Peripancreatic fluid.
+➢ Normal / Obscured.
+
+SPLEEN:
+➢ Normal __ cm [Normal: <12 cm].
+
+RIGHT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal.
+
+LEFT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal.
+
+URINARY BLADDER:
+➢ Normal.
 
 CONCLUSION:
-➢ Acute pancreatitis - Bulky pancreas.
+➢ Hepatomegaly __ cm with Grade 3 fatty liver.
 
 ADVICE:
-➢ Advised serum amylase, lipase, surgical / gastro consultation.`,
+➢ Advised LFTs, gastroenterology consultation.`,
 
-"WHOLE ABDOMEN - Ascites Mild":`C/O: Abdominal distension.
+"WHOLE ABDOMEN - Appendicitis":`C/O: RIF pain, fever, vomiting.
 
-              ULTRASOUND WHOLE ABDOMEN:
+                 ULTRASOUND WHOLE ABDOMEN:
 
-PERITONEUM:
-➢ Mild free fluid seen in peritoneal cavity [Normal: No fluid], No septations.
+LIVER:
+➢ Normal __ cm [Normal: <14 cm], No focal lesion.
 
-CONCLUSION:
-➢ Mild ascites.
+GALL BLADDER:
+➢ Normal distended, wall __ mm [Normal: <3 mm], No calculus.
 
-ADVICE:
-➢ Advised LFTs, RFTs, clinical correlation.`,
+PANCREAS:
+➢ Normal Head __ mm [Normal: <30 mm], No focal lesion.
 
-"WHOLE ABDOMEN - Ascites Moderate to Gross":`C/O: Gross distension.
+SPLEEN:
+➢ Normal __ cm [Normal: <12 cm], No focal lesion.
 
-              ULTRASOUND WHOLE ABDOMEN:
+RIGHT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis.
 
-PERITONEUM:
-➢ Moderate to gross free fluid with internal echoes / septations.
-
-CONCLUSION:
-➢ Moderate to gross ascites.
-
-ADVICE:
-➢ Advised LFTs, SAAG, diagnostic tap, physician consultation.`,
-
-"WHOLE ABDOMEN - Lymphadenopathy":`C/O: __
-
-              ULTRASOUND WHOLE ABDOMEN:
-
-PERITONEUM:
-➢ Enlarged lymph nodes seen at para-aortic / mesenteric region largest __ mm [Normal: <10 mm].
-
-CONCLUSION:
-➢ Abdominal lymphadenopathy largest __ mm.
-
-ADVICE:
-➢ Advised clinical correlation, CBC, further workup.`,
-
-"WHOLE ABDOMEN - Appendicitis":`C/O: RIF pain, fever.
-
-                ULTRASOUND WHOLE ABDOMEN:
+LEFT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal.
 
 RIGHT ILIAC FOSSA:
-➢ Appendix visualized, diameter __ mm [Normal: <6 mm], Wall __ mm [Normal: <3 mm], Non-compressible, Surrounding echogenic fat, Free fluid in RIF.
+➢ Appendix visualized, diameter __ mm [Normal: <6 mm], Wall thickness __ mm [Normal: <3 mm], Non-compressible, Blind ending, Surrounding echogenic fat, Minimal free fluid __ cc in RIF.
+
+URINARY BLADDER:
+➢ Normal __ cc [Normal: 300-400 cc], No calculus.
 
 CONCLUSION:
-➢ Acute appendicitis Appendix __ mm.
+➢ Acute appendicitis - Appendix __ mm, non-compressible with surrounding inflammation.
 
 ADVICE:
-➢ Advised urgent surgical consultation, CBC.`,
+➢ Advised urgent surgical consultation, CBC, CRP.`,
 
-"WHOLE ABDOMEN - Appendicular Mass":`C/O: RIF pain.
+"WHOLE ABDOMEN - Umbilical Hernia":`C/O: Swelling at umbilicus.
 
-                ULTRASOUND WHOLE ABDOMEN:
+                 ULTRASOUND WHOLE ABDOMEN:
 
-RIGHT ILIAC FOSSA:
-➢ Ill-defined heterogeneous mass __ x __ mm in RIF with surrounding bowel loops.
+LIVER:
+➢ Normal __ cm [Normal: <14 cm], No focal lesion.
 
-CONCLUSION:
-➢ Appendicular mass / abscess __ mm.
+GALL BLADDER:
+➢ Normal __ mm [Normal: <3 mm], No calculus.
 
-ADVICE:
-➢ Advised surgical consultation, antibiotics.`,
+PANCREAS:
+➢ Normal __ mm [Normal: Head <30 mm].
 
-"WHOLE ABDOMEN - Intestinal Obstruction":`C/O: Abdominal pain, vomiting.
+SPLEEN:
+➢ Normal __ cm [Normal: <12 cm].
 
-                ULTRASOUND WHOLE ABDOMEN:
+RIGHT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal.
 
-BOWEL LOOPS:
-➢ Dilated bowel loops __ mm [Normal: <25 mm] with to-and-fro peristalsis, No free fluid / Free fluid.
-
-CONCLUSION:
-➢ Dilated bowel loops __ mm - subacute intestinal obstruction.
-
-ADVICE:
-➢ Advised X-ray abdomen erect, surgical consultation.`,
-
-"WHOLE ABDOMEN - Umbilical Hernia":`C/O: Umbilical swelling.
-
-              ULTRASOUND WHOLE ABDOMEN:
+LEFT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal.
 
 ANTERIOR ABDOMINAL WALL:
-➢ Defect __ x __ mm [Normal: No defect] at umbilical region with herniation of fat / bowel.
+➢ Defect at umbilical region __ x __ mm [Normal: No defect], Herniation of omental fat / bowel loops through defect, Defect width __ mm, Contents reducible, No strangulation.
+
+URINARY BLADDER:
+➢ Normal __ cc [Normal: 300-400 cc].
 
 CONCLUSION:
-➢ Umbilical hernia defect __ mm.
-
-ADVICE:
-➢ Advised surgical consultation.`,
-
-"WHOLE ABDOMEN - Paraumbilical Hernia":`C/O: Paraumbilical swelling.
-
-              ULTRASOUND WHOLE ABDOMEN:
-
-ANTERIOR ABDOMINAL WALL:
-➢ Defect __ x __ mm at paraumbilical region with herniation.
-
-CONCLUSION:
-➢ Paraumbilical hernia defect __ mm.
+➢ Umbilical hernia defect __ mm with omental / bowel herniation, Rest of abdomen normal.
 
 ADVICE:
 ➢ Advised surgical consultation.`,
 
 "WHOLE ABDOMEN - Inguinal Hernia Right":`C/O: Right groin swelling.
 
-              ULTRASOUND WHOLE ABDOMEN:
+                 ULTRASOUND WHOLE ABDOMEN:
+
+LIVER:
+➢ Normal __ cm [Normal: <14 cm].
+
+GALL BLADDER:
+➢ Normal.
+
+PANCREAS:
+➢ Normal.
+
+SPLEEN:
+➢ Normal __ cm [Normal: <12 cm].
+
+RIGHT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal.
+
+LEFT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal.
 
 RIGHT INGUINAL REGION:
-➢ Defect __ mm [Normal: No defect] with herniation on Valsalva.
-
-CONCLUSION:
-➢ Right inguinal hernia __ mm.
-
-ADVICE:
-➢ Advised surgical consultation.`,
-
-"WHOLE ABDOMEN - Inguinal Hernia Left":`C/O: Left groin swelling.
-
-              ULTRASOUND WHOLE ABDOMEN:
+➢ Defect __ mm [Normal: No defect] in right inguinal canal with herniation of bowel / omental fat on Valsalva, No obstruction, Testis and cord normal.
 
 LEFT INGUINAL REGION:
-➢ Defect __ mm with herniation.
+➢ No hernia.
+
+URINARY BLADDER:
+➢ Normal __ cc [Normal: 300-400 cc].
 
 CONCLUSION:
-➢ Left inguinal hernia __ mm.
-
-ADVICE:
-➢ Advised surgical consultation.`,
-
-"WHOLE ABDOMEN - Inguinal Hernia Bilateral":`C/O: Bilateral groin swelling.
-
-              ULTRASOUND WHOLE ABDOMEN:
-
-BOTH INGUINAL REGIONS:
-➢ Defect Right __ mm, Left __ mm with herniation.
-
-CONCLUSION:
-➢ Bilateral inguinal hernia.
-
-ADVICE:
-➢ Advised surgical consultation.`,
-
-"WHOLE ABDOMEN - Ventral Hernia":`C/O: Anterior wall swelling.
-
-              ULTRASOUND WHOLE ABDOMEN:
-
-ANTERIOR WALL:
-➢ Defect __ x __ mm with herniation.
-
-CONCLUSION:
-➢ Ventral hernia __ x __ mm.
-
-ADVICE:
-➢ Advised surgical consultation.`,
-
-"WHOLE ABDOMEN - Incisional Hernia":`C/O: Swelling at scar.
-
-              ULTRASOUND WHOLE ABDOMEN:
-
-ANTERIOR WALL:
-➢ Defect __ x __ mm at scar site with herniation.
-
-CONCLUSION:
-➢ Incisional hernia __ x __ mm.
+➢ Right inguinal hernia __ mm with bowel / omental herniation, Rest normal.
 
 ADVICE:
 ➢ Advised surgical consultation.`,
@@ -548,191 +402,144 @@ ADVICE:
                          ULTRASOUND KUB:
 
 RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis.
+➢ __ x __ cm [Normal: 9-12 cm], Normal in size, shape and texture.
+➢ Cortical thickness __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis, No mass.
 
 LEFT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm], Normal.
+➢ __ x __ cm [Normal: 9-12 cm], Normal in size, shape and texture.
+➢ Cortical thickness __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis.
 
 URINARY BLADDER:
-➢ __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
+➢ Normal capacity __ cc [Normal: 300-400 cc], Wall thickness __ mm [Normal: <3 mm].
+➢ Lumen clear, No calculus, No mass, No diverticulum, No trabeculations.
+
+PROSTATE:
+➢ __ x __ x __ cm, weight __ gm [Normal: 20-25 gm], Normal in size, shape and texture, Capsule intact, No calcification.
 
 CONCLUSION:
-➢ Normal KUB.
+➢ Normal Ultrasound KUB - Both kidneys, urinary bladder and prostate apparently normal.
 
 ADVICE:
-➢ Maintain hydration.`,
+➢ No abnormality, maintain hydration.`,
+
+"KUB - Hydronephrosis with Dilated Ureter - Right":`C/O: Lumber pain / Flank pain.
+
+                         ULTRASOUND KUB:
+
+RIGHT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Mild / Moderate hydronephrosis seen.
+➢ Pelvis dilated __ mm [Normal: <10 mm], Calyces dilated, Cortical thickness __ mm [Normal: >6 mm].
+➢ Ureter dilated __ mm [Normal: <4 mm] down to VUJ / mid ureter, No calculus seen at upper / Echogenic focus seen.
+➢ No perinephric collection.
+
+LEFT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal in size, shape and texture.
+➢ Cortical thickness __ mm [Normal: >6 mm], CMD intact.
+➢ No calculus, No hydronephrosis, No mass.
+
+URINARY BLADDER:
+➢ Normal capacity __ cc [Normal: 300-400 cc], Wall thickness __ mm [Normal: <3 mm].
+➢ Lumen clear, No calculus, No mass, No diverticulum.
+
+PROSTATE:
+➢ __ x __ x __ cm, weight __ gm [Normal: 20-25 gm], Normal, Capsule intact.
+
+CONCLUSION:
+➢ Right hydronephrosis with dilated ureter __ mm down to VUJ.
+➢ Left kidney, bladder and prostate normal.
+
+ADVICE:
+➢ Advised urology consultation, CT KUB if needed, hydration.`,
+
+"KUB - Hydroureteronephrosis Right":`C/O: Severe flank pain, hematuria.
+
+                         ULTRASOUND KUB:
+
+RIGHT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Moderate hydronephrosis, Pelvis __ mm [Normal: <10 mm], Cortex __ mm [Normal: >6 mm].
+➢ Ureter dilated __ mm [Normal: <4 mm] down to lower ureter / VUJ, Tortuous.
+➢ Echogenic calculus __ mm [Normal: No calculus] seen at lower ureter with shadowing causing obstruction.
+
+LEFT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal in size, shape and texture.
+➢ No calculus, No hydronephrosis, Cortical thickness __ mm [Normal: >6 mm].
+
+URINARY BLADDER:
+➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus, No mass.
+
+PROSTATE:
+➢ __ gm [Normal: 20-25 gm], Normal.
+
+CONCLUSION:
+➢ Right hydroureteronephrosis with ureteric calculus __ mm causing obstruction, Pelvis __ mm, Ureter __ mm.
+➢ Left kidney and bladder normal.
+
+ADVICE:
+➢ Advised urgent urology consultation, increased fluid intake, analgesics.`,
 
 "KUB - Renal Calculus Right":`C/O: Right flank pain.
 
                          ULTRASOUND KUB:
 
 RIGHT KIDNEY:
-➢ Calculus __ mm [Normal: No calculus] with shadowing at upper / mid / lower pole.
+➢ __ x __ cm [Normal: 9-12 cm], Echogenic calculus __ mm [Normal: No calculus] at upper / mid / lower pole with shadowing.
+➢ No / Mild hydronephrosis, Pelvis __ mm [Normal: <10 mm], Cortex __ mm [Normal: >6 mm].
+
+LEFT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis.
+
+URINARY BLADDER:
+➢ __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
+
+PROSTATE:
+➢ __ gm [Normal: 20-25 gm], Normal.
 
 CONCLUSION:
 ➢ Right renal calculus __ mm.
 
 ADVICE:
-➢ Advised increased water intake, urology consultation.`,
+➢ Advised hydration, urology consultation.`,
 
-"KUB - Renal Calculus Left":`C/O: Left flank pain.
+"KUB - Parenchymal Changes Grade 1":`C/O: Flank pain.
 
                          ULTRASOUND KUB:
+
+RIGHT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Slightly increased cortical echogenicity Grade 1 [Normal: Grade 0], CMD preserved [Normal: Preserved], Cortical thickness __ mm [Normal: >6 mm], No calculus, No hydronephrosis.
 
 LEFT KIDNEY:
-➢ Calculus __ mm with shadowing.
+➢ __ x __ cm [Normal: 9-12 cm], Grade 1 increased echogenicity [Normal: Grade 0], CMD preserved, Cortex __ mm [Normal: >6 mm], No calculus, No hydronephrosis.
+
+URINARY BLADDER:
+➢ __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
+
+PROSTATE:
+➢ __ gm [Normal: 20-25 gm], Normal.
 
 CONCLUSION:
-➢ Left renal calculus __ mm.
+➢ Bilateral Grade 1 parenchymal changes.
 
 ADVICE:
-➢ Advised urology consultation, hydration.`,
-
-"KUB - Renal Calculus Bilateral":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Calculus __ mm.
-
-LEFT KIDNEY:
-➢ Calculus __ mm.
-
-CONCLUSION:
-➢ Bilateral renal calculi.
-
-ADVICE:
-➢ Advised urology consultation, metabolic workup.`,
-
-"KUB - Staghorn Calculus":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Large staghorn calculus __ mm filling pelvis and calyces with shadowing.
-
-CONCLUSION:
-➢ Right staghorn calculus __ mm.
-
-ADVICE:
-➢ Advised urology / nephrology consultation, CT KUB.`,
-
-"KUB - Microliths Bilateral":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY: Multiple microliths __ mm.
-LEFT KIDNEY: Microliths __ mm.
-
-CONCLUSION:
-➢ Bilateral renal microlithiasis.
-
-ADVICE:
-➢ Advised hydration, follow-up.`,
-
-"KUB - Hydronephrosis Mild Right":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Mild hydronephrosis pelvis __ mm [Normal: <10 mm], No calculus / Calculus.
-
-CONCLUSION:
-➢ Mild right hydronephrosis.
-
-ADVICE:
-➢ Advised urology consultation, follow-up.`,
-
-"KUB - Hydronephrosis Moderate Right":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Moderate hydronephrosis pelvis __ mm.
-
-CONCLUSION:
-➢ Moderate right hydronephrosis pelvis __ mm.
-
-ADVICE:
-➢ Advised urology consultation.`,
-
-"KUB - Hydronephrosis Severe":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Severe hydronephrosis with thinned cortex __ mm [Normal: >6 mm].
-
-CONCLUSION:
-➢ Severe right hydronephrosis with thinned cortex.
-
-ADVICE:
-➢ Advised urgent urology consultation.`,
-
-"KUB - Hydroureteronephrosis":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Hydronephrosis with dilated ureter __ mm [Normal: <4 mm] down to VUJ.
-
-CONCLUSION:
-➢ Right hydroureteronephrosis.
-
-ADVICE:
-➢ Advised urology consultation, CT KUB.`,
-
-"KUB - PUJ Obstruction":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Moderate hydronephrosis pelvis __ mm, Ureter not dilated beyond PUJ.
-
-CONCLUSION:
-➢ PUJ obstruction pelvis __ mm.
-
-ADVICE:
-➢ Advised urology consultation, DTPA scan.`,
-
-"KUB - Ureteric Calculus with Hydronephrosis":`C/O: Severe colic, hematuria.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Hydronephrosis pelvis __ mm [Normal: <10 mm], Ureter dilated __ mm [Normal: <4 mm], Calculus __ mm in ureter.
-
-CONCLUSION:
-➢ Right ureteric calculus __ mm with hydronephrosis.
-
-ADVICE:
-➢ Advised urology consultation, increased fluids, analgesics.`,
-
-"KUB - Parenchymal Changes Grade 1":`C/O: __
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ cm [Normal: 9-12 cm], Grade 1 increased echogenicity [Normal: Grade 0], CMD preserved.
-
-LEFT KIDNEY:
-➢ Grade 1.
-
-CONCLUSION:
-➢ Grade 1 parenchymal changes.
-
-ADVICE:
-➢ Advised RFTs, BP check, nephrology follow-up.`,
+➢ Advised RFTs, urine R/E, BP monitoring.`,
 
 "KUB - Parenchymal Changes Grade 2":`C/O: Raised creatinine.
 
                          ULTRASOUND KUB:
 
 RIGHT KIDNEY:
-➢ __ cm [Normal: 9-12 cm], Grade 2 echogenicity [Normal: Grade 0], CMD poorly preserved.
+➢ __ x __ cm [Normal: 9-12 cm] / Small __ cm, Increased echogenicity Grade 2 [Normal: Grade 0], CMD poorly preserved, Cortex __ mm [Normal: >6 mm], No calculus.
+
+LEFT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Grade 2 changes, Cortex __ mm.
+
+URINARY BLADDER:
+➢ __ cc [Normal: 300-400 cc], Normal.
+
+PROSTATE:
+➢ __ gm [Normal: 20-25 gm], Normal.
 
 CONCLUSION:
-➢ Grade 2 parenchymal changes.
+➢ Bilateral Grade 2 parenchymal changes.
 
 ADVICE:
 ➢ Advised RFTs, nephrology consultation.`,
@@ -742,1226 +549,361 @@ ADVICE:
                          ULTRASOUND KUB:
 
 RIGHT KIDNEY:
-➢ Small __ cm [Normal: 9-12 cm], Grade 3 echogenicity [Normal: Grade 0], CMD lost, Cortex __ mm [Normal: >6 mm].
-
-CONCLUSION:
-➢ Grade 3 parenchymal changes - CKD.
-
-ADVICE:
-➢ Advised urgent nephrology consultation.`,
-
-"KUB - Simple Cortical Cyst Right":`C/O: Incidental.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Simple cyst __ mm [Normal: No cyst], Thin walled, No echoes.
-
-CONCLUSION:
-➢ Right simple cortical cyst __ mm.
-
-ADVICE:
-➢ Benign cyst, follow-up after 6-12 months.`,
-
-"KUB - Simple Cortical Cyst Left":`C/O: Incidental.
-
-                         ULTRASOUND KUB:
+➢ Small shrunken __ x __ cm [Normal: 9-12 cm], Markedly increased echogenicity Grade 3 [Normal: Grade 0], CMD lost [Normal: Preserved], Cortex __ mm [Normal: >6 mm], No calculus.
 
 LEFT KIDNEY:
-➢ Simple cyst __ mm [Normal: No cyst].
+➢ Small shrunken __ x __ cm [Normal: 9-12 cm], Grade 3, Cortex __ mm.
+
+URINARY BLADDER:
+➢ __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
+
+PROSTATE:
+➢ __ gm [Normal: 20-25 gm].
 
 CONCLUSION:
-➢ Left simple cortical cyst __ mm.
+➢ Bilateral small kidneys with Grade 3 parenchymal changes - CKD.
 
 ADVICE:
-➢ Benign, follow-up.`,
-
-"KUB - Bilateral Cortical Cysts":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY: Cyst __ mm.
-LEFT KIDNEY: Cyst __ mm.
-
-CONCLUSION:
-➢ Bilateral simple cortical cysts.
-
-ADVICE:
-➢ Benign, follow-up.`,
-
-"KUB - Complex Renal Cyst":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Complex cyst __ mm [Normal: No cyst] with septations / echoes / thick wall.
-
-CONCLUSION:
-➢ Complex cyst right __ mm - Bosniak __.
-
-ADVICE:
-➢ Advised CT correlation, urology consultation.`,
-
-"KUB - Polycystic Kidney Disease":`C/O: Family history.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Enlarged __ cm [Normal: 9-12 cm], Multiple cysts largest __ mm [Normal: No cyst].
-
-LEFT KIDNEY:
-➢ Enlarged __ cm, Multiple cysts.
-
-CONCLUSION:
-➢ Polycystic kidney disease.
-
-ADVICE:
-➢ Advised nephrology consultation, BP control, family screening.`,
-
-"KUB - Atrophic Small Kidney":`C/O: Chronic disease.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Small shrunken __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], Increased echogenicity.
-
-CONCLUSION:
-➢ Small atrophic right kidney __ cm.
-
-ADVICE:
-➢ Advised nephrology consultation, RFTs.`,
-
-"KUB - Ectopic Kidney":`C/O: Incidental.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Ectopic pelvic kidney __ cm [Normal: 9-12 cm] at pelvis / iliac fossa, Normal texture.
-
-CONCLUSION:
-➢ Right ectopic pelvic kidney.
-
-ADVICE:
-➢ Incidental finding, routine follow-up.`,
+➢ Advised urgent nephrology consultation, RFTs.`,
 
 "KUB - Bladder Stone Single":`C/O: Dysuria, hematuria.
 
                          ULTRASOUND KUB:
 
-URINARY BLADDER:
-➢ Single calculus __ mm [Normal: No calculus] with shadowing in bladder lumen, Mobile.
+RIGHT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis.
 
-CONCLUSION:
-➢ Urinary bladder calculus __ mm.
-
-ADVICE:
-➢ Advised urology consultation, increased fluids.`,
-
-"KUB - Bladder Stones Multiple":`C/O: Dysuria.
-
-                         ULTRASOUND KUB:
+LEFT KIDNEY:
+➢ __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis.
 
 URINARY BLADDER:
-➢ Multiple calculi largest __ mm [Normal: No calculus].
+➢ Normal capacity __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
+➢ Single echogenic calculus __ mm [Normal: No calculus] with shadowing, Mobile, No mass.
+
+PROSTATE:
+➢ __ gm [Normal: 20-25 gm], Normal.
 
 CONCLUSION:
-➢ Multiple bladder calculi largest __ mm.
+➢ Urinary bladder calculus __ mm, Both kidneys normal.
 
 ADVICE:
 ➢ Advised urology consultation.`,
-
-"KUB - Cystitis Thickened Wall":`C/O: Burning micturition.
-
-                         ULTRASOUND KUB:
-
-URINARY BLADDER:
-➢ Wall thickened __ mm [Normal: <3 mm], Irregular, Debris / echoes in lumen.
-
-CONCLUSION:
-➢ Cystitis with thickened wall __ mm.
-
-ADVICE:
-➢ Advised urine R/E, culture, antibiotics as per doctor.`,
-
-"KUB - Bladder Diverticulum":`C/O: Recurrent UTI.
-
-                         ULTRASOUND KUB:
-
-URINARY BLADDER:
-➢ Outpouching / diverticulum __ x __ mm [Normal: No diverticulum] from bladder wall.
-
-CONCLUSION:
-➢ Bladder diverticulum __ mm.
-
-ADVICE:
-➢ Advised urology consultation.`,
-
-"KUB - Bladder Mass":`C/O: Hematuria.
-
-                         ULTRASOUND KUB:
-
-URINARY BLADDER:
-➢ Echogenic mass __ x __ mm [Normal: No mass] arising from wall, Vascularity on Doppler.
-
-CONCLUSION:
-➢ Urinary bladder mass __ mm.
-
-ADVICE:
-➢ Advised urgent urology consultation, cystoscopy, urine cytology.`,
-
-"KUB - High Post Void Residual":`C/O: Difficulty in micturition.
-
-                         ULTRASOUND KUB:
-
-URINARY BLADDER:
-➢ Pre-void __ cc [Normal: 300-400 cc], Post-void residual __ cc [Normal: <50 cc], Wall thickened.
-
-CONCLUSION:
-➢ High post void residual __ cc.
-
-ADVICE:
-➢ Advised urology consultation, uroflowmetry.`,
 
 "KUB + PROSTATE - Normal":`ULTRASOUND KUB + PROSTATE:
 
 RIGHT KIDNEY:
-➢ 9.0 x 4.2 cm [Normal: 9-12 cm], Normal.
+➢ 9.0 x 4.2 cm [Normal: 9-12 cm], Normal in size, shape and texture, CMD intact, No calculus, No hydronephrosis.
 
 LEFT KIDNEY:
-➢ 10.4 x 5.4 cm [Normal: 9-12 cm], Normal.
+➢ 10.4 x 5.4 cm [Normal: 9-12 cm], Normal in size, shape and texture, CMD intact, No calculus.
 
 URINARY BLADDER:
-➢ Normal.
+➢ Normal shape and walls, Capacity __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus, No mass.
 
 PROSTATE:
-➢ __ x __ x __ cm, weight __ gm [Normal: 20-25 gm], Normal texture.
+➢ __ x __ x __ cm, weight __ gm [Normal: 20-25 gm], Normal shape and texture, Capsule intact, No calcification.
 
 CONCLUSION:
-➢ Normal KUB with normal prostate.
+➢ Both kidneys, bladder and prostate apparently normal.
 
 ADVICE:
 ➢ Normal study.`,
-
-"KUB + PROSTATE - BPH":`ULTRASOUND KUB + PROSTATE:
-
-RIGHT KIDNEY: 9.0 x 4.2 cm [Normal: 9-12 cm], Normal.
-LEFT KIDNEY: 10.4 x 5.4 cm, Mild hydronephrosis, microliths.
-PROSTATE: 3.0 x 4.0 x 3.5 cm, weight 22.7 gm [Normal: 20-25 gm], Enlarged, Median lobe hypertrophy.
-
-CONCLUSION:
-➢ BPH prostate 22.7 gm.
-
-ADVICE:
-➢ Advised urology consultation, PSA.`,
-
-"KUB + PROSTATE - Prostatitis":`ULTRASOUND KUB + PROSTATE:
-
-PROSTATE:
-➢ __ gm [Normal: 20-25 gm], Bulky heterogeneous, Increased vascularity, Periprostatic fat echogenic.
-
-CONCLUSION:
-➢ Prostatitis.
-
-ADVICE:
-➢ Advised urology consultation, urine culture, antibiotics.`,
-
-"KUB + PROSTATE - Prostate Calcification":`ULTRASOUND KUB + PROSTATE:
-
-PROSTATE:
-➢ __ gm [Normal: 20-25 gm], Multiple calcifications __ mm [Normal: No calcification] in parenchyma.
-
-CONCLUSION:
-➢ Prostate calcifications.
-
-ADVICE:
-➢ Advised urology consultation.`,
 
 "PELVIS - Normal":`C/O: Lower abdominal pain.
 
                        ULTRASOUND PELVIS:
 
 UTERUS:
-➢ Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm], ET __ mm [Normal: 6-12 mm], No mass, No free fluid.
+➢ Anteverted normal sized __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm], Myometrium homogenous, No fibroid, ET __ mm [Normal: 6-12 mm], Cervix normal, No free fluid in POD.
 
 OVARIES:
-➢ Right __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc].
-➢ Left __ x __ cm [Normal: 3 x 2 cm].
+➢ Right ovary __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc], Normal, No cyst.
+➢ Left ovary __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc], Normal.
 
 CONCLUSION:
 ➢ Normal pelvis.
 
 ADVICE:
-➢ No significant abnormality.`,
-
-"PELVIS - Bulky Uterus":`C/O: Pain.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Bulky __ x __ cm [Normal: 7-9 cm], Heterogeneous, ET __ mm [Normal: 6-12 mm].
-
-CONCLUSION:
-➢ Bulky uterus __ cm.
-
-ADVICE:
-➢ Advised gynecology consultation.`,
-
-"PELVIS - Endometrial Thickening":`C/O: Irregular bleeding.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ ET __ mm [Normal: 6-12 mm], Thickened [Normal: <15 mm], Heterogeneous.
-
-CONCLUSION:
-➢ Endometrial thickening __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation, hormonal profile.`,
-
-"PELVIS - Endometrial Polyp":`C/O: Bleeding, infertility.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ ET __ mm [Normal: 6-12 mm], Echogenic lesion __ x __ mm [Normal: No lesion] in endometrial cavity.
-
-CONCLUSION:
-➢ Endometrial polyp __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation, hysteroscopy.`,
-
-"PELVIS - Thin Endometrium":`C/O: Infertility.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ ET __ mm [Normal: 6-12 mm], Thin.
-
-CONCLUSION:
-➢ Thin endometrium __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation, hormonal evaluation.`,
-
-"PELVIS - Ovarian Cyst Simple":`C/O: Lower abdominal pain.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ __ x __ cm [Normal: 7-9 cm], ET __ mm [Normal: 6-12 mm].
-
-OVARIES:
-➢ Right normal __ cm [Normal: 3 x 2 cm].
-➢ Left simple cyst __ x __ mm [Normal: No cyst], Thin walled, No echoes.
-
-CONCLUSION:
-➢ Left simple ovarian cyst __ mm.
-
-ADVICE:
-➢ Follow-up after next menses.`,
-
-"PELVIS - Ovarian Cyst Complex":`C/O: Pain.
-
-                       ULTRASOUND PELVIS:
-
-OVARIES:
-➢ Left complex cyst __ x __ mm [Normal: No cyst], Septations / echoes / thick wall.
-
-CONCLUSION:
-➢ Left complex ovarian cyst __ mm.
-
-ADVICE:
-➢ Advised CA-125, gynecology consultation.`,
-
-"PELVIS - Hemorrhagic Ovarian Cyst":`C/O: Acute pain.
-
-                       ULTRASOUND PELVIS:
-
-OVARIES:
-➢ Hemorrhagic cyst __ x __ mm [Normal: No cyst], Reticular / lace-like echoes.
-
-CONCLUSION:
-➢ Hemorrhagic ovarian cyst __ mm.
-
-ADVICE:
-➢ Follow-up after 6 weeks.`,
-
-"PELVIS - Endometrioma Chocolate Cyst":`C/O: Dysmenorrhea.
-
-                       ULTRASOUND PELVIS:
-
-OVARIES:
-➢ Endometrioma __ x __ mm [Normal: No cyst], Ground glass appearance.
-
-CONCLUSION:
-➢ Endometrioma / chocolate cyst __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation.`,
-
-"PELVIS - Dermoid Cyst":`C/O: Incidental.
-
-                       ULTRASOUND PELVIS:
-
-OVARIES:
-➢ Complex cyst __ x __ mm [Normal: No cyst] with echogenic nodule / calcification / fat-fluid level - Dermoid.
-
-CONCLUSION:
-➢ Dermoid cyst / teratoma __ mm.
-
-ADVICE:
-➢ Advised surgical / gynecology opinion.`,
-
-"PELVIS - Paraovarian Cyst":`C/O: Pain.
-
-                       ULTRASOUND PELVIS:
-
-OVARIES:
-➢ Separate cyst __ x __ mm [Normal: No cyst] adjacent to ovary, Ovary separate.
-
-CONCLUSION:
-➢ Paraovarian cyst __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation.`,
-
-"PELVIS - Follicular Cyst":`C/O: Irregular menses.
-
-                       ULTRASOUND PELVIS:
-
-OVARIES:
-➢ Follicular cyst __ x __ mm [Normal: <3 cm], Thin walled.
-
-CONCLUSION:
-➢ Follicular cyst __ mm.
-
-ADVICE:
-➢ Physiological, follow-up after menses.`,
-
-"PELVIS - Corpus Luteum Cyst":`C/O: LMP __.
-
-                       ULTRASOUND PELVIS:
-
-OVARIES:
-➢ Corpus luteum cyst __ x __ mm [Normal: No cyst] with peripheral vascularity - ring of fire.
-
-CONCLUSION:
-➢ Corpus luteum cyst __ mm.
-
-ADVICE:
-➢ Physiological, correlate with LMP.`,
-
-"PELVIS - Theca Lutein Cyst":`C/O: Molar pregnancy.
-
-                       ULTRASOUND PELVIS:
-
-OVARIES:
-➢ Bilateral theca lutein cysts largest __ mm [Normal: No cyst].
-
-CONCLUSION:
-➢ Bilateral theca lutein cysts.
-
-ADVICE:
-➢ Advised gynecology consultation.`,
-
-"PELVIS - Nabothian Cyst":`C/O: Discharge.
-
-                       ULTRASOUND PELVIS:
-
-CERVIX:
-➢ Nabothian cysts largest __ x __ mm [Normal: No cyst] in cervix.
-
-CONCLUSION:
-➢ Nabothian cysts largest __ mm.
-
-ADVICE:
-➢ Benign retention cysts, no treatment needed.`,
-
-"PELVIS - PCOS":`C/O: Irregular menses.
-
-                       ULTRASOUND PELVIS:
-
-OVARIES:
-➢ Right __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc], Multiple follicles __ mm [Normal: <10 follicles].
-➢ Left __ cm, Volume __ cc.
-
-CONCLUSION:
-➢ Polycystic ovaries - PCOS.
-
-ADVICE:
-➢ Advised weight reduction, lifestyle modification, gynecology consultation.`,
-
-"PELVIS - PID with Free Fluid":`C/O: Lower abdominal pain, fever.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Bulky __ cm, ET __ mm.
-
-OVARIES:
-➢ Congested.
-
-POD:
-➢ Free fluid with echoes __ cc [Normal: No fluid].
-
-CONCLUSION:
-➢ PID with free fluid in POD.
-
-ADVICE:
-➢ Advised gynecology consultation, antibiotics, follow-up.`,
-
-"PELVIS - Ovarian Torsion":`C/O: Acute severe pain, vomiting.
-
-                       ULTRASOUND PELVIS:
-
-OVARIES:
-➢ Right ovary enlarged __ x __ cm [Normal: 3 x 2 cm] with cyst __ mm, Edematous, No vascularity on Doppler, Twisted pedicle.
-
-CONCLUSION:
-➢ Right ovarian torsion with cyst __ mm.
-
-ADVICE:
-➢ Advised urgent gynecology / surgical consultation.`,
-
-"PELVIS - Solid Ovarian Mass":`C/O: Mass, pain.
-
-                       ULTRASOUND PELVIS:
-
-OVARIES:
-➢ Solid heterogeneous mass __ x __ mm [Normal: No mass] in right ovary, Vascularity on Doppler.
-
-CONCLUSION:
-➢ Solid ovarian mass __ mm.
-
-ADVICE:
-➢ Advised CA-125, CEA, MRI pelvis, urgent gynecology / oncology consultation.`,
-
-"PELVIS - Fibroid Intramural":`C/O: Menorrhagia.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Bulky __ x __ cm [Normal: 7-9 cm], Intramural fibroid __ x __ mm [Normal: No fibroid] at anterior / posterior wall, ET __ mm [Normal: 6-12 mm].
-
-CONCLUSION:
-➢ Intramural fibroid __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation, CBC.`,
-
-"PELVIS - Fibroid Subserosal":`C/O: Mass.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Subserosal fibroid __ x __ mm [Normal: No fibroid] projecting outside.
-
-CONCLUSION:
-➢ Subserosal fibroid __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation.`,
-
-"PELVIS - Fibroid Submucosal":`C/O: Heavy bleeding.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Submucosal fibroid __ x __ mm [Normal: No fibroid] protruding into cavity.
-
-CONCLUSION:
-➢ Submucosal fibroid __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation, hysteroscopy.`,
-
-"PELVIS - Fibroid Pedunculated":`C/O: Mass.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Pedunculated fibroid __ x __ mm [Normal: No fibroid] with stalk __ mm.
-
-CONCLUSION:
-➢ Pedunculated fibroid __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation.`,
-
-"PELVIS - Fibroid Cervical":`C/O: Pressure.
-
-                       ULTRASOUND PELVIS:
-
-CERVIX:
-➢ Cervical fibroid __ x __ mm [Normal: No fibroid] in cervix, Cervix bulky __ cm.
-
-CONCLUSION:
-➢ Cervical fibroid __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation.`,
-
-"PELVIS - Fibroid Broad Ligament":`C/O: Mass.
-
-                       ULTRASOUND PELVIS:
-
-PELVIS:
-➢ Broad ligament fibroid __ x __ mm [Normal: No fibroid] separate from uterus.
-
-CONCLUSION:
-➢ Broad ligament fibroid __ mm.
-
-ADVICE:
-➢ Advised MRI pelvis, gynecology consultation.`,
-
-"PELVIS - Fibroids Multiple":`C/O: Menorrhagia.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Bulky __ cm [Normal: 7-9 cm], Multiple fibroids largest __ x __ mm [Normal: No fibroid].
-
-CONCLUSION:
-➢ Multiple uterine fibroids largest __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation, surgical opinion.`,
-
-"PELVIS - Fibroid Degenerated":`C/O: Acute pain.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Fibroid __ x __ mm [Normal: No fibroid] with cystic areas - degeneration.
-
-CONCLUSION:
-➢ Degenerated fibroid __ mm with cystic degeneration.
-
-ADVICE:
-➢ Advised gynecology consultation.`,
-
-"PELVIS - Fibroid Calcified":`C/O: Postmenopausal.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Calcified fibroid __ x __ mm [Normal: No fibroid] with shadowing.
-
-CONCLUSION:
-➢ Calcified fibroid __ mm.
-
-ADVICE:
-➢ Advised gynecology consultation.`,
-
-"PELVIS - Ectopic Pregnancy":`C/O: Amenorrhea, pain, bleeding.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Empty uterus, ET __ mm.
-
-ADNEXA:
-➢ Adnexal mass __ x __ mm [Normal: No mass] with yolk sac / fetal pole, Free fluid in POD with echoes.
-
-CONCLUSION:
-➢ Right ectopic pregnancy with free fluid.
-
-ADVICE:
-➢ Advised urgent gynecology consultation, beta-HCG, immediate referral.`,
-
-"FWB - Normal Single Live":`C/O: __ weeks amenorrhea.
-
-                  ULTRASOUND FWB:
-
-FETUS:
-➢ Single alive, Cephalic, Lie Longitudinal, FHR __ bpm [Normal: 120-160 bpm], BPD __ mm, HC __ mm, AC __ mm, FL __ mm, GA __ w __ d, EFW __ gm.
-
-LIQUOR:
-➢ AFI __ cm [Normal: 8-20 cm], Adequate.
-
-PLACENTA:
-➢ Anterior / Posterior upper segment, Grade __ [Normal: Grade 0-II <36 w].
-
-CERVIX:
-➢ Closed __ mm [Normal: >25 mm].
-
-CONCLUSION:
-➢ Single live pregnancy __ weeks __ days, cephalic, EFW __ gm.
-
-ADVICE:
-➢ Regular antenatal follow-up.`,
-
-"FWB - Early Pregnancy CRL":`C/O: __ weeks amenorrhea.
-
-                 ULTRASOUND FWB:
-
-GESTATIONAL SAC:
-➢ __ x __ mm, Yolk sac __ mm [Normal: <6 mm], CRL __ mm, GA __ w __ d, FHR __ bpm [Normal: 120-160].
-
-CONCLUSION:
-➢ Single live early pregnancy CRL __ mm = __ weeks.
-
-ADVICE:
-➢ Advised folic acid, antenatal follow-up.`,
-
-"FWB - Anomaly Scan 18-22 Weeks":`C/O: Anomaly scan.
-
-              ULTRASOUND FWB:
-
-FETUS:
-➢ Single alive, FHR __ bpm [Normal: 120-160], BPD __ mm, HC __ mm, AC __ mm, FL __ mm, GA __ w, EFW __ gm.
-➢ No gross anomaly - Head, Spine, Heart, Abdomen, Limbs normal.
-
-LIQUOR:
-➢ AFI __ cm [Normal: 8-20 cm].
-
-CONCLUSION:
-➢ Normal anomaly scan __ weeks - No gross anomaly.
-
-ADVICE:
-➢ Advised regular antenatal follow-up.`,
-
-"FWB - Oligohydramnios":`C/O: __
-
-                ULTRASOUND FWB:
-
-FETUS:
-➢ Single alive, FHR __ bpm [Normal: 120-160], GA __ w, EFW __ gm.
-➢ AFI __ cm [Normal: 8-20 cm] - Reduced.
-
-CONCLUSION:
-➢ Oligohydramnios AFI __ cm with single live __ weeks.
-
-ADVICE:
-➢ Advised hydration, fetal movement count, Doppler, obstetrician consultation.`,
-
-"FWB - Polyhydramnios":`C/O: __
-
-                ULTRASOUND FWB:
-
-FETUS:
-➢ Single alive, GA __ w, EFW __ gm.
-➢ AFI __ cm [Normal: 8-20 cm] - Increased.
-
-CONCLUSION:
-➢ Polyhydramnios AFI __ cm.
-
-ADVICE:
-➢ Advised GTT, anomaly scan review, obstetrician consultation.`,
-
-"FWB - Breech Presentation":`C/O: __
-
-               ULTRASOUND FWB:
-
-FETUS:
-➢ Breech, Lie Longitudinal, FHR __ bpm [Normal: 120-160], GA __ w, EFW __ gm.
-
-CONCLUSION:
-➢ Breech presentation __ weeks.
-
-ADVICE:
-➢ Advised obstetric consultation.`,
-
-"FWB - IUGR":`C/O: __ weeks.
-
-               ULTRASOUND FWB:
-
-FETUS:
-➢ Single alive, GA __ w as per LMP, EFW __ gm [Normal: Appropriate for GA], BPD __ mm, HC __ mm, AC __ mm [Small], FL __ mm.
-➢ AFI __ cm [Normal: 8-20 cm].
-
-CONCLUSION:
-➢ IUGR - Small for gestational age EFW __ gm.
-
-ADVICE:
-➢ Advised Doppler, NST, obstetrician consultation urgently.`,
-
-"FWB - IUD / Demise":`C/O: No fetal movement.
-
-               ULTRASOUND FWB:
-
-FETUS:
-➢ Single intrauterine fetus, No cardiac activity, No movement, GA __ w, EFW __ gm.
-➢ Spalding sign / Overlapping skull bones.
-
-CONCLUSION:
-➢ Single IUD / intrauterine fetal demise __ weeks.
-
-ADVICE:
-➢ Advised urgent obstetrician consultation for induction.`,
-
-"FWB - Twins Normal":`C/O: __ weeks amenorrhea.
-
-               ULTRASOUND FWB:
-
-TWIN A:
-➢ Live, Cephalic, FHR __ bpm [Normal: 120-160], BPD __ mm, FL __ mm, EFW __ gm.
-
-TWIN B:
-➢ Live, Cephalic / Breech, FHR __ bpm [Normal: 120-160], BPD __ mm, FL __ mm, EFW __ gm.
-
-LIQUOR:
-➢ AFI Twin A __ cm [Normal: 8-20 cm], Twin B __ cm.
-
-PLACENTA:
-➢ __, Grade __.
-
-CONCLUSION:
-➢ Twin live pregnancy __ weeks.
-
-ADVICE:
-➢ Advised high risk antenatal follow-up, obstetrician consultation.`,
-
-"FWB - Placenta Previa Low Lying":`C/O: __ weeks, bleeding.
-
-               ULTRASOUND FWB:
-
-FETUS:
-➢ Single alive, Cephalic, GA __ w, EFW __ gm.
-
-PLACENTA:
-➢ Low lying / covering internal os [Normal: Upper segment], Anterior / Posterior, Grade __ [Normal: Grade 0-II], Distance from os __ mm [Normal: >20 mm].
-
-CONCLUSION:
-➢ Low lying placenta / Placenta previa covering os.
-
-ADVICE:
-➢ Advised bed rest, avoid intercourse, pelvic rest, obstetrician consultation, follow-up scan.`,
-
-"FWB - Short Cervix":`C/O: __ weeks.
-
-               ULTRASOUND FWB:
-
-CERVIX:
-➢ Length __ mm [Normal: >25 mm], Short, Internal os open / closed, Funneling.
-
-CONCLUSION:
-➢ Short cervix __ mm.
-
-ADVICE:
-➢ Advised bed rest, progesterone, obstetrician consultation, consider cerclage.`,
-
-"FWB - Subchorionic Hematoma":`C/O: Bleeding.
-
-               ULTRASOUND FWB:
-
-GESTATIONAL SAC:
-➢ __, CRL __ mm, FHR __ bpm [Normal: 120-160].
-
-SUBCHORIONIC:
-➢ Hematoma __ x __ mm [Normal: No hematoma] at __ region.
-
-CONCLUSION:
-➢ Early pregnancy with subchorionic hematoma __ mm.
-
-ADVICE:
-➢ Advised bed rest, progesterone, avoid intercourse, follow-up.`,
-
-"BREAST - Normal":`C/O: Breast pain.
-
-                       ULTRASOUND BREAST:
-
-RIGHT BREAST:
-➢ Normal fibroglandular pattern [Normal: Normal], No mass, No cyst, No duct dilatation.
-
-LEFT BREAST:
-➢ Normal.
-
-AXILLA:
-➢ No lymphadenopathy.
-
-CONCLUSION:
-➢ Normal bilateral breast ultrasound.
-
-ADVICE:
-➢ No significant abnormality. Self breast examination monthly.`,
-
-"BREAST - Fibroadenoma":`C/O: Breast lump.
-
-                       ULTRASOUND BREAST:
-
-RIGHT BREAST:
-➢ Well-defined hypoechoic solid lesion __ x __ mm [Normal: No lesion] at __ o'clock position, Oval, Circumscribed, No calcification.
-
-LEFT BREAST:
-➢ Normal.
-
-CONCLUSION:
-➢ Fibroadenoma right breast __ mm at __ o'clock.
-
-ADVICE:
-➢ Benign lesion. Advised follow-up after 6 months, surgical consultation if enlarging.`,
-
-"BREAST - Simple Cyst":`C/O: Breast lump.
-
-                       ULTRASOUND BREAST:
-
-RIGHT BREAST:
-➢ Simple anechoic cyst __ x __ mm [Normal: No cyst], Thin walled, No echoes.
-
-CONCLUSION:
-➢ Simple cyst right breast __ mm.
-
-ADVICE:
-➢ Benign simple cyst. Follow-up.`,
-
-"BREAST - Complex Cyst":`C/O: Breast lump.
-
-                       ULTRASOUND BREAST:
-
-RIGHT BREAST:
-➢ Complex cyst __ x __ mm [Normal: No cyst] with internal echoes / septations / thick wall.
-
-CONCLUSION:
-➢ Complex cyst right breast __ mm.
-
-ADVICE:
-➢ Advised FNAC / biopsy, surgical consultation.`,
-
-"BREAST - Breast Abscess":`C/O: Pain, fever, swelling.
-
-                       ULTRASOUND BREAST:
-
-RIGHT BREAST:
-➢ Heterogeneous collection __ x __ mm [Normal: No collection] with internal echoes, Increased vascularity.
-
-CONCLUSION:
-➢ Breast abscess __ mm.
-
-ADVICE:
-➢ Advised urgent surgical consultation, antibiotics, drainage.`,
-
-"BREAST - Galactocele":`C/O: Lactating, lump.
-
-                       ULTRASOUND BREAST:
-
-RIGHT BREAST:
-➢ Cystic lesion __ x __ mm [Normal: No lesion] with fat-fluid level / milky echoes.
-
-CONCLUSION:
-➢ Galactocele __ mm.
-
-ADVICE:
-➢ Advised surgical consultation, follow-up.`,
-
-"BREAST - Suspicious Malignant Lesion":`C/O: Breast lump.
-
-                       ULTRASOUND BREAST:
-
-RIGHT BREAST:
-➢ Irregular hypoechoic solid lesion __ x __ mm [Normal: No lesion] with spiculated margins, Microcalcifications, Vertical orientation, Posterior shadowing.
-
-AXILLA:
-➢ Suspicious lymph nodes __ mm.
-
-CONCLUSION:
-➢ Suspicious malignant lesion right breast __ mm - BIRADS 4/5.
-
-ADVICE:
-➢ Advised urgent biopsy / FNAC, mammography, oncology / surgical consultation.`,
-
-"BREAST - Gynecomastia":`C/O: Male breast enlargement.
-
-                       ULTRASOUND BREAST:
-
-BOTH BREASTS:
-➢ Increased fibroglandular tissue __ mm [Normal: <5 mm] behind nipple, No mass.
-
-CONCLUSION:
-➢ Bilateral gynecomastia.
-
-ADVICE:
-➢ Advised endocrinology consultation, hormonal profile.`,
-
-"THYROID - Normal":`C/O: Neck swelling.
-
-                       ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm], Volume __ cc [Normal: 4-10 cc], Normal echotexture.
-
-LEFT LOBE:
-➢ __ x __ x __ mm [Normal: 40-60 x 10-20 mm], Volume __ cc [Normal: 4-10 cc], Normal.
-
-ISTHMUS:
-➢ __ mm [Normal: <3 mm], Normal.
-
-No lymphadenopathy.
-
-CONCLUSION:
-➢ Normal thyroid ultrasound.
-
-ADVICE:
-➢ No significant abnormality.`,
-
-"THYROID - Diffuse Goiter":`C/O: Neck swelling.
-
-                       ULTRASOUND THYROID:
-
-BOTH LOBES:
-➢ Enlarged Right __ cc [Normal: 4-10 cc], Left __ cc [Normal: 4-10 cc], Diffuse heterogeneous, No nodule.
-
-CONCLUSION:
-➢ Diffuse goiter / thyroid enlargement.
-
-ADVICE:
-➢ Advised TFTs, endocrinology consultation.`,
-
-"THYROID - Multinodular Goiter":`C/O: Neck swelling.
-
-                       ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ Enlarged __ cc [Normal: 4-10 cc], Multiple nodules largest __ x __ mm [Normal: No nodule].
-
-LEFT LOBE:
-➢ Multiple nodules largest __ x __ mm.
-
-CONCLUSION:
-➢ Multinodular goiter.
-
-ADVICE:
-➢ Advised TFTs, FNAC of dominant nodule, endocrinology consultation.`,
-
-"THYROID - Solitary Nodule":`C/O: Neck lump.
-
-                       ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ Solitary nodule __ x __ mm [Normal: No nodule], Solid / mixed, Isoechoic / hypoechoic, Well-defined.
-
-CONCLUSION:
-➢ Solitary thyroid nodule __ mm right lobe.
-
-ADVICE:
-➢ Advised TFTs, FNAC, follow-up.`,
-
-"THYROID - Simple Thyroid Cyst":`C/O: Neck lump.
-
-                       ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ Simple anechoic cyst __ x __ mm [Normal: No cyst], Thin walled.
-
-CONCLUSION:
-➢ Simple thyroid cyst __ mm.
-
-ADVICE:
-➢ Benign cyst, follow-up.`,
-
-"THYROID - Complex Thyroid Cyst":`C/O: Neck swelling.
-
-                       ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ Complex cyst __ x __ mm [Normal: No cyst] with internal echoes / septations.
-
-CONCLUSION:
-➢ Complex thyroid cyst __ mm.
-
-ADVICE:
-➢ Advised FNAC, follow-up.`,
-
-"THYROID - Colloid Nodule":`C/O: Neck swelling.
-
-                       ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ Colloid nodule __ x __ mm [Normal: No nodule] with comet tail artifacts.
-
-CONCLUSION:
-➢ Colloid nodule __ mm.
-
-ADVICE:
-➢ Benign colloid nodule, follow-up.`,
-
-"THYROID - Calcified Nodule":`C/O: Neck lump.
-
-                       ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ Calcified nodule __ x __ mm [Normal: No nodule] with shadowing.
-
-CONCLUSION:
-➢ Calcified thyroid nodule __ mm.
-
-ADVICE:
-➢ Advised TFTs, FNAC if indicated.`,
-
-"THYROID - Thyroiditis":`C/O: Neck pain, fever.
-
-                       ULTRASOUND THYROID:
-
-BOTH LOBES:
-➢ Heterogeneous, Hypoechoic, Decreased / increased vascularity, No nodule.
-
-CONCLUSION:
-➢ Thyroiditis.
-
-ADVICE:
-➢ Advised TFTs, anti-TPO, ESR, endocrinology consultation.`,
-
-"THYROID - Suspicious Malignant Nodule":`C/O: Neck lump.
-
-                       ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ Irregular hypoechoic solid nodule __ x __ mm [Normal: No nodule] with microcalcifications, Taller than wide, Spiculated margins, TI-RADS 4/5.
-
-NECK:
-➢ Suspicious lymph nodes __ mm.
-
-CONCLUSION:
-➢ Suspicious malignant thyroid nodule __ mm TI-RADS 4-5.
-
-ADVICE:
-➢ Advised urgent FNAC, TFTs, oncology / ENT / endocrine surgery consultation.`,
-
-"AXILLA - Normal":`C/O: Axillary pain.
-
-                       ULTRASOUND AXILLA:
-
-BOTH AXILLAE:
-➢ No lymphadenopathy [Normal: No nodes / <10 mm], Normal fat.
-
-CONCLUSION:
-➢ Normal bilateral axillary ultrasound.
-
-ADVICE:
 ➢ No abnormality.`,
 
-"AXILLA - Reactive Lymphadenopathy":`C/O: Axillary swelling.
-
-                       ULTRASOUND AXILLA:
-
-RIGHT AXILLA:
-➢ Reactive lymph nodes largest __ x __ mm [Normal: <10 mm], Oval, Hilum preserved, Cortex __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Reactive lymphadenopathy right axilla largest __ mm.
-
-ADVICE:
-➢ Advised clinical correlation, antibiotics if infected, follow-up.`,
-
-"AXILLA - Suspicious Lymphadenopathy":`C/O: Axillary lump.
-
-                       ULTRASOUND AXILLA:
-
-RIGHT AXILLA:
-➢ Enlarged lymph nodes largest __ x __ mm [Normal: <10 mm], Round, Hilum lost, Cortical thickening __ mm, Necrosis / calcification.
-
-CONCLUSION:
-➢ Suspicious lymphadenopathy right axilla __ mm.
-
-ADVICE:
-➢ Advised FNAC / biopsy, further workup.`,
-
-"SMALL PARTS - Lymph Node Reactive":`C/O: Neck swelling.
-
-                       ULTRASOUND NECK:
-
-NECK:
-➢ Reactive lymph nodes largest __ x __ mm [Normal: <10 mm] at Level __, Oval, Hilum preserved.
-
-CONCLUSION:
-➢ Reactive lymphadenopathy neck largest __ mm.
-
-ADVICE:
-➢ Advised clinical correlation, follow-up.`,
-
-"SMALL PARTS - Lymph Node Suspicious":`C/O: Neck swelling.
-
-                       ULTRASOUND NECK:
-
-NECK:
-➢ Enlarged nodes largest __ x __ mm [Normal: <10 mm], Round, Hilum lost, Matted.
-
-CONCLUSION:
-➢ Suspicious lymphadenopathy neck __ mm.
-
-ADVICE:
-➢ Advised FNAC / biopsy, chest X-ray, further workup.`,
-
-"SMALL PARTS - Scrotum Normal":`C/O: Scrotal pain.
+"SCROTUM - Normal":`C/O: Scrotal pain / Routine check.
 
                        ULTRASOUND SCROTUM:
 
 RIGHT TESTIS:
-➢ __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Normal echotexture.
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Normal in size, shape and echotexture.
+➢ Homogenous, No focal lesion, No calcification, No microlithiasis.
+➢ Vascularity normal on Doppler.
+
+RIGHT EPIDIDYMIS:
+➢ Head __ mm [Normal: <10 mm], Body __ mm [Normal: <3 mm], Tail __ mm [Normal: <5 mm], Normal, No mass, No cyst.
 
 LEFT TESTIS:
-➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Normal.
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Normal echotexture.
+➢ No focal lesion, Vascularity normal.
 
-EPIDIDYMIS:
-➢ Normal [Normal: Head <10 mm].
+LEFT EPIDIDYMIS:
+➢ Head __ mm [Normal: <10 mm], Normal.
 
-No hydrocele [Normal: No fluid].
+SCROTAL WALL:
+➢ Normal thickness __ mm [Normal: <5 mm], No collection.
+
+SPERMATIC CORD:
+➢ Normal, No varicocele [Normal: Veins <2 mm].
+
+HYDROCELE:
+➢ No hydrocele [Normal: No fluid].
 
 CONCLUSION:
-➢ Normal scrotal ultrasound.
+➢ Normal scrotal ultrasound - Both testes and epididymides normal.
 
 ADVICE:
-➢ No abnormality.`,
+➢ No significant abnormality.`,
 
-"SMALL PARTS - Hydrocele":`C/O: Scrotal swelling.
+"SCROTUM - Hydrocele Right":`C/O: Right scrotal swelling.
 
                        ULTRASOUND SCROTUM:
 
+RIGHT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Normal echotexture, Compressed by fluid.
+➢ No focal lesion.
+
 RIGHT HEMISCROTUM:
-➢ Anechoic fluid collection __ cc [Normal: No fluid] around testis - Hydrocele.
+➢ Anechoic fluid collection __ cc [Normal: No fluid] around testis - Hydrocele, Septated / Non-septated, No internal echoes / Debris.
 
 LEFT TESTIS:
-➢ Normal.
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
+
+LEFT HEMISCROTUM:
+➢ No hydrocele [Normal: No fluid].
+
+EPIDIDYMIS:
+➢ Right epididymis normal Head __ mm [Normal: <10 mm], Left normal.
 
 CONCLUSION:
-➢ Right hydrocele __ cc.
+➢ Right hydrocele __ cc, Left testis normal.
+
+ADVICE:
+➢ Advised urology consultation, follow-up.`,
+
+"SCROTUM - Hydrocele Bilateral":`C/O: Bilateral scrotal swelling.
+
+                       ULTRASOUND SCROTUM:
+
+RIGHT TESTIS:
+➢ __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
+
+RIGHT HEMISCROTUM:
+➢ Hydrocele __ cc [Normal: No fluid] anechoic collection around testis.
+
+LEFT TESTIS:
+➢ __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
+
+LEFT HEMISCROTUM:
+➢ Hydrocele __ cc [Normal: No fluid].
+
+CONCLUSION:
+➢ Bilateral hydrocele Right __ cc, Left __ cc.
 
 ADVICE:
 ➢ Advised urology consultation.`,
 
-"SMALL PARTS - Varicocele":`C/O: Scrotal pain, infertility.
+"SCROTUM - Varicocele Left":`C/O: Left scrotal pain, infertility.
 
                        ULTRASOUND SCROTUM:
 
-LEFT HEMISCROTUM:
-➢ Dilated pampiniform plexus veins largest __ mm [Normal: <2 mm] at rest, __ mm on Valsalva [Normal: <3 mm].
+RIGHT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal echotexture, Vascularity normal.
+
+LEFT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] / Small __ cc, Normal / Heterogeneous.
+
+PAMPINIFORM PLEXUS - LEFT:
+➢ Dilated tortuous veins largest __ mm [Normal: <2 mm] at rest, __ mm [Normal: <3 mm] on Valsalva, Reflux on Doppler.
+➢ Grade 1 / 2 / 3 varicocele.
+
+RIGHT PAMPINIFORM PLEXUS:
+➢ Normal veins <2 mm [Normal: <2 mm], No varicocele.
+
+EPIDIDYMIS:
+➢ Normal Head __ mm [Normal: <10 mm].
 
 CONCLUSION:
-➢ Left varicocele.
+➢ Left varicocele Grade __ with veins __ mm at rest, __ mm on Valsalva, Right testis normal.
 
 ADVICE:
 ➢ Advised urology consultation, semen analysis.`,
 
-"SMALL PARTS - Epididymo-orchitis":`C/O: Pain, fever.
+"SCROTUM - Epididymo-orchitis Right":`C/O: Right scrotal pain, fever, swelling.
 
                        ULTRASOUND SCROTUM:
 
 RIGHT TESTIS:
-➢ Enlarged __ cc [Normal: 12-20 cc], Heterogeneous, Increased vascularity.
+➢ Enlarged __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] Bulky __ cc, Heterogeneous echotexture, Increased vascularity on Doppler, No focal collection.
+
+RIGHT EPIDIDYMIS:
+➢ Enlarged Head __ mm [Normal: <10 mm], Body __ mm [Normal: <3 mm], Tail __ mm [Normal: <5 mm], Heterogeneous, Increased vascularity, No abscess.
+
+LEFT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
+
+LEFT EPIDIDYMIS:
+➢ Normal.
+
+SCROTAL WALL:
+➢ Thickened __ mm [Normal: <5 mm] on right side, Edematous.
+
+HYDROCELE:
+➢ Minimal reactive hydrocele __ cc [Normal: No fluid] on right.
+
+CONCLUSION:
+➢ Right epididymo-orchitis - Enlarged right testis __ cc and epididymis with increased vascularity.
+
+ADVICE:
+➢ Advised urine R/E, culture, CBC, antibiotics, scrotal support, urology consultation.`,
+
+"SCROTUM - Testicular Torsion Right":`C/O: Acute severe right scrotal pain, vomiting.
+
+                       ULTRASOUND SCROTUM:
+
+RIGHT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] Enlarged, Heterogeneous echotexture, No vascularity / Decreased vascularity on Color Doppler, Whirlpool sign of spermatic cord.
+➢ No focal lesion, Tunica vaginalis fluid.
+
+LEFT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal echotexture, Vascularity normal.
 
 EPIDIDYMIS:
-➢ Enlarged head __ mm [Normal: <10 mm], Heterogeneous, Increased vascularity.
+➢ Right epididymis enlarged Head __ mm [Normal: <10 mm], Left normal.
 
 CONCLUSION:
-➢ Right epididymo-orchitis.
+➢ Right testicular torsion - Enlarged right testis __ cc with absent vascularity and whirlpool sign, Left testis normal.
 
 ADVICE:
-➢ Advised urine culture, antibiotics, urology consultation, scrotal support.`,
+➢ Advised urgent urology / surgical consultation - Emergency, immediate exploration.`,
 
-"SMALL PARTS - Testicular Torsion":`C/O: Acute severe scrotal pain.
+"TESTIS - Normal":`C/O: Testicular pain / Routine.
 
-                       ULTRASOUND SCROTUM:
+                       ULTRASOUND TESTIS:
 
 RIGHT TESTIS:
-➢ Enlarged __ cc [Normal: 12-20 cc], Heterogeneous, No vascularity on Doppler, Twisted spermatic cord - Whirlpool sign.
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Ovoid, Homogenous medium level echoes, No focal lesion, No microlithiasis, Tunica albuginea intact.
+
+LEFT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Normal homogenous echotexture, No lesion.
+
+EPIDIDYMIS BOTH:
+➢ Head __ mm [Normal: <10 mm], Body __ mm [Normal: <3 mm], Tail __ mm [Normal: <5 mm], Normal.
+
+VASCULARITY:
+➢ Normal low flow on Doppler [Normal: Present].
 
 CONCLUSION:
-➢ Right testicular torsion - No vascularity.
+➢ Both testes normal in size and echotexture.
 
 ADVICE:
-➢ Advised urgent urology / surgical consultation - emergency.`
+➢ Normal study.`,
+
+"TESTIS - Atrophy Small Testis":`C/O: Infertility, small testis.
+
+                       ULTRASOUND TESTIS:
+
+RIGHT TESTIS:
+➢ Small __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] Small __ cc [Normal: >12 cc], Heterogeneous / Homogenous, No focal lesion.
+
+LEFT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal / Small.
+
+EPIDIDYMIS:
+➢ Normal Head __ mm [Normal: <10 mm].
+
+CONCLUSION:
+➢ Small atrophic right testis __ cc, Left testis __ cc.
+
+ADVICE:
+➢ Advised urology / endocrinology consultation, semen analysis, hormonal profile.`,
+
+"TESTIS - Microlithiasis":`C/O: Infertility / Incidental.
+
+                       ULTRASOUND TESTIS:
+
+RIGHT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Multiple tiny echogenic foci __ mm [Normal: No microlithiasis] without shadowing - microlithiasis, Count >5 per field.
+
+LEFT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Microlithiasis present __ foci.
+
+EPIDIDYMIS:
+➢ Normal Head __ mm [Normal: <10 mm].
+
+CONCLUSION:
+➢ Bilateral testicular microlithiasis.
+
+ADVICE:
+➢ Advised urology consultation, self examination, annual follow-up ultrasound, tumor markers if indicated.`,
+
+"TESTIS - Testicular Mass Tumor":`C/O: Testicular lump, painless.
+
+                       ULTRASOUND TESTIS:
+
+RIGHT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Heterogeneous hypoechoic solid mass __ x __ mm [Normal: No mass] within testis, Irregular margins, Increased internal vascularity on Doppler, No calcification / Microcalcifications.
+
+LEFT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
+
+EPIDIDYMIS:
+➢ Normal.
+
+HYDROCELE:
+➢ No hydrocele / Minimal hydrocele __ cc [Normal: No fluid].
+
+CONCLUSION:
+➢ Solid mass right testis __ x __ mm - suspicious for testicular tumor.
+
+ADVICE:
+➢ Advised urgent urology / oncology consultation, tumor markers AFP, beta-HCG, LDH, CT abdomen pelvis.`,
+
+"TESTIS - Epididymal Cyst":`C/O: Scrotal lump.
+
+                       ULTRASOUND TESTIS:
+
+RIGHT EPIDIDYMIS:
+➢ Head __ mm [Normal: <10 mm] with anechoic thin-walled cyst __ x __ mm [Normal: No cyst] at head, No internal echoes, No vascularity.
+
+RIGHT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
+
+LEFT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Normal.
+
+LEFT EPIDIDYMIS:
+➢ Normal.
+
+CONCLUSION:
+➢ Right epididymal cyst __ x __ mm, Both testes normal.
+
+ADVICE:
+➢ Benign epididymal cyst, follow-up.`,
+
+"TESTIS - Spermatocele":`C/O: Scrotal cystic swelling.
+
+                       ULTRASOUND TESTIS:
+
+RIGHT EPIDIDYMIS:
+➢ Cystic lesion __ x __ mm [Normal: No cyst] with low level echoes / debris at head of epididymis - spermatocele.
+
+RIGHT TESTIS:
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
+
+LEFT TESTIS:
+➢ Normal.
+
+CONCLUSION:
+➢ Right spermatocele __ x __ mm.
+
+ADVICE:
+➢ Benign spermatocele, no treatment required unless large / symptomatic, urology consultation.`
 };
 
 let allTemplates=Object.keys(T);
@@ -2077,7 +1019,7 @@ function render(){try{let all=[]; try{ all=JSON.parse(localStorage.getItem('azam
 function viewR(id){try{let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;lastViewedId=id; editId=null; let eb=document.getElementById('editBanner'); if(eb) eb.style.display='none';document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'Male';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||allTemplates[0];document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';checkFetal(true);document.getElementById('rText').value=r.text||'';document.getElementById('pComplaint').value=r.complaint||'';make();}catch(e){alert('View error: '+e.message);}}
 function editR(id){try{let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;editId=id;lastViewedId=id;document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||allTemplates[0];document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';checkFetal(true);document.getElementById('rText').value=r.text||'';document.getElementById('pComplaint').value=r.complaint||'';let eb=document.getElementById('editBanner'); if(eb) eb.style.display='block';let es=document.getElementById('editIdShow'); if(es) es.innerText=id;let fb=document.getElementById('finalBtn'); if(fb) fb.innerText='Update Report';make();window.scrollTo({top:0,behavior:'smooth'});autoSaveDraft();}catch(e){alert('Edit error: '+e.message);}}
 function editCurrent(){if(lastViewedId){editR(lastViewedId);}else{alert('No report selected');}}
-function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));}
+function delR(id){if(!confirm('Delete this report?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));}
 function pdf(){try{let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[190,280]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:document.getElementById('rText').value;doc.text(doc.splitTextToSize(txt,165),10,45);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}catch(e){alert('PDF error: '+e.message);}}
 function openSummary(){let sc=document.getElementById('summaryCard'); if(sc) sc.style.display='block';renderSummary();}
 function closeSummary(){let sc=document.getElementById('summaryCard'); if(sc) sc.style.display='none';}
