@@ -7,28 +7,24 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif}
 body{background:#eef4ff;padding:10px}
 .card{background:#fff;border-radius:16px;padding:14px;margin:10px auto;max-width:1100px;box-shadow:0 6px 18px #0001}
 input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px solid #cbd5e1;margin:5px 0;font-size:14px}
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;font-size:16px;margin-top:8px}
 .small{padding:8px 10px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff;font-size:12px}
-/* REPORT - BLACK & WHITE ONLY */
 .report{width:190mm;height:280mm;margin:auto;background:#fff;border:1px solid #000;border-radius:0;padding:0;box-sizing:border-box;position:relative;overflow:hidden}
-.report-inner{width:160mm;height:210mm;margin:42mm auto 0 auto;padding:0 5mm 5mm 5mm;box-sizing:border-box;position:relative;line-height:1.75;font-size:12.5px;z-index:2;color:#000}
-.report::before{content:"";position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:320px;height:320px;background-image:url('logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.04;filter:grayscale(100%);z-index:1;pointer-events:none}
-/* PROFESSIONAL DIAGRAM WATERMARK - BOTTOM RIGHT */
-.diagram-wm{position:absolute;right:4mm;bottom:10mm;width:72mm;height:88mm;opacity:0.18;z-index:1;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom right;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.report-inner{width:160mm;height:210mm;margin:42mm auto 0 auto;padding:0 5mm 5mm 5mm;box-sizing:border-box;position:relative;line-height:1.55;font-size:11.5px;z-index:2;color:#000;font-family:Arial, sans-serif}
+.report::before{content:"";position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background-image:url('logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.04;filter:grayscale(100%);z-index:1;pointer-events:none}
+.diagram-wm{position:absolute;right:4mm;bottom:10mm;width:68mm;height:80mm;opacity:0.14;z-index:1;pointer-events:none;background-repeat:no-repeat;background-size:contain;background-position:bottom right;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @media print{
  @page{size:190mm 280mm; margin:0!important}
  html,body{margin:0!important;padding:0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
  body{background:#fff;padding:0}
- /* Hide everything except report */
  body *{visibility:hidden}
 .report,.report *{visibility:visible}
 .report{position:absolute;left:0;top:0;width:190mm;height:280mm;border:none!important;border-radius:0;margin:0}
-.report::before{opacity:0.04!important}
-.diagram-wm{opacity:0.16!important;display:block!important}
+.diagram-wm{opacity:0.12!important;display:block!important}
 .noPrint{display:none!important}
 }
 .calcBox{background:#f0f7ff;border:2px dashed #1e90ff;border-radius:12px;padding:12px;margin:10px 0}
@@ -41,31 +37,31 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 </style>
 </head>
 <body>
-<div id="loginOverlay"><div class="loginBox"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:80px;height:80px;border-radius:50%;border:3px solid #0a4eb5"><h2 style="color:#0a4eb5;margin:10px 0">Azam Medical Centre</h2><input id="passInput" type="password" placeholder="Enter Password" style="text-align:center;font-size:16px"><button class="btn" onclick="checkPass()" type="button">Login</button><p id="passErr" style="color:red;display:none;margin-top:10px;font-weight:700">Ghalat Password! Pakistan@777 likhen</p></div></div>
+<div id="loginOverlay"><div class="loginBox"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:80px;height:80px;border-radius:50%;border:3px solid #0a4eb5"><h2 style="color:#0a4eb5;margin:10px 0">Azam Medical Centre</h2><input id="passInput" type="password" placeholder="Enter Password" style="text-align:center;font-size:16px"><button class="btn" onclick="checkPass()" type="button">Login</button><p id="passErr" style="color:red;display:none;margin-top:10px;font-weight:700">Wrong Password! Enter Pakistan@777</p></div></div>
 <div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:65px;height:65px;border-radius:50%;border:2px solid #0a4eb5"><div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981;margin-top:4px">● Drive: Ready | Auto-Save: ON (Ctrl+S)</div></div></div>
 <div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff">
-<div class="boxTitle"><span>📚 BOX 1: Template Library</span><span id="templateCount" style="font-size:11px;color:#10b981">Templates</span></div>
+<div class="boxTitle"><span>BOX 1: Template Library (English)</span><span id="templateCount" style="font-size:11px;color:#10b981">Templates</span></div>
 <input id="tSearch" placeholder="Search template e.g. whole, kub, fatty, fwb, pelvis..." onkeyup="filterTemplates()" style="border-color:#8b5cf6">
 <select id="uType" size="12" style="height:240px;font-size:13px;font-weight:600"></select>
-<button class="small" style="background:#8b5cf6;width:100%;padding:12px;font-size:14px;margin-top:8px" onclick="useSelectedTemplate()">⬇️ Use This Template in Report Box</button>
+<button class="small" style="background:#8b5cf6;width:100%;padding:12px;font-size:14px;margin-top:8px" onclick="useSelectedTemplate()">⬇️ Use This Template</button>
 </div>
 <div class="card noPrint" style="border:3px solid #1e90ff">
-<div class="boxTitle"><span>📝 BOX 2: Report Tayar Karen</span><span id="draftStatus" style="font-size:11px;color:#10b981">Draft: Empty</span></div>
-<div id="editBanner" class="editBanner">✏️ EDIT MODE ON - ID: <span id="editIdShow"></span></div>
+<div class="boxTitle"><span>BOX 2: Prepare Report</span><span id="draftStatus" style="font-size:11px;color:#10b981">Draft: Empty</span></div>
+<div id="editBanner" class="editBanner">EDIT MODE ON - ID: <span id="editIdShow"></span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *" oninput="autoSaveDraft()"><input id="pAge" placeholder="Age" oninput="autoSaveDraft()"><select id="pGen" onchange="autoSaveDraft()"><option>Male</option><option>Female</option><option>Child</option></select></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date" onchange="autoSaveDraft()"><input id="pIDMobile" placeholder="Patient ID / Mobile No." oninput="autoSaveDraft()"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref" onchange="autoSaveDraft()"></select><select id="sono" onchange="autoSaveDraft()"></select></div>
-<div id="complaintBox" style="border:2px solid #f59e0b;border-radius:12px;padding:10px;margin:8px 0;background:#fffbeb;display:none">
-<label style="font-weight:800;color:#d97706;font-size:12px">📝 Present Complaint / H/O</label>
-<textarea id="pComplaint" rows="2" placeholder="e.g. Bilateral Lumber pain..." oninput="autoSaveDraft()"></textarea>
+<div id="complaintBox" style="border:2px solid #f59e0b;border-radius:12px;padding:10px;margin:8px 0;background:#fffbeb;display:block">
+<label style="font-weight:800;color:#d97706;font-size:12px">Present Complaint / Clinical Data / LMP</label>
+<textarea id="pComplaint" rows="2" placeholder="e.g. Lower abdominal pain / 34 week's gestational amenorrhea" oninput="autoSaveDraft()"></textarea>
 </div>
-<div id="fetalCalc" class="calcBox" style="display:none"><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Wt: --</div></div><button class="small" style="background:#10b981;width:100%" onclick="applyCalc()">Calculation Lagayen</button></div>
-<div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Prostate Lagayen</button></div>
-<textarea id="rText" rows="22" style="font-family:monospace;font-size:13px" oninput="autoSaveDraft()"></textarea>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="finalBtn" class="btn" onclick="make()">✅ Final Report Banayen</button><button class="btn" style="background:#10b981" onclick="saveR()">💾 Save + Drive Upload</button></div>
+<div id="fetalCalc" class="calcBox" style="display:none"><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Wt: --</div></div><button class="small" style="background:#10b981;width:100%" onclick="applyCalc()">Apply Calculation</button></div>
+<div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Apply Prostate</button></div>
+<textarea id="rText" rows="22" style="font-family:Arial, sans-serif;font-size:13px" oninput="autoSaveDraft()"></textarea>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="finalBtn" class="btn" onclick="make()">Generate Final Report</button><button class="btn" style="background:#10b981" onclick="saveR()">Save + Upload to Drive</button></div>
 </div>
-<div class="card" id="outCard" style="display:none"><div class="boxTitle noPrint"><span>🖨️ BOX 3: Final Preview - Black & White</span><span style="font-size:11px">Print me upar ka URL nahi ayega</span></div><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#000" onclick="beforePrintClean()">🖨️ Print Final (No Header)</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF</button><button class="small" style="background:#10b981" onclick="saveR()">Save + Drive Upload</button><button class="small" style="background:#8b5cf6" onclick="editCurrent()">✏️ Wapis Edit Karen</button></div><div class="noPrint" style="text-align:center;font-size:11px;color:#666;margin-top:6px">Print dialog me "Headers and footers" ka tick hata den to upar ka Date/URL bilkul khatam ho jayega</div></div>
-<div class="card noPrint"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h3>📂 BOX 4: Saved Reports</h3><div style="display:flex;gap:6px"><button class="small" style="background:#0a4eb5;padding:12px" onclick="loadFromDrive()">☁️ Drive se Load</button><button class="small" style="background:#8b5cf6;padding:10px" onclick="openSummary()">📊 Summary</button><button class="small" style="background:#ff3b30;padding:10px" onclick="clearDraft()">🗑️ Clear Draft</button></div></div><input id="sBox" placeholder="Search Name / ID / Mobile" onkeyup="render()" style="margin-top:8px"><div id="list"></div></div>
+<div class="card" id="outCard" style="display:none"><div class="boxTitle noPrint"><span>BOX 3: Final Preview - Sample Style</span><span style="font-size:11px">Black headings, arrow & tabular</span></div><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#000" onclick="beforePrintClean()">Print Final</button><button class="small" style="background:#f59e0b" onclick="pdf()">Download PDF</button><button class="small" style="background:#10b981" onclick="saveR()">Save + Upload</button><button class="small" style="background:#8b5cf6" onclick="editCurrent()">Back to Edit</button></div></div>
+<div class="card noPrint"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h3>BOX 4: Saved Reports</h3><div style="display:flex;gap:6px"><button class="small" style="background:#0a4eb5;padding:12px" onclick="loadFromDrive()">Load from Drive</button><button class="small" style="background:#8b5cf6;padding:10px" onclick="openSummary()">Summary</button><button class="small" style="background:#ff3b30;padding:10px" onclick="clearDraft()">Clear Draft</button></div></div><input id="sBox" placeholder="Search Name / ID / Mobile" onkeyup="render()" style="margin-top:8px"><div id="list"></div></div>
 <div class="card noPrint" id="summaryCard" style="display:none;border:3px solid #8b5cf6"><div style="display:flex;justify-content:space-between"><h3>Daily Summary</h3><div style="display:flex;gap:6px"><input id="sumDate" type="date" style="width:auto"><button class="small" style="background:#0a4eb5" onclick="renderSummary()">Show</button><button class="small" style="background:#10b981" onclick="printSummary()">Print</button><button class="small" style="background:#ff3b30" onclick="closeSummary()">Close</button></div></div><div id="summaryPrintArea"><h4 id="sumTitle" style="text-align:center"></h4><table style="width:100%;border-collapse:collapse;font-size:12px" border="1"><thead><tr><th>Sr#</th><th>Name</th><th>ID/Mobile</th><th>Age/Sex</th><th>Type</th><th>Ref</th><th>Sono</th></tr></thead><tbody id="sumBody"></tbody></table><div>Total: <b id="sumTotal">0</b></div></div></div>
 <script>
 const CLIENT_ID='153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com';
@@ -97,13 +93,13 @@ async function uploadToDriveFile(name,content){
 }
 async function loadFromDrive(){
  try{
-  if(!gapiInited||!gisInited){alert('Drive load ho raha hai, 2 second baad try karen');return;}
+  if(!gapiInited||!gisInited){alert('Drive is loading, try again after 2 seconds');return;}
   updateDriveStatus('Loading from Drive...',' #f59e0b');
   await ensureDriveAuth();
-  let folderId=await getOrCreateFolder(); if(!folderId){alert('Folder nahi mila');return;}
+  let folderId=await getOrCreateFolder(); if(!folderId){alert('Folder not found');return;}
   let listResp=await gapi.client.drive.files.list({q:`'${folderId}' in parents and trashed=false`,fields:"files(id,name,modifiedTime)",pageSize:100,orderBy:"modifiedTime desc"});
   let files=listResp.result.files||[];
-  if(files.length===0){alert('Drive khali hai');updateDriveStatus('Drive Empty',' #ff3b30');return;}
+  if(files.length===0){alert('Drive is empty');updateDriveStatus('Drive Empty',' #ff3b30');return;}
   let existing=[];try{ existing=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){ existing=[]; }
   let ids=new Set(existing.map(r=>String(r.id)));
   let loaded=0;
@@ -120,15 +116,14 @@ async function loadFromDrive(){
   }
   localStorage.setItem('azam_reports',JSON.stringify(existing));
   render();
-  updateDriveStatus(`Drive se ${loaded} Loaded - Total ${existing.length}`,' #10b981');
-  alert(`Drive se ${loaded} nayi reports loaded! Total ${existing.length}`);
+  updateDriveStatus(`Loaded ${loaded} from Drive - Total ${existing.length}`,' #10b981');
+  alert(`Loaded ${loaded} new reports from Drive! Total ${existing.length}`);
  }catch(e){alert('Drive error: '+(e.message||e));updateDriveStatus('Drive Load Error',' #ff3b30');}
 }
 window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1200);});
-// FINAL FIX FOR HEADER/FOOTER URL
 function beforePrintClean(){document.title=' '; setTimeout(()=>{window.print();},100);}
-window.addEventListener('beforeprint',()=>{document.title=' '; let el=document.getElementById('driveStatus'); if(el) el.style.display='none';});
-window.addEventListener('afterprint',()=>{document.title=' '; let el=document.getElementById('driveStatus'); if(el) el.style.display='block';});
+window.addEventListener('beforeprint',()=>{document.title=' ';});
+window.addEventListener('afterprint',()=>{document.title=' ';});
 function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';}else{document.getElementById('passErr').style.display='block';}}
 (function(){if(sessionStorage.getItem('azam_login')==='ok'){let ov=document.getElementById('loginOverlay');if(ov) ov.style.display='none';}})();
 document.addEventListener('DOMContentLoaded',()=>{let pi=document.getElementById('passInput');if(pi){pi.addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});}document.title=' ';});
@@ -138,204 +133,490 @@ function fillSelect(id,list){let s=document.getElementById(id);if(!s)return;s.in
 fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
 let prostateData={};
 function calcProstate(){try{let l=parseFloat(document.getElementById('pL')?.value)||0,w=parseFloat(document.getElementById('pW')?.value)||0,h=parseFloat(document.getElementById('pH')?.value)||0;if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};let e1=document.getElementById('resPVol'); if(e1) e1.innerText=`Volume: ${vol.toFixed(1)} cc`;let e2=document.getElementById('resPGm'); if(e2) e2.innerText=`Weight: ${vol.toFixed(1)} gm`;}}catch(e){}}
-function applyProstateCalc(){if(!prostateData.vol){alert('cm likhen');return;}let txt=document.getElementById('rText').value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);document.getElementById('rText').value=txt;autoSaveDraft();}
-
-// ===== PROFESSIONAL MEDICAL DIAGRAMS - CLEAN LINE ART =====
+function applyProstateCalc(){if(!prostateData.vol){alert('Please enter cm');return;}let txt=document.getElementById('rText').value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);document.getElementById('rText').value=txt;autoSaveDraft();}
 const DIAGRAMS={
-whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g fill='none' stroke='%23000' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round' opacity='0.85'><path d='M60 18 C55 18 48 24 48 38 C48 52 55 62 72 62 C88 62 95 52 95 38 C95 24 85 18 60 18 Z'/><path d='M75 62 C78 68 80 78 78 88 C76 98 70 105 60 105'/><path d='M35 70 C28 70 22 76 24 88 C26 100 38 108 50 108 C62 108 72 100 70 88'/><path d='M120 55 C110 55 105 65 108 78 C111 91 125 98 135 90 C145 82 148 68 135 58'/><path d='M38 125 C30 125 25 135 30 150 C35 165 50 175 60 175 C70 175 85 165 88 150 C91 135 85 125 70 125'/><path d='M115 125 C107 125 102 135 107 150 C112 165 127 175 137 175 C147 175 162 165 165 150 C168 135 162 125 147 125'/><path d='M60 175 C60 190 65 200 75 205 C85 210 95 205 100 195'/><path d='M135 175 C135 190 130 200 120 205 C110 210 100 205 100 195'/><path d='M75 205 L125 205 C135 205 142 195 138 185'/></g></svg>`,
-kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g fill='none' stroke='%23000' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'><path d='M55 30 C40 30 28 45 32 65 C36 85 52 95 65 90 C78 85 85 65 78 45 C72 32 65 30 55 30 Z'/><path d='M145 30 C130 30 118 45 122 65 C126 85 142 95 155 90 C168 85 175 65 168 45 C162 32 155 30 145 30 Z'/><path d='M65 90 C68 115 72 140 75 160'/><path d='M135 90 C132 115 128 140 125 160'/><path d='M60 160 C55 160 48 168 52 180 C56 192 70 198 85 198 C100 198 112 192 116 180 C120 168 113 160 100 160'/><path d='M100 198 C100 208 102 215 100 220'/><path d='M70 75 C60 75 55 80 58 85'/><path d='M130 75 C140 75 145 80 142 85'/></g></svg>`,
-kub_prostate:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g fill='none' stroke='%23000' stroke-width='1.3'><path d='M55 25 C38 25 28 42 32 62 C36 82 52 92 65 87'/><path d='M145 25 C162 25 172 42 168 62 C164 82 148 92 135 87'/><path d='M65 87 C68 112 72 135 78 155'/><path d='M135 87 C132 112 128 135 122 155'/><path d='M70 155 C60 155 50 165 55 180 C60 195 80 200 100 200 C120 200 140 195 145 180 C150 165 140 155 130 155'/><path d='M85 200 C82 210 88 218 100 218 C112 218 118 210 115 200'/><ellipse cx='100' cy='185' rx='18' ry='12'/></g></svg>`,
-pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g fill='none' stroke='%23000' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'><path d='M60 90 C55 90 45 100 50 115 C55 130 75 135 90 125'/><path d='M140 90 C145 90 155 100 150 115 C145 130 125 135 110 125'/><path d='M90 125 C70 125 50 145 55 165 C60 185 80 195 100 195 C120 195 140 185 145 165 C150 145 130 125 110 125 Z'/><path d='M55 115 C40 115 30 125 35 135 C40 145 55 145 60 135'/><path d='M145 115 C160 115 170 125 165 135 C160 145 145 145 140 135'/><path d='M75 165 C75 180 85 195 100 195'/><path d='M125 165 C125 180 115 195 100 195'/><path d='M70 70 C65 70 58 75 60 85 C62 95 75 98 85 90'/></g></svg>`,
-fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 220'><g fill='none' stroke='%23000' stroke-width='1.2' stroke-linecap='round'><ellipse cx='100' cy='110' rx='70' ry='85'/><ellipse cx='100' cy='110' rx='58' ry='72'/><path d='M85 70 C75 70 65 80 68 95 C71 110 85 120 95 115 C105 110 110 90 100 75'/><path d='M95 115 C100 125 105 135 98 145 C90 155 75 160 65 150'/><path d='M98 145 C105 150 115 145 118 135'/><path d='M115 65 C120 60 130 62 132 70 C134 78 128 85 120 85'/><path d='M132 70 C140 72 145 80 142 88 C139 96 130 98 125 92'/><path d='M100 195 C95 205 98 215 100 220'/></g></svg>`
+whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%23000' stroke-width='1.2'><path d='M30 50 Q60 20 110 30 Q150 40 160 80 Q165 110 130 120 L110 115 Q100 90 70 85 Q40 80 30 50'/><path d='M60 70 Q70 65 80 70 Q85 80 75 85 Q65 85 60 70'/><ellipse cx='135' cy='100' rx='18' ry='12'/><path d='M40 130 Q40 110 60 110 Q80 110 80 130 Q80 150 60 155 Q40 150 40 130'/><path d='M100 135 Q100 115 125 115 Q150 115 150 135 Q150 155 125 160 Q100 155 100 135'/></g></svg>`,
+kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%23000' stroke-width='1.3'><path d='M45 30 Q30 45 35 70 Q40 90 55 95 Q70 90 65 65 Q60 40 45 30'/><path d='M125 30 Q110 45 115 70 Q120 90 135 95 Q150 90 145 65 Q140 40 125 30'/><path d='M55 95 Q55 130 75 150 L75 165 Q75 175 90 175 Q105 175 105 165 L105 150 Q125 130 125 95'/><path d='M85 160 Q90 155 95 160'/></g></svg>`,
+kub_prostate:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%23000' stroke-width='1.3'><path d='M50 35 Q35 50 40 75 Q45 90 60 95 Q75 90 70 70 Q65 45 50 35'/><path d='M120 35 Q105 50 110 75 Q115 90 130 95 Q145 90 140 70 Q135 45 120 35'/><ellipse cx='90' cy='145' rx='30' ry='20'/><ellipse cx='90' cy='170' rx='18' ry='12'/></g></svg>`,
+pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%23000' stroke-width='1.2'><path d='M60 60 Q100 55 140 60 Q145 80 130 100 Q100 115 70 100 Q55 80 60 60'/><path d='M60 60 Q40 50 35 70 Q40 85 60 80'/><path d='M140 60 Q160 50 165 70 Q160 85 140 80'/><circle cx='45' cy='85' r='12'/><circle cx='155' cy='85' r='12'/></g></svg>`,
+fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><g fill='none' stroke='%23000' stroke-width='1.2'><circle cx='100' cy='100' r='70'/><circle cx='100' cy='100' r='60'/><path d='M70 90 Q80 70 100 75 Q115 80 120 95 Q125 110 125 Q95 135 80 125 Q65 110 70 90'/><path d='M100 75 Q90 65 85 50'/><path d='M110 125 Q125 135 130 145'/></g></svg>`
 };
-function getDiagramForType(t){t=(t||'').toLowerCase();if(t.includes('kub')&&t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('kub'))return DIAGRAMS.kub;if(t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('pelvis')||t.includes('gynae')||t.includes('uterus')||t.includes('ovary')||t.includes('fibroid')||t.includes('pcos'))return DIAGRAMS.pelvis;if(t.includes('fwb')||t.includes('anomaly')||t.includes('ob')||t.includes('pregnancy')||t.includes('weeks')||t.includes('crl')||t.includes('breech')||t.includes('cephalic')||t.includes('placenta'))return DIAGRAMS.fwb;return DIAGRAMS.whole;}
-let T={"WHOLE ABDOMEN - Normal":`ULTRASOUND WHOLE ABDOMEN
-LIVER: Normal in size __ cm [Normal: 12-15 cm], Normal homogenous echotexture, No focal lesion, No IHBR dilatation, Portal vein normal __ mm [Normal: <13 mm], No ascites
-GALL BLADDER: Normally distended, Wall thickness __ mm [Normal: <3 mm], Lumen clear, No calculus, No sludge
-CBD: __ mm [Normal: <6 mm], Normal
-PANCREAS: Normal in size, Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal echotexture, No focal lesion
-SPLEEN: Normal in size __ cm [Normal: <12 cm], Normal echotexture, No focal lesion
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
-URINARY BLADDER: Normal capacity __ cc [Normal: 300-400 cc], Wall thickness normal __ mm [Normal: <3 mm], Lumen clear, No calculus
-PROSTATE: __ gm [Normal: 20-25 gm], Normal
-PERITONEUM: No free fluid, No lymphadenopathy
-IMPRESSION: Normal Ultrasound Whole Abdomen`,
+function getDiagramForType(t){t=(t||'').toLowerCase();if(t.includes('kub')&&t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('kub'))return DIAGRAMS.kub;if(t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('pelvis')||t.includes('gynae')||t.includes('uterus')||t.includes('ovary')||t.includes('fibroid')||t.includes('pcos'))return DIAGRAMS.pelvis;if(t.includes('fwb')||t.includes('obstetric')||t.includes('ob')||t.includes('pregnancy')||t.includes('weeks')||t.includes('crl')||t.includes('breech')||t.includes('cephalic')||t.includes('placenta'))return DIAGRAMS.fwb;return DIAGRAMS.whole;}
+let T={"WHOLE ABDOMEN - Normal":`CLINICAL DATA:
+C/O: Lower abdominal discomfort.
 
-"WHOLE ABDOMEN - Fatty Liver Grade 1":`ULTRASOUND WHOLE ABDOMEN - FATTY LIVER GRADE 1
-LIVER: Enlarged __ cm [Normal: 12-15 cm], Increased echogenicity Grade 1 Fatty Liver, Minimal diffuse increase, No focal lesion
-GALL BLADDER: Normally distended, Wall __ mm [Normal: <3 mm], No calculus
-CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal __ cm [Normal: <12 cm], KIDNEYS: Normal, BLADDER: Normal, PERITONEUM: No free fluid
-IMPRESSION: Hepatomegaly with Fatty Liver Grade 1 - LIVER __ cm`,
+                   ULTRASOUND WHOLE ABDOMEN:
 
-"WHOLE ABDOMEN - Fatty Liver Grade 2":`ULTRASOUND WHOLE ABDOMEN - FATTY LIVER GRADE 2
-LIVER: Enlarged __ cm [Normal: 12-15 cm], Increased echogenicity Grade 2 Fatty Liver, Moderate diffuse increase, No focal lesion
-GALL BLADDER: Normally distended, Wall __ mm, No calculus, CBD: __ mm, PANCREAS: Normal / Obscured, SPLEEN: Normal __ cm, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Hepatomegaly with Fatty Liver Grade 2 - LIVER __ cm`,
+LIVER:
+ ➢ Normal in size measuring 13.1 cm with normal shape homogenous texture.
+ ➢ No intrahepatic biliary dilatation seen. No focal mass seen.
+ ➢ CBD 0.4cm, portal vein 1.0cm, IVC 1.4cm, and hepatic vein are normal.
 
-"WHOLE ABDOMEN - Fatty Liver Grade 3":`ULTRASOUND WHOLE ABDOMEN - FATTY LIVER GRADE 3
-LIVER: Enlarged __ cm [Normal: 12-15 cm], Markedly increased echogenicity Grade 3 Fatty Liver, No focal lesion
-GALL BLADDER: Obscured / Normally distended, Wall __ mm, CBD: __ mm, PANCREAS: Obscured, SPLEEN: Normal __ cm, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Hepatomegaly with Fatty Liver Grade 3 - LIVER __ cm`,
+GALL BLADDER:
+ ➢ Normal shape & walls.
+ ➢ No evidence of calculus or growth seen.
 
-"WHOLE ABDOMEN - Hepatomegaly":`ULTRASOUND WHOLE ABDOMEN - HEPATOMEGALY
-LIVER: Enlarged __ cm [Normal: 12-15 cm], Homogenous, No focal lesion, No IHBR dilatation, Portal vein normal __ mm [Normal: <13 mm]
-GALL BLADDER: Normally distended, Wall __ mm [Normal: <3 mm], No calculus, CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal __ cm [Normal: <12 cm], KIDNEYS: Normal, BLADDER: Normal, PERITONEUM: No ascites
-IMPRESSION: Hepatomegaly __ cm [Normal: <15 cm]`,
+PANCREAS:
+ ➢ Normal in size, shape and texture.
+ ➢ No mass or duct dilatation seen.
 
-"WHOLE ABDOMEN - Splenomegaly":`ULTRASOUND WHOLE ABDOMEN - SPLENOMEGALY
-LIVER: Normal __ cm [Normal: 12-15 cm], GALL BLADDER: Normal, Wall __ mm [Normal: <3 mm], CBD: __ mm, PANCREAS: Normal, SPLEEN: Enlarged __ cm [Normal: <12 cm], Homogenous, No focal lesion, RIGHT KIDNEY: __ x __ cm, LEFT KIDNEY: __ x __ cm, BLADDER: __ cc, PROSTATE: __ gm, PERITONEUM: No ascites
-IMPRESSION: Splenomegaly __ cm`,
+SPLEEN:
+ ➢ Normal in size measuring 9.8 cm and shape, texture.
+ ➢ Normal splenic vein measuring 0.4 cm.
+ ➢ No evidence of free fluid or enlarged Para-aortic nodes seen.
+ ➢ Diaphragm move normal with respiration.
+ ➢ No evidence of pleural effusion seen.
 
-"WHOLE ABDOMEN - Cholelithiasis Single":`ULTRASOUND WHOLE ABDOMEN - CHOLELITHIASIS SINGLE
-LIVER: Normal __ cm [Normal: 12-15 cm], No focal lesion, GALL BLADDER: Normally distended, Lumen shows single echogenic calculus __ mm [Normal: No calculus] with posterior acoustic shadowing, Mobile, Wall __ mm [Normal: <3 mm], No pericholecystic fluid, CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Cholelithiasis - Single Gall bladder calculus __ mm`,
+RIGHT KIDNEY: measuring 10.0 X 4.5 cm.
+ ➢ Normal in size, shape and texture.
+ ➢ Normal cortical thickness and corticomedullary distinction is intact.
+ ➢ No evidence of calculus or hydronephrosis seen.
 
-"WHOLE ABDOMEN - Cholelithiasis Multiple":`ULTRASOUND WHOLE ABDOMEN - CHOLELITHIASIS MULTIPLE
-LIVER: Normal __ cm, No focal lesion, GALL BLADDER: Normally distended, Lumen shows multiple echogenic calculi, Largest __ mm with posterior acoustic shadowing, Wall __ mm [Normal: <3 mm], CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Cholelithiasis - Multiple Gall bladder calculi largest __ mm`,
+LEFT KIDNEY: measuring 9.5 X 4.1 cm.
+ ➢ Normal in size, shape and texture.
+ ➢ Normal cortical thickness and corticomedullary distinction is intact.
+ ➢ No evidence of calculus or hydronephrosis seen.
 
-"WHOLE ABDOMEN - Prominent Bowel Loops":`ULTRASOUND WHOLE ABDOMEN - PROMINENT BOWEL LOOPS
-LIVER: Normal __ cm, GALL BLADDER: Normal, CBD: Normal, PANCREAS: Normal, SPLEEN: Normal __ cm, BOWEL LOOPS: Prominent, Dilated __ mm [Normal: <25 mm], To-and-fro peristalsis, No free fluid, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Prominent / Dilated bowel loops __ mm -? Subacute intestinal obstruction`,
+URINARY BLADDER:
+ ➢ Normal shape & walls.
+ ➢ No evidence of calculus or growth & diverticula seen.
 
-"WHOLE ABDOMEN - Appendicitis":`ULTRASOUND WHOLE ABDOMEN - APPENDICITIS
-RIGHT ILIAC FOSSA: Appendix visualized, Diameter __ mm [Normal: <6 mm], Wall thickness __ mm [Normal: <3 mm], Non-compressible, Surrounding echogenic fat, Minimal free fluid __ cc in RIF
-LIVER: Normal __ cm, GALL BLADDER: Normal, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Acute Appendicitis - Appendix __ mm, Non-compressible`,
+CONCLUSION:
+ ➢ Liver, Gall bladder, Pancreas, Spleen, pancreas, Both Kidneys & Urinary bladder apparently normal.
+ ➢ No evidence of mass, ascites & lymphadenopathy was seen.`,
 
-"KUB - Normal":`ULTRASOUND KUB
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal size, shape and echotexture, Cortical thickness __ mm [Normal: >10 mm], No calculus, No hydronephrosis
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
-URINARY BLADDER: Capacity __ cc [Normal: 300-400 cc], Wall normal __ mm [Normal: <3 mm], Lumen clear
-PROSTATE: __ gm [Normal: 20-25 gm], Normal
-IMPRESSION: Normal KUB`,
+"WHOLE ABDOMEN - Fatty Liver Grade 1":`CLINICAL DATA:
+C/O: __
 
-"KUB - Bilateral Microliths":`ULTRASOUND KUB - BILATERAL MICROLITHS
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Multiple tiny echogenic foci __ mm [Normal: No calculus] - Microliths, No hydronephrosis
-LEFT KIDNEY: __ x __ cm, Microliths __ mm
-URINARY BLADDER: __ cc [Normal: 300-400 cc], Normal, PROSTATE: __ gm [Normal: 20-25 gm]
-IMPRESSION: Bilateral Renal Microlithiasis`,
+                   ULTRASOUND WHOLE ABDOMEN:
 
-"KUB - Right Renal Calculus":`ULTRASOUND KUB - RIGHT RENAL CALCULUS
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Echogenic calculus __ mm [Normal: No calculus] with shadowing at upper / mid / lower pole / pelvis
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
-URINARY BLADDER: Normal __ cc [Normal: 300-400 cc], No calculus, PROSTATE: __ gm
-IMPRESSION: Right Renal Calculus __ mm`,
+LIVER:
+ ➢ Enlarged in size measuring __ cm with increased echogenicity - Grade 1 fatty liver.
+ ➢ No focal mass seen.
+ ➢ Portal vein normal.
 
-"KUB - Hydronephrosis":`ULTRASOUND KUB - HYDRONEPHROSIS
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Moderate hydronephrosis, Pelvis dilated __ mm [Normal: <10 mm], No calculus seen, LEFT KIDNEY: Normal, BLADDER: Normal __ cc
-IMPRESSION: Right Hydronephrosis - Pelvis __ mm`,
+GALL BLADDER:
+ ➢ Normal shape & walls. No calculus.
 
-"KUB - Hydronephrosis with Proximal Ureter Dilation":`ULTRASOUND KUB - HYDRO WITH PROXIMAL URETER DILATION
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Mild hydronephrosis, Proximal ureter dilated __ mm [Normal: <3 mm], LEFT KIDNEY: Normal, BLADDER: Normal
-IMPRESSION: Right hydronephrosis with proximal ureteric dilatation __ mm`,
+PANCREAS:
+ ➢ Normal in size and texture.
 
-"KUB + PROSTATE - Normal":`ULTRASOUND KUB + PROSTATE - NORMAL
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal
-URINARY BLADDER: Capacity __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Pre-void __ cc, Post-void residual __ cc [Normal: <50 cc]
-PROSTATE: __ x __ x __ cm [Normal: <4 cm], Volume __ cc [Normal: 20-25 cc], Weight __ gm [Normal: 20-25 gm], Normal size and echotexture
-IMPRESSION: Normal KUB with Normal Prostate __ gm`,
+SPLEEN:
+ ➢ Normal __ cm.
 
-"KUB + PROSTATE - BPH":`ULTRASOUND KUB + PROSTATE - BPH
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal
-URINARY BLADDER: Capacity __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Pre-void __ cc, Post-void residual __ cc [Normal: <50 cc]
-PROSTATE: Enlarged __ x __ x __ cm, Volume __ cc, Weight __ gm [Normal: 20-25 gm], Median lobe hypertrophy
-IMPRESSION: Benign Prostatic Hyperplasia - Enlarged Prostate __ gm with residual __ cc`,
+CONCLUSION:
+ ➢ Hepatomegaly with fatty liver Grade 1 measuring __ cm.`,
 
-"PELVIS - Normal":`ULTRASOUND PELVIS - NORMAL
-UTERUS: Anteverted, Normal size __ x __ cm [Normal: 7-9 x 4-5 cm], Myometrium homogenous, No fibroid, Endometrial thickness __ mm [Normal: 6-12 mm], Regular, Cervix normal
-OVARIES: Right ovary __ x __ cm, Volume __ cc [Normal: 5-10 cc], Left ovary __ x __ cm, Volume __ cc [Normal: 5-10 cc], No adnexal mass
-POD: No free fluid
-IMPRESSION: Normal Pelvis - Uterus __ x __ cm, ET __ mm`,
+"WHOLE ABDOMEN - Fatty Liver Grade 2":`CLINICAL DATA:
+C/O: __
 
-"PELVIS - Bulky Uterus":`ULTRASOUND PELVIS - BULKY UTERUS
-UTERUS: Bulky __ x __ cm [Normal: 7-9 x 4-5 cm], Heterogeneous myometrium, Endometrial thickness __ mm [Normal: 6-12 mm], No fibroid, Cervix normal, OVARIES: Normal, POD: No free fluid
-IMPRESSION: Bulky Uterus __ x __ cm`,
+                   ULTRASOUND WHOLE ABDOMEN:
 
-"PELVIS - PCOS / RPCOs":`ULTRASOUND PELVIS - PCOS / RPCOs
-UTERUS: __ x __ cm [Normal: 7-9 x 4-5 cm], ET __ mm [Normal: 6-12 mm], OVARIES: Both ovaries enlarged, Right __ x __ cm Volume __ cc [Normal: 5-10 cc], Left __ x __ cm Volume __ cc [Normal: 5-10 cc], Multiple small peripherally arranged follicles __ mm [Normal: <10 mm], Increased stromal echogenicity
-IMPRESSION: Bilateral Polycystic Ovaries (PCOS / RPCOs)`,
+LIVER:
+ ➢ Enlarged measuring __ cm with Grade 2 fatty liver.
 
-"FWB - Normal Single Live":`ULTRASOUND FWB - NORMAL SINGLE LIVE
-Presentation: Cephalic [Normal: Cephalic at term], Lie: Longitudinal, Fetus: Single, Alive, Cardiac Activity: Present, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks __ days, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Adequate, Placenta: Anterior / Posterior upper segment, Grade __ maturity, Cervix: Closed, Length __ mm [Normal: >25 mm]
-IMPRESSION: Single live intrauterine pregnancy __ weeks __ days, Cephalic, EFW __ gm, Adequate liquor, FHR __ bpm`,
+GALL BLADDER:
+ ➢ Normal.
 
-"FWB - Early Pregnancy CRL":`ULTRASOUND FWB - EARLY PREGNANCY CRL
-Gestational Sac: __ x __ mm, Yolk Sac: Normal __ mm [Normal: <6 mm], Fetal Pole: Present, CRL: __ mm [Normal: 2-30 mm], Gestational Age: __ weeks __ days as per CRL, Cardiac Activity: Present, FHR __ bpm [Normal: 120-160 bpm], Cervix: Closed __ mm [Normal: >25 mm]
-IMPRESSION: Single live early intrauterine pregnancy CRL __ mm = __ weeks __ days`,
+CONCLUSION:
+ ➢ Hepatomegaly with fatty liver Grade 2 __ cm.`,
 
-"FWB - Anomaly Scan 18-22 Weeks":`ULTRASOUND FWB - ANOMALY SCAN 18-22 WEEKS
-Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Placenta: __, No gross congenital anomaly seen, Head, Spine, Heart, Abdomen, Limbs normal, Cervix: Closed __ mm [Normal: >25 mm]
-IMPRESSION: Normal anomaly scan __ weeks - No gross anomaly seen`,
+"WHOLE ABDOMEN - Fatty Liver Grade 3":`CLINICAL DATA:
+C/O: __
 
-"FWB - Oligohydramnios":`ULTRASOUND FWB - OLIGOHYDRAMNIOS
-Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm] - Reduced
-IMPRESSION: Single live pregnancy __ weeks with Oligohydramnios AFI __ mm`,
+                   ULTRASOUND WHOLE ABDOMEN:
 
-"FWB - Breech Presentation":`ULTRASOUND FWB - BREECH PRESENTATION
-Presentation: Breech [Normal: Cephalic at term], Lie: Longitudinal, Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Placenta: __, Cervix: Closed
-IMPRESSION: Single live breech presentation __ weeks - EFW __ gm`
+LIVER:
+ ➢ Enlarged __ cm with Grade 3 fatty liver. Markedly increased echogenicity.
+
+CONCLUSION:
+ ➢ Hepatomegaly with fatty liver Grade 3 __ cm.`,
+
+"WHOLE ABDOMEN - Hepatomegaly":`CLINICAL DATA:
+C/O: __
+
+                   ULTRASOUND WHOLE ABDOMEN:
+
+LIVER:
+ ➢ Enlarged measuring __ cm with homogenous texture. No focal lesion.
+
+CONCLUSION:
+ ➢ Hepatomegaly __ cm.`,
+
+"WHOLE ABDOMEN - Splenomegaly":`CLINICAL DATA:
+C/O: __
+
+                   ULTRASOUND WHOLE ABDOMEN:
+
+SPLEEN:
+ ➢ Enlarged measuring __ cm. Homogenous. No focal lesion.
+
+CONCLUSION:
+ ➢ Splenomegaly __ cm.`,
+
+"WHOLE ABDOMEN - Cholelithiasis Single":`CLINICAL DATA:
+C/O: Right hypochondrial pain.
+
+                   ULTRASOUND WHOLE ABDOMEN:
+
+GALL BLADDER:
+ ➢ Gall bladder normally distended.
+ ➢ Single echogenic calculus __ mm with posterior acoustic shadowing.
+
+CONCLUSION:
+ ➢ Cholelithiasis - Single gall bladder calculus __ mm.`,
+
+"WHOLE ABDOMEN - Cholelithiasis Multiple":`CLINICAL DATA:
+C/O: __
+
+                   ULTRASOUND WHOLE ABDOMEN:
+
+GALL BLADDER:
+ ➢ Multiple echogenic calculi largest __ mm with shadowing.
+
+CONCLUSION:
+ ➢ Cholelithiasis - Multiple calculi largest __ mm.`,
+
+"WHOLE ABDOMEN - Prominent Bowel Loops":`CLINICAL DATA:
+C/O: __
+
+                   ULTRASOUND WHOLE ABDOMEN:
+
+BOWEL LOOPS:
+ ➢ Prominent / dilated loops __ mm with to-and-fro peristalsis.
+
+CONCLUSION:
+ ➢ Prominent dilated bowel loops __ mm.`,
+
+"WHOLE ABDOMEN - Appendicitis":`CLINICAL DATA:
+C/O: RIF pain.
+
+                   ULTRASOUND WHOLE ABDOMEN:
+
+RIGHT ILIAC FOSSA:
+ ➢ Appendix visualized, diameter __ mm, non-compressible, surrounding fat.
+
+CONCLUSION:
+ ➢ Acute appendicitis - Appendix __ mm.`,
+
+"KUB - Normal":`CLINICAL DATA:
+C/O: Flank pain.
+
+                          ULTRASOUND KUB:
+
+RIGHT KIDNEY:
+ ➢ Normal size __ X __ cm. No calculus or hydronephrosis.
+ ➢ Cortical thickness normal.
+
+LEFT KIDNEY:
+ ➢ Normal __ X __ cm. No calculus.
+
+URINARY BLADDER:
+ ➢ Normal capacity __ cc. No calculus.
+
+CONCLUSION:
+ ➢ Normal ultrasound KUB.`,
+
+"KUB - Bilateral Microliths":`CLINICAL DATA:
+C/O: __
+
+                     ULTRASOUND KUB:
+
+RIGHT KIDNEY: __ X __ cm.
+ ➢ Multiple tiny echogenic foci __ mm - Microliths. No hydronephrosis.
+
+LEFT KIDNEY: __ X __ cm.
+ ➢ Microliths __ mm.
+
+CONCLUSION:
+ ➢ Bilateral renal microlithiasis.`,
+
+"KUB - Right Renal Calculus":`CLINICAL DATA:
+C/O: Right flank pain.
+
+                  ULTRASOUND KUB:
+
+RIGHT KIDNEY: __ X __ cm.
+ ➢ Echogenic calculus __ mm with shadowing.
+
+CONCLUSION:
+ ➢ Right renal calculus __ mm.`,
+
+"KUB - Hydronephrosis":`CLINICAL DATA:
+C/O: __
+
+                   ULTRASOUND KUB:
+
+RIGHT KIDNEY: __ X __ cm.
+ ➢ Moderate hydronephrosis, pelvis __ mm. No calculus.
+
+CONCLUSION:
+ ➢ Right hydronephrosis pelvis __ mm.`,
+
+"KUB - Hydronephrosis with Proximal Ureter Dilation":`CLINICAL DATA:
+C/O: __
+
+                   ULTRASOUND KUB:
+
+RIGHT KIDNEY: __ X __ cm.
+ ➢ Mild hydronephrosis with proximal ureter __ mm.
+
+CONCLUSION:
+ ➢ Right hydronephrosis with proximal ureteric dilatation __ mm.`,
+
+"KUB + PROSTATE - Normal":`CLINICAL DATA:
+C/O: __
+
+                   ULTRASOUND KUB + PROSTATE:
+
+RIGHT KIDNEY: __ X __ cm. Normal.
+LEFT KIDNEY: __ X __ cm. Normal.
+URINARY BLADDER: __ cc. Normal.
+PROSTATE: __ gm. Normal.
+
+CONCLUSION:
+ ➢ Normal KUB with normal prostate __ gm.`,
+
+"KUB + PROSTATE - BPH":`CLINICAL DATA:
+C/O: Difficulty in micturition.
+
+                   ULTRASOUND KUB + PROSTATE - BPH:
+
+PROSTATE:
+ ➢ Enlarged __ X __ X __ cm, Volume __ cc, Weight __ gm.
+ ➢ Median lobe hypertrophy.
+
+URINARY BLADDER:
+ ➢ Post-void residual __ cc.
+
+CONCLUSION:
+ ➢ Benign prostatic hyperplasia - Enlarged prostate __ gm.`,
+
+"PELVIS - Normal":`CLINICAL DATA:
+C/O: Lower abdominal pain.
+
+                        ULTRASOUND PELVIS:
+
+UTERUS:
+ ➢ Scan of the pelvis shows Anteverted normal sized uterus measuring 9.8 x2.4x3.0 cm.
+ ➢ No evidence of uterine mass seen.
+ ➢ Endometrial cavity is normal.
+ ➢ Endometrial lining is normal thickness about 0.4cm.
+ ➢ No free fluid seen in pouch of douglas.
+
+OVARIES:
+ ➢ Right ovary is normal in size & shape measuring 3.0 x 1.9 cm.
+ ➢ Right ovary is normal in size & shape measuring 2.8 x 1.7 cm.
+ ➢ No evidence of mass or cyst seen in either ovary.
+
+CONCLUSION:
+ ➢ Anteverted uterus and ovaries apparently normal.
+ ➢ No free fluid seen in pouch of douglas.
+ ➢ Rest of study unremarkable.
+ ➢ Clinical & labs correlation would be suggested.`,
+
+"PELVIS - Bulky Uterus":`CLINICAL DATA:
+C/O: Lower abdominal pain.
+
+                        ULTRASOUND PELVIS:
+
+UTERUS:
+ ➢ Scan shows bulky uterus measuring __ x __ cm.
+ ➢ Myometrium heterogeneous. No focal mass.
+ ➢ ET __ mm. No free fluid in pouch of douglas.
+
+CONCLUSION:
+ ➢ Bulky uterus __ x __ cm.
+ ➢ Rest of study unremarkable.`,
+
+"PELVIS - PCOS / RPCOs":`CLINICAL DATA:
+C/O: Irregular menses.
+
+                        ULTRASOUND PELVIS:
+
+UTERUS:
+ ➢ Uterus __ x __ cm, ET __ mm.
+
+OVARIES:
+ ➢ Right ovary __ x __ cm, Volume __ cc.
+ ➢ Left ovary __ x __ cm, Volume __ cc.
+ ➢ Both ovaries show multiple small peripherally arranged follicles.
+ ➢ Increased stromal echogenicity.
+
+CONCLUSION:
+ ➢ Bilateral polycystic ovaries (PCOS / RPCOs).`,
+
+"FWB - Normal Single Live":`CLINICAL DATA:
+LMP: __ week's gestational amenorrhea.
+
+                  FWB & OBSTETRIC ULTRASOUND REPORT:
+
+Number of Fetus: SINGLE
+Location: INTRAUTERINE.
+Presentation: CEPHALIC
+Lie: LONGITUDINAL LIE.
+Fetal Cardiac Activity: PRESENT. (__ BPM)
+Gross Fetal Movement: PRESENT.
+Placenta: ANTERIOR, NOT LOW-LYING.
+Placental Maturity: GRADE II.
+Amount of Liquor: ADEQUATE RESPECTIVE TO GEST-AGE.
+B.P.D.: (Bi Parietal Diameter) __ cm.
+HC: __ cm, AC: __ cm, FL: __ cm, EFW: __ gm.
+AFI: __ cm.
+
+CONCLUSION:
+Scan of the pelvis shows single alive intrauterine pregnancy corresponding to
+the gestational age of __ weeks±__ day. Cephalic presentation & placenta
+localized anteriorly no previa with grade II maturity. Umbilical cord is not
+seen round the neck of the fetus, Internal oss is closed. Amount of
+liquor is adequate.
+
+AFI
+-
+__cm - __cm
+--------- The amniotic fluid index is __ cm. (Normal 08 to 20cm)
+__cm - __cm`,
+
+"FWB - Early Pregnancy CRL":`CLINICAL DATA:
+LMP: __ weeks amenorrhea.
+
+                  FWB & OBSTETRIC ULTRASOUND REPORT:
+
+Gestational Sac: __ x __ mm
+Yolk Sac: Normal __ mm
+Fetal Pole: Present, CRL __ mm
+Gestational Age: __ weeks __ days as per CRL
+Fetal Cardiac Activity: PRESENT. (__ BPM)
+Cervix: Closed __ mm
+
+CONCLUSION:
+Scan shows single alive early intrauterine pregnancy CRL __ mm = __ weeks __ days.
+Internal oss is closed. No subchorionic collection.
+
+AFI: Adequate.`,
+
+"FWB - Anomaly Scan 18-22 Weeks":`CLINICAL DATA:
+LMP: __ weeks amenorrhea.
+
+                  FWB & OBSTETRIC ULTRASOUND REPORT - ANOMALY SCAN:
+
+Number of Fetus: SINGLE ALIVE
+FHR: __ BPM
+BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm
+Gestational Age: __ weeks
+EFW: __ gm
+AFI: __ cm
+
+Placenta: ANTERIOR / POSTERIOR, NOT LOW-LYING
+Placental Maturity: GRADE __
+
+Anomaly:
+  No gross congenital anomaly seen. Head, spine, heart, abdomen, limbs normal.
+
+Cervix: Closed __ mm
+
+CONCLUSION:
+Normal anomaly scan __ weeks - No gross anomaly seen. Liquor adequate.`,
+
+"FWB - Oligohydramnios":`CLINICAL DATA:
+LMP: __ weeks amenorrhea.
+
+                  FWB & OBSTETRIC ULTRASOUND REPORT:
+
+Number of Fetus: SINGLE ALIVE
+FHR: __ BPM
+BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm
+EFW: __ gm
+AFI: __ cm - Reduced
+
+CONCLUSION:
+Single live pregnancy __ weeks with oligohydramnios AFI __ cm. Liquor reduced.`,
+
+"FWB - Breech Presentation":`CLINICAL DATA:
+LMP: __ weeks amenorrhea.
+
+                  FWB & OBSTETRIC ULTRASOUND REPORT:
+
+Number of Fetus: SINGLE ALIVE
+Presentation: BREECH
+Lie: LONGITUDINAL LIE.
+FHR: __ BPM
+BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm
+EFW: __ gm
+AFI: __ cm
+
+CONCLUSION:
+Single live breech presentation __ weeks - EFW __ gm. Liquor adequate.
+Internal oss closed.`
 };
 
 let allTemplates=Object.keys(T);
 let fetalData={},editId=null,lastViewedId=null;
 function filterTemplates(){try{let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');if(!s)return;let current=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(current)){s.value=current;}}catch(e){}}
-function useSelectedTemplate(){try{let sel=document.getElementById('uType');let v=sel?.value;if(!v){alert('Pehle template select karen');return;}let rt=document.getElementById('rText');if(rt) rt.value=T[v]||'';checkFetal(false);autoSaveDraft();document.getElementById('rText')?.scrollIntoView({behavior:'smooth'});}catch(e){alert('Template error: '+e.message);}}
+function useSelectedTemplate(){try{let sel=document.getElementById('uType');let v=sel?.value;if(!v){alert('Please select template first');return;}let rt=document.getElementById('rText');if(rt) rt.value=T[v]||'';checkFetal(false);autoSaveDraft();document.getElementById('rText')?.scrollIntoView({behavior:'smooth'});}catch(e){alert('Template error: '+e.message);}}
 function calcFWB(){try{let bpd=parseFloat(document.getElementById('cBPD')?.value)||0,hc=parseFloat(document.getElementById('cHC')?.value)||0,ac=parseFloat(document.getElementById('cAC')?.value)||0,fl=parseFloat(document.getElementById('cFL')?.value)||0,crl=parseFloat(document.getElementById('cCRL')?.value)||0,afi=parseFloat(document.getElementById('cAFI')?.value)||0;let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);if(crl>0)gas.push(crl*0.16+6.8);if(bpd>0)gas.push(bpd*0.33+4);let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}fetalData={ga:avg,efw:efw,hc,ac,fl,bpd,crl,afi};let e1=document.getElementById('resGA'); if(e1) e1.innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';let e2=document.getElementById('resEFW'); if(e2) e2.innerText=efw?`Wt: ${Math.round(efw)} gm`:'Wt: --';let e3=document.getElementById('resEDD'); if(e3) e3.innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';}catch(e){}}
-function applyCalc(){try{if(!fetalData.ga&&!fetalData.efw){alert('HC AC FL likhen');return;}let rt=document.getElementById('rText');if(!rt)return;let txt=rt.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rt.value=txt;autoSaveDraft();}catch(e){}}
+function applyCalc(){try{if(!fetalData.ga&&!fetalData.efw){alert('Please enter HC AC FL');return;}let rt=document.getElementById('rText');if(!rt)return;let txt=rt.value;txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rt.value=txt;autoSaveDraft();}catch(e){}}
 function init(){try{let s=document.getElementById('uType');if(s){s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate'); if(pd) pd.valueAsDate=new Date();let sd=document.getElementById('sumDate'); if(sd) sd.valueAsDate=new Date();let tc=document.getElementById('templateCount'); if(tc) tc.innerText=allTemplates.length+' Templates';loadDraft();checkFetal(true);render();}catch(e){console.log('init error',e);}}
-function checkFetal(preserveText){try{let sel=document.getElementById('uType');let v=sel?.value||allTemplates[0];let isFWB=v.toLowerCase().includes('fwb')||v.toLowerCase().includes('ob')||v.toLowerCase().includes('pregnancy');let isProstate=v.toLowerCase().includes('prostate');let isWhole=v.toLowerCase().includes('whole')||v.toLowerCase().includes('kub')||v.toLowerCase().includes('pelvis')||v.toLowerCase().includes('gynae');let fc=document.getElementById('fetalCalc'); if(fc) fc.style.display=isFWB?'block':'none';let pc=document.getElementById('prostateCalc'); if(pc) pc.style.display=isProstate?'block':'none';let cb=document.getElementById('complaintBox'); if(cb) cb.style.display=isWhole?'block':'none';let d = getDiagramForType(v);let wm=document.getElementById('diagramWM'); if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}}catch(e){}}
+function checkFetal(preserveText){try{let sel=document.getElementById('uType');let v=sel?.value||allTemplates[0];let isFWB=v.toLowerCase().includes('fwb')||v.toLowerCase().includes('obstetric')||v.toLowerCase().includes('pregnancy');let isProstate=v.toLowerCase().includes('prostate');let fc=document.getElementById('fetalCalc'); if(fc) fc.style.display=isFWB?'block':'none';let pc=document.getElementById('prostateCalc'); if(pc) pc.style.display=isProstate?'block':'none';let d = getDiagramForType(v);let wm=document.getElementById('diagramWM'); if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}}catch(e){}}
 function formatReportToHTML(text){
  try{
   let lines=text.split('\n'); let html='';
   lines.forEach(line=>{
-   let originalLine=line.trim();
-   if(!originalLine){html+='<div style="height:6px"></div>';return;}
-   let lineForPrint = originalLine.replace(/\[.*?\]/g,'').trim();
-   if(lineForPrint.startsWith('ULTRASOUND')||lineForPrint.startsWith('DOPPLER')){
-     html+=`<div style="text-align:center;margin:12px 0 10px 0;font-size:14px;font-weight:900;text-decoration:underline;color:#000">${lineForPrint}</div>`;return;
+   let trimmed=line.trim();
+   if(!trimmed){html+='<div style="height:4px"></div>';return;}
+   // Keep original spacing for tabular FWB
+   if(trimmed.startsWith('CLINICAL DATA:')||trimmed.startsWith('LMP:')||trimmed.startsWith('C/O:')){
+     html+=`<div style="margin:4px 0;font-size:11.5px;color:#000"><b><u>${trimmed.split(':')[0]}:</u></b> ${trimmed.split(':').slice(1).join(':')}</div>`;return;
    }
-   if(lineForPrint.startsWith('IMPRESSION:')){
-     let val=lineForPrint.replace('IMPRESSION:','').trim();
-     html+=`<div style="margin-top:14px;font-size:13px;color:#000"><b><u>IMPRESSION</u>:</b> ${val}</div>`;return;
+   if(trimmed.startsWith('ULTRASOUND')||trimmed.includes('FWB & OBSTETRIC')){
+     html+=`<div style="text-align:center;margin:8px 0 10px 0;font-size:12px;font-weight:900;text-decoration:underline;color:#000">${trimmed}</div>`;return;
    }
-   if(lineForPrint.startsWith('Advice:')){
-     let val=lineForPrint.replace('Advice:','').trim();
-     html+=`<div style="margin-top:8px;font-size:12.5px;color:#000"><b><u>Advice</u>:</b> ${val}</div>`;return;
+   if(trimmed.startsWith('Number of Fetus:')||trimmed.startsWith('Location:')||trimmed.startsWith('Presentation:')||trimmed.startsWith('Lie:')||trimmed.startsWith('Fetal Cardiac')||trimmed.startsWith('Gross Fetal')||trimmed.startsWith('Placenta:')||trimmed.startsWith('Placental Maturity:')||trimmed.startsWith('Amount of Liquor:')||trimmed.startsWith('B.P.D.:')||trimmed.startsWith('BPD:')||trimmed.startsWith('AFI')||trimmed.startsWith('FHR:')||trimmed.startsWith('Gestational')||trimmed.startsWith('Yolk Sac:')||trimmed.startsWith('Fetal Pole:')||trimmed.startsWith('Cervix:')||trimmed.startsWith('Anomaly:')){
+     // Tabular style - keep as two columns
+     html+=`<div style="font-family:Courier New, monospace;font-size:11px;color:#000;white-space:pre;margin:1px 0">${line.replace(/ {2,}/g,' ').replace(/\t/g,' ')}</div>`;return;
    }
-   if(lineForPrint.includes(':')){
-     let idx=lineForPrint.indexOf(':');
-     let label=lineForPrint.substring(0,idx).trim();
-     let value=lineForPrint.substring(idx+1).trim();
-     html+=`<div style="margin:3px 0;color:#000"><b><u>${label}</u>:</b> ${value}</div>`;
-   }else{
-     html+=`<div style="color:#000">${lineForPrint}</div>`;
+   if(trimmed.startsWith('CONCLUSION:')){
+     html+=`<div style="margin-top:12px;font-size:11.5px;color:#000"><b><u>CONCLUSION:</u></b></div>`;return;
    }
-  });return html;
+   if(trimmed.startsWith('➢')){
+     html+=`<div style="margin:2px 0 2px 10px;font-size:11px;color:#000">${trimmed}</div>`;return;
+   }
+   // Paragraphs
+   if(trimmed.length>40 &&!trimmed.endsWith(':')){
+     html+=`<div style="margin:4px 0;text-align:justify;font-size:11px;color:#000">${trimmed}</div>`;return;
+   }
+   if(trimmed.endsWith(':') && trimmed.length<35){
+     html+=`<div style="margin-top:8px;font-size:11.5px;color:#000"><b><u>${trimmed}</u></b></div>`;return;
+   }
+   html+=`<div style="font-size:11px;color:#000">${trimmed}</div>`;
+  });
+  return html;
  }catch(e){return text;}
 }
 function make(){
  try{
   let pn=document.getElementById('pName');
-  if(!pn?.value){alert('Patient Name likhen');return;}
+  if(!pn?.value){alert('Please enter Patient Name');return;}
   let d = getDiagramForType(document.getElementById('uType')?.value);
   let wm = document.getElementById('diagramWM');
   if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}
   let pid=document.getElementById('pIDMobile')?.value||'__';
   let complaintText=(document.getElementById('pComplaint')?.value||'').trim();
-  let complaintHTML='';
-  let cb=document.getElementById('complaintBox');
-  if(complaintText && cb && cb.style.display!=='none'){
-   complaintHTML=`<div style="margin-bottom:10px;font-size:12.5px;color:#000"><b><u>Present Complaint / H/O</u>:</b> ${complaintText}</div>`;
+  let patientBorder=`<div style="border:1px solid #000;padding:6px 10px;margin-bottom:10px;background:#fff;color:#000;font-size:11px"><div style="display:flex;flex-wrap:wrap;gap:6px"><span><b>Name:</b> ${document.getElementById('pName').value}</span> | <span><b>Age:</b> ${document.getElementById('pAge').value}</span> | <span><b>Sex:</b> ${document.getElementById('pGen').value}</span> | <span><b>Date:</b> ${document.getElementById('pDate').value}</span> | <span><b>ID/Mobile:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:2px"><span><b>Ref By:</b> ${document.getElementById('ref').value}</span> | <span><b>Sonologist:</b> ${document.getElementById('sono').value}</span></div></div>`;
+  // Auto insert C/O if typed in complaint box and not in template
+  let rTextVal=document.getElementById('rText').value;
+  if(complaintText &&!rTextVal.toLowerCase().includes('c/o:') &&!rTextVal.toLowerCase().includes('clinical data:') &&!rTextVal.toLowerCase().includes('lmp:')){
+    // For FWB, put as LMP, for others as C/O
+    if(document.getElementById('uType').value.toLowerCase().includes('fwb')){
+      rTextVal=`CLINICAL DATA:\nLMP: ${complaintText}\n\n`+rTextVal;
+    }else{
+      rTextVal=`CLINICAL DATA:\nC/O: ${complaintText}\n\n`+rTextVal;
+    }
   }
-  let patientBorder=`<div style="border:1.5px solid #000;border-radius:6px;padding:10px 12px;margin-bottom:10px;background:#fff;color:#000"><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;color:#000"><span><b><u>Name</u>:</b> ${document.getElementById('pName').value}</span> | <span><b><u>Age</u>:</b> ${document.getElementById('pAge').value}</span> | <span><b><u>Sex</u>:</b> ${document.getElementById('pGen').value}</span> | <span><b><u>Date</u>:</b> ${document.getElementById('pDate').value}</span> | <span><b><u>ID/Mobile</u>:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;margin-top:4px;color:#000"><span><b><u>Ref By</u>:</b> ${document.getElementById('ref').value}</span> | <span><b><u>Sonologist</u>:</b> ${document.getElementById('sono').value}</span></div></div>`;
-  let bodyHTML=formatReportToHTML(document.getElementById('rText').value);
-  let footer=`<div style="margin-top:22px;border-top:1.5px solid #000;padding-top:8px;text-align:center;font-size:11px;line-height:1.6;color:#000"><div><b><i>This report is computer generated, signature not required</i></b></div><div style="margin-top:4px;font-size:12px;font-weight:800;color:#000">Thanks for availing our service</div></div>`;
+  let bodyHTML=formatReportToHTML(rTextVal);
+  let footer=`<div style="margin-top:18px;text-align:center;font-size:10px;color:#000"><i>This is computer generated report no signature required.</i></div>`;
   let rc=document.getElementById('reportContent');
-  if(rc) rc.innerHTML=patientBorder+complaintHTML+bodyHTML+footer;
+  if(rc) rc.innerHTML=patientBorder+bodyHTML+footer;
   let oc=document.getElementById('outCard'); if(oc) oc.style.display='block';
   setTimeout(()=>{let w=document.getElementById('diagramWM'); if(w){w.style.backgroundImage=`url("${d}")`; w.style.display='block';}},100);
   if(oc) oc.scrollIntoView({behavior:'smooth'});
@@ -344,12 +625,12 @@ function make(){
 }
 function autoSaveDraft(){try{let draft={name:document.getElementById('pName')?.value||'',age:document.getElementById('pAge')?.value||'',gen:document.getElementById('pGen')?.value||'',mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',ref:document.getElementById('ref')?.value||'',sono:document.getElementById('sono')?.value||'',text:document.getElementById('rText')?.value||'',complaint:document.getElementById('pComplaint')?.value||'',editId:editId};localStorage.setItem('azam_draft',JSON.stringify(draft));let ds=document.getElementById('draftStatus'); if(ds){ds.innerText='Draft Saved: '+new Date().toLocaleTimeString(); ds.style.color='#10b981';}}catch(e){}}
 function loadDraft(){try{let d=localStorage.getItem('azam_draft');if(!d) return;let draft=JSON.parse(d);if(draft.name) document.getElementById('pName').value=draft.name;if(draft.age) document.getElementById('pAge').value=draft.age;if(draft.gen) document.getElementById('pGen').value=draft.gen;if(draft.mobile) document.getElementById('pIDMobile').value=draft.mobile;if(draft.type) document.getElementById('uType').value=draft.type;if(draft.date) document.getElementById('pDate').value=draft.date;if(draft.ref) document.getElementById('ref').value=draft.ref;if(draft.sono) document.getElementById('sono').value=draft.sono;if(draft.text) document.getElementById('rText').value=draft.text;if(draft.complaint) document.getElementById('pComplaint').value=draft.complaint;if(draft.editId) {editId=draft.editId; let eb=document.getElementById('editBanner'); if(eb) eb.style.display='block'; let es=document.getElementById('editIdShow'); if(es) es.innerText=editId; }let ds=document.getElementById('draftStatus'); if(ds) ds.innerText='Draft Restored: '+new Date().toLocaleTimeString();}catch(e){}}
-function clearDraft(){if(confirm('Draft clear karna hai?')){localStorage.removeItem('azam_draft');location.reload();}}
+function clearDraft(){if(confirm('Clear draft?')){localStorage.removeItem('azam_draft');location.reload();}}
 document.addEventListener('keydown', function(e){if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='s'){e.preventDefault();autoSaveDraft();saveR();}});
 function saveR(){
  try{
   let pNameEl=document.getElementById('pName');
-  if(!pNameEl ||!pNameEl.value){alert('Patient Name likhen');return;}
+  if(!pNameEl ||!pNameEl.value){alert('Please enter Patient Name');return;}
   let all=[];try{ all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){ all=[]; }
   let recId = editId? editId : Date.now();
   let reportHTML='';let rc=document.getElementById('reportContent');
@@ -361,19 +642,19 @@ function saveR(){
   render();
   let ds=document.getElementById('draftStatus'); if(ds) ds.innerText='✅ Final Saved: '+new Date().toLocaleTimeString();
   lastViewedId=rec.id;
-  alert('✅ Report Local Save ho gayi! Ab Drive par upload ho rahi hai...');
+  alert('✅ Report saved! Uploading to Drive...');
   setTimeout(()=>{uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));},500);
- }catch(err){console.error(err);alert('Local save error: '+err.message);}
+ }catch(err){console.error(err);alert('Save error: '+err.message);}
 }
-function render(){try{let all=[]; try{ all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){all=[];}let sBox=document.getElementById('sBox');let q=(sBox?.value||'').toLowerCase();let listEl=document.getElementById('list');if(!listEl) return;let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')+' '+(r.type||'')).toLowerCase().includes(q));if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:20px">Koi report nahi mili. Drive se Load dabayen.</p>';return;}listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center"><div><b>${r.name||'No Name'}</b> - ${r.type||''}<br><small>${r.mobile||''} | ${r.date||''}${r.complaint?' | H/O:'+r.complaint.substring(0,25):''}</small></div><div style="display:flex;flex-wrap:wrap"><button class="small" style="background:#f59e0b" onclick="editR(${r.id})">Edit</button><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="viewR(${r.id});setTimeout(()=>beforePrintClean(),600)">Print</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}catch(e){let listEl=document.getElementById('list'); if(listEl) listEl.innerHTML='<p style="color:red">List error</p>';}}
+function render(){try{let all=[]; try{ all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){all=[];}let sBox=document.getElementById('sBox');let q=(sBox?.value||'').toLowerCase();let listEl=document.getElementById('list');if(!listEl) return;let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')+' '+(r.type||'')).toLowerCase().includes(q));if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:20px">No reports found. Click Load from Drive.</p>';return;}listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center"><div><b>${r.name||'No Name'}</b> - ${r.type||''}<br><small>${r.mobile||''} | ${r.date||''}${r.complaint?' | '+r.complaint.substring(0,25):''}</small></div><div style="display:flex;flex-wrap:wrap"><button class="small" style="background:#f59e0b" onclick="editR(${r.id})">Edit</button><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="viewR(${r.id});setTimeout(()=>beforePrintClean(),600)">Print</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}catch(e){let listEl=document.getElementById('list'); if(listEl) listEl.innerHTML='<p style="color:red">List error</p>';}}
 function viewR(id){try{let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;lastViewedId=id; editId=null; let eb=document.getElementById('editBanner'); if(eb) eb.style.display='none';document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'Male';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||allTemplates[0];document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';checkFetal(true);document.getElementById('rText').value=r.text||'';document.getElementById('pComplaint').value=r.complaint||'';make();}catch(e){alert('View error: '+e.message);}}
-function editR(id){try{let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;editId=id;lastViewedId=id;document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||allTemplates[0];document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';checkFetal(true);document.getElementById('rText').value=r.text||'';document.getElementById('pComplaint').value=r.complaint||'';let eb=document.getElementById('editBanner'); if(eb) eb.style.display='block';let es=document.getElementById('editIdShow'); if(es) es.innerText=id;let fb=document.getElementById('finalBtn'); if(fb) fb.innerText='✏️ Update Report';make();window.scrollTo({top:0,behavior:'smooth'});autoSaveDraft();}catch(e){alert('Edit error: '+e.message);}}
-function editCurrent(){if(lastViewedId){editR(lastViewedId);}else{alert('Koi report selected nahi');}}
+function editR(id){try{let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;editId=id;lastViewedId=id;document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||allTemplates[0];document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';checkFetal(true);document.getElementById('rText').value=r.text||'';document.getElementById('pComplaint').value=r.complaint||'';let eb=document.getElementById('editBanner'); if(eb) eb.style.display='block';let es=document.getElementById('editIdShow'); if(es) es.innerText=id;let fb=document.getElementById('finalBtn'); if(fb) fb.innerText='Update Report';make();window.scrollTo({top:0,behavior:'smooth'});autoSaveDraft();}catch(e){alert('Edit error: '+e.message);}}
+function editCurrent(){if(lastViewedId){editR(lastViewedId);}else{alert('No report selected');}}
 function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));}
 function pdf(){try{let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[190,280]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:document.getElementById('rText').value;doc.text(doc.splitTextToSize(txt,150),10,50);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}catch(e){alert('PDF error: '+e.message);}}
 function openSummary(){let sc=document.getElementById('summaryCard'); if(sc) sc.style.display='block';renderSummary();}
 function closeSummary(){let sc=document.getElementById('summaryCard'); if(sc) sc.style.display='none';}
-function renderSummary(){try{let d=document.getElementById('sumDate')?.value;if(!d){alert('Date select');return;}let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let f=all.filter(r=>r.date===d);let st=document.getElementById('sumTitle'); if(st) st.innerText='Date: '+d;let tot=document.getElementById('sumTotal'); if(tot) tot.innerText=f.length;let sb=document.getElementById('sumBody'); if(sb) sb.innerHTML=f.map((r,i)=>`<tr><td>${i+1}</td><td>${r.name}</td><td>${r.mobile}</td><td>${r.age}/${r.gen}</td><td>${r.type}</td><td>${r.ref}</td><td>${r.sono}</td></tr>`).join('');}catch(e){}}
+function renderSummary(){try{let d=document.getElementById('sumDate')?.value;if(!d){alert('Select date');return;}let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let f=all.filter(r=>r.date===d);let st=document.getElementById('sumTitle'); if(st) st.innerText='Date: '+d;let tot=document.getElementById('sumTotal'); if(tot) tot.innerText=f.length;let sb=document.getElementById('sumBody'); if(sb) sb.innerHTML=f.map((r,i)=>`<tr><td>${i+1}</td><td>${r.name}</td><td>${r.mobile}</td><td>${r.age}/${r.gen}</td><td>${r.type}</td><td>${r.ref}</td><td>${r.sono}</td></tr>`).join('');}catch(e){}}
 function printSummary(){try{let c=document.getElementById('summaryPrintArea')?.innerHTML||'';let w=window.open('','','width=900,height=700');w.document.write('<html><body>'+c+'</body></html>');w.document.close();w.print();}catch(e){}}
 init();
 </script>
