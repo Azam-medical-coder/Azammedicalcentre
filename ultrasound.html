@@ -54,8 +54,8 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date" onchange="autoSaveDraft()"><input id="pIDMobile" placeholder="Patient ID / Mobile" oninput="autoSaveDraft()"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref" onchange="autoSaveDraft()"></select><select id="sono" onchange="autoSaveDraft()"></select></div>
 <div id="complaintBox" style="border:2px solid #f59e0b;border-radius:12px;padding:10px;margin:8px 0;background:#fffbeb;display:block">
-<label style="font-weight:800;color:#d97706;font-size:12px">Present Complaint / C/O</label>
-<textarea id="pComplaint" rows="2" placeholder="e.g. Lumber pain, Lower abdominal pain..." oninput="autoSaveDraft()"></textarea>
+<label style="font-weight:800;color:#d97706;font-size:12px">Present Complaint / C/O - Type here and it will appear in report</label>
+<textarea id="pComplaint" rows="2" placeholder="e.g. Lumber pain, Right scrotal pain, Lower abdominal pain..." oninput="autoSaveDraft()"></textarea>
 </div>
 <div id="fetalCalc" class="calcBox" style="display:none"><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Wt: --</div></div><button class="small" style="background:#10b981;width:100%" onclick="applyCalc()">Apply Calculation</button></div>
 <div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Apply Prostate Size</button></div>
@@ -140,21 +140,17 @@ fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
 let prostateData={};
 function calcProstate(){try{let l=parseFloat(document.getElementById('pL')?.value)||0,w=parseFloat(document.getElementById('pW')?.value)||0,h=parseFloat(document.getElementById('pH')?.value)||0;if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};let e1=document.getElementById('resPVol'); if(e1) e1.innerText=`Vol: ${vol.toFixed(1)} cc`;let e2=document.getElementById('resPGm'); if(e2) e2.innerText=`Wt: ${vol.toFixed(1)} gm`;}}catch(e){}}
 function applyProstateCalc(){if(!prostateData.vol){alert('Enter cm');return;}let txt=document.getElementById('rText').value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);document.getElementById('rText').value=txt;autoSaveDraft();}
-
-// REALISTIC DIAGRAMS - Professional line art for watermark
 const DIAGRAMS={
-whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><path d='M50 50 C80 40 120 35 150 60 L180 90 L160 140 L120 160 L60 120 Z' /><path d='M200 70 L250 60 L280 90 L260 140 L210 150 L180 110 Z' /><ellipse cx='130' cy='180' rx='35' ry='50'/><ellipse cx='270' cy='190' rx='35' ry='50'/><ellipse cx='200' cy='230' rx='50' ry='30'/><text x='100' y='30' font-size='10' fill='%23000'>LIVER</text><text x='220' y='30' font-size='10' fill='%23000'>GALL BLADDER</text><text x='120' y='170' font-size='9' fill='%23000'>LEFT KIDNEY</text><text x='260' y='180' font-size='9' fill='%23000'>RIGHT KIDNEY</text></g></svg>`,
-kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 350'><g fill='none' stroke='%23000' stroke-width='1.3' opacity='0.75'><path d='M50 40 C50 20 110 10 130 40 C150 70 140 120 110 140 C80 160 40 140 30 100 C20 60 30 50 50 40 Z'/><path d='M270 40 C270 20 330 10 350 40 C370 70 360 120 330 140 C300 160 260 140 250 100 C240 60 250 50 270 40 Z'/><ellipse cx='200' cy='220' rx='70' ry='45'/><ellipse cx='200' cy='290' rx='25' ry='18'/><text x='20' y='20' font-size='10' fill='%23000'>RIGHT KIDNEY</text><text x='270' y='20' font-size='10' fill='%23000'>LEFT KIDNEY</text><text x='170' y='210' font-size='10' fill='%23000'>BLADDER</text><text x='170' y='285' font-size='9' fill='%23000'>PROSTATE</text></g></svg>`,
-scrotum:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><ellipse cx='120' cy='220' rx='55' ry='75'/><ellipse cx='120' cy='220' rx='40' ry='55'/><path d='M120 80 L120 145'/><path d='M100 90 Q120 100 140 90'/><path d='M95 110 Q120 120 145 110'/><ellipse cx='280' cy='220' rx='55' ry='75'/><ellipse cx='280' cy='220' rx='40' ry='55'/><path d='M280 80 L280 145'/><text x='80' y='40' font-size='11' fill='%23000'>RIGHT TESTIS</text><text x='240' y='40' font-size='11' fill='%23000'>LEFT TESTIS</text><text x='90' y='310' font-size='9' fill='%23000'>EPIDIDYMIS</text><text x='250' y='310' font-size='9' fill='%23000'>EPIDIDYMIS</text></g></svg>`,
-pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><path d='M150 80 L250 80 L260 120 L140 120 Z'/><ellipse cx='120' cy='150' rx='35' ry='25'/><ellipse cx='280' cy='150' rx='35' ry='25'/><ellipse cx='200' cy='200' rx='60' ry='20'/><text x='170' y='60' font-size='10' fill='%23000'>UTERUS</text><text x='90' y='140' font-size='9' fill='%23000'>RT OVARY</text><text x='260' y='140' font-size='9' fill='%23000'>LT OVARY</text></g></svg>`,
-fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><ellipse cx='200' cy='150' rx='100' ry='70'/><circle cx='180' cy='130' r='15'/><path d='M200 160 L230 200 L210 210'/><text x='160' y='40' font-size='11' fill='%23000'>FETUS</text><text x='170' y='240' font-size='10' fill='%23000'>PLACENTA</text></g></svg>`,
-breast:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><path d='M100 100 Q150 50 200 100 T300 100 Q280 180 200 200 Q120 180 100 100 Z'/><circle cx='180' cy='130' r='8'/><text x='150' y='50' font-size='11' fill='%23000'>BREAST</text></g></svg>`,
-thyroid:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'><g fill='none' stroke='%23000' stroke-width='1.2' opacity='0.7'><path d='M120 80 L140 180 L110 200 L90 100 Z'/><path d='M280 80 L260 180 L290 200 L310 100 Z'/><rect x='140' y='130' width='120' height='20' rx='10'/><text x='160' y='60' font-size='11' fill='%23000'>THYROID</text></g></svg>`
+whole:`data:image/svg+xml;utf8,[STRIPPED]`,
+kub:`data:image/svg+xml;utf8,[STRIPPED]`,
+scrotum:`data:image/svg+xml;utf8,[STRIPPED]`,
+pelvis:`data:image/svg+xml;utf8,[STRIPPED]`,
+fwb:`data:image/svg+xml;utf8,[STRIPPED]`,
+breast:`data:image/svg+xml;utf8,[STRIPPED]`,
+thyroid:`data:image/svg+xml;utf8,[STRIPPED]`
 };
 function getDiagramForType(t){t=(t||'').toLowerCase();if(t.includes('scrotum')||t.includes('testis')||t.includes('hydrocele')||t.includes('varicocele')||t.includes('epididymo'))return DIAGRAMS.scrotum;if(t.includes('kub')&&t.includes('prostate'))return DIAGRAMS.kub;if(t.includes('kub')||t.includes('bladder')||t.includes('parenchymal')||t.includes('calculus')||t.includes('hydronephrosis')||t.includes('hydroureter'))return DIAGRAMS.kub;if(t.includes('prostate'))return DIAGRAMS.kub;if(t.includes('pelvis')||t.includes('uterus')||t.includes('ovary')||t.includes('fibroid')||t.includes('cyst')||t.includes('pcos'))return DIAGRAMS.pelvis;if(t.includes('fwb')||t.includes('pregnancy')||t.includes('iugr')||t.includes('placenta')||t.includes('breech'))return DIAGRAMS.fwb;if(t.includes('breast')||t.includes('axilla'))return DIAGRAMS.breast;if(t.includes('thyroid')||t.includes('neck'))return DIAGRAMS.thyroid;return DIAGRAMS.whole;}
-let T={"WHOLE ABDOMEN - Normal":`C/O: Lower abdominal pain.
-
-                 ULTRASOUND WHOLE ABDOMEN:
+let T={"WHOLE ABDOMEN - Normal":` ULTRASOUND WHOLE ABDOMEN:
 
 LIVER:
 ➢ Normal in size measuring __ cm [Normal: <14 cm] with homogenous texture.
@@ -198,9 +194,7 @@ CONCLUSION:
 ADVICE:
 ➢ No significant abnormality. Routine follow-up.`,
 
-"WHOLE ABDOMEN - Fatty Liver Grade 1":`C/O: Right hypochondrial pain.
-
-                 ULTRASOUND WHOLE ABDOMEN:
+"WHOLE ABDOMEN - Fatty Liver Grade 1":` ULTRASOUND WHOLE ABDOMEN:
 
 LIVER:
 ➢ Enlarged __ cm [Normal: <14 cm] with Grade 1 fatty liver - minimal increased echogenicity.
@@ -230,9 +224,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised LFTs, lipid profile, avoid fatty diet, weight reduction.`,
 
-"WHOLE ABDOMEN - Fatty Liver Grade 2":`C/O: __
-
-                 ULTRASOUND WHOLE ABDOMEN:
+"WHOLE ABDOMEN - Fatty Liver Grade 2":` ULTRASOUND WHOLE ABDOMEN:
 
 LIVER:
 ➢ Enlarged __ cm [Normal: <14 cm] with Grade 2 fatty liver - moderate increase, No focal lesion.
@@ -261,9 +253,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised LFTs, lipid profile, dietary control.`,
 
-"WHOLE ABDOMEN - Fatty Liver Grade 3":`C/O: __
-
-                 ULTRASOUND WHOLE ABDOMEN:
+"WHOLE ABDOMEN - Fatty Liver Grade 3":` ULTRASOUND WHOLE ABDOMEN:
 
 LIVER:
 ➢ Enlarged __ cm [Normal: <14 cm] with Grade 3 fatty liver - markedly increased echogenicity, No focal lesion.
@@ -292,9 +282,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised LFTs, gastroenterology consultation.`,
 
-"WHOLE ABDOMEN - Appendicitis":`C/O: RIF pain, fever, vomiting.
-
-                 ULTRASOUND WHOLE ABDOMEN:
+"WHOLE ABDOMEN - Appendicitis":` ULTRASOUND WHOLE ABDOMEN:
 
 LIVER:
 ➢ Normal __ cm [Normal: <14 cm], No focal lesion.
@@ -326,9 +314,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised urgent surgical consultation, CBC, CRP.`,
 
-"WHOLE ABDOMEN - Umbilical Hernia":`C/O: Swelling at umbilicus.
-
-                 ULTRASOUND WHOLE ABDOMEN:
+"WHOLE ABDOMEN - Umbilical Hernia":` ULTRASOUND WHOLE ABDOMEN:
 
 LIVER:
 ➢ Normal __ cm [Normal: <14 cm], No focal lesion.
@@ -360,9 +346,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised surgical consultation.`,
 
-"WHOLE ABDOMEN - Inguinal Hernia Right":`C/O: Right groin swelling.
-
-                 ULTRASOUND WHOLE ABDOMEN:
+"WHOLE ABDOMEN - Inguinal Hernia Right":` ULTRASOUND WHOLE ABDOMEN:
 
 LIVER:
 ➢ Normal __ cm [Normal: <14 cm].
@@ -397,9 +381,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised surgical consultation.`,
 
-"KUB - Normal":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
+"KUB - Normal":` ULTRASOUND KUB:
 
 RIGHT KIDNEY:
 ➢ __ x __ cm [Normal: 9-12 cm], Normal in size, shape and texture.
@@ -422,9 +404,7 @@ CONCLUSION:
 ADVICE:
 ➢ No abnormality, maintain hydration.`,
 
-"KUB - Hydronephrosis with Dilated Ureter - Right":`C/O: Lumber pain / Flank pain.
-
-                         ULTRASOUND KUB:
+"KUB - Hydronephrosis with Dilated Ureter - Right":` ULTRASOUND KUB:
 
 RIGHT KIDNEY:
 ➢ __ x __ cm [Normal: 9-12 cm], Mild / Moderate hydronephrosis seen.
@@ -451,9 +431,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised urology consultation, CT KUB if needed, hydration.`,
 
-"KUB - Hydroureteronephrosis Right":`C/O: Severe flank pain, hematuria.
-
-                         ULTRASOUND KUB:
+"KUB - Hydroureteronephrosis Right":` ULTRASOUND KUB:
 
 RIGHT KIDNEY:
 ➢ __ x __ cm [Normal: 9-12 cm], Moderate hydronephrosis, Pelvis __ mm [Normal: <10 mm], Cortex __ mm [Normal: >6 mm].
@@ -477,9 +455,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised urgent urology consultation, increased fluid intake, analgesics.`,
 
-"KUB - Renal Calculus Right":`C/O: Right flank pain.
-
-                         ULTRASOUND KUB:
+"KUB - Renal Calculus Right":` ULTRASOUND KUB:
 
 RIGHT KIDNEY:
 ➢ __ x __ cm [Normal: 9-12 cm], Echogenic calculus __ mm [Normal: No calculus] at upper / mid / lower pole with shadowing.
@@ -500,9 +476,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised hydration, urology consultation.`,
 
-"KUB - Parenchymal Changes Grade 1":`C/O: Flank pain.
-
-                         ULTRASOUND KUB:
+"KUB - Parenchymal Changes Grade 1":` ULTRASOUND KUB:
 
 RIGHT KIDNEY:
 ➢ __ x __ cm [Normal: 9-12 cm], Slightly increased cortical echogenicity Grade 1 [Normal: Grade 0], CMD preserved [Normal: Preserved], Cortical thickness __ mm [Normal: >6 mm], No calculus, No hydronephrosis.
@@ -522,53 +496,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised RFTs, urine R/E, BP monitoring.`,
 
-"KUB - Parenchymal Changes Grade 2":`C/O: Raised creatinine.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] / Small __ cm, Increased echogenicity Grade 2 [Normal: Grade 0], CMD poorly preserved, Cortex __ mm [Normal: >6 mm], No calculus.
-
-LEFT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm], Grade 2 changes, Cortex __ mm.
-
-URINARY BLADDER:
-➢ __ cc [Normal: 300-400 cc], Normal.
-
-PROSTATE:
-➢ __ gm [Normal: 20-25 gm], Normal.
-
-CONCLUSION:
-➢ Bilateral Grade 2 parenchymal changes.
-
-ADVICE:
-➢ Advised RFTs, nephrology consultation.`,
-
-"KUB - Parenchymal Changes Grade 3":`C/O: CKD.
-
-                         ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Small shrunken __ x __ cm [Normal: 9-12 cm], Markedly increased echogenicity Grade 3 [Normal: Grade 0], CMD lost [Normal: Preserved], Cortex __ mm [Normal: >6 mm], No calculus.
-
-LEFT KIDNEY:
-➢ Small shrunken __ x __ cm [Normal: 9-12 cm], Grade 3, Cortex __ mm.
-
-URINARY BLADDER:
-➢ __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-PROSTATE:
-➢ __ gm [Normal: 20-25 gm].
-
-CONCLUSION:
-➢ Bilateral small kidneys with Grade 3 parenchymal changes - CKD.
-
-ADVICE:
-➢ Advised urgent nephrology consultation, RFTs.`,
-
-"KUB - Bladder Stone Single":`C/O: Dysuria, hematuria.
-
-                         ULTRASOUND KUB:
+"KUB - Bladder Stone Single":` ULTRASOUND KUB:
 
 RIGHT KIDNEY:
 ➢ __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis.
@@ -609,26 +537,7 @@ CONCLUSION:
 ADVICE:
 ➢ Normal study.`,
 
-"PELVIS - Normal":`C/O: Lower abdominal pain.
-
-                       ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Anteverted normal sized __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm], Myometrium homogenous, No fibroid, ET __ mm [Normal: 6-12 mm], Cervix normal, No free fluid in POD.
-
-OVARIES:
-➢ Right ovary __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc], Normal, No cyst.
-➢ Left ovary __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc], Normal.
-
-CONCLUSION:
-➢ Normal pelvis.
-
-ADVICE:
-➢ No abnormality.`,
-
-"SCROTUM - Normal":`C/O: Scrotal pain / Routine check.
-
-                       ULTRASOUND SCROTUM:
+"SCROTUM - Normal":` ULTRASOUND SCROTUM:
 
 RIGHT TESTIS:
 ➢ __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Normal in size, shape and echotexture.
@@ -660,9 +569,7 @@ CONCLUSION:
 ADVICE:
 ➢ No significant abnormality.`,
 
-"SCROTUM - Hydrocele Right":`C/O: Right scrotal swelling.
-
-                       ULTRASOUND SCROTUM:
+"SCROTUM - Hydrocele Right":` ULTRASOUND SCROTUM:
 
 RIGHT TESTIS:
 ➢ __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Normal echotexture, Compressed by fluid.
@@ -686,31 +593,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised urology consultation, follow-up.`,
 
-"SCROTUM - Hydrocele Bilateral":`C/O: Bilateral scrotal swelling.
-
-                       ULTRASOUND SCROTUM:
-
-RIGHT TESTIS:
-➢ __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
-
-RIGHT HEMISCROTUM:
-➢ Hydrocele __ cc [Normal: No fluid] anechoic collection around testis.
-
-LEFT TESTIS:
-➢ __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
-
-LEFT HEMISCROTUM:
-➢ Hydrocele __ cc [Normal: No fluid].
-
-CONCLUSION:
-➢ Bilateral hydrocele Right __ cc, Left __ cc.
-
-ADVICE:
-➢ Advised urology consultation.`,
-
-"SCROTUM - Varicocele Left":`C/O: Left scrotal pain, infertility.
-
-                       ULTRASOUND SCROTUM:
+"SCROTUM - Varicocele Left":` ULTRASOUND SCROTUM:
 
 RIGHT TESTIS:
 ➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal echotexture, Vascularity normal.
@@ -734,9 +617,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised urology consultation, semen analysis.`,
 
-"SCROTUM - Epididymo-orchitis Right":`C/O: Right scrotal pain, fever, swelling.
-
-                       ULTRASOUND SCROTUM:
+"SCROTUM - Epididymo-orchitis Right":` ULTRASOUND SCROTUM:
 
 RIGHT TESTIS:
 ➢ Enlarged __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] Bulky __ cc, Heterogeneous echotexture, Increased vascularity on Doppler, No focal collection.
@@ -762,13 +643,10 @@ CONCLUSION:
 ADVICE:
 ➢ Advised urine R/E, culture, CBC, antibiotics, scrotal support, urology consultation.`,
 
-"SCROTUM - Testicular Torsion Right":`C/O: Acute severe right scrotal pain, vomiting.
-
-                       ULTRASOUND SCROTUM:
+"SCROTUM - Testicular Torsion Right":` ULTRASOUND SCROTUM:
 
 RIGHT TESTIS:
 ➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] Enlarged, Heterogeneous echotexture, No vascularity / Decreased vascularity on Color Doppler, Whirlpool sign of spermatic cord.
-➢ No focal lesion, Tunica vaginalis fluid.
 
 LEFT TESTIS:
 ➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal echotexture, Vascularity normal.
@@ -782,9 +660,7 @@ CONCLUSION:
 ADVICE:
 ➢ Advised urgent urology / surgical consultation - Emergency, immediate exploration.`,
 
-"TESTIS - Normal":`C/O: Testicular pain / Routine.
-
-                       ULTRASOUND TESTIS:
+"TESTIS - Normal":` ULTRASOUND TESTIS:
 
 RIGHT TESTIS:
 ➢ __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Ovoid, Homogenous medium level echoes, No focal lesion, No microlithiasis, Tunica albuginea intact.
@@ -804,50 +680,10 @@ CONCLUSION:
 ADVICE:
 ➢ Normal study.`,
 
-"TESTIS - Atrophy Small Testis":`C/O: Infertility, small testis.
-
-                       ULTRASOUND TESTIS:
+"TESTIS - Testicular Mass Tumor":` ULTRASOUND TESTIS:
 
 RIGHT TESTIS:
-➢ Small __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] Small __ cc [Normal: >12 cc], Heterogeneous / Homogenous, No focal lesion.
-
-LEFT TESTIS:
-➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal / Small.
-
-EPIDIDYMIS:
-➢ Normal Head __ mm [Normal: <10 mm].
-
-CONCLUSION:
-➢ Small atrophic right testis __ cc, Left testis __ cc.
-
-ADVICE:
-➢ Advised urology / endocrinology consultation, semen analysis, hormonal profile.`,
-
-"TESTIS - Microlithiasis":`C/O: Infertility / Incidental.
-
-                       ULTRASOUND TESTIS:
-
-RIGHT TESTIS:
-➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Multiple tiny echogenic foci __ mm [Normal: No microlithiasis] without shadowing - microlithiasis, Count >5 per field.
-
-LEFT TESTIS:
-➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Microlithiasis present __ foci.
-
-EPIDIDYMIS:
-➢ Normal Head __ mm [Normal: <10 mm].
-
-CONCLUSION:
-➢ Bilateral testicular microlithiasis.
-
-ADVICE:
-➢ Advised urology consultation, self examination, annual follow-up ultrasound, tumor markers if indicated.`,
-
-"TESTIS - Testicular Mass Tumor":`C/O: Testicular lump, painless.
-
-                       ULTRASOUND TESTIS:
-
-RIGHT TESTIS:
-➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Heterogeneous hypoechoic solid mass __ x __ mm [Normal: No mass] within testis, Irregular margins, Increased internal vascularity on Doppler, No calcification / Microcalcifications.
+➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Heterogeneous hypoechoic solid mass __ x __ mm [Normal: No mass] within testis, Irregular margins, Increased internal vascularity on Doppler.
 
 LEFT TESTIS:
 ➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
@@ -862,54 +698,39 @@ CONCLUSION:
 ➢ Solid mass right testis __ x __ mm - suspicious for testicular tumor.
 
 ADVICE:
-➢ Advised urgent urology / oncology consultation, tumor markers AFP, beta-HCG, LDH, CT abdomen pelvis.`,
-
-"TESTIS - Epididymal Cyst":`C/O: Scrotal lump.
-
-                       ULTRASOUND TESTIS:
-
-RIGHT EPIDIDYMIS:
-➢ Head __ mm [Normal: <10 mm] with anechoic thin-walled cyst __ x __ mm [Normal: No cyst] at head, No internal echoes, No vascularity.
-
-RIGHT TESTIS:
-➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
-
-LEFT TESTIS:
-➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Normal.
-
-LEFT EPIDIDYMIS:
-➢ Normal.
-
-CONCLUSION:
-➢ Right epididymal cyst __ x __ mm, Both testes normal.
-
-ADVICE:
-➢ Benign epididymal cyst, follow-up.`,
-
-"TESTIS - Spermatocele":`C/O: Scrotal cystic swelling.
-
-                       ULTRASOUND TESTIS:
-
-RIGHT EPIDIDYMIS:
-➢ Cystic lesion __ x __ mm [Normal: No cyst] with low level echoes / debris at head of epididymis - spermatocele.
-
-RIGHT TESTIS:
-➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc], Normal.
-
-LEFT TESTIS:
-➢ Normal.
-
-CONCLUSION:
-➢ Right spermatocele __ x __ mm.
-
-ADVICE:
-➢ Benign spermatocele, no treatment required unless large / symptomatic, urology consultation.`
+➢ Advised urgent urology / oncology consultation, tumor markers AFP, beta-HCG, LDH, CT abdomen pelvis.`
 };
 
 let allTemplates=Object.keys(T);
 let fetalData={},editId=null,lastViewedId=null;
 function filterTemplates(){try{let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');if(!s)return;let current=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(current)){s.value=current;}}catch(e){}}
-function useSelectedTemplate(){try{let sel=document.getElementById('uType');let v=sel?.value;if(!v){alert('Select template first');return;}let rt=document.getElementById('rText');if(rt) rt.value=T[v]||'';checkFetal(false);autoSaveDraft();document.getElementById('rText')?.scrollIntoView({behavior:'smooth'});}catch(e){alert('Template error: '+e.message);}}
+
+// FIXED: Remove auto C/O from templates - only show complaint box content
+function cleanTemplateText(txt){
+ try{
+  let lines=txt.split('\n');
+  let cleaned=lines.filter(l=>{
+   let t=l.trim().toUpperCase();
+   return!t.startsWith('C/O:') &&!t.startsWith('C/O :');
+  });
+  return cleaned.join('\n').trim();
+ }catch(e){return txt;}
+}
+
+function useSelectedTemplate(){
+ try{
+  let sel=document.getElementById('uType');let v=sel?.value;
+  if(!v){alert('Select template first');return;}
+  let raw=T[v]||'';
+  let cleaned=cleanTemplateText(raw);
+  let rt=document.getElementById('rText');
+  if(rt) rt.value=cleaned;
+  checkFetal(false);
+  autoSaveDraft();
+  document.getElementById('rText')?.scrollIntoView({behavior:'smooth'});
+ }catch(e){alert('Template error: '+e.message);}
+}
+
 function calcFWB(){try{let bpd=parseFloat(document.getElementById('cBPD')?.value)||0,hc=parseFloat(document.getElementById('cHC')?.value)||0,ac=parseFloat(document.getElementById('cAC')?.value)||0,fl=parseFloat(document.getElementById('cFL')?.value)||0,crl=parseFloat(document.getElementById('cCRL')?.value)||0,afi=parseFloat(document.getElementById('cAFI')?.value)||0;let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);if(crl>0)gas.push(crl*0.16+6.8);if(bpd>0)gas.push(bpd*0.33+4);let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}fetalData={ga:avg,efw:efw,hc,ac,fl,bpd,crl,afi};let e1=document.getElementById('resGA'); if(e1) e1.innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';let e2=document.getElementById('resEFW'); if(e2) e2.innerText=efw?`Wt: ${Math.round(efw)} gm`:'Wt: --';let e3=document.getElementById('resEDD'); if(e3) e3.innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';}catch(e){}}
 function applyCalc(){try{if(!fetalData.ga&&!fetalData.efw){alert('Enter HC AC FL');return;}let rt=document.getElementById('rText');if(!rt)return;let txt=rt.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rt.value=txt;autoSaveDraft();}catch(e){}}
 function init(){try{let s=document.getElementById('uType');if(s){s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate'); if(pd) pd.valueAsDate=new Date();let sd=document.getElementById('sumDate'); if(sd) sd.valueAsDate=new Date();let tc=document.getElementById('templateCount'); if(tc) tc.innerText=allTemplates.length+' Templates';loadDraft();checkFetal(true);render();}catch(e){console.log('init error',e);}}
@@ -921,7 +742,8 @@ function formatReportToHTML(text){
    let originalLine=line.trim();
    if(!originalLine){html+='<div style="height:5px"></div>';return;}
    let lineForPrint = originalLine.replace(/\[Normal:[^\]]*\]/gi,'').trim().replace(/\s{2,}/g,' ');
-   if(lineForPrint.startsWith('C/O:')){
+   if(!lineForPrint) return;
+   if(lineForPrint.toUpperCase().startsWith('C/O:')){
      html+=`<div style="margin-bottom:8px;font-size:13px;color:#000"><b><i>${lineForPrint}</i></b></div>`;return;
    }
    if(lineForPrint.toUpperCase().startsWith('ULTRASOUND')){
@@ -978,9 +800,11 @@ function make(){
   if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}
   let pid=document.getElementById('pIDMobile')?.value||'__';
   let complaintText=(document.getElementById('pComplaint')?.value||'').trim();
+  // Only show complaint from box, not from template
   let patientBorder=`<div style="border:1.5px solid #000;padding:8px 10px;margin-bottom:12px;background:#fff;color:#000;font-size:12.5px"><div style="display:flex;flex-wrap:wrap;gap:6px"><span><b>Name:</b> ${document.getElementById('pName').value}</span> | <span><b>Age:</b> ${document.getElementById('pAge').value}</span> | <span><b>Sex:</b> ${document.getElementById('pGen').value}</span> | <span><b>Date:</b> ${document.getElementById('pDate').value}</span> | <span><b>ID/Mobile:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px"><span><b>Ref By:</b> ${document.getElementById('ref').value}</span> | <span><b>Sonologist:</b> ${document.getElementById('sono').value}</span></div></div>`;
   let bodyHTML=formatReportToHTML(document.getElementById('rText').value);
-  if(complaintText &&!document.getElementById('rText').value.toUpperCase().includes('C/O:')){
+  // C/O only from complaint box
+  if(complaintText){
      bodyHTML=`<div style="margin-bottom:10px;font-size:13px;color:#000"><b><i>C/O: ${complaintText}</i></b></div>`+bodyHTML;
   }
   let footer=`<div style="margin-top:24px;text-align:center;font-size:11px;color:#000"><i>This is computer generated report no signature required.</i></div>`;
