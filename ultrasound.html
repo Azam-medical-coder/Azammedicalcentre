@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - FINAL EDIT + FONT FIX</title>
+<title>Azam Medical Centre - FINAL SEPARATE BOXES + CTRL S</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -23,39 +23,64 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 .calcRes{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;font-size:12px;font-weight:800;text-align:center}
 #loginOverlay{position:fixed;inset:0;background:#0a4eb5;display:flex;align-items:center;justify-content:center;z-index:99999}
 .loginBox{background:#fff;padding:30px;border-radius:20px;width:90%;max-width:400px;text-align:center}
+.boxTitle{font-size:16px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
 .editBanner{background:#fff3cd;border:2px solid #f59e0b;color:#92400e;padding:10px;border-radius:10px;margin:8px 0;font-weight:800;text-align:center;display:none}
+.draftStatus{font-size:11px;color:#10b981;font-weight:700}
 </style>
 </head>
 <body>
 <div id="loginOverlay"><div class="loginBox"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:80px;height:80px;border-radius:50%;border:3px solid #0a4eb5"><h2 style="color:#0a4eb5;margin:10px 0">Azam Medical Centre</h2><input id="passInput" type="password" placeholder="Enter Password" style="text-align:center;font-size:16px"><button class="btn" onclick="checkPass()" type="button">Login</button><p id="passErr" style="color:red;display:none;margin-top:10px;font-weight:700">Ghalat Password! Pakistan@777 likhen</p></div></div>
-<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:65px;height:65px;border-radius:50%;border:2px solid #0a4eb5"><div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p><div id="driveStatus" style="font-size:11px;color:#10b981;margin-top:4px">● Drive: Ready</div></div></div>
-<div class="card noPrint">
-<div id="editBanner" class="editBanner">✏️ EDIT MODE ON - Report edit ho rahi hai, neeche Save / Update dabayen</div>
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><input id="pIDMobile" placeholder="Patient ID / Mobile No."></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref"></select><select id="sono"></select></div>
-<div style="border:2px solid #8b5cf6;border-radius:12px;padding:10px;margin:8px 0;background:#f8f7ff">
-<label style="font-weight:800;color:#7c3aed;font-size:12px">🔍 Category + Template Search</label>
-<input id="tSearch" placeholder="Search e.g. whole, kub, fatty, cyst, fwb, pelvis..." onkeyup="filterTemplates()" style="border-color:#8b5cf6">
-<select id="uType" size="10" style="height:200px;font-size:13px"></select>
-<div style="font-size:10px;color:#666;margin-top:4px">* Edit me [Normal:...] nazar ayega, Print me auto hide ho jayega</div>
+
+<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:65px;height:65px;border-radius:50%;border:2px solid #0a4eb5"><div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p><div id="driveStatus" style="font-size:11px;color:#10b981;margin-top:4px">● Drive: Ready | Auto-Save: ON (Ctrl+S)</div></div></div>
+
+<!-- BOX 1: TEMPLATE LIBRARY - ALAG -->
+<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff">
+<div class="boxTitle"><span>📚 BOX 1: Template Library (Yahan se select karen)</span><span class="draftStatus" id="templateCount">90+ Templates</span></div>
+<input id="tSearch" placeholder="Search template e.g. whole, kub, fatty, calculus, fwb, pelvis, pcos..." onkeyup="filterTemplates()" style="border-color:#8b5cf6">
+<select id="uType" size="12" style="height:240px;font-size:13px;font-weight:600"></select>
+<div style="display:flex;gap:8px;margin-top:8px">
+<button class="small" style="background:#8b5cf6;width:100%;padding:12px;font-size:14px" onclick="useSelectedTemplate()">⬇️ Use This Template in Report Box</button>
 </div>
+<div style="font-size:10px;color:#666;margin-top:6px">* [Normal:...] sirf edit me dikhega, Print me hide ho jayega</div>
+</div>
+
+<!-- BOX 2: REPORT MAKING - ALAG -->
+<div class="card noPrint" style="border:3px solid #1e90ff">
+<div class="boxTitle"><span>📝 BOX 2: Report Tayar Karen (Yahan edit karen)</span><span class="draftStatus" id="draftStatus">Draft: Empty</span></div>
+<div id="editBanner" class="editBanner">✏️ EDIT MODE ON - ID: <span id="editIdShow"></span> | Ctrl+S se save hota rahega</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *" oninput="autoSaveDraft()"><input id="pAge" placeholder="Age" oninput="autoSaveDraft()"><select id="pGen" onchange="autoSaveDraft()"><option>Male</option><option>Female</option><option>Child</option></select></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date" onchange="autoSaveDraft()"><input id="pIDMobile" placeholder="Patient ID / Mobile No." oninput="autoSaveDraft()"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref" onchange="autoSaveDraft()"></select><select id="sono" onchange="autoSaveDraft()"></select></div>
+
 <div id="complaintBox" style="border:2px solid #f59e0b;border-radius:12px;padding:10px;margin:8px 0;background:#fffbeb;display:none">
 <label style="font-weight:800;color:#d97706;font-size:12px">📝 Present Complaint / H/O</label>
-<textarea id="pComplaint" rows="2" placeholder="e.g. Epigastric pain, Flank pain, Burning micturition..."></textarea>
+<textarea id="pComplaint" rows="2" placeholder="e.g. Left flank pain, Nausea..." oninput="autoSaveDraft()"></textarea>
 </div>
-<div id="fetalCalc" class="calcBox" style="display:none"><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Wt: --</div></div><button class="small" style="background:#10b981;width:100%" onclick="applyCalc()">Calculation Lagayen</button></div>
-<div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Prostate Lagayen</button></div>
-<textarea id="rText" rows="24" style="font-family:monospace;font-size:13px"></textarea><button id="finalBtn" class="btn" onclick="make()">✅ Final Report Banayen</button>
+
+<div id="fetalCalc" class="calcBox" style="display:none"><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB();autoSaveDraft()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB();autoSaveDraft()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB();autoSaveDraft()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB();autoSaveDraft()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB();autoSaveDraft()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB();autoSaveDraft()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Wt: --</div></div><button class="small" style="background:#10b981;width:100%" onclick="applyCalc()">Calculation Lagayen</button></div>
+<div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate();autoSaveDraft()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate();autoSaveDraft()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate();autoSaveDraft()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Prostate Lagayen</button></div>
+
+<textarea id="rText" rows="22" style="font-family:monospace;font-size:13px" oninput="autoSaveDraft()" placeholder="Yahan report ayegi... Ctrl+S dabate hi auto save hoga"></textarea>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<button id="finalBtn" class="btn" onclick="make()">✅ Final Report Banayen</button>
+<button class="btn" style="background:#10b981" onclick="saveR()">💾 Save + Drive Upload (Ctrl+S)</button>
 </div>
-<div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#0a4eb5" onclick="window.print()">Print Final (28x19)</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF</button><button class="small" style="background:#10b981" onclick="saveR()" id="saveBtn">Save + Drive Upload</button><button class="small" style="background:#8b5cf6" onclick="editCurrent()">✏️ Edit Again</button></div></div>
-<div class="card noPrint"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h3>Saved Reports</h3><div style="display:flex;gap:6px"><button class="small" style="background:#0a4eb5;padding:12px" onclick="loadFromDrive()">☁️ Drive se Load</button><button class="small" style="background:#8b5cf6;padding:10px" onclick="openSummary()">📊 Summary</button></div></div><input id="sBox" placeholder="Search Name / ID / Mobile" onkeyup="render()" style="margin-top:8px"><div id="list"></div></div>
+<div style="font-size:11px;text-align:center;margin-top:6px;color:#666">Tip: Ctrl+S = Auto Save Draft | Final Save = Drive Upload</div>
+</div>
+
+<!-- BOX 3: PREVIEW -->
+<div class="card" id="outCard" style="display:none"><div class="boxTitle noPrint"><span>🖨️ BOX 3: Final Preview (Print Page)</span></div><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#0a4eb5" onclick="window.print()">Print Final (28x19)</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF</button><button class="small" style="background:#10b981" onclick="saveR()">Save + Drive Upload</button><button class="small" style="background:#8b5cf6" onclick="editCurrent()">✏️ Wapis Edit Karen</button></div></div>
+
+<!-- BOX 4: SAVED LIST -->
+<div class="card noPrint"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h3>📂 BOX 4: Saved Reports</h3><div style="display:flex;gap:6px"><button class="small" style="background:#0a4eb5;padding:12px" onclick="loadFromDrive()">☁️ Drive se Load</button><button class="small" style="background:#8b5cf6;padding:10px" onclick="openSummary()">📊 Summary</button><button class="small" style="background:#ff3b30;padding:10px" onclick="clearDraft()">🗑️ Clear Draft</button></div></div><input id="sBox" placeholder="Search Name / ID / Mobile" onkeyup="render()" style="margin-top:8px"><div id="list"></div></div>
+
 <div class="card noPrint" id="summaryCard" style="display:none;border:3px solid #8b5cf6"><div style="display:flex;justify-content:space-between"><h3>Daily Summary</h3><div style="display:flex;gap:6px"><input id="sumDate" type="date" style="width:auto"><button class="small" style="background:#0a4eb5" onclick="renderSummary()">Show</button><button class="small" style="background:#10b981" onclick="printSummary()">Print</button><button class="small" style="background:#ff3b30" onclick="closeSummary()">Close</button></div></div><div id="summaryPrintArea"><h4 id="sumTitle" style="text-align:center"></h4><table style="width:100%;border-collapse:collapse;font-size:12px" border="1"><thead><tr><th>Sr#</th><th>Name</th><th>ID/Mobile</th><th>Age/Sex</th><th>Type</th><th>Ref</th><th>Sono</th></tr></thead><tbody id="sumBody"></tbody></table><div>Total: <b id="sumTotal">0</b></div></div></div>
+
 <script>
 const CLIENT_ID='153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com';
 const SCOPES='https://www.googleapis.com/auth/drive.file';
 let tokenClient,gapiInited=false,gisInited=false,driveFolderId=null;
-function updateDriveStatus(m,c){let e=document.getElementById('driveStatus'); if(e){e.innerText='● Drive: '+m; e.style.color=c||'#10b981';}}
+function updateDriveStatus(m,c){let e=document.getElementById('driveStatus'); if(e){e.innerText='● Drive: '+m+' | Auto-Save: ON (Ctrl+S)'; e.style.color=c||'#10b981';}}
 function gapiLoaded(){gapi.load('client', async()=>{await gapi.client.init({discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]});gapiInited=true;updateDriveStatus('Ready',' #10b981');});}
 function gisLoaded(){tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID, scope:SCOPES, callback:''});gisInited=true;}
 function ensureDriveAuth(){return new Promise((res,rej)=>{tokenClient.callback=(r)=>{if(r.error)rej(r);else res(r);};tokenClient.requestAccessToken({prompt:''});});}
@@ -72,21 +97,20 @@ function fillSelect(id,list){let s=document.getElementById(id);s.innerHTML='';li
 fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
 let prostateData={};
 function calcProstate(){let l=parseFloat(pL.value)||0,w=parseFloat(pW.value)||0,h=parseFloat(pH.value)||0;if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};resPVol.innerText=`Volume: ${vol.toFixed(1)} cc`;resPGm.innerText=`Weight: ${vol.toFixed(1)} gm`;}}
-function applyProstateCalc(){if(!prostateData.vol){alert('cm likhen');return;}let txt=rText.value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);rText.value=txt;}
+function applyProstateCalc(){if(!prostateData.vol){alert('cm likhen');return;}let txt=rText.value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);rText.value=txt;autoSaveDraft();}
 
 const DIAGRAMS={
-whole:`data:image/svg+xml;utf8,[STRIPPED]`,
-kub:`data:image/svg+xml;utf8,[STRIPPED]`,
-kub_prostate:`data:image/svg+xml;utf8,[STRIPPED]`,
-pelvis:`data:image/svg+xml;utf8,[STRIPPED]`,
-fwb:`data:image/svg+xml;utf8,[STRIPPED]`,
-thyroid:`data:image/svg+xml;utf8,[STRIPPED]`,
-breast:`data:image/svg+xml;utf8,[STRIPPED]`,
-testis:`data:image/svg+xml;utf8,[STRIPPED]`
+whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><path d='M100 50 Q150 30 200 50 L210 180 Q150 200 90 180 Z' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
+kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><ellipse cx='110' cy='150' rx='40' ry='60' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><ellipse cx='190' cy='150' rx='40' ry='60' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><path d='M150 220 L150 300' stroke='%23999' stroke-width='2'/></g></svg>`,
+kub_prostate:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><ellipse cx='110' cy='120' rx='35' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><ellipse cx='190' cy='120' rx='35' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><ellipse cx='150' cy='280' rx='30' ry='25' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
+pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><path d='M80 180 Q150 150 220 180 L210 280 Q150 300 90 280 Z' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
+fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><circle cx='150' cy='120' r='40' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><path d='M110 160 Q150 200 190 160 L180 280 Q150 300 120 280 Z' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
+thyroid:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><ellipse cx='110' cy='150' rx='30' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><ellipse cx='190' cy='150' rx='30' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
+breast:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><ellipse cx='150' cy='200' rx='80' ry='60' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
+testis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><ellipse cx='120' cy='200' rx='35' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><ellipse cx='180' cy='200' rx='35' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`
 };
-function getDiagramForType(t){t=t.toLowerCase();if(t.includes('kub')&&t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('kub'))return DIAGRAMS.kub;if(t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('pelvis')||t.includes('gynae')||t.includes('uterus')||t.includes('ovary')||t.includes('fibroid')||t.includes('pcos'))return DIAGRAMS.pelvis;if(t.includes('fwb')||t.includes('anomaly')||t.includes('ob')||t.includes('pregnancy')||t.includes('weeks')||t.includes('crl')||t.includes('breech')||t.includes('cephalic')||t.includes('placenta')||t.includes('liquor'))return DIAGRAMS.fwb;if(t.includes('thyroid'))return DIAGRAMS.thyroid;if(t.includes('breast'))return DIAGRAMS.breast;if(t.includes('testis')||t.includes('scrotum'))return DIAGRAMS.testis;return DIAGRAMS.whole;}
-let T={// ===================== 1. WHOLE ABDOMEN =====================
-"WHOLE ABDOMEN - Normal":`ULTRASOUND WHOLE ABDOMEN
+function getDiagramForType(t){t=(t||'').toLowerCase();if(t.includes('kub')&&t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('kub'))return DIAGRAMS.kub;if(t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('pelvis')||t.includes('gynae')||t.includes('uterus')||t.includes('ovary')||t.includes('fibroid')||t.includes('pcos'))return DIAGRAMS.pelvis;if(t.includes('fwb')||t.includes('anomaly')||t.includes('ob')||t.includes('pregnancy')||t.includes('weeks')||t.includes('crl')||t.includes('breech')||t.includes('cephalic')||t.includes('placenta')||t.includes('liquor'))return DIAGRAMS.fwb;if(t.includes('thyroid'))return DIAGRAMS.thyroid;if(t.includes('breast'))return DIAGRAMS.breast;if(t.includes('testis')||t.includes('scrotum'))return DIAGRAMS.testis;return DIAGRAMS.whole;}
+let T={"WHOLE ABDOMEN - Normal":`ULTRASOUND WHOLE ABDOMEN
 LIVER: Normal in size __ cm [Normal: 12-15 cm], Normal homogenous echotexture, No focal lesion, No IHBR dilatation, Portal vein normal __ mm [Normal: <13 mm], No ascites
 GALL BLADDER: Normally distended, Wall thickness __ mm [Normal: <3 mm], Lumen clear, No calculus, No sludge
 CBD: __ mm [Normal: <6 mm], Normal
@@ -103,462 +127,118 @@ IMPRESSION: Normal Ultrasound Whole Abdomen`,
 LIVER: Enlarged __ cm [Normal: 12-15 cm], Increased echogenicity Grade 1 Fatty Liver, Minimal diffuse increase, Diaphragm and portal vessels still visualized, No focal lesion
 GALL BLADDER: Normally distended, Wall __ mm [Normal: <3 mm], No calculus
 CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal __ cm [Normal: <12 cm], KIDNEYS: Normal, BLADDER: Normal, PERITONEUM: No free fluid
-IMPRESSION: Hepatomegaly with Fatty Liver Grade 1 - LIVER __ cm
-Advice: LFTs, Lipid Profile, Blood Sugar Fasting, HbA1c, Diet control, Exercise, Avoid fatty food and alcohol, Physician consultation`,
+IMPRESSION: Hepatomegaly with Fatty Liver Grade 1 - LIVER __ cm`,
 
 "WHOLE ABDOMEN - Fatty Liver Grade 2":`ULTRASOUND WHOLE ABDOMEN - FATTY LIVER GRADE 2
 LIVER: Enlarged __ cm [Normal: 12-15 cm], Increased echogenicity Grade 2 Fatty Liver, Moderate diffuse increase, Diaphragm and portal vessels partially obscured, No focal lesion
 GALL BLADDER: Normally distended, Wall __ mm, No calculus, CBD: __ mm, PANCREAS: Normal / Obscured, SPLEEN: Normal __ cm, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Hepatomegaly with Fatty Liver Grade 2 - LIVER __ cm
-Advice: LFTs, Lipid Profile, Blood Sugar, HbA1c, FibroScan, Physician consultation`,
+IMPRESSION: Hepatomegaly with Fatty Liver Grade 2 - LIVER __ cm`,
 
 "WHOLE ABDOMEN - Fatty Liver Grade 3":`ULTRASOUND WHOLE ABDOMEN - FATTY LIVER GRADE 3
 LIVER: Enlarged __ cm [Normal: 12-15 cm], Markedly increased echogenicity Grade 3 Fatty Liver, Diaphragm and portal vessels poorly visualized, No focal lesion
 GALL BLADDER: Obscured / Normally distended, Wall __ mm, CBD: __ mm, PANCREAS: Obscured, SPLEEN: Normal __ cm, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Hepatomegaly with Fatty Liver Grade 3 - LIVER __ cm
-Advice: LFTs, Lipid Profile, HbA1c, FibroScan, Hepatologist consultation`,
-
-"WHOLE ABDOMEN - Hepatomegaly":`ULTRASOUND WHOLE ABDOMEN - HEPATOMEGALY
-LIVER: Enlarged __ cm [Normal: 12-15 cm], Homogenous echotexture, No focal lesion, No IHBR dilatation, Portal vein normal __ mm [Normal: <13 mm]
-GALL BLADDER: Normally distended, Wall __ mm [Normal: <3 mm], No calculus, CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal __ cm [Normal: <12 cm], KIDNEYS: Normal, BLADDER: Normal, PERITONEUM: No ascites
-IMPRESSION: Hepatomegaly __ cm [Normal: <15 cm]
-Advice: LFTs, CBC, Hepatitis Profile, Physician consultation`,
-
-"WHOLE ABDOMEN - Splenomegaly":`ULTRASOUND WHOLE ABDOMEN - SPLENOMEGALY
-LIVER: Normal __ cm [Normal: 12-15 cm], GALL BLADDER: Normal, Wall __ mm [Normal: <3 mm], CBD: __ mm, PANCREAS: Normal, SPLEEN: Enlarged __ cm [Normal: <12 cm], Homogenous, No focal lesion, RIGHT KIDNEY: __ x __ cm, LEFT KIDNEY: __ x __ cm, BLADDER: __ cc, PROSTATE: __ gm, PERITONEUM: No ascites
-IMPRESSION: Splenomegaly __ cm`,
-
-"WHOLE ABDOMEN - Cholelithiasis Single":`ULTRASOUND WHOLE ABDOMEN - CHOLELITHIASIS SINGLE
-LIVER: Normal __ cm [Normal: 12-15 cm], No focal lesion, GALL BLADDER: Normally distended, Lumen shows single echogenic calculus __ mm [Normal: No calculus] with posterior acoustic shadowing, Mobile, Wall __ mm [Normal: <3 mm], No pericholecystic fluid, CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Cholelithiasis - Single Gall bladder calculus __ mm`,
-
-"WHOLE ABDOMEN - Cholelithiasis Multiple":`ULTRASOUND WHOLE ABDOMEN - CHOLELITHIASIS MULTIPLE
-LIVER: Normal __ cm, No focal lesion, GALL BLADDER: Normally distended, Lumen shows multiple echogenic calculi, Largest __ mm with posterior acoustic shadowing, Wall __ mm [Normal: <3 mm], CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Cholelithiasis - Multiple Gall bladder calculi largest __ mm`,
-
-"WHOLE ABDOMEN - GB Sludge + Calculus":`ULTRASOUND WHOLE ABDOMEN - GB SLUDGE + CALCULI
-LIVER: Normal __ cm, GALL BLADDER: Normally distended, Lumen shows echogenic calculus __ mm plus low level echoes / sludge, Wall __ mm [Normal: <3 mm], CBD: __ mm, PANCREAS: Normal, SPLEEN: Normal, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Cholelithiasis __ mm with sludge`,
-
-"WHOLE ABDOMEN - Acute Cholecystitis":`ULTRASOUND WHOLE ABDOMEN - ACUTE CHOLECYSTITIS
-LIVER: Normal __ cm, GALL BLADDER: Distended, Wall markedly thickened __ mm [Normal: <3 mm], Edematous, Lumen shows calculus __ mm impacted at neck, Pericholecystic fluid present, Sonographic Murphy positive, CBD: __ mm, PANCREAS: Normal, SPLEEN: Normal, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Acute Cholecystitis with Cholelithiasis __ mm`,
-
-"WHOLE ABDOMEN - Ascites":`ULTRASOUND WHOLE ABDOMEN - ASCITES
-LIVER: __ cm [Normal: 12-15 cm], GALL BLADDER: Wall __ mm, CBD: __ mm, PANCREAS: Normal, SPLEEN: __ cm [Normal: <12 cm], KIDNEYS: Normal, BLADDER: Normal, PERITONEAL CAVITY: Free fluid seen in perihepatic, perisplenic, paracolic gutters and pelvis - Gross / Moderate / Mild Ascites
-IMPRESSION: Ascites`,
-
-"WHOLE ABDOMEN - Prominent Bowel Loops":`ULTRASOUND WHOLE ABDOMEN - PROMINENT BOWEL LOOPS
-LIVER: Normal __ cm, GALL BLADDER: Normal, CBD: Normal, PANCREAS: Normal, SPLEEN: Normal __ cm, BOWEL LOOPS: Prominent, Dilated __ mm [Normal: <25 mm], To-and-fro peristalsis, No free fluid, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Prominent / Dilated bowel loops __ mm -? Subacute intestinal obstruction`,
-
-"WHOLE ABDOMEN - Appendicitis":`ULTRASOUND WHOLE ABDOMEN - APPENDICITIS
-RIGHT ILIAC FOSSA: Appendix visualized, Diameter __ mm [Normal: <6 mm], Wall thickness __ mm [Normal: <3 mm], Non-compressible, Surrounding echogenic fat, Minimal free fluid __ cc in RIF
-LIVER: Normal __ cm, GALL BLADDER: Normal, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Acute Appendicitis - Appendix __ mm, Non-compressible`,
-
-"WHOLE ABDOMEN - Liver Hemangioma / Cyst":`ULTRASOUND WHOLE ABDOMEN - LIVER HEMANGIOMA
-LIVER: Size __ cm [Normal: 12-15 cm], Hyperechoic well defined lesion __ x __ mm in Segment __, No internal vascularity, No other focal lesion, No IHBR dilatation, Portal vein normal, No ascites
-GALL BLADDER: Normal, Wall __ mm, CBD: __ mm, PANCREAS: Normal, SPLEEN: Normal, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Hyperechoic lesion __ x __ mm -? Hemangioma`,
-
-// ===================== 2. KUB =====================
-"KUB - Normal":`ULTRASOUND KUB
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal size, shape and echotexture, Cortical thickness __ mm [Normal: >10 mm], No calculus, No hydronephrosis
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
-URINARY BLADDER: Capacity __ cc [Normal: 300-400 cc], Wall normal __ mm [Normal: <3 mm], Lumen clear
-PROSTATE: __ gm [Normal: 20-25 gm], Normal
-IMPRESSION: Normal KUB`,
-
-"KUB - Bilateral Microliths":`ULTRASOUND KUB - BILATERAL MICROLITHS
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Multiple tiny echogenic foci __ mm [Normal: No calculus] - Microliths, No hydronephrosis
-LEFT KIDNEY: __ x __ cm, Microliths __ mm
-URINARY BLADDER: __ cc [Normal: 300-400 cc], Normal, PROSTATE: __ gm [Normal: 20-25 gm]
-IMPRESSION: Bilateral Renal Microlithiasis`,
-
-"KUB - Right Renal Calculus":`ULTRASOUND KUB - RIGHT RENAL CALCULUS
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Echogenic calculus __ mm [Normal: No calculus] with shadowing at upper / mid / lower pole / pelvis
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
-URINARY BLADDER: Normal __ cc [Normal: 300-400 cc], No calculus, PROSTATE: __ gm
-IMPRESSION: Right Renal Calculus __ mm`,
-
-"KUB - Left Renal Calculus":`ULTRASOUND KUB - LEFT RENAL CALCULUS
-RIGHT KIDNEY: Normal __ x __ cm, No calculus
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Echogenic calculus __ mm [Normal: No calculus] with shadowing at __ pole
-URINARY BLADDER: Normal, PROSTATE: __ gm [Normal: 20-25 gm]
-IMPRESSION: Left Renal Calculus __ mm`,
-
-"KUB - Multiple Renal Calculi":`ULTRASOUND KUB - MULTIPLE RENAL CALCULI
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Multiple calculi largest __ mm [Normal: No calculus], LEFT KIDNEY: __ x __ cm, Calculus __ mm, BLADDER: Normal __ cc, PROSTATE: __ gm
-IMPRESSION: Bilateral Multiple Renal Calculi - Largest __ mm`,
-
-"KUB - Hydronephrosis":`ULTRASOUND KUB - HYDRONEPHROSIS
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Moderate hydronephrosis, Pelvis dilated __ mm [Normal: <10 mm], No calculus seen, LEFT KIDNEY: Normal, BLADDER: Normal __ cc
-IMPRESSION: Right Hydronephrosis - Pelvis __ mm`,
-
-"KUB - Hydronephrosis with Proximal Ureter Dilation":`ULTRASOUND KUB - HYDRO WITH PROXIMAL URETER DILATION
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Mild hydronephrosis, Proximal ureter dilated __ mm [Normal: <3 mm], LEFT KIDNEY: Normal, BLADDER: Normal
-IMPRESSION: Right hydronephrosis with proximal ureteric dilatation __ mm`,
-
-"KUB - Distal Ureter Calculus":`ULTRASOUND KUB - DISTAL URETER CALCULUS
-RIGHT KIDNEY: __ x __ cm, Mild hydronephrosis, Distal ureter shows echogenic calculus __ mm [Normal: No calculus] with shadowing near VUJ, LEFT KIDNEY: Normal, BLADDER: Normal
-IMPRESSION: Right Distal Ureteric Calculus __ mm with mild hydronephrosis`,
-
-"KUB - Urinary Bladder Stone":`ULTRASOUND KUB - URINARY BLADDER STONE
-RIGHT KIDNEY: Normal __ x __ cm, LEFT KIDNEY: Normal, URINARY BLADDER: Distended __ cc [Normal: 300-400 cc], Echogenic calculus __ mm [Normal: No calculus] with shadowing in bladder lumen
-PROSTATE: __ gm [Normal: 20-25 gm]
-IMPRESSION: Urinary Bladder Calculus __ mm`,
-
-"KUB - Cystitis":`ULTRASOUND KUB - CYSTITIS
-RIGHT KIDNEY: Normal, LEFT KIDNEY: Normal, URINARY BLADDER: Distended __ cc [Normal: 300-400 cc], Wall diffusely thickened __ mm [Normal: <3 mm], Hyperemic, Internal echoes
-IMPRESSION: Cystitis - Thickened bladder wall __ mm [Normal: <3 mm]`,
-
-"KUB - UB Debris":`ULTRASOUND KUB - UB DEBRIS
-RIGHT KIDNEY: Normal, LEFT KIDNEY: Normal, URINARY BLADDER: Distended __ cc [Normal: 300-400 cc], Multiple low level internal echoes / Debris in lumen, No calculus, Wall __ mm [Normal: <3 mm]
-IMPRESSION: UB debris -? Infection`,
-
-"KUB - PUJ Obstruction":`ULTRASOUND KUB - PUJ OBSTRUCTION
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Hydronephrosis with abrupt narrowing at PUJ, Pelvis dilated __ mm [Normal: <10 mm], No calculus, LEFT KIDNEY: Normal, BLADDER: Normal __ cc
-IMPRESSION: Right PUJ Obstruction - Pelvis __ mm`,
-
-"KUB - Simple Cortical Cyst":`ULTRASOUND KUB - SIMPLE CORTICAL CYST
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Anechoic thin walled simple cortical cyst __ x __ mm [Normal: No cyst] at upper / mid / lower pole, Bosniak I
-LEFT KIDNEY: Normal
-IMPRESSION: Right Renal Simple Cortical Cyst __ mm - Bosniak I`,
-
-// ===================== 3. KUB + PROSTATE =====================
-"KUB + PROSTATE - Normal":`ULTRASOUND KUB + PROSTATE - NORMAL
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal
-URINARY BLADDER: Capacity __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Pre-void __ cc, Post-void residual __ cc [Normal: <50 cc]
-PROSTATE: __ x __ x __ cm [Normal: <4 cm], Volume __ cc [Normal: 20-25 cc], Weight __ gm [Normal: 20-25 gm], Normal size and echotexture
-IMPRESSION: Normal KUB with Normal Prostate __ gm`,
-
-"KUB + PROSTATE - BPH":`ULTRASOUND KUB + PROSTATE - BPH
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal
-URINARY BLADDER: Capacity __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Pre-void __ cc, Post-void residual __ cc [Normal: <50 cc]
-PROSTATE: Enlarged __ x __ x __ cm, Volume __ cc, Weight __ gm [Normal: 20-25 gm], Median lobe hypertrophy
-IMPRESSION: Benign Prostatic Hyperplasia - Enlarged Prostate __ gm with residual __ cc`,
-
-"KUB + PROSTATE - Pre & Post Void Significant":`ULTRASOUND KUB + PROSTATE - PRE & POST VOID
-RIGHT KIDNEY: __ x __ cm, Normal, LEFT KIDNEY: __ x __ cm, Normal
-URINARY BLADDER: Pre-void volume __ cc [Normal: 300-400 cc], Post-void residual volume __ cc [Normal: <50 cc] - Significant residual
-PROSTATE: __ x __ x __ cm, Volume __ cc, Weight __ gm [Normal: 20-25 gm], Enlarged
-IMPRESSION: Enlarged Prostate __ gm with Significant post-void residual __ cc [Normal: <50 cc]`,
-
-"KUB + PROSTATE - Prostatitis":`ULTRASOUND KUB + PROSTATE - PROSTATITIS
-KIDNEYS: Normal, BLADDER: Wall thickened __ mm [Normal: <3 mm], Hyperemic, PROSTATE: __ x __ x __ cm, Volume __ cc, Weight __ gm [Normal: 20-25 gm], Heterogeneous, Increased vascularity
-IMPRESSION: Prostatitis - Heterogeneous Prostate __ gm`,
-
-// ===================== 4. GYNAE & OBSTETRICS =====================
-"PELVIS - Normal":`ULTRASOUND PELVIS - NORMAL
-UTERUS: Anteverted, Normal size __ x __ cm [Normal: 7-9 x 4-5 cm], Myometrium homogenous, No fibroid, Endometrial thickness __ mm [Normal: 6-12 mm], Regular, Cervix normal
-OVARIES: Right ovary __ x __ cm, Volume __ cc [Normal: 5-10 cc], Left ovary __ x __ cm, Volume __ cc [Normal: 5-10 cc], No adnexal mass
-POD: No free fluid
-IMPRESSION: Normal Pelvis - Uterus __ x __ cm, ET __ mm`,
-
-"PELVIS - Bulky Uterus":`ULTRASOUND PELVIS - BULKY UTERUS
-UTERUS: Bulky __ x __ cm [Normal: 7-9 x 4-5 cm], Heterogeneous myometrium, Endometrial thickness __ mm [Normal: 6-12 mm], No fibroid, Cervix normal, OVARIES: Normal, POD: No free fluid
-IMPRESSION: Bulky Uterus __ x __ cm`,
-
-"PELVIS - Fibroid":`ULTRASOUND PELVIS - FIBROID
-UTERUS: __ x __ cm [Normal: 7-9 x 4-5 cm], Myometrium shows well defined hypoechoic lesion __ x __ mm at anterior / posterior wall - Fibroid, Endometrial thickness __ mm [Normal: 6-12 mm], OVARIES: Normal, POD: No free fluid
-IMPRESSION: Uterine Fibroid __ x __ mm`,
-
-"PELVIS - Ovarian Simple Cyst":`ULTRASOUND PELVIS - OVARIAN SIMPLE CYST
-UTERUS: __ x __ cm [Normal: 7-9 x 4-5 cm], ET __ mm [Normal: 6-12 mm], Normal, OVARY: Right / Left ovary shows well defined anechoic thin walled cyst __ x __ mm [Normal: No cyst], No internal echoes
-IMPRESSION: Right / Left Ovarian Simple Cyst __ x __ mm`,
-
-"PELVIS - PCOS / RPCOs":`ULTRASOUND PELVIS - PCOS / RPCOs
-UTERUS: __ x __ cm [Normal: 7-9 x 4-5 cm], ET __ mm [Normal: 6-12 mm], OVARIES: Both ovaries enlarged, Right __ x __ cm Volume __ cc [Normal: 5-10 cc], Left __ x __ cm Volume __ cc [Normal: 5-10 cc], Multiple small peripherally arranged follicles __ mm [Normal: <10 mm], Increased stromal echogenicity
-IMPRESSION: Bilateral Polycystic Ovaries (PCOS / RPCOs)`,
-
-"PELVIS - PID":`ULTRASOUND PELVIS - PID
-UTERUS: Bulky __ x __ cm [Normal: 7-9 x 4-5 cm], Heterogeneous, Endometrial thickness __ mm, OVARIES: Both bulky, Heterogeneous, POD: Free fluid with internal echoes __ cc
-IMPRESSION: Pelvic Inflammatory Disease - PID`,
-
-"PELVIS - Follicle Study":`ULTRASOUND PELVIS - FOLLICLE STUDY DOMINANT
-UTERUS: __ x __ cm, ET __ mm [Normal: 8-12 mm triple line], Triple line, OVARIES: Right ovary shows dominant follicle __ x __ mm [Normal mature: 18-24 mm], Left ovary shows small follicles, POD: No / Minimal free fluid
-IMPRESSION: Dominant follicle __ x __ mm in Right ovary`,
-
-"FWB - Normal Single Live":`ULTRASOUND FWB - NORMAL SINGLE LIVE
-Presentation: Cephalic [Normal: Cephalic at term], Lie: Longitudinal, Fetus: Single, Alive, Cardiac Activity: Present, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks __ days, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Adequate, Placenta: Anterior / Posterior upper segment, Grade __ maturity, Cervix: Closed, Length __ mm [Normal: >25 mm]
-IMPRESSION: Single live intrauterine pregnancy __ weeks __ days, Cephalic, EFW __ gm, Adequate liquor, FHR __ bpm`,
-
-"FWB - Early Pregnancy CRL":`ULTRASOUND FWB - EARLY PREGNANCY CRL
-Gestational Sac: __ x __ mm, Yolk Sac: Normal __ mm [Normal: <6 mm], Fetal Pole: Present, CRL: __ mm [Normal: 2-30 mm], Gestational Age: __ weeks __ days as per CRL, Cardiac Activity: Present, FHR __ bpm [Normal: 120-160 bpm], Cervix: Closed __ mm [Normal: >25 mm]
-IMPRESSION: Single live early intrauterine pregnancy CRL __ mm = __ weeks __ days`,
-
-"FWB - Anomaly Scan 18-22 Weeks":`ULTRASOUND FWB - ANOMALY SCAN 18-22 WEEKS
-Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Placenta: __, No gross congenital anomaly seen, Head, Spine, Heart, Abdomen, Limbs normal, Cervix: Closed __ mm [Normal: >25 mm]
-IMPRESSION: Normal anomaly scan __ weeks - No gross anomaly seen`,
-
-"FWB - Growth Scan 28-32 Weeks":`ULTRASOUND FWB - GROWTH SCAN 28-32 WEEKS
-Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], Presentation: Cephalic, BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Placenta: Anterior upper segment Grade I maturity, Doppler: Normal, S/D Ratio __ [Normal: <3], Cervix: Closed __ mm [Normal: >25 mm]
-IMPRESSION: Single live pregnancy __ weeks, Cephalic, EFW __ gm - Adequate growth`,
-
-"FWB - Oligohydramnios":`ULTRASOUND FWB - OLIGOHYDRAMNIOS
-Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm] - Reduced
-IMPRESSION: Single live pregnancy __ weeks with Oligohydramnios AFI __ mm`,
-
-"FWB - Polyhydramnios":`ULTRASOUND FWB - POLYHYDRAMNIOS
-Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm] - Increased
-IMPRESSION: Single live pregnancy __ weeks with Polyhydramnios AFI __ mm`,
-
-"FWB - Breech Presentation":`ULTRASOUND FWB - BREECH PRESENTATION
-Presentation: Breech [Normal: Cephalic at term], Lie: Longitudinal, Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Placenta: __, Cervix: Closed
-IMPRESSION: Single live breech presentation __ weeks - EFW __ gm`,
-
-"FWB - Nuchal Cord":`ULTRASOUND FWB - NUCHAL CORD
-Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], Presentation: Cephalic, BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Color Doppler: Single / Double loop of umbilical cord seen around fetal neck - Nuchal cord
-IMPRESSION: Single live pregnancy __ weeks with Nuchal Cord`,
-
-"FWB - Missed Abortion":`ULTRASOUND FWB - MISSED ABORTION
-Gestational Sac: __ x __ mm, CRL: __ mm [Normal: 2-30 mm], Gestational Age: __ weeks, Cardiac Activity: Absent [Normal: Present after 6 weeks]
-IMPRESSION: Missed abortion __ weeks - No cardiac activity`
-};
-let allTemplates=Object.keys(T);
-let fetalData={},editId=null,lastViewedId=null;
-function filterTemplates(){
- let q=(tSearch.value||'').toLowerCase();
- let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));
- let s=uType; let current=s.value;
- s.innerHTML='';
- filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
- if(filtered.includes(current)){s.value=current;}
- if(filtered.length>0 &&!filtered.includes(current)){rText.value=T[filtered[0]];checkFetal();}
- if(filtered.length===0){s.innerHTML='<option>No match</option>';}
-}
-function calcFWB(){let bpd=parseFloat(cBPD.value)||0,hc=parseFloat(cHC.value)||0,ac=parseFloat(cAC.value)||0,fl=parseFloat(cFL.value)||0,crl=parseFloat(cCRL.value)||0,afi=parseFloat(cAFI.value)||0;let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);if(crl>0)gas.push(crl*0.16+6.8);if(bpd>0)gas.push(bpd*0.33+4);let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}fetalData={ga:avg,efw:efw,hc,ac,fl,bpd,crl,afi};resGA.innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';resEFW.innerText=efw?`Wt: ${Math.round(efw)} gm`:'Wt: --';resEDD.innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';}
-function applyCalc(){if(!fetalData.ga&&!fetalData.efw){alert('HC AC FL likhen');return;}let txt=rText.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rText.value=txt;}
-function init(){let s=uType;s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});pDate.valueAsDate=new Date();sumDate.valueAsDate=new Date();rText.value=T[allTemplates[0]];checkFetal();render();}
-function checkFetal(){
- let v=uType.value; rText.value=T[v]||'';
- let isFWB=v.toLowerCase().includes('fwb')||v.toLowerCase().includes('ob')||v.toLowerCase().includes('pregnancy');
- let isProstate=v.toLowerCase().includes('prostate');
- let isWhole=v.toLowerCase().includes('whole')||v.toLowerCase().includes('kub')||v.toLowerCase().includes('pelvis')||v.toLowerCase().includes('gynae');
- fetalCalc.style.display=isFWB?'block':'none';
- prostateCalc.style.display=isProstate?'block':'none';
- complaintBox.style.display=isWhole?'block':'none';
- let d = getDiagramForType(v);
- document.getElementById('diagramWM').style.backgroundImage=`url("${d}")`;
- document.getElementById('diagramWM').style.display='block';
-}
-uType.addEventListener('change',checkFetal);
-function formatReportToHTML(text){
- let lines=text.split('\n'); let html='';
- lines.forEach(line=>{
-   let originalLine=line.trim();
-   if(!originalLine){html+='<div style="height:6px"></div>';return;}
-   let lineForPrint = originalLine.replace(/\[.*?\]/g,'').trim();
-   if(lineForPrint.startsWith('ULTRASOUND')||lineForPrint.startsWith('DOPPLER')){html+=`<div style="text-align:center;margin:12px 0 10px 0;font-size:14px;font-weight:900;text-decoration:underline;color:#0a4eb5">${lineForPrint}</div>`;return;}
-   if(lineForPrint.startsWith('IMPRESSION:')){let val=lineForPrint.replace('IMPRESSION:','').trim(); html+=`<div style="margin-top:14px;font-size:13px"><b><u>IMPRESSION</u>:</b> ${val}</div>`;return;}
-   if(lineForPrint.startsWith('Advice:')){let val=lineForPrint.replace('Advice:','').trim(); html+=`<div style="margin-top:8px;font-size:12.5px"><b><u>Advice</u>:</b> ${val}</div>`;return;}
-   if(lineForPrint.includes(':')){let idx=lineForPrint.indexOf(':');let label=lineForPrint.substring(0,idx).trim();let value=lineForPrint.substring(idx+1).trim();html+=`<div style="margin:3px 0"><b><u>${label}</u>:</b> ${value}</div>`;}else{html+=`<div>${lineForPrint}</div>`;}
- });return html;
-}
-function make(){
- if(!pName.value){alert('Patient Name likhen');return;}
- let d = getDiagramForType(uType.value);
- let wm = document.getElementById('diagramWM');
- wm.style.backgroundImage=`url("${d}")`;
- wm.style.display='block';
- let pid=pIDMobile.value||'__';
- let complaintText=(pComplaint.value||'').trim();
- let complaintHTML='';
- if(complaintText && complaintBox.style.display!=='none'){
-   complaintHTML=`<div style="margin-bottom:10px;font-size:12.5px"><b><u>Present Complaint / H/O</u>:</b> ${complaintText}</div>`;
- }
- let patientBorder=`<div style="border:2px solid #0a4eb5;border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#f8fbff"><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px"><span><b><u>Name</u>:</b> ${pName.value}</span> | <span><b><u>Age</u>:</b> ${pAge.value}</span> | <span><b><u>Sex</u>:</b> ${pGen.value}</span> | <span><b><u>Date</u>:</b> ${pDate.value}</span> | <span><b><u>ID/Mobile</u>:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;margin-top:4px"><span><b><u>Ref By</u>:</b> ${ref.value}</span> | <span><b><u>Sonologist</u>:</b> ${sono.value}</span></div></div>`;
- let bodyHTML=formatReportToHTML(rText.value);
- let footer=`<div style="margin-top:20px;border-top:2px solid #0a4eb5;padding-top:10px;text-align:center;font-size:11px;line-height:1.6"><div><b><i>This report is computer generated, signature not required</i></b></div><div style="margin-top:4px;font-size:12px;font-weight:800">Thanks for availing our service</div></div>`;
- document.getElementById('reportContent').innerHTML=patientBorder+complaintHTML+bodyHTML+footer;
- document.getElementById('outCard').style.display='block';
- setTimeout(()=>{let w=document.getElementById('diagramWM'); w.style.backgroundImage=`url("${d}")`; w.style.display='block';},100);
- document.getElementById('outCard').scrollIntoView({behavior:'smooth'});
-}
-function saveR(){
- if(!pName.value){alert('Name likhen');return;}
- let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');
- let recId = editId? editId : Date.now();
- let rec={id:recId,name:pName.value,age:pAge.value,gen:pGen.value,mobile:pIDMobile.value,type:uType.value,date:pDate.value,ref:ref.value,sono:sono.value,text:rText.value,complaint:pComplaint.value,html:document.getElementById('reportContent').innerHTML};
- if(editId){
-   let i=all.findIndex(x=>x.id===editId);
-   if(i>=0) all[i]=rec;
-   editId=null;
-   document.getElementById('editBanner').style.display='none';
-   document.getElementById('saveBtn').innerText='Save + Drive Upload';
-   document.getElementById('finalBtn').innerText='✅ Final Report Banayen';
- }else{
-   all.unshift(rec);
- }
- localStorage.setItem('azam_reports',JSON.stringify(all));
- render();
- uploadToDriveFile(`report_${rec.id}_${rec.name.replace(/\s+/g,'_')}.json`,JSON.stringify(rec));
- uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));
- alert(editId? '✅ Update ho gaya!' : '✅ Save ho gaya! Local + Drive par upload ho raha hai');
- lastViewedId=rec.id;
-}
-function render(){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let q=(sBox.value||'').toLowerCase();let f=all.filter(r=>(r.name+' '+r.mobile+' '+r.type).toLowerCase().includes(q));if(f.length===0){list.innerHTML='<p style="text-align:center;color:#888;padding:20px">Koi report nahi mili. Drive se Load dabayen.</p>';return;}list.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center"><div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}${r.complaint?' | H/O:'+r.complaint.substring(0,25):''}</small></div><div style="display:flex;flex-wrap:wrap"><button class="small" style="background:#f59e0b" onclick="editR(${r.id})">Edit</button><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="viewR(${r.id});setTimeout(()=>window.print(),600)">Print</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}
-function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;lastViewedId=id;pName.value=r.name;pAge.value=r.age;pGen.value=r.gen;pIDMobile.value=r.mobile;uType.value=r.type;pDate.value=r.date;ref.value=r.ref;sono.value=r.sono;rText.value=r.text;pComplaint.value=r.complaint||'';checkFetal();make();}
-function editR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;editId=id;lastViewedId=id;pName.value=r.name;pAge.value=r.age;pGen.value=r.gen;pIDMobile.value=r.mobile;uType.value=r.type;pDate.value=r.date;ref.value=r.ref;sono.value=r.sono;rText.value=r.text;pComplaint.value=r.complaint||'';checkFetal();document.getElementById('editBanner').style.display='block';document.getElementById('saveBtn').innerText='Update + Drive Upload';document.getElementById('finalBtn').innerText='✏️ Update Report';window.scrollTo({top:0,behavior:'smooth'});alert('Edit mode ON - Ab edit karke Final Report Banayen aur Update dabayen');}
-function editCurrent(){if(lastViewedId){editR(lastViewedId);}else{alert('Koi report selected nahi');}}
-function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();}
-function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[190,280]);doc.text(doc.splitTextToSize(document.getElementById('reportContent').innerText,150),10,50);doc.save((pName.value||'Report')+'.pdf');}
-function openSummary(){summaryCard.style.display='block';renderSummary();}
-function closeSummary(){summaryCard.style.display='none';}
-function renderSummary(){let d=sumDate.value;if(!d){alert('Date select');return;}let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let f=all.filter(r=>r.date===d);sumTitle.innerText='Date: '+d;sumTotal.innerText=f.length;sumBody.innerHTML=f.map((r,i)=>`<tr><td>${i+1}</td><td>${r.name}</td><td>${r.mobile}</td><td>${r.age}/${r.gen}</td><td>${r.type}</td><td>${r.ref}</td><td>${r.sono}</td></tr>`).join('');}
-function printSummary(){let c=document.getElementById('summaryPrintArea').innerHTML;let w=window.open('','','width=900,height=700');w.document.write('<html><body>'+c+'</body></html>');w.document.close();w.print();}
-init();
-</script>
-</body>
-</html>"WHOLE ABDOMEN - Normal":`ULTRASOUND WHOLE ABDOMEN
-LIVER: Normal in size __ cm [Normal: 12-15 cm], Normal homogenous echotexture, No focal lesion, No IHBR dilatation, Portal vein normal __ mm [Normal: <13 mm], No ascites
-GALL BLADDER: Normally distended, Wall thickness __ mm [Normal: <3 mm], Lumen clear, No calculus, No sludge
-CBD: __ mm [Normal: <6 mm], Normal
-PANCREAS: Normal in size, Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal echotexture, No focal lesion
-SPLEEN: Normal in size __ cm [Normal: <12 cm], Normal echotexture, No focal lesion
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
-URINARY BLADDER: Normal capacity __ cc [Normal: 300-400 cc], Wall thickness normal __ mm [Normal: <3 mm], Lumen clear, No calculus
-PROSTATE: __ gm [Normal: 20-25 gm], Normal
-PERITONEUM: No free fluid, No lymphadenopathy
-IMPRESSION: Normal Ultrasound Whole Abdomen`,
-"WHOLE ABDOMEN - Fatty Liver Grade 1":`ULTRASOUND WHOLE ABDOMEN - FATTY LIVER GRADE 1
-LIVER: Enlarged __ cm [Normal: 12-15 cm], Increased echogenicity Grade 1 Fatty Liver, Minimal diffuse increase, No focal lesion
-GALL BLADDER: Normally distended, Wall __ mm [Normal: <3 mm], No calculus
-CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal __ cm [Normal: <12 cm], KIDNEYS: Normal, BLADDER: Normal, PERITONEUM: No free fluid
-IMPRESSION: Hepatomegaly with Fatty Liver Grade 1 - LIVER __ cm`,
-"WHOLE ABDOMEN - Fatty Liver Grade 2":`ULTRASOUND WHOLE ABDOMEN - FATTY LIVER GRADE 2
-LIVER: Enlarged __ cm [Normal: 12-15 cm], Increased echogenicity Grade 2 Fatty Liver, Moderate diffuse increase, No focal lesion
-GALL BLADDER: Normally distended, Wall __ mm, No calculus, CBD: __ mm, PANCREAS: Normal / Obscured, SPLEEN: Normal __ cm, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Hepatomegaly with Fatty Liver Grade 2 - LIVER __ cm`,
-"WHOLE ABDOMEN - Fatty Liver Grade 3":`ULTRASOUND WHOLE ABDOMEN - FATTY LIVER GRADE 3
-LIVER: Enlarged __ cm [Normal: 12-15 cm], Markedly increased echogenicity Grade 3 Fatty Liver, No focal lesion
-GALL BLADDER: Obscured / Normally distended, Wall __ mm, CBD: __ mm, PANCREAS: Obscured, SPLEEN: Normal __ cm, KIDNEYS: Normal, BLADDER: Normal
 IMPRESSION: Hepatomegaly with Fatty Liver Grade 3 - LIVER __ cm`,
+
 "WHOLE ABDOMEN - Hepatomegaly":`ULTRASOUND WHOLE ABDOMEN - HEPATOMEGALY
 LIVER: Enlarged __ cm [Normal: 12-15 cm], Homogenous, No focal lesion, No IHBR dilatation, Portal vein normal __ mm [Normal: <13 mm]
 GALL BLADDER: Normally distended, Wall __ mm [Normal: <3 mm], No calculus, CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal __ cm [Normal: <12 cm], KIDNEYS: Normal, BLADDER: Normal, PERITONEUM: No ascites
 IMPRESSION: Hepatomegaly __ cm [Normal: <15 cm]`,
+
 "WHOLE ABDOMEN - Splenomegaly":`ULTRASOUND WHOLE ABDOMEN - SPLENOMEGALY
 LIVER: Normal __ cm [Normal: 12-15 cm], GALL BLADDER: Normal, Wall __ mm [Normal: <3 mm], CBD: __ mm, PANCREAS: Normal, SPLEEN: Enlarged __ cm [Normal: <12 cm], Homogenous, No focal lesion, RIGHT KIDNEY: __ x __ cm, LEFT KIDNEY: __ x __ cm, BLADDER: __ cc, PROSTATE: __ gm, PERITONEUM: No ascites
 IMPRESSION: Splenomegaly __ cm`,
+
 "WHOLE ABDOMEN - Cholelithiasis Single":`ULTRASOUND WHOLE ABDOMEN - CHOLELITHIASIS SINGLE
 LIVER: Normal __ cm [Normal: 12-15 cm], No focal lesion, GALL BLADDER: Normally distended, Lumen shows single echogenic calculus __ mm [Normal: No calculus] with posterior acoustic shadowing, Mobile, Wall __ mm [Normal: <3 mm], No pericholecystic fluid, CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal, KIDNEYS: Normal, BLADDER: Normal
 IMPRESSION: Cholelithiasis - Single Gall bladder calculus __ mm`,
+
 "WHOLE ABDOMEN - Cholelithiasis Multiple":`ULTRASOUND WHOLE ABDOMEN - CHOLELITHIASIS MULTIPLE
 LIVER: Normal __ cm, No focal lesion, GALL BLADDER: Normally distended, Lumen shows multiple echogenic calculi, Largest __ mm with posterior acoustic shadowing, Wall __ mm [Normal: <3 mm], CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal, KIDNEYS: Normal, BLADDER: Normal
 IMPRESSION: Cholelithiasis - Multiple Gall bladder calculi largest __ mm`,
-"WHOLE ABDOMEN - Ascites":`ULTRASOUND WHOLE ABDOMEN - ASCITES
-LIVER: __ cm [Normal: 12-15 cm], GALL BLADDER: Wall __ mm, CBD: __ mm, PANCREAS: Normal, SPLEEN: __ cm [Normal: <12 cm], KIDNEYS: Normal, BLADDER: Normal, PERITONEAL CAVITY: Free fluid seen in perihepatic, perisplenic, paracolic gutters and pelvis - Gross / Moderate / Mild Ascites
-IMPRESSION: Ascites`,
+
 "WHOLE ABDOMEN - Prominent Bowel Loops":`ULTRASOUND WHOLE ABDOMEN - PROMINENT BOWEL LOOPS
 LIVER: Normal __ cm, GALL BLADDER: Normal, CBD: Normal, PANCREAS: Normal, SPLEEN: Normal __ cm, BOWEL LOOPS: Prominent, Dilated __ mm [Normal: <25 mm], To-and-fro peristalsis, No free fluid, KIDNEYS: Normal, BLADDER: Normal
 IMPRESSION: Prominent / Dilated bowel loops __ mm -? Subacute intestinal obstruction`,
-"WHOLE ABDOMEN - Appendicitis":`ULTRASOUND WHOLE ABDOMEN - APPENDICITIS
-RIGHT ILIAC FOSSA: Appendix visualized, Diameter __ mm [Normal: <6 mm], Wall thickness __ mm [Normal: <3 mm], Non-compressible, Surrounding echogenic fat, Minimal free fluid __ cc in RIF
-LIVER: Normal __ cm, GALL BLADDER: Normal, KIDNEYS: Normal, BLADDER: Normal
-IMPRESSION: Acute Appendicitis - Appendix __ mm, Non-compressible`,
+
 "KUB - Normal":`ULTRASOUND KUB
 RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal size, shape and echotexture, Cortical thickness __ mm [Normal: >10 mm], No calculus, No hydronephrosis
 LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
 URINARY BLADDER: Capacity __ cc [Normal: 300-400 cc], Wall normal __ mm [Normal: <3 mm], Lumen clear
 PROSTATE: __ gm [Normal: 20-25 gm], Normal
 IMPRESSION: Normal KUB`,
+
 "KUB - Bilateral Microliths":`ULTRASOUND KUB - BILATERAL MICROLITHS
 RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Multiple tiny echogenic foci __ mm [Normal: No calculus] - Microliths, No hydronephrosis
 LEFT KIDNEY: __ x __ cm, Microliths __ mm
 URINARY BLADDER: __ cc [Normal: 300-400 cc], Normal, PROSTATE: __ gm [Normal: 20-25 gm]
 IMPRESSION: Bilateral Renal Microlithiasis`,
+
 "KUB - Right Renal Calculus":`ULTRASOUND KUB - RIGHT RENAL CALCULUS
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Echogenic calculus __ mm [Normal: No calculus] with shadowing at upper / mid / lower pole / pelvis
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Echogenic calculus __ mm [Normal: No calculus] with shadowing at upper / mid / lower pole / pelvis, No hydronephrosis
 LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
 URINARY BLADDER: Normal __ cc [Normal: 300-400 cc], No calculus, PROSTATE: __ gm
 IMPRESSION: Right Renal Calculus __ mm`,
-"KUB - Left Renal Calculus":`ULTRASOUND KUB - LEFT RENAL CALCULUS
-RIGHT KIDNEY: Normal __ x __ cm, No calculus
-LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Echogenic calculus __ mm [Normal: No calculus] with shadowing at __ pole
-URINARY BLADDER: Normal, PROSTATE: __ gm [Normal: 20-25 gm]
-IMPRESSION: Left Renal Calculus __ mm`,
+
 "KUB - Hydronephrosis":`ULTRASOUND KUB - HYDRONEPHROSIS
 RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Moderate hydronephrosis, Pelvis dilated __ mm [Normal: <10 mm], No calculus seen, LEFT KIDNEY: Normal, BLADDER: Normal __ cc
 IMPRESSION: Right Hydronephrosis - Pelvis __ mm`,
+
 "KUB - Hydronephrosis with Proximal Ureter Dilation":`ULTRASOUND KUB - HYDRO WITH PROXIMAL URETER DILATION
 RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Mild hydronephrosis, Proximal ureter dilated __ mm [Normal: <3 mm], LEFT KIDNEY: Normal, BLADDER: Normal
-IMPRESSION: Right hydronephrosis with proximal ureteric dilatation __ mm`,
-"KUB - Urinary Bladder Stone":`ULTRASOUND KUB - URINARY BLADDER STONE
-RIGHT KIDNEY: Normal __ x __ cm, LEFT KIDNEY: Normal, URINARY BLADDER: Distended __ cc [Normal: 300-400 cc], Echogenic calculus __ mm [Normal: No calculus] with shadowing in bladder lumen
-PROSTATE: __ gm [Normal: 20-25 gm]
-IMPRESSION: Urinary Bladder Calculus __ mm`,
-"KUB - Cystitis":`ULTRASOUND KUB - CYSTITIS
-RIGHT KIDNEY: Normal, LEFT KIDNEY: Normal, URINARY BLADDER: Distended __ cc [Normal: 300-400 cc], Wall diffusely thickened __ mm [Normal: <3 mm], Hyperemic, Internal echoes
-IMPRESSION: Cystitis - Thickened bladder wall __ mm [Normal: <3 mm]`,
-"KUB - UB Debris":`ULTRASOUND KUB - UB DEBRIS
-RIGHT KIDNEY: Normal, LEFT KIDNEY: Normal, URINARY BLADDER: Distended __ cc [Normal: 300-400 cc], Multiple low level internal echoes / Debris in lumen, No calculus, Wall __ mm [Normal: <3 mm]
-IMPRESSION: UB debris -? Infection`,
-"KUB - PUJ Obstruction":`ULTRASOUND KUB - PUJ OBSTRUCTION
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Hydronephrosis with abrupt narrowing at PUJ, Pelvis dilated __ mm [Normal: <10 mm], No calculus, LEFT KIDNEY: Normal, BLADDER: Normal __ cc
-IMPRESSION: Right PUJ Obstruction - Pelvis __ mm`,
+IMPRESSION: Right hydronephrosis with proximal ureteric dilatation __ mm -? Ureteric calculus`,
+
 "KUB + PROSTATE - Normal":`ULTRASOUND KUB + PROSTATE - NORMAL
 RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis
 LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal
 URINARY BLADDER: Capacity __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Pre-void __ cc, Post-void residual __ cc [Normal: <50 cc]
 PROSTATE: __ x __ x __ cm [Normal: <4 cm], Volume __ cc [Normal: 20-25 cc], Weight __ gm [Normal: 20-25 gm], Normal size and echotexture
 IMPRESSION: Normal KUB with Normal Prostate __ gm`,
+
 "KUB + PROSTATE - BPH":`ULTRASOUND KUB + PROSTATE - BPH
 RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
 LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal
 URINARY BLADDER: Capacity __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Pre-void __ cc, Post-void residual __ cc [Normal: <50 cc]
 PROSTATE: Enlarged __ x __ x __ cm, Volume __ cc, Weight __ gm [Normal: 20-25 gm], Median lobe hypertrophy
 IMPRESSION: Benign Prostatic Hyperplasia - Enlarged Prostate __ gm with residual __ cc`,
-"KUB + PROSTATE - Pre & Post Void Significant":`ULTRASOUND KUB + PROSTATE - PRE & POST VOID
-RIGHT KIDNEY: __ x __ cm, Normal, LEFT KIDNEY: __ x __ cm, Normal
-URINARY BLADDER: Pre-void volume __ cc [Normal: 300-400 cc], Post-void residual volume __ cc [Normal: <50 cc] - Significant residual
-PROSTATE: __ x __ x __ cm, Volume __ cc, Weight __ gm [Normal: 20-25 gm], Enlarged
-IMPRESSION: Enlarged Prostate __ gm with Significant post-void residual __ cc [Normal: <50 cc]`,
+
 "PELVIS - Normal":`ULTRASOUND PELVIS - NORMAL
 UTERUS: Anteverted, Normal size __ x __ cm [Normal: 7-9 x 4-5 cm], Myometrium homogenous, No fibroid, Endometrial thickness __ mm [Normal: 6-12 mm], Regular, Cervix normal
 OVARIES: Right ovary __ x __ cm, Volume __ cc [Normal: 5-10 cc], Left ovary __ x __ cm, Volume __ cc [Normal: 5-10 cc], No adnexal mass
 POD: No free fluid
 IMPRESSION: Normal Pelvis - Uterus __ x __ cm, ET __ mm`,
+
 "PELVIS - Bulky Uterus":`ULTRASOUND PELVIS - BULKY UTERUS
 UTERUS: Bulky __ x __ cm [Normal: 7-9 x 4-5 cm], Heterogeneous myometrium, Endometrial thickness __ mm [Normal: 6-12 mm], No fibroid, Cervix normal, OVARIES: Normal, POD: No free fluid
 IMPRESSION: Bulky Uterus __ x __ cm`,
-"PELVIS - Fibroid":`ULTRASOUND PELVIS - FIBROID
-UTERUS: __ x __ cm [Normal: 7-9 x 4-5 cm], Myometrium shows well defined hypoechoic lesion __ x __ mm at anterior / posterior wall - Fibroid, Endometrial thickness __ mm [Normal: 6-12 mm], OVARIES: Normal, POD: No free fluid
-IMPRESSION: Uterine Fibroid __ x __ mm`,
-"PELVIS - Ovarian Simple Cyst":`ULTRASOUND PELVIS - OVARIAN SIMPLE CYST
-UTERUS: __ x __ cm [Normal: 7-9 x 4-5 cm], ET __ mm [Normal: 6-12 mm], Normal, OVARY: Right / Left ovary shows well defined anechoic thin walled cyst __ x __ mm [Normal: No cyst], No internal echoes
-IMPRESSION: Right / Left Ovarian Simple Cyst __ x __ mm`,
+
 "PELVIS - PCOS / RPCOs":`ULTRASOUND PELVIS - PCOS / RPCOs
 UTERUS: __ x __ cm [Normal: 7-9 x 4-5 cm], ET __ mm [Normal: 6-12 mm], OVARIES: Both ovaries enlarged, Right __ x __ cm Volume __ cc [Normal: 5-10 cc], Left __ x __ cm Volume __ cc [Normal: 5-10 cc], Multiple small peripherally arranged follicles __ mm [Normal: <10 mm], Increased stromal echogenicity
 IMPRESSION: Bilateral Polycystic Ovaries (PCOS / RPCOs)`,
+
 "FWB - Normal Single Live":`ULTRASOUND FWB - NORMAL SINGLE LIVE
 Presentation: Cephalic [Normal: Cephalic at term], Lie: Longitudinal, Fetus: Single, Alive, Cardiac Activity: Present, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks __ days, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Adequate, Placenta: Anterior / Posterior upper segment, Grade __ maturity, Cervix: Closed, Length __ mm [Normal: >25 mm]
 IMPRESSION: Single live intrauterine pregnancy __ weeks __ days, Cephalic, EFW __ gm, Adequate liquor, FHR __ bpm`,
+
 "FWB - Early Pregnancy CRL":`ULTRASOUND FWB - EARLY PREGNANCY CRL
 Gestational Sac: __ x __ mm, Yolk Sac: Normal __ mm [Normal: <6 mm], Fetal Pole: Present, CRL: __ mm [Normal: 2-30 mm], Gestational Age: __ weeks __ days as per CRL, Cardiac Activity: Present, FHR __ bpm [Normal: 120-160 bpm], Cervix: Closed __ mm [Normal: >25 mm]
 IMPRESSION: Single live early intrauterine pregnancy CRL __ mm = __ weeks __ days`,
+
 "FWB - Anomaly Scan 18-22 Weeks":`ULTRASOUND FWB - ANOMALY SCAN 18-22 WEEKS
 Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Placenta: __, No gross congenital anomaly seen, Head, Spine, Heart, Abdomen, Limbs normal, Cervix: Closed __ mm [Normal: >25 mm]
 IMPRESSION: Normal anomaly scan __ weeks - No gross anomaly seen`,
+
 "FWB - Oligohydramnios":`ULTRASOUND FWB - OLIGOHYDRAMNIOS
 Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm] - Reduced
 IMPRESSION: Single live pregnancy __ weeks with Oligohydramnios AFI __ mm`,
+
 "FWB - Breech Presentation":`ULTRASOUND FWB - BREECH PRESENTATION
 Presentation: Breech [Normal: Cephalic at term], Lie: Longitudinal, Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Placenta: __, Cervix: Closed
-IMPRESSION: Single live breech presentation __ weeks - EFW __ gm`,
-"FWB - Nuchal Cord":`ULTRASOUND FWB - NUCHAL CORD
-Fetus: Single Alive, FHR __ bpm [Normal: 120-160 bpm], Presentation: Cephalic, BPD: __ mm, HC: __ mm, AC: __ mm, FL: __ mm, Gestational Age: __ weeks, EFW: __ gm, AFI: __ mm [Normal: 8-18 cm], Color Doppler: Single / Double loop of umbilical cord seen around fetal neck - Nuchal cord
-IMPRESSION: Single live pregnancy __ weeks with Nuchal Cord`,
-"FWB - Missed Abortion":`ULTRASOUND FWB - MISSED ABORTION
-Gestational Sac: __ x __ mm, CRL: __ mm [Normal: 2-30 mm], Gestational Age: __ weeks, Cardiac Activity: Absent [Normal: Present after 6 weeks]
-IMPRESSION: Missed abortion __ weeks - No cardiac activity`
+IMPRESSION: Single live breech presentation __ weeks - EFW __ gm`
 };
+
 let allTemplates=Object.keys(T);
 let fetalData={},editId=null,lastViewedId=null;
+
 function filterTemplates(){
  let q=(tSearch.value||'').toLowerCase();
  let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));
@@ -566,15 +246,33 @@ function filterTemplates(){
  s.innerHTML='';
  filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
  if(filtered.includes(current)){s.value=current;}
- if(filtered.length>0 &&!filtered.includes(current)){rText.value=T[filtered[0]];checkFetal(false);}
- if(filtered.length===0){s.innerHTML='<option>No match</option>';}
 }
-function calcFWB(){let bpd=parseFloat(cBPD.value)||0,hc=parseFloat(cHC.value)||0,ac=parseFloat(cAC.value)||0,fl=parseFloat(cFL.value)||0,crl=parseFloat(cCRL.value)||0,afi=parseFloat(cAFI.value)||0;let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);if(crl>0)gas.push(crl*0.16+6.8);if(bpd>0)gas.push(bpd*0.33+4);let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}fetalData={ga:avg,efw:efw,hc,ac,fl,bpd,crl,afi};resGA.innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';resEFW.innerText=efw?`Wt: ${Math.round(efw)} gm`:'Wt: --';resEDD.innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';}
-function applyCalc(){if(!fetalData.ga&&!fetalData.efw){alert('HC AC FL likhen');return;}let txt=rText.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rText.value=txt;}
-function init(){let s=uType;s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});pDate.valueAsDate=new Date();sumDate.valueAsDate=new Date();rText.value=T[allTemplates[0]];checkFetal(false);render();}
-function checkFetal(preserveText){
+
+function useSelectedTemplate(){
  let v=uType.value;
- if(!preserveText){ rText.value=T[v]||''; }
+ if(!v){alert('Pehle template select karen');return;}
+ rText.value=T[v]||'';
+ checkFetal(false);
+ autoSaveDraft();
+ document.getElementById('rText').scrollIntoView({behavior:'smooth'});
+}
+
+function calcFWB(){let bpd=parseFloat(cBPD.value)||0,hc=parseFloat(cHC.value)||0,ac=parseFloat(cAC.value)||0,fl=parseFloat(cFL.value)||0,crl=parseFloat(cCRL.value)||0,afi=parseFloat(cAFI.value)||0;let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);if(crl>0)gas.push(crl*0.16+6.8);if(bpd>0)gas.push(bpd*0.33+4);let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}fetalData={ga:avg,efw:efw,hc,ac,fl,bpd,crl,afi};resGA.innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';resEFW.innerText=efw?`Wt: ${Math.round(efw)} gm`:'Wt: --';resEDD.innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';}
+function applyCalc(){if(!fetalData.ga&&!fetalData.efw){alert('HC AC FL likhen');return;}let txt=rText.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rText.value=txt;autoSaveDraft();}
+
+function init(){
+ let s=uType;s.innerHTML='';
+ allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
+ pDate.valueAsDate=new Date();
+ sumDate.valueAsDate=new Date();
+ document.getElementById('templateCount').innerText=allTemplates.length+' Templates';
+ loadDraft();
+ checkFetal(true);
+ render();
+}
+
+function checkFetal(preserveText){
+ let v=uType.value||allTemplates[0];
  let isFWB=v.toLowerCase().includes('fwb')||v.toLowerCase().includes('ob')||v.toLowerCase().includes('pregnancy');
  let isProstate=v.toLowerCase().includes('prostate');
  let isWhole=v.toLowerCase().includes('whole')||v.toLowerCase().includes('kub')||v.toLowerCase().includes('pelvis')||v.toLowerCase().includes('gynae');
@@ -585,7 +283,7 @@ function checkFetal(preserveText){
  document.getElementById('diagramWM').style.backgroundImage=`url("${d}")`;
  document.getElementById('diagramWM').style.display='block';
 }
-uType.addEventListener('change',()=>{ checkFetal(false); });
+
 function formatReportToHTML(text){
  let lines=text.split('\n'); let html='';
  lines.forEach(line=>{
@@ -598,6 +296,7 @@ function formatReportToHTML(text){
    if(lineForPrint.includes(':')){let idx=lineForPrint.indexOf(':');let label=lineForPrint.substring(0,idx).trim();let value=lineForPrint.substring(idx+1).trim();html+=`<div style="margin:3px 0"><b><u>${label}</u>:</b> ${value}</div>`;}else{html+=`<div>${lineForPrint}</div>`;}
  });return html;
 }
+
 function make(){
  if(!pName.value){alert('Patient Name likhen');return;}
  let d = getDiagramForType(uType.value);
@@ -617,41 +316,103 @@ function make(){
  document.getElementById('outCard').style.display='block';
  setTimeout(()=>{let w=document.getElementById('diagramWM'); w.style.backgroundImage=`url("${d}")`; w.style.display='block';},100);
  document.getElementById('outCard').scrollIntoView({behavior:'smooth'});
+ autoSaveDraft();
 }
+
+// ===== AUTO SAVE DRAFT SYSTEM - CTRL+S =====
+function autoSaveDraft(){
+ try{
+  let draft={
+   name:pName.value,age:pAge.value,gen:pGen.value,mobile:pIDMobile.value,type:uType.value,date:pDate.value,ref:ref.value,sono:sono.value,text:rText.value,complaint:pComplaint.value,editId:editId
+  };
+  localStorage.setItem('azam_draft',JSON.stringify(draft));
+  document.getElementById('draftStatus').innerText='Draft Saved: '+new Date().toLocaleTimeString();
+  document.getElementById('draftStatus').style.color='#10b981';
+ }catch(e){}
+}
+function loadDraft(){
+ try{
+  let d=localStorage.getItem('azam_draft');
+  if(!d) return;
+  let draft=JSON.parse(d);
+  if(draft.name) pName.value=draft.name;
+  if(draft.age) pAge.value=draft.age;
+  if(draft.gen) pGen.value=draft.gen;
+  if(draft.mobile) pIDMobile.value=draft.mobile;
+  if(draft.type) uType.value=draft.type;
+  if(draft.date) pDate.value=draft.date;
+  if(draft.ref) ref.value=draft.ref;
+  if(draft.sono) sono.value=draft.sono;
+  if(draft.text) rText.value=draft.text;
+  if(draft.complaint) pComplaint.value=draft.complaint;
+  if(draft.editId) {editId=draft.editId; document.getElementById('editBanner').style.display='block'; document.getElementById('editIdShow').innerText=editId; }
+  document.getElementById('draftStatus').innerText='Draft Restored: '+new Date().toLocaleTimeString();
+ }catch(e){}
+}
+function clearDraft(){if(confirm('Draft clear karna hai?')){localStorage.removeItem('azam_draft');location.reload();}}
+
+// Ctrl+S listener
+document.addEventListener('keydown', function(e){
+ if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='s'){
+  e.preventDefault();
+  autoSaveDraft();
+  saveR();
+ }
+});
+
 function saveR(){
  if(!pName.value){alert('Name likhen');return;}
- let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');
- let recId = editId? editId : Date.now();
- let rec={id:recId,name:pName.value,age:pAge.value,gen:pGen.value,mobile:pIDMobile.value,type:uType.value,date:pDate.value,ref:ref.value,sono:sono.value,text:rText.value,complaint:pComplaint.value,html:document.getElementById('reportContent').innerHTML};
- if(editId){
+ try{
+  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');
+  let recId = editId? editId : Date.now();
+  // Safety: ensure HTML is generated
+  if(!document.getElementById('reportContent').innerHTML || document.getElementById('outCard').style.display==='none'){
+   make();
+  }
+  let rec={id:recId,name:pName.value,age:pAge.value,gen:pGen.value,mobile:pIDMobile.value,type:uType.value,date:pDate.value,ref:ref.value,sono:sono.value,text:rText.value,complaint:pComplaint.value,html:document.getElementById('reportContent').innerHTML};
+  if(editId){
    let i=all.findIndex(x=>x.id===editId);
-   if(i>=0) all[i]=rec;
+   if(i>=0) all[i]=rec; else all.unshift(rec);
    editId=null;
    document.getElementById('editBanner').style.display='none';
    document.getElementById('saveBtn').innerText='Save + Drive Upload';
    document.getElementById('finalBtn').innerText='✅ Final Report Banayen';
- }else{
+  }else{
    all.unshift(rec);
+  }
+  localStorage.setItem('azam_reports',JSON.stringify(all));
+  localStorage.removeItem('azam_draft');
+  render();
+  uploadToDriveFile(`report_${rec.id}_${rec.name.replace(/\s+/g,'_')}.json`,JSON.stringify(rec));
+  uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));
+  document.getElementById('draftStatus').innerText='✅ Final Saved: '+new Date().toLocaleTimeString();
+  lastViewedId=rec.id;
+  alert('✅ Report Save ho gayi! Local + Drive');
+ }catch(err){
+  alert('Save error: '+err.message);
  }
- localStorage.setItem('azam_reports',JSON.stringify(all));
- render();
- uploadToDriveFile(`report_${rec.id}_${rec.name.replace(/\s+/g,'_')}.json`,JSON.stringify(rec));
- uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));
- alert('✅ Save ho gaya!');
- lastViewedId=rec.id;
 }
-function render(){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let q=(sBox.value||'').toLowerCase();let f=all.filter(r=>(r.name+' '+r.mobile+' '+r.type).toLowerCase().includes(q));if(f.length===0){list.innerHTML='<p style="text-align:center;color:#888;padding:20px">Koi report nahi mili. Drive se Load dabayen.</p>';return;}list.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center"><div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}${r.complaint?' | H/O:'+r.complaint.substring(0,25):''}</small></div><div style="display:flex;flex-wrap:wrap"><button class="small" style="background:#f59e0b" onclick="editR(${r.id})">Edit</button><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="viewR(${r.id});setTimeout(()=>window.print(),600)">Print</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}
+
+function render(){
+ try{
+  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');
+  let q=(sBox.value||'').toLowerCase();
+  let f=all.filter(r=>(r.name+' '+r.mobile+' '+r.type).toLowerCase().includes(q));
+  if(f.length===0){list.innerHTML='<p style="text-align:center;color:#888;padding:20px">Koi report nahi mili. Drive se Load dabayen.</p>';return;}
+  list.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center"><div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}${r.complaint?' | H/O:'+r.complaint.substring(0,25):''}</small></div><div style="display:flex;flex-wrap:wrap"><button class="small" style="background:#f59e0b" onclick="editR(${r.id})">Edit</button><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="viewR(${r.id});setTimeout(()=>window.print(),600)">Print</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');
+ }catch(e){ list.innerHTML='<p style="color:red">List error, localStorage clear karen</p>'; }
+}
+
 function viewR(id){
  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;
- lastViewedId=id;
- editId=null;
- document.getElementById('editBanner').style.display='none';
+ lastViewedId=id; editId=null; document.getElementById('editBanner').style.display='none';
  pName.value=r.name;pAge.value=r.age;pGen.value=r.gen;pIDMobile.value=r.mobile;uType.value=r.type;pDate.value=r.date;ref.value=r.ref;sono.value=r.sono;
  checkFetal(true);
  rText.value=r.text;
  pComplaint.value=r.complaint||'';
  make();
 }
+
 function editR(id){
  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;
  editId=id;lastViewedId=id;
@@ -660,12 +421,13 @@ function editR(id){
  rText.value=r.text;
  pComplaint.value=r.complaint||'';
  document.getElementById('editBanner').style.display='block';
- document.getElementById('saveBtn').innerText='Update + Drive Upload';
+ document.getElementById('editIdShow').innerText=id;
  document.getElementById('finalBtn').innerText='✏️ Update Report';
- // Purani report bhi nazar ayegi
  make();
  window.scrollTo({top:0,behavior:'smooth'});
+ autoSaveDraft();
 }
+
 function editCurrent(){if(lastViewedId){editR(lastViewedId);}else{alert('Koi report selected nahi');}}
 function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();}
 function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[190,280]);doc.text(doc.splitTextToSize(document.getElementById('reportContent').innerText,150),10,50);doc.save((pName.value||'Report')+'.pdf');}
