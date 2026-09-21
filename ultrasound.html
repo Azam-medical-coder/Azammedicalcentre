@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - FINAL SAVE FIX</title>
+<title>Azam Medical Centre - DRIVE LOAD FIX FINAL</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -50,7 +50,6 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 <div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Prostate Lagayen</button></div>
 <textarea id="rText" rows="22" style="font-family:monospace;font-size:13px" oninput="autoSaveDraft()"></textarea>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="finalBtn" class="btn" onclick="make()">✅ Final Report Banayen</button><button class="btn" style="background:#10b981" onclick="saveR()">💾 Save + Drive Upload</button></div>
-<div style="font-size:11px;text-align:center;margin-top:6px;color:#666">Tip: Ctrl+S = Auto Save | Final Save = Drive Upload</div>
 </div>
 <div class="card" id="outCard" style="display:none"><div class="boxTitle noPrint"><span>🖨️ BOX 3: Final Preview</span></div><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#0a4eb5" onclick="window.print()">Print Final (28x19)</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF</button><button class="small" style="background:#10b981" onclick="saveR()">Save + Drive Upload</button><button class="small" style="background:#8b5cf6" onclick="editCurrent()">✏️ Wapis Edit Karen</button></div></div>
 <div class="card noPrint"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h3>📂 BOX 4: Saved Reports</h3><div style="display:flex;gap:6px"><button class="small" style="background:#0a4eb5;padding:12px" onclick="loadFromDrive()">☁️ Drive se Load</button><button class="small" style="background:#8b5cf6;padding:10px" onclick="openSummary()">📊 Summary</button><button class="small" style="background:#ff3b30;padding:10px" onclick="clearDraft()">🗑️ Clear Draft</button></div></div><input id="sBox" placeholder="Search Name / ID / Mobile" onkeyup="render()" style="margin-top:8px"><div id="list"></div></div>
@@ -58,14 +57,88 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 <script>
 const CLIENT_ID='153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com';
 const SCOPES='https://www.googleapis.com/auth/drive.file';
-let tokenClient,gapiInited=false,gisInited=false,driveFolderId=null;
+let tokenClient,gapiInited=false,gisInited=false,driveFolderId=null,driveBackupFileId=null;
 function updateDriveStatus(m,c){let e=document.getElementById('driveStatus'); if(e){e.innerText='● Drive: '+m+' | Auto-Save: ON (Ctrl+S)'; e.style.color=c||'#10b981';}}
 function gapiLoaded(){gapi.load('client', async()=>{try{await gapi.client.init({discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]});gapiInited=true;updateDriveStatus('Ready',' #10b981');}catch(e){updateDriveStatus('Drive Init Error',' #ff3b30');}});}
 function gisLoaded(){try{tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID, scope:SCOPES, callback:''});gisInited=true;}catch(e){}}
 function ensureDriveAuth(){return new Promise((res,rej)=>{if(!tokenClient){rej('No tokenClient');return;}tokenClient.callback=(r)=>{if(r.error)rej(r);else res(r);};try{tokenClient.requestAccessToken({prompt:''});}catch(e){rej(e);}});}
 async function getOrCreateFolder(){if(driveFolderId)return driveFolderId;try{let r=await gapi.client.drive.files.list({q:"name='Azam_Medical_Reports' and mimeType='application/vnd.google-apps.folder' and trashed=false",fields:"files(id,name)"});if(r.result.files&&r.result.files.length>0){driveFolderId=r.result.files[0].id;return driveFolderId;}let c=await gapi.client.drive.files.create({resource:{name:'Azam_Medical_Reports', mimeType:'application/vnd.google-apps.folder'},fields:'id'});driveFolderId=c.result.id;return driveFolderId;}catch(e){return null;}}
-async function uploadToDriveFile(name,content){try{if(!gapiInited||!gisInited||!tokenClient)return;updateDriveStatus('Uploading...',' #f59e0b');await ensureDriveAuth();let folderId=await getOrCreateFolder();const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents: folderId?[folderId]:[]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file);let token=gapi.client.getToken();if(!token||!token.access_token)return;await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form});updateDriveStatus('Saved to Drive',' #10b981');}catch(e){console.log('Drive error',e);updateDriveStatus('Local Saved, Drive Pending',' #f59e0b');}}
-async function loadFromDrive(){try{if(!gapiInited||!gisInited){alert('Drive load ho raha hai, 2 second baad try karen');return;}await ensureDriveAuth();let folderId=await getOrCreateFolder();let listResp=await gapi.client.drive.files.list({q:`'${folderId}' in parents and trashed=false`,fields:"files(id,name)",pageSize:100});let files=listResp.result.files||[];if(files.length===0){alert('Drive khali');return;}let existing=JSON.parse(localStorage.getItem('azam_reports')||'[]');let ids=new Set(existing.map(r=>r.id));let loaded=0;for(let f of files){try{let resp=await fetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`,{headers:{'Authorization':'Bearer '+gapi.client.getToken().access_token}});if(!resp.ok)continue;let data=await resp.json();if(data&&data.id&&!ids.has(data.id)){existing.unshift(data);ids.add(data.id);loaded++;}}catch(e){}}localStorage.setItem('azam_reports',JSON.stringify(existing));render();alert(`Drive se ${loaded} loaded`);}catch(e){alert('Drive error: '+e);}}
+async function findFileInFolder(folderId,fileName){try{let q=`'${folderId}' in parents and name='${fileName}' and trashed=false`;let res=await gapi.client.drive.files.list({q:q,fields:"files(id,name)"});if(res.result.files&&res.result.files.length>0) return res.result.files[0]; return null;}catch(e){return null;}}
+async function uploadToDriveFile(name,content){
+ try{
+  if(!gapiInited||!gisInited||!tokenClient){return;}
+  await ensureDriveAuth();
+  let folderId=await getOrCreateFolder(); if(!folderId) return;
+  let token=gapi.client.getToken(); if(!token||!token.access_token) return;
+  // Backup file ko update karo, naya create nahi
+  if(name==='Azam_Medical_Backup_ALL.json'){
+   let existing=await findFileInFolder(folderId,name);
+   if(existing){
+    // UPDATE existing file
+    await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=media`,{method:'PATCH',headers:{'Authorization':'Bearer '+token.access_token,'Content-Type':'application/json'},body:content});
+    updateDriveStatus('Backup Updated to Drive',' #10b981'); return;
+   }
+  }
+  const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents:[folderId]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file);
+  await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form});
+  updateDriveStatus('Saved to Drive',' #10b981');
+ }catch(e){console.log('Drive error',e);updateDriveStatus('Local Saved, Drive Pending',' #f59e0b');}
+}
+
+// ===== NAYA FIXED LOAD FUNCTION =====
+async function loadFromDrive(){
+ try{
+  if(!gapiInited||!gisInited){alert('Drive load ho raha hai, 2 second baad try karen');return;}
+  updateDriveStatus('Loading from Drive...',' #f59e0b');
+  await ensureDriveAuth();
+  let folderId=await getOrCreateFolder(); if(!folderId){alert('Folder nahi mila');return;}
+  let listResp=await gapi.client.drive.files.list({q:`'${folderId}' in parents and trashed=false`,fields:"files(id,name,modifiedTime)",pageSize:100,orderBy:"modifiedTime desc"});
+  let files=listResp.result.files||[];
+  if(files.length===0){alert('Drive khali hai - Folder me koi file nahi');updateDriveStatus('Drive Empty',' #ff3b30');return;}
+  let existing=[];
+  try{ existing=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){ existing=[]; }
+  let ids=new Set(existing.map(r=>String(r.id)));
+  let loaded=0;
+
+  for(let f of files){
+   try{
+    let token=gapi.client.getToken();
+    let resp=await fetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`,{headers:{'Authorization':'Bearer '+token.access_token}});
+    if(!resp.ok) continue;
+    let text=await resp.text();
+    let data;
+    try{ data=JSON.parse(text); }catch(e){ continue; }
+
+    // CASE 1: Backup file - ye array hai
+    if(Array.isArray(data)){
+     for(let rep of data){
+      if(rep && rep.id &&!ids.has(String(rep.id))){
+       existing.unshift(rep);
+       ids.add(String(rep.id));
+       loaded++;
+      }
+     }
+    } else if(data && data.id){
+     // CASE 2: Single report file
+     if(!ids.has(String(data.id))){
+      existing.unshift(data);
+      ids.add(String(data.id));
+      loaded++;
+     }
+    }
+   }catch(e){ console.log('file load error',e); }
+  }
+  localStorage.setItem('azam_reports',JSON.stringify(existing));
+  render();
+  updateDriveStatus(`Drive se ${loaded} Loaded - Total ${existing.length}`,' #10b981');
+  alert(`Drive se ${loaded} nayi reports loaded! Total ${existing.length} reports ab is PC par hain.`);
+ }catch(e){
+  console.log(e);
+  alert('Drive error: '+(e.message||e));
+  updateDriveStatus('Drive Load Error',' #ff3b30');
+ }
+}
+
 window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1200);});
 function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';let e=document.getElementById('passErr'); if(e) e.style.display='none';}else{let er=document.getElementById('passErr'); if(er) er.style.display='block';}}
 (function(){if(sessionStorage.getItem('azam_login')==='ok'){let ov=document.getElementById('loginOverlay');if(ov) ov.style.display='none';}})();
@@ -75,16 +148,7 @@ const sonoDoctors=["Sonologist Dr. - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN",
 function fillSelect(id,list){let s=document.getElementById(id);if(!s)return;s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
 fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
 let prostateData={};
-function calcProstate(){
- try{
-  let l=parseFloat(document.getElementById('pL')?.value)||0,w=parseFloat(document.getElementById('pW')?.value)||0,h=parseFloat(document.getElementById('pH')?.value)||0;
-  if(l>0&&w>0&&h>0){
-   let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};
-   let e1=document.getElementById('resPVol'); if(e1) e1.innerText=`Volume: ${vol.toFixed(1)} cc`;
-   let e2=document.getElementById('resPGm'); if(e2) e2.innerText=`Weight: ${vol.toFixed(1)} gm`;
-  }
- }catch(e){console.log(e);}
-}
+function calcProstate(){try{let l=parseFloat(document.getElementById('pL')?.value)||0,w=parseFloat(document.getElementById('pW')?.value)||0,h=parseFloat(document.getElementById('pH')?.value)||0;if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};let e1=document.getElementById('resPVol'); if(e1) e1.innerText=`Volume: ${vol.toFixed(1)} cc`;let e2=document.getElementById('resPGm'); if(e2) e2.innerText=`Weight: ${vol.toFixed(1)} gm`;}}catch(e){}}
 function applyProstateCalc(){if(!prostateData.vol){alert('cm likhen');return;}let txt=document.getElementById('rText').value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);document.getElementById('rText').value=txt;autoSaveDraft();}
 
 const DIAGRAMS={
@@ -228,248 +292,42 @@ IMPRESSION: Single live breech presentation __ weeks - EFW __ gm`
 
 let allTemplates=Object.keys(T);
 let fetalData={},editId=null,lastViewedId=null;
-
-function filterTemplates(){
- try{
-  let q=(document.getElementById('tSearch')?.value||'').toLowerCase();
-  let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));
-  let s=document.getElementById('uType');
-  if(!s) return;
-  let current=s.value;
-  s.innerHTML='';
-  filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
-  if(filtered.includes(current)){s.value=current;}
- }catch(e){}
-}
-
-function useSelectedTemplate(){
- try{
-  let sel=document.getElementById('uType');
-  let v=sel?.value;
-  if(!v){alert('Pehle template select karen');return;}
-  let rt=document.getElementById('rText');
-  if(rt) rt.value=T[v]||'';
-  checkFetal(false);
-  autoSaveDraft();
-  document.getElementById('rText')?.scrollIntoView({behavior:'smooth'});
- }catch(e){ alert('Template error: '+e.message); }
-}
-
-function calcFWB(){
- try{
-  let bpd=parseFloat(document.getElementById('cBPD')?.value)||0,hc=parseFloat(document.getElementById('cHC')?.value)||0,ac=parseFloat(document.getElementById('cAC')?.value)||0,fl=parseFloat(document.getElementById('cFL')?.value)||0,crl=parseFloat(document.getElementById('cCRL')?.value)||0,afi=parseFloat(document.getElementById('cAFI')?.value)||0;
-  let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);if(crl>0)gas.push(crl*0.16+6.8);if(bpd>0)gas.push(bpd*0.33+4);
-  let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;
-  if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}
-  fetalData={ga:avg,efw:efw,hc,ac,fl,bpd,crl,afi};
-  let e1=document.getElementById('resGA'); if(e1) e1.innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';
-  let e2=document.getElementById('resEFW'); if(e2) e2.innerText=efw?`Wt: ${Math.round(efw)} gm`:'Wt: --';
-  let e3=document.getElementById('resEDD'); if(e3) e3.innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';
- }catch(e){}
-}
+function filterTemplates(){try{let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');if(!s)return;let current=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(current)){s.value=current;}}catch(e){}}
+function useSelectedTemplate(){try{let sel=document.getElementById('uType');let v=sel?.value;if(!v){alert('Pehle template select karen');return;}let rt=document.getElementById('rText');if(rt) rt.value=T[v]||'';checkFetal(false);autoSaveDraft();document.getElementById('rText')?.scrollIntoView({behavior:'smooth'});}catch(e){alert('Template error: '+e.message);}}
+function calcFWB(){try{let bpd=parseFloat(document.getElementById('cBPD')?.value)||0,hc=parseFloat(document.getElementById('cHC')?.value)||0,ac=parseFloat(document.getElementById('cAC')?.value)||0,fl=parseFloat(document.getElementById('cFL')?.value)||0,crl=parseFloat(document.getElementById('cCRL')?.value)||0,afi=parseFloat(document.getElementById('cAFI')?.value)||0;let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);if(crl>0)gas.push(crl*0.16+6.8);if(bpd>0)gas.push(bpd*0.33+4);let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}fetalData={ga:avg,efw:efw,hc,ac,fl,bpd,crl,afi};let e1=document.getElementById('resGA'); if(e1) e1.innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';let e2=document.getElementById('resEFW'); if(e2) e2.innerText=efw?`Wt: ${Math.round(efw)} gm`:'Wt: --';let e3=document.getElementById('resEDD'); if(e3) e3.innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';}catch(e){}}
 function applyCalc(){try{if(!fetalData.ga&&!fetalData.efw){alert('HC AC FL likhen');return;}let rt=document.getElementById('rText');if(!rt)return;let txt=rt.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rt.value=txt;autoSaveDraft();}catch(e){}}
-
-function init(){
- try{
-  let s=document.getElementById('uType');if(s){s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}
-  let pd=document.getElementById('pDate'); if(pd) pd.valueAsDate=new Date();
-  let sd=document.getElementById('sumDate'); if(sd) sd.valueAsDate=new Date();
-  let tc=document.getElementById('templateCount'); if(tc) tc.innerText=allTemplates.length+' Templates';
-  loadDraft();
-  checkFetal(true);
-  render();
- }catch(e){console.log('init error',e);}
-}
-
-function checkFetal(preserveText){
- try{
-  let sel=document.getElementById('uType');
-  let v=sel?.value||allTemplates[0];
-  let isFWB=v.toLowerCase().includes('fwb')||v.toLowerCase().includes('ob')||v.toLowerCase().includes('pregnancy');
-  let isProstate=v.toLowerCase().includes('prostate');
-  let isWhole=v.toLowerCase().includes('whole')||v.toLowerCase().includes('kub')||v.toLowerCase().includes('pelvis')||v.toLowerCase().includes('gynae');
-  let fc=document.getElementById('fetalCalc'); if(fc) fc.style.display=isFWB?'block':'none';
-  let pc=document.getElementById('prostateCalc'); if(pc) pc.style.display=isProstate?'block':'none';
-  let cb=document.getElementById('complaintBox'); if(cb) cb.style.display=isWhole?'block':'none';
-  let d = getDiagramForType(v);
-  let wm=document.getElementById('diagramWM'); if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}
- }catch(e){}
-}
-
-function formatReportToHTML(text){
- try{
-  let lines=text.split('\n'); let html='';
-  lines.forEach(line=>{
-   let originalLine=line.trim();
-   if(!originalLine){html+='<div style="height:6px"></div>';return;}
-   let lineForPrint = originalLine.replace(/\[.*?\]/g,'').trim();
-   if(lineForPrint.startsWith('ULTRASOUND')||lineForPrint.startsWith('DOPPLER')){html+=`<div style="text-align:center;margin:12px 0 10px 0;font-size:14px;font-weight:900;text-decoration:underline;color:#0a4eb5">${lineForPrint}</div>`;return;}
-   if(lineForPrint.startsWith('IMPRESSION:')){let val=lineForPrint.replace('IMPRESSION:','').trim(); html+=`<div style="margin-top:14px;font-size:13px"><b><u>IMPRESSION</u>:</b> ${val}</div>`;return;}
-   if(lineForPrint.startsWith('Advice:')){let val=lineForPrint.replace('Advice:','').trim(); html+=`<div style="margin-top:8px;font-size:12.5px"><b><u>Advice</u>:</b> ${val}</div>`;return;}
-   if(lineForPrint.includes(':')){let idx=lineForPrint.indexOf(':');let label=lineForPrint.substring(0,idx).trim();let value=lineForPrint.substring(idx+1).trim();html+=`<div style="margin:3px 0"><b><u>${label}</u>:</b> ${value}</div>`;}else{html+=`<div>${lineForPrint}</div>`;}
-  });return html;
- }catch(e){return text;}
-}
-
-function make(){
- try{
-  let pn=document.getElementById('pName');
-  if(!pn?.value){alert('Patient Name likhen');return;}
-  let d = getDiagramForType(document.getElementById('uType')?.value);
-  let wm = document.getElementById('diagramWM');
-  if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}
-  let pid=document.getElementById('pIDMobile')?.value||'__';
-  let complaintText=(document.getElementById('pComplaint')?.value||'').trim();
-  let complaintHTML='';
-  let cb=document.getElementById('complaintBox');
-  if(complaintText && cb && cb.style.display!=='none'){
-   complaintHTML=`<div style="margin-bottom:10px;font-size:12.5px"><b><u>Present Complaint / H/O</u>:</b> ${complaintText}</div>`;
-  }
-  let patientBorder=`<div style="border:2px solid #0a4eb5;border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#f8fbff"><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px"><span><b><u>Name</u>:</b> ${document.getElementById('pName').value}</span> | <span><b><u>Age</u>:</b> ${document.getElementById('pAge').value}</span> | <span><b><u>Sex</u>:</b> ${document.getElementById('pGen').value}</span> | <span><b><u>Date</u>:</b> ${document.getElementById('pDate').value}</span> | <span><b><u>ID/Mobile</u>:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;margin-top:4px"><span><b><u>Ref By</u>:</b> ${document.getElementById('ref').value}</span> | <span><b><u>Sonologist</u>:</b> ${document.getElementById('sono').value}</span></div></div>`;
-  let bodyHTML=formatReportToHTML(document.getElementById('rText').value);
-  let footer=`<div style="margin-top:20px;border-top:2px solid #0a4eb5;padding-top:10px;text-align:center;font-size:11px;line-height:1.6"><div><b><i>This report is computer generated, signature not required</i></b></div><div style="margin-top:4px;font-size:12px;font-weight:800">Thanks for availing our service</div></div>`;
-  let rc=document.getElementById('reportContent');
-  if(rc) rc.innerHTML=patientBorder+complaintHTML+bodyHTML+footer;
-  let oc=document.getElementById('outCard'); if(oc) oc.style.display='block';
-  setTimeout(()=>{let w=document.getElementById('diagramWM'); if(w){w.style.backgroundImage=`url("${d}")`; w.style.display='block';}},100);
-  if(oc) oc.scrollIntoView({behavior:'smooth'});
-  autoSaveDraft();
- }catch(e){ alert('Make error: '+e.message); }
-}
-
-function autoSaveDraft(){
- try{
-  let draft={
-   name:document.getElementById('pName')?.value||'',age:document.getElementById('pAge')?.value||'',gen:document.getElementById('pGen')?.value||'',mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',ref:document.getElementById('ref')?.value||'',sono:document.getElementById('sono')?.value||'',text:document.getElementById('rText')?.value||'',complaint:document.getElementById('pComplaint')?.value||'',editId:editId
-  };
-  localStorage.setItem('azam_draft',JSON.stringify(draft));
-  let ds=document.getElementById('draftStatus'); if(ds){ds.innerText='Draft Saved: '+new Date().toLocaleTimeString(); ds.style.color='#10b981';}
- }catch(e){}
-}
-function loadDraft(){
- try{
-  let d=localStorage.getItem('azam_draft');
-  if(!d) return;
-  let draft=JSON.parse(d);
-  if(draft.name) document.getElementById('pName').value=draft.name;
-  if(draft.age) document.getElementById('pAge').value=draft.age;
-  if(draft.gen) document.getElementById('pGen').value=draft.gen;
-  if(draft.mobile) document.getElementById('pIDMobile').value=draft.mobile;
-  if(draft.type) document.getElementById('uType').value=draft.type;
-  if(draft.date) document.getElementById('pDate').value=draft.date;
-  if(draft.ref) document.getElementById('ref').value=draft.ref;
-  if(draft.sono) document.getElementById('sono').value=draft.sono;
-  if(draft.text) document.getElementById('rText').value=draft.text;
-  if(draft.complaint) document.getElementById('pComplaint').value=draft.complaint;
-  if(draft.editId) {editId=draft.editId; let eb=document.getElementById('editBanner'); if(eb) eb.style.display='block'; let es=document.getElementById('editIdShow'); if(es) es.innerText=editId; }
-  let ds=document.getElementById('draftStatus'); if(ds) ds.innerText='Draft Restored: '+new Date().toLocaleTimeString();
- }catch(e){}
-}
+function init(){try{let s=document.getElementById('uType');if(s){s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate'); if(pd) pd.valueAsDate=new Date();let sd=document.getElementById('sumDate'); if(sd) sd.valueAsDate=new Date();let tc=document.getElementById('templateCount'); if(tc) tc.innerText=allTemplates.length+' Templates';loadDraft();checkFetal(true);render();}catch(e){console.log('init error',e);}}
+function checkFetal(preserveText){try{let sel=document.getElementById('uType');let v=sel?.value||allTemplates[0];let isFWB=v.toLowerCase().includes('fwb')||v.toLowerCase().includes('ob')||v.toLowerCase().includes('pregnancy');let isProstate=v.toLowerCase().includes('prostate');let isWhole=v.toLowerCase().includes('whole')||v.toLowerCase().includes('kub')||v.toLowerCase().includes('pelvis')||v.toLowerCase().includes('gynae');let fc=document.getElementById('fetalCalc'); if(fc) fc.style.display=isFWB?'block':'none';let pc=document.getElementById('prostateCalc'); if(pc) pc.style.display=isProstate?'block':'none';let cb=document.getElementById('complaintBox'); if(cb) cb.style.display=isWhole?'block':'none';let d = getDiagramForType(v);let wm=document.getElementById('diagramWM'); if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}}catch(e){}}
+function formatReportToHTML(text){try{let lines=text.split('\n'); let html='';lines.forEach(line=>{let originalLine=line.trim();if(!originalLine){html+='<div style="height:6px"></div>';return;}let lineForPrint = originalLine.replace(/\[.*?\]/g,'').trim();if(lineForPrint.startsWith('ULTRASOUND')||lineForPrint.startsWith('DOPPLER')){html+=`<div style="text-align:center;margin:12px 0 10px 0;font-size:14px;font-weight:900;text-decoration:underline;color:#0a4eb5">${lineForPrint}</div>`;return;}if(lineForPrint.startsWith('IMPRESSION:')){let val=lineForPrint.replace('IMPRESSION:','').trim(); html+=`<div style="margin-top:14px;font-size:13px"><b><u>IMPRESSION</u>:</b> ${val}</div>`;return;}if(lineForPrint.startsWith('Advice:')){let val=lineForPrint.replace('Advice:','').trim(); html+=`<div style="margin-top:8px;font-size:12.5px"><b><u>Advice</u>:</b> ${val}</div>`;return;}if(lineForPrint.includes(':')){let idx=lineForPrint.indexOf(':');let label=lineForPrint.substring(0,idx).trim();let value=lineForPrint.substring(idx+1).trim();html+=`<div style="margin:3px 0"><b><u>${label}</u>:</b> ${value}</div>`;}else{html+=`<div>${lineForPrint}</div>`;}});return html;}catch(e){return text;}}
+function make(){try{let pn=document.getElementById('pName');if(!pn?.value){alert('Patient Name likhen');return;}let d = getDiagramForType(document.getElementById('uType')?.value);let wm = document.getElementById('diagramWM');if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}let pid=document.getElementById('pIDMobile')?.value||'__';let complaintText=(document.getElementById('pComplaint')?.value||'').trim();let complaintHTML='';let cb=document.getElementById('complaintBox');if(complaintText && cb && cb.style.display!=='none'){complaintHTML=`<div style="margin-bottom:10px;font-size:12.5px"><b><u>Present Complaint / H/O</u>:</b> ${complaintText}</div>`;}let patientBorder=`<div style="border:2px solid #0a4eb5;border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#f8fbff"><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px"><span><b><u>Name</u>:</b> ${document.getElementById('pName').value}</span> | <span><b><u>Age</u>:</b> ${document.getElementById('pAge').value}</span> | <span><b><u>Sex</u>:</b> ${document.getElementById('pGen').value}</span> | <span><b><u>Date</u>:</b> ${document.getElementById('pDate').value}</span> | <span><b><u>ID/Mobile</u>:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;margin-top:4px"><span><b><u>Ref By</u>:</b> ${document.getElementById('ref').value}</span> | <span><b><u>Sonologist</u>:</b> ${document.getElementById('sono').value}</span></div></div>`;let bodyHTML=formatReportToHTML(document.getElementById('rText').value);let footer=`<div style="margin-top:20px;border-top:2px solid #0a4eb5;padding-top:10px;text-align:center;font-size:11px;line-height:1.6"><div><b><i>This report is computer generated, signature not required</i></b></div><div style="margin-top:4px;font-size:12px;font-weight:800">Thanks for availing our service</div></div>`;let rc=document.getElementById('reportContent');if(rc) rc.innerHTML=patientBorder+complaintHTML+bodyHTML+footer;let oc=document.getElementById('outCard'); if(oc) oc.style.display='block';setTimeout(()=>{let w=document.getElementById('diagramWM'); if(w){w.style.backgroundImage=`url("${d}")`; w.style.display='block';}},100);if(oc) oc.scrollIntoView({behavior:'smooth'});autoSaveDraft();}catch(e){alert('Make error: '+e.message);}}
+function autoSaveDraft(){try{let draft={name:document.getElementById('pName')?.value||'',age:document.getElementById('pAge')?.value||'',gen:document.getElementById('pGen')?.value||'',mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',ref:document.getElementById('ref')?.value||'',sono:document.getElementById('sono')?.value||'',text:document.getElementById('rText')?.value||'',complaint:document.getElementById('pComplaint')?.value||'',editId:editId};localStorage.setItem('azam_draft',JSON.stringify(draft));let ds=document.getElementById('draftStatus'); if(ds){ds.innerText='Draft Saved: '+new Date().toLocaleTimeString(); ds.style.color='#10b981';}}catch(e){}}
+function loadDraft(){try{let d=localStorage.getItem('azam_draft');if(!d) return;let draft=JSON.parse(d);if(draft.name) document.getElementById('pName').value=draft.name;if(draft.age) document.getElementById('pAge').value=draft.age;if(draft.gen) document.getElementById('pGen').value=draft.gen;if(draft.mobile) document.getElementById('pIDMobile').value=draft.mobile;if(draft.type) document.getElementById('uType').value=draft.type;if(draft.date) document.getElementById('pDate').value=draft.date;if(draft.ref) document.getElementById('ref').value=draft.ref;if(draft.sono) document.getElementById('sono').value=draft.sono;if(draft.text) document.getElementById('rText').value=draft.text;if(draft.complaint) document.getElementById('pComplaint').value=draft.complaint;if(draft.editId) {editId=draft.editId; let eb=document.getElementById('editBanner'); if(eb) eb.style.display='block'; let es=document.getElementById('editIdShow'); if(es) es.innerText=editId; }let ds=document.getElementById('draftStatus'); if(ds) ds.innerText='Draft Restored: '+new Date().toLocaleTimeString();}catch(e){}}
 function clearDraft(){if(confirm('Draft clear karna hai?')){localStorage.removeItem('azam_draft');location.reload();}}
-
-document.addEventListener('keydown', function(e){
- if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='s'){
-  e.preventDefault();
-  autoSaveDraft();
-  saveR();
- }
-});
-
+document.addEventListener('keydown', function(e){if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='s'){e.preventDefault();autoSaveDraft();saveR();}});
 function saveR(){
- // Pehle local save karo - Drive fail bhi ho to local save rahega
  try{
   let pNameEl=document.getElementById('pName');
   if(!pNameEl ||!pNameEl.value){alert('Patient Name likhen');return;}
-  let all=[];
-  try{ all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){ all=[]; }
+  let all=[];try{ all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){ all=[]; }
   let recId = editId? editId : Date.now();
-  let reportHTML='';
-  let rc=document.getElementById('reportContent');
-  if(rc && rc.innerHTML) reportHTML=rc.innerHTML;
-  else {
-   // Agar preview nahi bana to bana lo
-   try{ make(); reportHTML=document.getElementById('reportContent')?.innerHTML||''; }catch(e){ reportHTML=document.getElementById('rText')?.value||''; }
-  }
-  let rec={
-   id:recId,
-   name:document.getElementById('pName')?.value||'',
-   age:document.getElementById('pAge')?.value||'',
-   gen:document.getElementById('pGen')?.value||'',
-   mobile:document.getElementById('pIDMobile')?.value||'',
-   type:document.getElementById('uType')?.value||'',
-   date:document.getElementById('pDate')?.value||'',
-   ref:document.getElementById('ref')?.value||'',
-   sono:document.getElementById('sono')?.value||'',
-   text:document.getElementById('rText')?.value||'',
-   complaint:document.getElementById('pComplaint')?.value||'',
-   html:reportHTML
-  };
-  if(editId){
-   let idx=all.findIndex(x=>x.id===editId);
-   if(idx>=0) all[idx]=rec; else all.unshift(rec);
-   editId=null;
-   let eb=document.getElementById('editBanner'); if(eb) eb.style.display='none';
-  }else{
-   all.unshift(rec);
-  }
+  let reportHTML='';let rc=document.getElementById('reportContent');
+  if(rc && rc.innerHTML) reportHTML=rc.innerHTML; else {try{ make(); reportHTML=document.getElementById('reportContent')?.innerHTML||''; }catch(e){ reportHTML=document.getElementById('rText')?.value||''; }}
+  let rec={id:recId,name:document.getElementById('pName')?.value||'',age:document.getElementById('pAge')?.value||'',gen:document.getElementById('pGen')?.value||'',mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',ref:document.getElementById('ref')?.value||'',sono:document.getElementById('sono')?.value||'',text:document.getElementById('rText')?.value||'',complaint:document.getElementById('pComplaint')?.value||'',html:reportHTML};
+  if(editId){let idx=all.findIndex(x=>x.id===editId);if(idx>=0) all[idx]=rec; else all.unshift(rec);editId=null;let eb=document.getElementById('editBanner'); if(eb) eb.style.display='none';}else{all.unshift(rec);}
   localStorage.setItem('azam_reports',JSON.stringify(all));
   localStorage.removeItem('azam_draft');
   render();
   let ds=document.getElementById('draftStatus'); if(ds) ds.innerText='✅ Final Saved: '+new Date().toLocaleTimeString();
   lastViewedId=rec.id;
-  alert('✅ Report Local Save ho gayi!');
-  // Drive upload alag se - fail bhi ho to local save safe hai
-  setTimeout(()=>{
-   uploadToDriveFile(`report_${rec.id}_${(rec.name||'').replace(/\s+/g,'_')}.json`,JSON.stringify(rec));
-   uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));
-  },500);
- }catch(err){
-  console.error(err);
-  alert('Local save error: '+err.message);
- }
+  alert('✅ Report Local Save ho gayi! Ab Drive par upload ho rahi hai...');
+  setTimeout(()=>{uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));},500);
+ }catch(err){console.error(err);alert('Local save error: '+err.message);}
 }
-
-function render(){
- try{
-  let all=[]; try{ all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){all=[];}
-  let sBox=document.getElementById('sBox');
-  let q=(sBox?.value||'').toLowerCase();
-  let listEl=document.getElementById('list');
-  if(!listEl) return;
-  let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')+' '+(r.type||'')).toLowerCase().includes(q));
-  if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:20px">Koi report nahi mili. Drive se Load dabayen.</p>';return;}
-  listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center"><div><b>${r.name||'No Name'}</b> - ${r.type||''}<br><small>${r.mobile||''} | ${r.date||''}${r.complaint?' | H/O:'+r.complaint.substring(0,25):''}</small></div><div style="display:flex;flex-wrap:wrap"><button class="small" style="background:#f59e0b" onclick="editR(${r.id})">Edit</button><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="viewR(${r.id});setTimeout(()=>window.print(),600)">Print</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');
- }catch(e){ let listEl=document.getElementById('list'); if(listEl) listEl.innerHTML='<p style="color:red">List error</p>'; }
-}
-function viewR(id){
- try{
-  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;
-  lastViewedId=id; editId=null; let eb=document.getElementById('editBanner'); if(eb) eb.style.display='none';
-  document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'Male';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||allTemplates[0];document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';
-  checkFetal(true);
-  document.getElementById('rText').value=r.text||'';
-  document.getElementById('pComplaint').value=r.complaint||'';
-  make();
- }catch(e){ alert('View error: '+e.message); }
-}
-function editR(id){
- try{
-  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;
-  editId=id;lastViewedId=id;
-  document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||allTemplates[0];document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';
-  checkFetal(true);
-  document.getElementById('rText').value=r.text||'';
-  document.getElementById('pComplaint').value=r.complaint||'';
-  let eb=document.getElementById('editBanner'); if(eb) eb.style.display='block';
-  let es=document.getElementById('editIdShow'); if(es) es.innerText=id;
-  let fb=document.getElementById('finalBtn'); if(fb) fb.innerText='✏️ Update Report';
-  make();
-  window.scrollTo({top:0,behavior:'smooth'});
-  autoSaveDraft();
- }catch(e){ alert('Edit error: '+e.message); }
-}
+function render(){try{let all=[]; try{ all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){all=[];}let sBox=document.getElementById('sBox');let q=(sBox?.value||'').toLowerCase();let listEl=document.getElementById('list');if(!listEl) return;let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')+' '+(r.type||'')).toLowerCase().includes(q));if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:20px">Koi report nahi mili. Drive se Load dabayen.</p>';return;}listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center"><div><b>${r.name||'No Name'}</b> - ${r.type||''}<br><small>${r.mobile||''} | ${r.date||''}${r.complaint?' | H/O:'+r.complaint.substring(0,25):''}</small></div><div style="display:flex;flex-wrap:wrap"><button class="small" style="background:#f59e0b" onclick="editR(${r.id})">Edit</button><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="viewR(${r.id});setTimeout(()=>window.print(),600)">Print</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}catch(e){let listEl=document.getElementById('list'); if(listEl) listEl.innerHTML='<p style="color:red">List error</p>';}}
+function viewR(id){try{let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;lastViewedId=id; editId=null; let eb=document.getElementById('editBanner'); if(eb) eb.style.display='none';document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'Male';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||allTemplates[0];document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';checkFetal(true);document.getElementById('rText').value=r.text||'';document.getElementById('pComplaint').value=r.complaint||'';make();}catch(e){alert('View error: '+e.message);}}
+function editR(id){try{let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;editId=id;lastViewedId=id;document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||allTemplates[0];document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';checkFetal(true);document.getElementById('rText').value=r.text||'';document.getElementById('pComplaint').value=r.complaint||'';let eb=document.getElementById('editBanner'); if(eb) eb.style.display='block';let es=document.getElementById('editIdShow'); if(es) es.innerText=id;let fb=document.getElementById('finalBtn'); if(fb) fb.innerText='✏️ Update Report';make();window.scrollTo({top:0,behavior:'smooth'});autoSaveDraft();}catch(e){alert('Edit error: '+e.message);}}
 function editCurrent(){if(lastViewedId){editR(lastViewedId);}else{alert('Koi report selected nahi');}}
-function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();}
+function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));}
 function pdf(){try{let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[190,280]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:document.getElementById('rText').value;doc.text(doc.splitTextToSize(txt,150),10,50);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}catch(e){alert('PDF error: '+e.message);}}
 function openSummary(){let sc=document.getElementById('summaryCard'); if(sc) sc.style.display='block';renderSummary();}
 function closeSummary(){let sc=document.getElementById('summaryCard'); if(sc) sc.style.display='none';}
