@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - FINAL SEPARATE BOXES + CTRL S</title>
+<title>Azam Medical Centre - FINAL SAVE FIX</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -25,91 +25,76 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 .loginBox{background:#fff;padding:30px;border-radius:20px;width:90%;max-width:400px;text-align:center}
 .boxTitle{font-size:16px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
 .editBanner{background:#fff3cd;border:2px solid #f59e0b;color:#92400e;padding:10px;border-radius:10px;margin:8px 0;font-weight:800;text-align:center;display:none}
-.draftStatus{font-size:11px;color:#10b981;font-weight:700}
 </style>
 </head>
 <body>
 <div id="loginOverlay"><div class="loginBox"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:80px;height:80px;border-radius:50%;border:3px solid #0a4eb5"><h2 style="color:#0a4eb5;margin:10px 0">Azam Medical Centre</h2><input id="passInput" type="password" placeholder="Enter Password" style="text-align:center;font-size:16px"><button class="btn" onclick="checkPass()" type="button">Login</button><p id="passErr" style="color:red;display:none;margin-top:10px;font-weight:700">Ghalat Password! Pakistan@777 likhen</p></div></div>
-
 <div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:65px;height:65px;border-radius:50%;border:2px solid #0a4eb5"><div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - 02135386116</p><div id="driveStatus" style="font-size:11px;color:#10b981;margin-top:4px">● Drive: Ready | Auto-Save: ON (Ctrl+S)</div></div></div>
-
-<!-- BOX 1: TEMPLATE LIBRARY - ALAG -->
 <div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff">
-<div class="boxTitle"><span>📚 BOX 1: Template Library (Yahan se select karen)</span><span class="draftStatus" id="templateCount">90+ Templates</span></div>
-<input id="tSearch" placeholder="Search template e.g. whole, kub, fatty, calculus, fwb, pelvis, pcos..." onkeyup="filterTemplates()" style="border-color:#8b5cf6">
+<div class="boxTitle"><span>📚 BOX 1: Template Library</span><span id="templateCount" style="font-size:11px;color:#10b981">90+ Templates</span></div>
+<input id="tSearch" placeholder="Search template e.g. whole, kub, fatty, fwb, pelvis..." onkeyup="filterTemplates()" style="border-color:#8b5cf6">
 <select id="uType" size="12" style="height:240px;font-size:13px;font-weight:600"></select>
-<div style="display:flex;gap:8px;margin-top:8px">
-<button class="small" style="background:#8b5cf6;width:100%;padding:12px;font-size:14px" onclick="useSelectedTemplate()">⬇️ Use This Template in Report Box</button>
+<button class="small" style="background:#8b5cf6;width:100%;padding:12px;font-size:14px;margin-top:8px" onclick="useSelectedTemplate()">⬇️ Use This Template in Report Box</button>
 </div>
-<div style="font-size:10px;color:#666;margin-top:6px">* [Normal:...] sirf edit me dikhega, Print me hide ho jayega</div>
-</div>
-
-<!-- BOX 2: REPORT MAKING - ALAG -->
 <div class="card noPrint" style="border:3px solid #1e90ff">
-<div class="boxTitle"><span>📝 BOX 2: Report Tayar Karen (Yahan edit karen)</span><span class="draftStatus" id="draftStatus">Draft: Empty</span></div>
-<div id="editBanner" class="editBanner">✏️ EDIT MODE ON - ID: <span id="editIdShow"></span> | Ctrl+S se save hota rahega</div>
+<div class="boxTitle"><span>📝 BOX 2: Report Tayar Karen</span><span id="draftStatus" style="font-size:11px;color:#10b981">Draft: Empty</span></div>
+<div id="editBanner" class="editBanner">✏️ EDIT MODE ON - ID: <span id="editIdShow"></span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *" oninput="autoSaveDraft()"><input id="pAge" placeholder="Age" oninput="autoSaveDraft()"><select id="pGen" onchange="autoSaveDraft()"><option>Male</option><option>Female</option><option>Child</option></select></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date" onchange="autoSaveDraft()"><input id="pIDMobile" placeholder="Patient ID / Mobile No." oninput="autoSaveDraft()"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref" onchange="autoSaveDraft()"></select><select id="sono" onchange="autoSaveDraft()"></select></div>
-
 <div id="complaintBox" style="border:2px solid #f59e0b;border-radius:12px;padding:10px;margin:8px 0;background:#fffbeb;display:none">
 <label style="font-weight:800;color:#d97706;font-size:12px">📝 Present Complaint / H/O</label>
 <textarea id="pComplaint" rows="2" placeholder="e.g. Left flank pain, Nausea..." oninput="autoSaveDraft()"></textarea>
 </div>
-
-<div id="fetalCalc" class="calcBox" style="display:none"><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB();autoSaveDraft()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB();autoSaveDraft()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB();autoSaveDraft()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB();autoSaveDraft()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB();autoSaveDraft()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB();autoSaveDraft()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Wt: --</div></div><button class="small" style="background:#10b981;width:100%" onclick="applyCalc()">Calculation Lagayen</button></div>
-<div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate();autoSaveDraft()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate();autoSaveDraft()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate();autoSaveDraft()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Prostate Lagayen</button></div>
-
-<textarea id="rText" rows="22" style="font-family:monospace;font-size:13px" oninput="autoSaveDraft()" placeholder="Yahan report ayegi... Ctrl+S dabate hi auto save hoga"></textarea>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<button id="finalBtn" class="btn" onclick="make()">✅ Final Report Banayen</button>
-<button class="btn" style="background:#10b981" onclick="saveR()">💾 Save + Drive Upload (Ctrl+S)</button>
+<div id="fetalCalc" class="calcBox" style="display:none"><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Wt: --</div></div><button class="small" style="background:#10b981;width:100%" onclick="applyCalc()">Calculation Lagayen</button></div>
+<div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="Length cm" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="Width cm" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="Height cm" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Prostate Lagayen</button></div>
+<textarea id="rText" rows="22" style="font-family:monospace;font-size:13px" oninput="autoSaveDraft()"></textarea>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="finalBtn" class="btn" onclick="make()">✅ Final Report Banayen</button><button class="btn" style="background:#10b981" onclick="saveR()">💾 Save + Drive Upload</button></div>
+<div style="font-size:11px;text-align:center;margin-top:6px;color:#666">Tip: Ctrl+S = Auto Save | Final Save = Drive Upload</div>
 </div>
-<div style="font-size:11px;text-align:center;margin-top:6px;color:#666">Tip: Ctrl+S = Auto Save Draft | Final Save = Drive Upload</div>
-</div>
-
-<!-- BOX 3: PREVIEW -->
-<div class="card" id="outCard" style="display:none"><div class="boxTitle noPrint"><span>🖨️ BOX 3: Final Preview (Print Page)</span></div><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#0a4eb5" onclick="window.print()">Print Final (28x19)</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF</button><button class="small" style="background:#10b981" onclick="saveR()">Save + Drive Upload</button><button class="small" style="background:#8b5cf6" onclick="editCurrent()">✏️ Wapis Edit Karen</button></div></div>
-
-<!-- BOX 4: SAVED LIST -->
+<div class="card" id="outCard" style="display:none"><div class="boxTitle noPrint"><span>🖨️ BOX 3: Final Preview</span></div><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#0a4eb5" onclick="window.print()">Print Final (28x19)</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF</button><button class="small" style="background:#10b981" onclick="saveR()">Save + Drive Upload</button><button class="small" style="background:#8b5cf6" onclick="editCurrent()">✏️ Wapis Edit Karen</button></div></div>
 <div class="card noPrint"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h3>📂 BOX 4: Saved Reports</h3><div style="display:flex;gap:6px"><button class="small" style="background:#0a4eb5;padding:12px" onclick="loadFromDrive()">☁️ Drive se Load</button><button class="small" style="background:#8b5cf6;padding:10px" onclick="openSummary()">📊 Summary</button><button class="small" style="background:#ff3b30;padding:10px" onclick="clearDraft()">🗑️ Clear Draft</button></div></div><input id="sBox" placeholder="Search Name / ID / Mobile" onkeyup="render()" style="margin-top:8px"><div id="list"></div></div>
-
 <div class="card noPrint" id="summaryCard" style="display:none;border:3px solid #8b5cf6"><div style="display:flex;justify-content:space-between"><h3>Daily Summary</h3><div style="display:flex;gap:6px"><input id="sumDate" type="date" style="width:auto"><button class="small" style="background:#0a4eb5" onclick="renderSummary()">Show</button><button class="small" style="background:#10b981" onclick="printSummary()">Print</button><button class="small" style="background:#ff3b30" onclick="closeSummary()">Close</button></div></div><div id="summaryPrintArea"><h4 id="sumTitle" style="text-align:center"></h4><table style="width:100%;border-collapse:collapse;font-size:12px" border="1"><thead><tr><th>Sr#</th><th>Name</th><th>ID/Mobile</th><th>Age/Sex</th><th>Type</th><th>Ref</th><th>Sono</th></tr></thead><tbody id="sumBody"></tbody></table><div>Total: <b id="sumTotal">0</b></div></div></div>
-
 <script>
 const CLIENT_ID='153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com';
 const SCOPES='https://www.googleapis.com/auth/drive.file';
 let tokenClient,gapiInited=false,gisInited=false,driveFolderId=null;
 function updateDriveStatus(m,c){let e=document.getElementById('driveStatus'); if(e){e.innerText='● Drive: '+m+' | Auto-Save: ON (Ctrl+S)'; e.style.color=c||'#10b981';}}
-function gapiLoaded(){gapi.load('client', async()=>{await gapi.client.init({discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]});gapiInited=true;updateDriveStatus('Ready',' #10b981');});}
-function gisLoaded(){tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID, scope:SCOPES, callback:''});gisInited=true;}
-function ensureDriveAuth(){return new Promise((res,rej)=>{tokenClient.callback=(r)=>{if(r.error)rej(r);else res(r);};tokenClient.requestAccessToken({prompt:''});});}
+function gapiLoaded(){gapi.load('client', async()=>{try{await gapi.client.init({discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]});gapiInited=true;updateDriveStatus('Ready',' #10b981');}catch(e){updateDriveStatus('Drive Init Error',' #ff3b30');}});}
+function gisLoaded(){try{tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID, scope:SCOPES, callback:''});gisInited=true;}catch(e){}}
+function ensureDriveAuth(){return new Promise((res,rej)=>{if(!tokenClient){rej('No tokenClient');return;}tokenClient.callback=(r)=>{if(r.error)rej(r);else res(r);};try{tokenClient.requestAccessToken({prompt:''});}catch(e){rej(e);}});}
 async function getOrCreateFolder(){if(driveFolderId)return driveFolderId;try{let r=await gapi.client.drive.files.list({q:"name='Azam_Medical_Reports' and mimeType='application/vnd.google-apps.folder' and trashed=false",fields:"files(id,name)"});if(r.result.files&&r.result.files.length>0){driveFolderId=r.result.files[0].id;return driveFolderId;}let c=await gapi.client.drive.files.create({resource:{name:'Azam_Medical_Reports', mimeType:'application/vnd.google-apps.folder'},fields:'id'});driveFolderId=c.result.id;return driveFolderId;}catch(e){return null;}}
-async function uploadToDriveFile(name,content){try{if(!gapiInited||!gisInited)return;updateDriveStatus('Uploading...',' #f59e0b');await ensureDriveAuth();let folderId=await getOrCreateFolder();const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents: folderId?[folderId]:[]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file);await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+gapi.client.getToken().access_token}),body:form});updateDriveStatus('Saved to Drive',' #10b981');}catch(e){updateDriveStatus('Drive Error - Local Saved',' #ff3b30');}}
-async function loadFromDrive(){try{if(!gapiInited||!gisInited){alert('Drive load ho raha');return;}await ensureDriveAuth();let folderId=await getOrCreateFolder();let listResp=await gapi.client.drive.files.list({q:`'${folderId}' in parents and trashed=false`,fields:"files(id,name)",pageSize:100});let files=listResp.result.files||[];if(files.length===0){alert('Drive khali');return;}let existing=JSON.parse(localStorage.getItem('azam_reports')||'[]');let ids=new Set(existing.map(r=>r.id));let loaded=0;for(let f of files){try{let resp=await fetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`,{headers:{'Authorization':'Bearer '+gapi.client.getToken().access_token}});if(!resp.ok)continue;let data=await resp.json();if(data&&data.id&&!ids.has(data.id)){existing.unshift(data);ids.add(data.id);loaded++;}}catch(e){}}localStorage.setItem('azam_reports',JSON.stringify(existing));render();alert(`Drive se ${loaded} loaded`);}catch(e){alert('Drive error');}}
+async function uploadToDriveFile(name,content){try{if(!gapiInited||!gisInited||!tokenClient)return;updateDriveStatus('Uploading...',' #f59e0b');await ensureDriveAuth();let folderId=await getOrCreateFolder();const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents: folderId?[folderId]:[]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file);let token=gapi.client.getToken();if(!token||!token.access_token)return;await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form});updateDriveStatus('Saved to Drive',' #10b981');}catch(e){console.log('Drive error',e);updateDriveStatus('Local Saved, Drive Pending',' #f59e0b');}}
+async function loadFromDrive(){try{if(!gapiInited||!gisInited){alert('Drive load ho raha hai, 2 second baad try karen');return;}await ensureDriveAuth();let folderId=await getOrCreateFolder();let listResp=await gapi.client.drive.files.list({q:`'${folderId}' in parents and trashed=false`,fields:"files(id,name)",pageSize:100});let files=listResp.result.files||[];if(files.length===0){alert('Drive khali');return;}let existing=JSON.parse(localStorage.getItem('azam_reports')||'[]');let ids=new Set(existing.map(r=>r.id));let loaded=0;for(let f of files){try{let resp=await fetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`,{headers:{'Authorization':'Bearer '+gapi.client.getToken().access_token}});if(!resp.ok)continue;let data=await resp.json();if(data&&data.id&&!ids.has(data.id)){existing.unshift(data);ids.add(data.id);loaded++;}}catch(e){}}localStorage.setItem('azam_reports',JSON.stringify(existing));render();alert(`Drive se ${loaded} loaded`);}catch(e){alert('Drive error: '+e);}}
 window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1200);});
-function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';document.getElementById('passErr').style.display='none';}else{document.getElementById('passErr').style.display='block';}}
+function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';let e=document.getElementById('passErr'); if(e) e.style.display='none';}else{let er=document.getElementById('passErr'); if(er) er.style.display='block';}}
 (function(){if(sessionStorage.getItem('azam_login')==='ok'){let ov=document.getElementById('loginOverlay');if(ov) ov.style.display='none';}})();
 document.addEventListener('DOMContentLoaded',()=>{let pi=document.getElementById('passInput');if(pi){pi.addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});}});
 const refDoctors=["Ref By Dr. - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel Arain","Dr. Aqsa Gull","Dr. Shahzad Sadaqat","Dr. Bilal","Dr. Sofia Butt","Dr. Talha Bhatti","Dr. Irfan","Dr. Raheel Arain","Self","Other"];
 const sonoDoctors=["Sonologist Dr. - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN","DR. SAMAN AZAM","Other"];
-function fillSelect(id,list){let s=document.getElementById(id);s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
+function fillSelect(id,list){let s=document.getElementById(id);if(!s)return;s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
 fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
 let prostateData={};
-function calcProstate(){let l=parseFloat(pL.value)||0,w=parseFloat(pW.value)||0,h=parseFloat(pH.value)||0;if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};resPVol.innerText=`Volume: ${vol.toFixed(1)} cc`;resPGm.innerText=`Weight: ${vol.toFixed(1)} gm`;}}
-function applyProstateCalc(){if(!prostateData.vol){alert('cm likhen');return;}let txt=rText.value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);rText.value=txt;autoSaveDraft();}
+function calcProstate(){
+ try{
+  let l=parseFloat(document.getElementById('pL')?.value)||0,w=parseFloat(document.getElementById('pW')?.value)||0,h=parseFloat(document.getElementById('pH')?.value)||0;
+  if(l>0&&w>0&&h>0){
+   let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};
+   let e1=document.getElementById('resPVol'); if(e1) e1.innerText=`Volume: ${vol.toFixed(1)} cc`;
+   let e2=document.getElementById('resPGm'); if(e2) e2.innerText=`Weight: ${vol.toFixed(1)} gm`;
+  }
+ }catch(e){console.log(e);}
+}
+function applyProstateCalc(){if(!prostateData.vol){alert('cm likhen');return;}let txt=document.getElementById('rText').value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);document.getElementById('rText').value=txt;autoSaveDraft();}
 
 const DIAGRAMS={
-whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><path d='M100 50 Q150 30 200 50 L210 180 Q150 200 90 180 Z' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
-kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><ellipse cx='110' cy='150' rx='40' ry='60' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><ellipse cx='190' cy='150' rx='40' ry='60' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><path d='M150 220 L150 300' stroke='%23999' stroke-width='2'/></g></svg>`,
-kub_prostate:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><ellipse cx='110' cy='120' rx='35' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><ellipse cx='190' cy='120' rx='35' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><ellipse cx='150' cy='280' rx='30' ry='25' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
-pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><path d='M80 180 Q150 150 220 180 L210 280 Q150 300 90 280 Z' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
-fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><circle cx='150' cy='120' r='40' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><path d='M110 160 Q150 200 190 160 L180 280 Q150 300 120 280 Z' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
-thyroid:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><ellipse cx='110' cy='150' rx='30' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><ellipse cx='190' cy='150' rx='30' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
-breast:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><ellipse cx='150' cy='200' rx='80' ry='60' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`,
-testis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='400' viewBox='0 0 300 400'><g opacity='0.6'><ellipse cx='120' cy='200' rx='35' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/><ellipse cx='180' cy='200' rx='35' ry='50' fill='%23f0f0f0' stroke='%23999' stroke-width='2'/></g></svg>`
+whole:`data:image/svg+xml;utf8,[STRIPPED]`,
+kub:`data:image/svg+xml;utf8,[STRIPPED]`,
+kub_prostate:`data:image/svg+xml;utf8,[STRIPPED]`,
+pelvis:`data:image/svg+xml;utf8,[STRIPPED]`,
+fwb:`data:image/svg+xml;utf8,[STRIPPED]`
 };
-function getDiagramForType(t){t=(t||'').toLowerCase();if(t.includes('kub')&&t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('kub'))return DIAGRAMS.kub;if(t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('pelvis')||t.includes('gynae')||t.includes('uterus')||t.includes('ovary')||t.includes('fibroid')||t.includes('pcos'))return DIAGRAMS.pelvis;if(t.includes('fwb')||t.includes('anomaly')||t.includes('ob')||t.includes('pregnancy')||t.includes('weeks')||t.includes('crl')||t.includes('breech')||t.includes('cephalic')||t.includes('placenta')||t.includes('liquor'))return DIAGRAMS.fwb;if(t.includes('thyroid'))return DIAGRAMS.thyroid;if(t.includes('breast'))return DIAGRAMS.breast;if(t.includes('testis')||t.includes('scrotum'))return DIAGRAMS.testis;return DIAGRAMS.whole;}
+function getDiagramForType(t){t=(t||'').toLowerCase();if(t.includes('kub')&&t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('kub'))return DIAGRAMS.kub;if(t.includes('prostate'))return DIAGRAMS.kub_prostate;if(t.includes('pelvis')||t.includes('gynae')||t.includes('uterus')||t.includes('ovary')||t.includes('fibroid')||t.includes('pcos'))return DIAGRAMS.pelvis;if(t.includes('fwb')||t.includes('anomaly')||t.includes('ob')||t.includes('pregnancy')||t.includes('weeks')||t.includes('crl')||t.includes('breech')||t.includes('cephalic')||t.includes('placenta'))return DIAGRAMS.fwb;return DIAGRAMS.whole;}
 let T={"WHOLE ABDOMEN - Normal":`ULTRASOUND WHOLE ABDOMEN
 LIVER: Normal in size __ cm [Normal: 12-15 cm], Normal homogenous echotexture, No focal lesion, No IHBR dilatation, Portal vein normal __ mm [Normal: <13 mm], No ascites
 GALL BLADDER: Normally distended, Wall thickness __ mm [Normal: <3 mm], Lumen clear, No calculus, No sludge
@@ -124,18 +109,18 @@ PERITONEUM: No free fluid, No lymphadenopathy
 IMPRESSION: Normal Ultrasound Whole Abdomen`,
 
 "WHOLE ABDOMEN - Fatty Liver Grade 1":`ULTRASOUND WHOLE ABDOMEN - FATTY LIVER GRADE 1
-LIVER: Enlarged __ cm [Normal: 12-15 cm], Increased echogenicity Grade 1 Fatty Liver, Minimal diffuse increase, Diaphragm and portal vessels still visualized, No focal lesion
+LIVER: Enlarged __ cm [Normal: 12-15 cm], Increased echogenicity Grade 1 Fatty Liver, Minimal diffuse increase, No focal lesion
 GALL BLADDER: Normally distended, Wall __ mm [Normal: <3 mm], No calculus
 CBD: __ mm [Normal: <6 mm], PANCREAS: Normal, SPLEEN: Normal __ cm [Normal: <12 cm], KIDNEYS: Normal, BLADDER: Normal, PERITONEUM: No free fluid
 IMPRESSION: Hepatomegaly with Fatty Liver Grade 1 - LIVER __ cm`,
 
 "WHOLE ABDOMEN - Fatty Liver Grade 2":`ULTRASOUND WHOLE ABDOMEN - FATTY LIVER GRADE 2
-LIVER: Enlarged __ cm [Normal: 12-15 cm], Increased echogenicity Grade 2 Fatty Liver, Moderate diffuse increase, Diaphragm and portal vessels partially obscured, No focal lesion
+LIVER: Enlarged __ cm [Normal: 12-15 cm], Increased echogenicity Grade 2 Fatty Liver, Moderate diffuse increase, No focal lesion
 GALL BLADDER: Normally distended, Wall __ mm, No calculus, CBD: __ mm, PANCREAS: Normal / Obscured, SPLEEN: Normal __ cm, KIDNEYS: Normal, BLADDER: Normal
 IMPRESSION: Hepatomegaly with Fatty Liver Grade 2 - LIVER __ cm`,
 
 "WHOLE ABDOMEN - Fatty Liver Grade 3":`ULTRASOUND WHOLE ABDOMEN - FATTY LIVER GRADE 3
-LIVER: Enlarged __ cm [Normal: 12-15 cm], Markedly increased echogenicity Grade 3 Fatty Liver, Diaphragm and portal vessels poorly visualized, No focal lesion
+LIVER: Enlarged __ cm [Normal: 12-15 cm], Markedly increased echogenicity Grade 3 Fatty Liver, No focal lesion
 GALL BLADDER: Obscured / Normally distended, Wall __ mm, CBD: __ mm, PANCREAS: Obscured, SPLEEN: Normal __ cm, KIDNEYS: Normal, BLADDER: Normal
 IMPRESSION: Hepatomegaly with Fatty Liver Grade 3 - LIVER __ cm`,
 
@@ -160,6 +145,11 @@ IMPRESSION: Cholelithiasis - Multiple Gall bladder calculi largest __ mm`,
 LIVER: Normal __ cm, GALL BLADDER: Normal, CBD: Normal, PANCREAS: Normal, SPLEEN: Normal __ cm, BOWEL LOOPS: Prominent, Dilated __ mm [Normal: <25 mm], To-and-fro peristalsis, No free fluid, KIDNEYS: Normal, BLADDER: Normal
 IMPRESSION: Prominent / Dilated bowel loops __ mm -? Subacute intestinal obstruction`,
 
+"WHOLE ABDOMEN - Appendicitis":`ULTRASOUND WHOLE ABDOMEN - APPENDICITIS
+RIGHT ILIAC FOSSA: Appendix visualized, Diameter __ mm [Normal: <6 mm], Wall thickness __ mm [Normal: <3 mm], Non-compressible, Surrounding echogenic fat, Minimal free fluid __ cc in RIF
+LIVER: Normal __ cm, GALL BLADDER: Normal, KIDNEYS: Normal, BLADDER: Normal
+IMPRESSION: Acute Appendicitis - Appendix __ mm, Non-compressible`,
+
 "KUB - Normal":`ULTRASOUND KUB
 RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal size, shape and echotexture, Cortical thickness __ mm [Normal: >10 mm], No calculus, No hydronephrosis
 LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
@@ -174,7 +164,7 @@ URINARY BLADDER: __ cc [Normal: 300-400 cc], Normal, PROSTATE: __ gm [Normal: 20
 IMPRESSION: Bilateral Renal Microlithiasis`,
 
 "KUB - Right Renal Calculus":`ULTRASOUND KUB - RIGHT RENAL CALCULUS
-RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Echogenic calculus __ mm [Normal: No calculus] with shadowing at upper / mid / lower pole / pelvis, No hydronephrosis
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Echogenic calculus __ mm [Normal: No calculus] with shadowing at upper / mid / lower pole / pelvis
 LEFT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus
 URINARY BLADDER: Normal __ cc [Normal: 300-400 cc], No calculus, PROSTATE: __ gm
 IMPRESSION: Right Renal Calculus __ mm`,
@@ -185,7 +175,7 @@ IMPRESSION: Right Hydronephrosis - Pelvis __ mm`,
 
 "KUB - Hydronephrosis with Proximal Ureter Dilation":`ULTRASOUND KUB - HYDRO WITH PROXIMAL URETER DILATION
 RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Mild hydronephrosis, Proximal ureter dilated __ mm [Normal: <3 mm], LEFT KIDNEY: Normal, BLADDER: Normal
-IMPRESSION: Right hydronephrosis with proximal ureteric dilatation __ mm -? Ureteric calculus`,
+IMPRESSION: Right hydronephrosis with proximal ureteric dilatation __ mm`,
 
 "KUB + PROSTATE - Normal":`ULTRASOUND KUB + PROSTATE - NORMAL
 RIGHT KIDNEY: __ x __ cm [Normal: 9-12 cm], Normal, No calculus, No hydronephrosis
@@ -240,53 +230,76 @@ let allTemplates=Object.keys(T);
 let fetalData={},editId=null,lastViewedId=null;
 
 function filterTemplates(){
- let q=(tSearch.value||'').toLowerCase();
- let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));
- let s=uType; let current=s.value;
- s.innerHTML='';
- filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
- if(filtered.includes(current)){s.value=current;}
+ try{
+  let q=(document.getElementById('tSearch')?.value||'').toLowerCase();
+  let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));
+  let s=document.getElementById('uType');
+  if(!s) return;
+  let current=s.value;
+  s.innerHTML='';
+  filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
+  if(filtered.includes(current)){s.value=current;}
+ }catch(e){}
 }
 
 function useSelectedTemplate(){
- let v=uType.value;
- if(!v){alert('Pehle template select karen');return;}
- rText.value=T[v]||'';
- checkFetal(false);
- autoSaveDraft();
- document.getElementById('rText').scrollIntoView({behavior:'smooth'});
+ try{
+  let sel=document.getElementById('uType');
+  let v=sel?.value;
+  if(!v){alert('Pehle template select karen');return;}
+  let rt=document.getElementById('rText');
+  if(rt) rt.value=T[v]||'';
+  checkFetal(false);
+  autoSaveDraft();
+  document.getElementById('rText')?.scrollIntoView({behavior:'smooth'});
+ }catch(e){ alert('Template error: '+e.message); }
 }
 
-function calcFWB(){let bpd=parseFloat(cBPD.value)||0,hc=parseFloat(cHC.value)||0,ac=parseFloat(cAC.value)||0,fl=parseFloat(cFL.value)||0,crl=parseFloat(cCRL.value)||0,afi=parseFloat(cAFI.value)||0;let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);if(crl>0)gas.push(crl*0.16+6.8);if(bpd>0)gas.push(bpd*0.33+4);let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}fetalData={ga:avg,efw:efw,hc,ac,fl,bpd,crl,afi};resGA.innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';resEFW.innerText=efw?`Wt: ${Math.round(efw)} gm`:'Wt: --';resEDD.innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';}
-function applyCalc(){if(!fetalData.ga&&!fetalData.efw){alert('HC AC FL likhen');return;}let txt=rText.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rText.value=txt;autoSaveDraft();}
+function calcFWB(){
+ try{
+  let bpd=parseFloat(document.getElementById('cBPD')?.value)||0,hc=parseFloat(document.getElementById('cHC')?.value)||0,ac=parseFloat(document.getElementById('cAC')?.value)||0,fl=parseFloat(document.getElementById('cFL')?.value)||0,crl=parseFloat(document.getElementById('cCRL')?.value)||0,afi=parseFloat(document.getElementById('cAFI')?.value)||0;
+  let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);if(crl>0)gas.push(crl*0.16+6.8);if(bpd>0)gas.push(bpd*0.33+4);
+  let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;
+  if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}
+  fetalData={ga:avg,efw:efw,hc,ac,fl,bpd,crl,afi};
+  let e1=document.getElementById('resGA'); if(e1) e1.innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';
+  let e2=document.getElementById('resEFW'); if(e2) e2.innerText=efw?`Wt: ${Math.round(efw)} gm`:'Wt: --';
+  let e3=document.getElementById('resEDD'); if(e3) e3.innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';
+ }catch(e){}
+}
+function applyCalc(){try{if(!fetalData.ga&&!fetalData.efw){alert('HC AC FL likhen');return;}let rt=document.getElementById('rText');if(!rt)return;let txt=rt.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);txt=txt.replace(/CRL: __ mm/g,`CRL: ${fetalData.crl} mm`);txt=txt.replace(/AFI: __ mm/g,`AFI: ${fetalData.afi} mm`);txt=txt.replace(/__ gm/g,`${Math.round(fetalData.efw)} gm`);rt.value=txt;autoSaveDraft();}catch(e){}}
 
 function init(){
- let s=uType;s.innerHTML='';
- allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
- pDate.valueAsDate=new Date();
- sumDate.valueAsDate=new Date();
- document.getElementById('templateCount').innerText=allTemplates.length+' Templates';
- loadDraft();
- checkFetal(true);
- render();
+ try{
+  let s=document.getElementById('uType');if(s){s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}
+  let pd=document.getElementById('pDate'); if(pd) pd.valueAsDate=new Date();
+  let sd=document.getElementById('sumDate'); if(sd) sd.valueAsDate=new Date();
+  let tc=document.getElementById('templateCount'); if(tc) tc.innerText=allTemplates.length+' Templates';
+  loadDraft();
+  checkFetal(true);
+  render();
+ }catch(e){console.log('init error',e);}
 }
 
 function checkFetal(preserveText){
- let v=uType.value||allTemplates[0];
- let isFWB=v.toLowerCase().includes('fwb')||v.toLowerCase().includes('ob')||v.toLowerCase().includes('pregnancy');
- let isProstate=v.toLowerCase().includes('prostate');
- let isWhole=v.toLowerCase().includes('whole')||v.toLowerCase().includes('kub')||v.toLowerCase().includes('pelvis')||v.toLowerCase().includes('gynae');
- fetalCalc.style.display=isFWB?'block':'none';
- prostateCalc.style.display=isProstate?'block':'none';
- complaintBox.style.display=isWhole?'block':'none';
- let d = getDiagramForType(v);
- document.getElementById('diagramWM').style.backgroundImage=`url("${d}")`;
- document.getElementById('diagramWM').style.display='block';
+ try{
+  let sel=document.getElementById('uType');
+  let v=sel?.value||allTemplates[0];
+  let isFWB=v.toLowerCase().includes('fwb')||v.toLowerCase().includes('ob')||v.toLowerCase().includes('pregnancy');
+  let isProstate=v.toLowerCase().includes('prostate');
+  let isWhole=v.toLowerCase().includes('whole')||v.toLowerCase().includes('kub')||v.toLowerCase().includes('pelvis')||v.toLowerCase().includes('gynae');
+  let fc=document.getElementById('fetalCalc'); if(fc) fc.style.display=isFWB?'block':'none';
+  let pc=document.getElementById('prostateCalc'); if(pc) pc.style.display=isProstate?'block':'none';
+  let cb=document.getElementById('complaintBox'); if(cb) cb.style.display=isWhole?'block':'none';
+  let d = getDiagramForType(v);
+  let wm=document.getElementById('diagramWM'); if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}
+ }catch(e){}
 }
 
 function formatReportToHTML(text){
- let lines=text.split('\n'); let html='';
- lines.forEach(line=>{
+ try{
+  let lines=text.split('\n'); let html='';
+  lines.forEach(line=>{
    let originalLine=line.trim();
    if(!originalLine){html+='<div style="height:6px"></div>';return;}
    let lineForPrint = originalLine.replace(/\[.*?\]/g,'').trim();
@@ -294,40 +307,43 @@ function formatReportToHTML(text){
    if(lineForPrint.startsWith('IMPRESSION:')){let val=lineForPrint.replace('IMPRESSION:','').trim(); html+=`<div style="margin-top:14px;font-size:13px"><b><u>IMPRESSION</u>:</b> ${val}</div>`;return;}
    if(lineForPrint.startsWith('Advice:')){let val=lineForPrint.replace('Advice:','').trim(); html+=`<div style="margin-top:8px;font-size:12.5px"><b><u>Advice</u>:</b> ${val}</div>`;return;}
    if(lineForPrint.includes(':')){let idx=lineForPrint.indexOf(':');let label=lineForPrint.substring(0,idx).trim();let value=lineForPrint.substring(idx+1).trim();html+=`<div style="margin:3px 0"><b><u>${label}</u>:</b> ${value}</div>`;}else{html+=`<div>${lineForPrint}</div>`;}
- });return html;
+  });return html;
+ }catch(e){return text;}
 }
 
 function make(){
- if(!pName.value){alert('Patient Name likhen');return;}
- let d = getDiagramForType(uType.value);
- let wm = document.getElementById('diagramWM');
- wm.style.backgroundImage=`url("${d}")`;
- wm.style.display='block';
- let pid=pIDMobile.value||'__';
- let complaintText=(pComplaint.value||'').trim();
- let complaintHTML='';
- if(complaintText && complaintBox.style.display!=='none'){
+ try{
+  let pn=document.getElementById('pName');
+  if(!pn?.value){alert('Patient Name likhen');return;}
+  let d = getDiagramForType(document.getElementById('uType')?.value);
+  let wm = document.getElementById('diagramWM');
+  if(wm){wm.style.backgroundImage=`url("${d}")`; wm.style.display='block';}
+  let pid=document.getElementById('pIDMobile')?.value||'__';
+  let complaintText=(document.getElementById('pComplaint')?.value||'').trim();
+  let complaintHTML='';
+  let cb=document.getElementById('complaintBox');
+  if(complaintText && cb && cb.style.display!=='none'){
    complaintHTML=`<div style="margin-bottom:10px;font-size:12.5px"><b><u>Present Complaint / H/O</u>:</b> ${complaintText}</div>`;
- }
- let patientBorder=`<div style="border:2px solid #0a4eb5;border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#f8fbff"><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px"><span><b><u>Name</u>:</b> ${pName.value}</span> | <span><b><u>Age</u>:</b> ${pAge.value}</span> | <span><b><u>Sex</u>:</b> ${pGen.value}</span> | <span><b><u>Date</u>:</b> ${pDate.value}</span> | <span><b><u>ID/Mobile</u>:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;margin-top:4px"><span><b><u>Ref By</u>:</b> ${ref.value}</span> | <span><b><u>Sonologist</u>:</b> ${sono.value}</span></div></div>`;
- let bodyHTML=formatReportToHTML(rText.value);
- let footer=`<div style="margin-top:20px;border-top:2px solid #0a4eb5;padding-top:10px;text-align:center;font-size:11px;line-height:1.6"><div><b><i>This report is computer generated, signature not required</i></b></div><div style="margin-top:4px;font-size:12px;font-weight:800">Thanks for availing our service</div></div>`;
- document.getElementById('reportContent').innerHTML=patientBorder+complaintHTML+bodyHTML+footer;
- document.getElementById('outCard').style.display='block';
- setTimeout(()=>{let w=document.getElementById('diagramWM'); w.style.backgroundImage=`url("${d}")`; w.style.display='block';},100);
- document.getElementById('outCard').scrollIntoView({behavior:'smooth'});
- autoSaveDraft();
+  }
+  let patientBorder=`<div style="border:2px solid #0a4eb5;border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#f8fbff"><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px"><span><b><u>Name</u>:</b> ${document.getElementById('pName').value}</span> | <span><b><u>Age</u>:</b> ${document.getElementById('pAge').value}</span> | <span><b><u>Sex</u>:</b> ${document.getElementById('pGen').value}</span> | <span><b><u>Date</u>:</b> ${document.getElementById('pDate').value}</span> | <span><b><u>ID/Mobile</u>:</b> ${pid}</span></div><div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;margin-top:4px"><span><b><u>Ref By</u>:</b> ${document.getElementById('ref').value}</span> | <span><b><u>Sonologist</u>:</b> ${document.getElementById('sono').value}</span></div></div>`;
+  let bodyHTML=formatReportToHTML(document.getElementById('rText').value);
+  let footer=`<div style="margin-top:20px;border-top:2px solid #0a4eb5;padding-top:10px;text-align:center;font-size:11px;line-height:1.6"><div><b><i>This report is computer generated, signature not required</i></b></div><div style="margin-top:4px;font-size:12px;font-weight:800">Thanks for availing our service</div></div>`;
+  let rc=document.getElementById('reportContent');
+  if(rc) rc.innerHTML=patientBorder+complaintHTML+bodyHTML+footer;
+  let oc=document.getElementById('outCard'); if(oc) oc.style.display='block';
+  setTimeout(()=>{let w=document.getElementById('diagramWM'); if(w){w.style.backgroundImage=`url("${d}")`; w.style.display='block';}},100);
+  if(oc) oc.scrollIntoView({behavior:'smooth'});
+  autoSaveDraft();
+ }catch(e){ alert('Make error: '+e.message); }
 }
 
-// ===== AUTO SAVE DRAFT SYSTEM - CTRL+S =====
 function autoSaveDraft(){
  try{
   let draft={
-   name:pName.value,age:pAge.value,gen:pGen.value,mobile:pIDMobile.value,type:uType.value,date:pDate.value,ref:ref.value,sono:sono.value,text:rText.value,complaint:pComplaint.value,editId:editId
+   name:document.getElementById('pName')?.value||'',age:document.getElementById('pAge')?.value||'',gen:document.getElementById('pGen')?.value||'',mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',ref:document.getElementById('ref')?.value||'',sono:document.getElementById('sono')?.value||'',text:document.getElementById('rText')?.value||'',complaint:document.getElementById('pComplaint')?.value||'',editId:editId
   };
   localStorage.setItem('azam_draft',JSON.stringify(draft));
-  document.getElementById('draftStatus').innerText='Draft Saved: '+new Date().toLocaleTimeString();
-  document.getElementById('draftStatus').style.color='#10b981';
+  let ds=document.getElementById('draftStatus'); if(ds){ds.innerText='Draft Saved: '+new Date().toLocaleTimeString(); ds.style.color='#10b981';}
  }catch(e){}
 }
 function loadDraft(){
@@ -335,23 +351,22 @@ function loadDraft(){
   let d=localStorage.getItem('azam_draft');
   if(!d) return;
   let draft=JSON.parse(d);
-  if(draft.name) pName.value=draft.name;
-  if(draft.age) pAge.value=draft.age;
-  if(draft.gen) pGen.value=draft.gen;
-  if(draft.mobile) pIDMobile.value=draft.mobile;
-  if(draft.type) uType.value=draft.type;
-  if(draft.date) pDate.value=draft.date;
-  if(draft.ref) ref.value=draft.ref;
-  if(draft.sono) sono.value=draft.sono;
-  if(draft.text) rText.value=draft.text;
-  if(draft.complaint) pComplaint.value=draft.complaint;
-  if(draft.editId) {editId=draft.editId; document.getElementById('editBanner').style.display='block'; document.getElementById('editIdShow').innerText=editId; }
-  document.getElementById('draftStatus').innerText='Draft Restored: '+new Date().toLocaleTimeString();
+  if(draft.name) document.getElementById('pName').value=draft.name;
+  if(draft.age) document.getElementById('pAge').value=draft.age;
+  if(draft.gen) document.getElementById('pGen').value=draft.gen;
+  if(draft.mobile) document.getElementById('pIDMobile').value=draft.mobile;
+  if(draft.type) document.getElementById('uType').value=draft.type;
+  if(draft.date) document.getElementById('pDate').value=draft.date;
+  if(draft.ref) document.getElementById('ref').value=draft.ref;
+  if(draft.sono) document.getElementById('sono').value=draft.sono;
+  if(draft.text) document.getElementById('rText').value=draft.text;
+  if(draft.complaint) document.getElementById('pComplaint').value=draft.complaint;
+  if(draft.editId) {editId=draft.editId; let eb=document.getElementById('editBanner'); if(eb) eb.style.display='block'; let es=document.getElementById('editIdShow'); if(es) es.innerText=editId; }
+  let ds=document.getElementById('draftStatus'); if(ds) ds.innerText='Draft Restored: '+new Date().toLocaleTimeString();
  }catch(e){}
 }
 function clearDraft(){if(confirm('Draft clear karna hai?')){localStorage.removeItem('azam_draft');location.reload();}}
 
-// Ctrl+S listener
 document.addEventListener('keydown', function(e){
  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='s'){
   e.preventDefault();
@@ -361,80 +376,105 @@ document.addEventListener('keydown', function(e){
 });
 
 function saveR(){
- if(!pName.value){alert('Name likhen');return;}
+ // Pehle local save karo - Drive fail bhi ho to local save rahega
  try{
-  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');
+  let pNameEl=document.getElementById('pName');
+  if(!pNameEl ||!pNameEl.value){alert('Patient Name likhen');return;}
+  let all=[];
+  try{ all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){ all=[]; }
   let recId = editId? editId : Date.now();
-  // Safety: ensure HTML is generated
-  if(!document.getElementById('reportContent').innerHTML || document.getElementById('outCard').style.display==='none'){
-   make();
+  let reportHTML='';
+  let rc=document.getElementById('reportContent');
+  if(rc && rc.innerHTML) reportHTML=rc.innerHTML;
+  else {
+   // Agar preview nahi bana to bana lo
+   try{ make(); reportHTML=document.getElementById('reportContent')?.innerHTML||''; }catch(e){ reportHTML=document.getElementById('rText')?.value||''; }
   }
-  let rec={id:recId,name:pName.value,age:pAge.value,gen:pGen.value,mobile:pIDMobile.value,type:uType.value,date:pDate.value,ref:ref.value,sono:sono.value,text:rText.value,complaint:pComplaint.value,html:document.getElementById('reportContent').innerHTML};
+  let rec={
+   id:recId,
+   name:document.getElementById('pName')?.value||'',
+   age:document.getElementById('pAge')?.value||'',
+   gen:document.getElementById('pGen')?.value||'',
+   mobile:document.getElementById('pIDMobile')?.value||'',
+   type:document.getElementById('uType')?.value||'',
+   date:document.getElementById('pDate')?.value||'',
+   ref:document.getElementById('ref')?.value||'',
+   sono:document.getElementById('sono')?.value||'',
+   text:document.getElementById('rText')?.value||'',
+   complaint:document.getElementById('pComplaint')?.value||'',
+   html:reportHTML
+  };
   if(editId){
-   let i=all.findIndex(x=>x.id===editId);
-   if(i>=0) all[i]=rec; else all.unshift(rec);
+   let idx=all.findIndex(x=>x.id===editId);
+   if(idx>=0) all[idx]=rec; else all.unshift(rec);
    editId=null;
-   document.getElementById('editBanner').style.display='none';
-   document.getElementById('saveBtn').innerText='Save + Drive Upload';
-   document.getElementById('finalBtn').innerText='✅ Final Report Banayen';
+   let eb=document.getElementById('editBanner'); if(eb) eb.style.display='none';
   }else{
    all.unshift(rec);
   }
   localStorage.setItem('azam_reports',JSON.stringify(all));
   localStorage.removeItem('azam_draft');
   render();
-  uploadToDriveFile(`report_${rec.id}_${rec.name.replace(/\s+/g,'_')}.json`,JSON.stringify(rec));
-  uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));
-  document.getElementById('draftStatus').innerText='✅ Final Saved: '+new Date().toLocaleTimeString();
+  let ds=document.getElementById('draftStatus'); if(ds) ds.innerText='✅ Final Saved: '+new Date().toLocaleTimeString();
   lastViewedId=rec.id;
-  alert('✅ Report Save ho gayi! Local + Drive');
+  alert('✅ Report Local Save ho gayi!');
+  // Drive upload alag se - fail bhi ho to local save safe hai
+  setTimeout(()=>{
+   uploadToDriveFile(`report_${rec.id}_${(rec.name||'').replace(/\s+/g,'_')}.json`,JSON.stringify(rec));
+   uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));
+  },500);
  }catch(err){
-  alert('Save error: '+err.message);
+  console.error(err);
+  alert('Local save error: '+err.message);
  }
 }
 
 function render(){
  try{
-  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');
-  let q=(sBox.value||'').toLowerCase();
-  let f=all.filter(r=>(r.name+' '+r.mobile+' '+r.type).toLowerCase().includes(q));
-  if(f.length===0){list.innerHTML='<p style="text-align:center;color:#888;padding:20px">Koi report nahi mili. Drive se Load dabayen.</p>';return;}
-  list.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center"><div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}${r.complaint?' | H/O:'+r.complaint.substring(0,25):''}</small></div><div style="display:flex;flex-wrap:wrap"><button class="small" style="background:#f59e0b" onclick="editR(${r.id})">Edit</button><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="viewR(${r.id});setTimeout(()=>window.print(),600)">Print</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');
- }catch(e){ list.innerHTML='<p style="color:red">List error, localStorage clear karen</p>'; }
+  let all=[]; try{ all=JSON.parse(localStorage.getItem('azam_reports')||'[]'); }catch(e){all=[];}
+  let sBox=document.getElementById('sBox');
+  let q=(sBox?.value||'').toLowerCase();
+  let listEl=document.getElementById('list');
+  if(!listEl) return;
+  let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')+' '+(r.type||'')).toLowerCase().includes(q));
+  if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:20px">Koi report nahi mili. Drive se Load dabayen.</p>';return;}
+  listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center"><div><b>${r.name||'No Name'}</b> - ${r.type||''}<br><small>${r.mobile||''} | ${r.date||''}${r.complaint?' | H/O:'+r.complaint.substring(0,25):''}</small></div><div style="display:flex;flex-wrap:wrap"><button class="small" style="background:#f59e0b" onclick="editR(${r.id})">Edit</button><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="viewR(${r.id});setTimeout(()=>window.print(),600)">Print</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');
+ }catch(e){ let listEl=document.getElementById('list'); if(listEl) listEl.innerHTML='<p style="color:red">List error</p>'; }
 }
-
 function viewR(id){
- let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;
- lastViewedId=id; editId=null; document.getElementById('editBanner').style.display='none';
- pName.value=r.name;pAge.value=r.age;pGen.value=r.gen;pIDMobile.value=r.mobile;uType.value=r.type;pDate.value=r.date;ref.value=r.ref;sono.value=r.sono;
- checkFetal(true);
- rText.value=r.text;
- pComplaint.value=r.complaint||'';
- make();
+ try{
+  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;
+  lastViewedId=id; editId=null; let eb=document.getElementById('editBanner'); if(eb) eb.style.display='none';
+  document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'Male';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||allTemplates[0];document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';
+  checkFetal(true);
+  document.getElementById('rText').value=r.text||'';
+  document.getElementById('pComplaint').value=r.complaint||'';
+  make();
+ }catch(e){ alert('View error: '+e.message); }
 }
-
 function editR(id){
- let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;
- editId=id;lastViewedId=id;
- pName.value=r.name;pAge.value=r.age;pGen.value=r.gen;pIDMobile.value=r.mobile;uType.value=r.type;pDate.value=r.date;ref.value=r.ref;sono.value=r.sono;
- checkFetal(true);
- rText.value=r.text;
- pComplaint.value=r.complaint||'';
- document.getElementById('editBanner').style.display='block';
- document.getElementById('editIdShow').innerText=id;
- document.getElementById('finalBtn').innerText='✏️ Update Report';
- make();
- window.scrollTo({top:0,behavior:'smooth'});
- autoSaveDraft();
+ try{
+  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;
+  editId=id;lastViewedId=id;
+  document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||allTemplates[0];document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';
+  checkFetal(true);
+  document.getElementById('rText').value=r.text||'';
+  document.getElementById('pComplaint').value=r.complaint||'';
+  let eb=document.getElementById('editBanner'); if(eb) eb.style.display='block';
+  let es=document.getElementById('editIdShow'); if(es) es.innerText=id;
+  let fb=document.getElementById('finalBtn'); if(fb) fb.innerText='✏️ Update Report';
+  make();
+  window.scrollTo({top:0,behavior:'smooth'});
+  autoSaveDraft();
+ }catch(e){ alert('Edit error: '+e.message); }
 }
-
 function editCurrent(){if(lastViewedId){editR(lastViewedId);}else{alert('Koi report selected nahi');}}
 function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();}
-function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[190,280]);doc.text(doc.splitTextToSize(document.getElementById('reportContent').innerText,150),10,50);doc.save((pName.value||'Report')+'.pdf');}
-function openSummary(){summaryCard.style.display='block';renderSummary();}
-function closeSummary(){summaryCard.style.display='none';}
-function renderSummary(){let d=sumDate.value;if(!d){alert('Date select');return;}let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let f=all.filter(r=>r.date===d);sumTitle.innerText='Date: '+d;sumTotal.innerText=f.length;sumBody.innerHTML=f.map((r,i)=>`<tr><td>${i+1}</td><td>${r.name}</td><td>${r.mobile}</td><td>${r.age}/${r.gen}</td><td>${r.type}</td><td>${r.ref}</td><td>${r.sono}</td></tr>`).join('');}
-function printSummary(){let c=document.getElementById('summaryPrintArea').innerHTML;let w=window.open('','','width=900,height=700');w.document.write('<html><body>'+c+'</body></html>');w.document.close();w.print();}
+function pdf(){try{let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[190,280]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:document.getElementById('rText').value;doc.text(doc.splitTextToSize(txt,150),10,50);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}catch(e){alert('PDF error: '+e.message);}}
+function openSummary(){let sc=document.getElementById('summaryCard'); if(sc) sc.style.display='block';renderSummary();}
+function closeSummary(){let sc=document.getElementById('summaryCard'); if(sc) sc.style.display='none';}
+function renderSummary(){try{let d=document.getElementById('sumDate')?.value;if(!d){alert('Date select');return;}let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let f=all.filter(r=>r.date===d);let st=document.getElementById('sumTitle'); if(st) st.innerText='Date: '+d;let tot=document.getElementById('sumTotal'); if(tot) tot.innerText=f.length;let sb=document.getElementById('sumBody'); if(sb) sb.innerHTML=f.map((r,i)=>`<tr><td>${i+1}</td><td>${r.name}</td><td>${r.mobile}</td><td>${r.age}/${r.gen}</td><td>${r.type}</td><td>${r.ref}</td><td>${r.sono}</td></tr>`).join('');}catch(e){}}
+function printSummary(){try{let c=document.getElementById('summaryPrintArea')?.innerHTML||'';let w=window.open('','','width=900,height=700');w.document.write('<html><body>'+c+'</body></html>');w.document.close();w.print();}catch(e){}}
 init();
 </script>
 </body>
