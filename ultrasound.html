@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam 140 Final Watermark</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam 140 Final Drive Fixed</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#eef4ff;padding:10px}
@@ -29,16 +29,18 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 
 <div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px">
 <img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:60px;height:60px;border-radius:50%;border:2px solid #0a4eb5;filter:grayscale(20%)">
-<div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981">● 140 Templates | 21x18cm | Watermark Diagram No Text</div></div>
+<div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981">● 140 Templates | Drive Fixed | 21x18cm</div></div>
 </div>
 
 <div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - 140</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search template..." onkeyup="filterTemplates()"><select id="uType" size="20" style="height:400px;font-size:13px;font-weight:600"></select><button class="small" style="background:#8b5cf6;width:100%;padding:12px;margin-top:8px" onclick="useSelectedTemplate()">Use This Template</button></div>
 
 <div class="card noPrint" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Prepare Report</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><input id="pIDMobile" placeholder="Patient ID / Mobile"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref"></select><select id="sono"></select></div><div style="border:2px solid #10b981;border-radius:12px;padding:10px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:12px">C/O</label><textarea id="pComplaint" rows="2"></textarea></div><textarea id="rText" rows="24" style="font-family:Consolas,monospace;font-size:11.5px"></textarea><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn" onclick="make()">Generate Final Report</button><button class="btn" style="background:#10b981" onclick="saveR()">Save Report</button></div></div>
 
-<div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#000;padding:12px 20px" onclick="window.print()">Print</button><button class="small" style="background:#10b981;padding:12px 20px" onclick="pdf()">PDF</button><button class="small" style="background:#0a4eb5;padding:12px 20px" onclick="saveToDrive()">☁️ Save to Google Drive</button></div></div>
+<div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#000;padding:12px 20px" onclick="window.print()">Print</button><button class="small" style="background:#10b981;padding:12px 20px" onclick="pdf()">PDF</button><button class="small" style="background:#0a4eb5;padding:12px 20px" onclick="saveCurrentToDrive()">☁️ Save to Google Drive</button></div></div>
 
-<div class="card noPrint"><div class="boxTitle"><span>Saved Reports</span></div><input id="sBox" placeholder="Search..." onkeyup="render()"><div id="list"></div></div>
+<div class="card noPrint"><div class="boxTitle"><span>Saved Reports - Local</span><span style="font-size:10px;color:#666">View / Drive / Del</span></div><input id="sBox" placeholder="Search..." onkeyup="render()"><div id="list"></div></div>
+
+<div class="card noPrint" style="border:2px dashed #0a4eb5;background:#f0f7ff"><div class="boxTitle"><span>☁️ Google Drive Backups</span><button class="small" style="background:#0a4eb5" onclick="renderDrive()">Refresh</button></div><div id="driveList"></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
@@ -83,90 +85,31 @@ function getAdvice(n){
   if(n.includes("SCROTUM")||n.includes("TESTIS")) return "Advice: CBC, Urine R/E, Scrotal Doppler, Urologist consultation, Scrotal support.";
   return "Advice: As per findings, relevant labs and specialist consultation advised.";
 }
-
 function getDiagram(n){
-  // Realistic organs - NO TEXT - light gray watermark style
-  let lightGray = '#bbbbbb';
-  let fillGray = '#f2f2f2';
+  let lightGray = '#bbbbbb'; let fillGray = '#f2f2f2';
   if(n.startsWith("WHOLE ABDOMEN")||n.startsWith("ABDOMEN")){
-    return `<div class="diagramBox">
-      <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 12 Q45 5 80 15 Q92 25 85 42 Q55 50 30 45 Q15 30 10 12 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
-        <ellipse cx="70" cy="48" rx="7" ry="11" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-        <path d="M85 52 Q110 55 140 50 Q145 46 140 40 Q115 42 85 46 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-        <ellipse cx="160" cy="22" rx="11" ry="16" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-        <path d="M20 78 Q15 88 20 100 Q30 104 38 100 Q44 88 38 78 Q30 72 20 78 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
-        <path d="M125 78 Q120 88 125 100 Q135 104 143 100 Q149 88 143 78 Q135 72 125 78 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
-        <path d="M75 108 Q90 102 105 108 Q108 116 90 120 Q75 116 75 108 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-      </svg>
-    </div>`;
+    return `<div class="diagramBox"><svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg"><path d="M10 12 Q45 5 80 15 Q92 25 85 42 Q55 50 30 45 Q15 30 10 12 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/><ellipse cx="70" cy="48" rx="7" ry="11" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/><path d="M85 52 Q110 55 140 50 Q145 46 140 40 Q115 42 85 46 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/><ellipse cx="160" cy="22" rx="11" ry="16" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/><path d="M20 78 Q15 88 20 100 Q30 104 38 100 Q44 88 38 78 Q30 72 20 78 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/><path d="M125 78 Q120 88 125 100 Q135 104 143 100 Q149 88 143 78 Q135 72 125 78 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/><path d="M75 108 Q90 102 105 108 Q108 116 90 120 Q75 116 75 108 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/></svg></div>`;
   }
   if(n.startsWith("KUB")){
-    return `<div class="diagramBox">
-      <svg viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">
-        <path d="M28 18 Q16 32 20 55 Q28 68 46 63 Q58 50 53 32 Q43 16 28 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.3"/>
-        <path d="M128 18 Q116 32 120 55 Q128 68 146 63 Q158 50 153 32 Q143 16 128 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.3"/>
-        <path d="M33 63 Q38 78 43 88" stroke="${lightGray}" stroke-width="0.9" fill="none" stroke-dasharray="3 2"/>
-        <path d="M133 63 Q128 78 123 88" stroke="${lightGray}" stroke-width="0.9" fill="none" stroke-dasharray="3 2"/>
-        <path d="M68 85 Q83 80 98 85 Q103 95 98 105 Q83 110 68 105 Q63 95 68 85 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
-      </svg>
-    </div>`;
+    return `<div class="diagramBox"><svg viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg"><path d="M28 18 Q16 32 20 55 Q28 68 46 63 Q58 50 53 32 Q43 16 28 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.3"/><path d="M128 18 Q116 32 120 55 Q128 68 146 63 Q158 50 153 32 Q143 16 128 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.3"/><path d="M33 63 Q38 78 43 88" stroke="${lightGray}" stroke-width="0.9" fill="none" stroke-dasharray="3 2"/><path d="M133 63 Q128 78 123 88" stroke="${lightGray}" stroke-width="0.9" fill="none" stroke-dasharray="3 2"/><path d="M68 85 Q83 80 98 85 Q103 95 98 105 Q83 110 68 105 Q63 95 68 85 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/></svg></div>`;
   }
   if(n.startsWith("PELVIS")){
-    return `<div class="diagramBox">
-      <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
-        <path d="M80 8 Q100 3 120 8 Q123 23 120 42 Q113 57 100 62 Q87 57 80 42 Q77 23 80 8 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
-        <rect x="92" y="62" width="16" height="14" rx="3" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-        <ellipse cx="50" cy="48" rx="17" ry="11" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-        <ellipse cx="150" cy="48" rx="17" ry="11" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-      </svg>
-    </div>`;
+    return `<div class="diagramBox"><svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg"><path d="M80 8 Q100 3 120 8 Q123 23 120 42 Q113 57 100 62 Q87 57 80 42 Q77 23 80 8 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/><rect x="92" y="62" width="16" height="14" rx="3" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/><ellipse cx="50" cy="48" rx="17" ry="11" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/><ellipse cx="150" cy="48" rx="17" ry="11" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/></svg></div>`;
   }
   if(n.startsWith("FWB")){
-    return `<div class="diagramBox">
-      <svg viewBox="0 0 200 105" xmlns="http://www.w3.org/2000/svg">
-        <path d="M18 12 Q100 3 182 12 Q187 55 100 95 Q13 55 18 12 Z" fill="#fafafa" stroke="${lightGray}" stroke-width="0.9" stroke-dasharray="4 2"/>
-        <path d="M58 42 Q68 32 83 35 Q93 39 90 52 Q86 65 73 67 Q58 65 53 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
-        <circle cx="78" cy="39" r="7" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-        <path d="M123 22 Q143 18 153 32 Q148 52 128 47 Q118 37 123 22 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-        <path d="M88 52 Q108 57 128 47" stroke="${lightGray}" stroke-width="0.8" fill="none"/>
-      </svg>
-    </div>`;
+    return `<div class="diagramBox"><svg viewBox="0 0 200 105" xmlns="http://www.w3.org/2000/svg"><path d="M18 12 Q100 3 182 12 Q187 55 100 95 Q13 55 18 12 Z" fill="#fafafa" stroke="${lightGray}" stroke-width="0.9" stroke-dasharray="4 2"/><path d="M58 42 Q68 32 83 35 Q93 39 90 52 Q86 65 73 67 Q58 65 53 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/><circle cx="78" cy="39" r="7" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/><path d="M123 22 Q143 18 153 32 Q148 52 128 47 Q118 37 123 22 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/><path d="M88 52 Q108 57 128 47" stroke="${lightGray}" stroke-width="0.8" fill="none"/></svg></div>`;
   }
   if(n.startsWith("THYROID")){
-    return `<div class="diagramBox">
-      <svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg">
-        <path d="M58 12 Q38 22 43 42 Q53 57 73 52 Q83 37 78 17 Q68 7 58 12 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
-        <path d="M142 12 Q162 22 157 42 Q147 57 127 52 Q117 37 122 17 Q132 7 142 12 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
-        <path d="M78 27 Q100 25 122 27 Q122 37 100 39 Q78 37 78 27 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-      </svg>
-    </div>`;
+    return `<div class="diagramBox"><svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg"><path d="M58 12 Q38 22 43 42 Q53 57 73 52 Q83 37 78 17 Q68 7 58 12 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/><path d="M142 12 Q162 22 157 42 Q147 57 127 52 Q117 37 122 17 Q132 7 142 12 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/><path d="M78 27 Q100 25 122 27 Q122 37 100 39 Q78 37 78 27 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/></svg></div>`;
   }
   if(n.startsWith("BREAST")){
-    return `<div class="diagramBox">
-      <svg viewBox="0 0 200 65" xmlns="http://www.w3.org/2000/svg">
-        <path d="M28 18 Q48 8 73 18 Q83 33 73 53 Q48 63 28 53 Q18 33 28 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-        <path d="M123 18 Q143 8 168 18 Q178 33 168 53 Q143 63 123 53 Q113 33 123 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
-      </svg>
-    </div>`;
+    return `<div class="diagramBox"><svg viewBox="0 0 200 65" xmlns="http://www.w3.org/2000/svg"><path d="M28 18 Q48 8 73 18 Q83 33 73 53 Q48 63 28 53 Q18 33 28 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/><path d="M123 18 Q143 8 168 18 Q178 33 168 53 Q143 63 123 53 Q113 33 123 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/></svg></div>`;
   }
   if(n.startsWith("SCROTUM")||n.startsWith("TESTIS")){
-    return `<div class="diagramBox">
-      <svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="60" cy="32" rx="20" ry="26" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
-        <ellipse cx="60" cy="35" rx="11" ry="15" fill="#e9e9e9" stroke="${lightGray}" stroke-width="1"/>
-        <ellipse cx="140" cy="32" rx="20" ry="26" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
-        <ellipse cx="140" cy="35" rx="11" ry="15" fill="#e9e9e9" stroke="${lightGray}" stroke-width="1"/>
-      </svg>
-    </div>`;
+    return `<div class="diagramBox"><svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg"><ellipse cx="60" cy="32" rx="20" ry="26" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/><ellipse cx="60" cy="35" rx="11" ry="15" fill="#e9e9e9" stroke="${lightGray}" stroke-width="1"/><ellipse cx="140" cy="32" rx="20" ry="26" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/><ellipse cx="140" cy="35" rx="11" ry="15" fill="#e9e9e9" stroke="${lightGray}" stroke-width="1"/></svg></div>`;
   }
-  return `<div class="diagramBox">
-    <svg viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
-      <rect x="20" y="12" width="160" height="26" rx="6" fill="${fillGray}" stroke="${lightGray}" stroke-width="1" stroke-dasharray="3 2"/>
-    </svg>
-  </div>`;
+  return `<div class="diagramBox"><svg viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="12" width="160" height="26" rx="6" fill="${fillGray}" stroke="${lightGray}" stroke-width="1" stroke-dasharray="3 2"/></svg></div>`;
 }
-
 function gen(n){
   let liver="Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]";
   let gb="Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge], No fluid [Normal: No fluid]";
@@ -215,42 +158,21 @@ let allTemplates=Object.keys(T);
 function filterTemplates(){let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');if(!s)return;let cur=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(cur))s.value=cur;}
 function useSelectedTemplate(){let v=document.getElementById('uType')?.value;if(!v){alert('Select template');return;}document.getElementById('rText').value=T[v]||'';}
 function formatReportToHTML(text){
-  let lines=text.split('\n');
-  let html='';
+  let lines=text.split('\n'); let html='';
   lines.forEach(line=>{
-    let l=line.trim();
-    if(!l){html+='<div style="height:3px"></div>';return;}
-    let clean=l.replace(/\[Normal:[^\]]*\]/gi,'').trim();
-    if(!clean)return;
-    if(clean.toUpperCase().startsWith('ULTRASOUND')){
-      html+=`<div style="text-align:center;margin:10px 0;font-weight:900;text-decoration:underline;font-size:12px">${clean}</div>`;
-      return;
-    }
-    if(clean.toUpperCase().startsWith('CONCLUSION:')){
-      html+=`<div style="margin-top:12px"><b><u>CONCLUSION:</u></b> <b>${clean.replace(/CONCLUSION:/i,'').trim()}</b></div>`;
-      return;
-    }
-    if(clean.toUpperCase().startsWith('ADVICE:')){
-      html+=`<div style="margin-top:10px"><b><u>ADVICE:</u></b> ${clean.replace(/ADVICE:/i,'').trim()}</div>`;
-      return;
-    }
+    let l=line.trim(); if(!l){html+='<div style="height:3px"></div>';return;}
+    let clean=l.replace(/\[Normal:[^\]]*\]/gi,'').trim(); if(!clean)return;
+    if(clean.toUpperCase().startsWith('ULTRASOUND')){html+=`<div style="text-align:center;margin:10px 0;font-weight:900;text-decoration:underline;font-size:12px">${clean}</div>`;return;}
+    if(clean.toUpperCase().startsWith('CONCLUSION:')){html+=`<div style="margin-top:12px"><b><u>CONCLUSION:</u></b> <b>${clean.replace(/CONCLUSION:/i,'').trim()}</b></div>`;return;}
+    if(clean.toUpperCase().startsWith('ADVICE:')){html+=`<div style="margin-top:10px"><b><u>ADVICE:</u></b> ${clean.replace(/ADVICE:/i,'').trim()}</div>`;return;}
     if(clean.includes('LFTs')||clean.includes('RFTs')||clean.includes('No active pathology')||clean.includes('Routine follow-up')||clean.includes('Maintain healthy')||clean.includes('GTT')||clean.includes('Urine R/E')||clean.includes('CBC')||clean.includes('Gynae')||clean.includes('Urologist')||clean.includes('Physician')||clean.includes('Plenty of oral')||clean.includes('Avoid')||clean.includes('Mammography')||clean.includes('TFTs')){
-      if(!clean.toUpperCase().startsWith('ADVICE:')){
-        html+=`<div style="margin:2px 0 2px 16px;font-size:10.5px"><i>${clean}</i></div>`;
-      }
-      return;
+      if(!clean.toUpperCase().startsWith('ADVICE:')){html+=`<div style="margin:2px 0 2px 16px;font-size:10.5px"><i>${clean}</i></div>`;}return;
     }
-    if(clean.endsWith(':')){
-      html+=`<div style="margin:6px 0 1px 0;font-weight:800;font-size:11px"><i>➢ ${clean}</i></div>`;
-    }else{
-      html+=`<div style="margin:1px 0 1px 22px;font-size:10.5px"><i>• ${clean.replace(/^[-•➢]\s*/,'').trim()}</i></div>`;
-    }
-  });
-  return html;
+    if(clean.endsWith(':')){html+=`<div style="margin:6px 0 1px 0;font-weight:800;font-size:11px"><i>➢ ${clean}</i></div>`;}else{html+=`<div style="margin:1px 0 1px 22px;font-size:10.5px"><i>• ${clean.replace(/^[-•➢]\s*/,'').trim()}</i></div>`;}
+  }); return html;
 }
 function make(){
-  let pn=document.getElementById('pName');
-  if(!pn?.value){alert('Enter Patient Name');return;}
+  let pn=document.getElementById('pName'); if(!pn?.value){alert('Enter Patient Name');return;}
   let pid=document.getElementById('pIDMobile')?.value||'__';
   let complaintText=(document.getElementById('pComplaint')?.value||'').trim();
   let templateName=document.getElementById('uType').value||'';
@@ -264,11 +186,52 @@ function make(){
   document.getElementById('outCard').style.display='block';
 }
 function saveR(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let rec={id:Date.now(),name:document.getElementById('pName')?.value||'',age:document.getElementById('pAge')?.value||'',gen:document.getElementById('pGen')?.value||'',mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',ref:document.getElementById('ref')?.value||'',sono:document.getElementById('sono')?.value||'',text:document.getElementById('rText')?.value||'',complaint:document.getElementById('pComplaint')?.value||'',html:document.getElementById('reportContent')?.innerHTML||''};all.unshift(rec);localStorage.setItem('azam_reports',JSON.stringify(all));render();alert('Saved locally');}
-function saveToDrive(){let content=document.getElementById('reportContent').innerHTML;let name=document.getElementById('pName').value||'Report';let blob=new Blob([content],{type:'text/html'});let url=URL.createObjectURL(blob);let a=document.createElement('a'); a.href=url; a.download=name+'.html'; a.click();try{let driveData=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]');driveData.unshift({id:Date.now(),name:name,date:new Date().toISOString(),html:content});localStorage.setItem('azam_drive_backup',JSON.stringify(driveData));document.getElementById('driveStatus').innerText='● Saved to Drive - '+name+' | '+new Date().toLocaleString();document.getElementById('driveStatus').style.color='#10b981';alert('☁️ Report Google Drive backup me save ho gayi!');window.open('https://drive.google.com/drive/','_blank');}catch(e){alert('Drive save error - local download ho gayi');}}
-function render(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let q=(document.getElementById('sBox')?.value||'').toLowerCase();let listEl=document.getElementById('list');if(!listEl)return;let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')).toLowerCase().includes(q));if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:20px">No reports</p>';return;}listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:8px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between"><div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}</small></div><div><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="saveToDrive()">Drive</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}
-function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('pName').value=r.name;document.getElementById('pAge').value=r.age;document.getElementById('pGen').value=r.gen;document.getElementById('pIDMobile').value=r.mobile;document.getElementById('uType').value=r.type;document.getElementById('pDate').value=r.date;document.getElementById('ref').value=r.ref;document.getElementById('sono').value=r.sono;document.getElementById('rText').value=r.text;document.getElementById('pComplaint').value=r.complaint;make();}
+
+function saveCurrentToDrive(){
+  let content=document.getElementById('reportContent').innerHTML;
+  if(!content){alert('Pehle Generate karen');return;}
+  let name=(document.getElementById('pName').value||'Report').replace(/\s+/g,'_');
+  let fullHtml=`<html><head><meta charset="UTF-8"><title>${name}</title></head><body>${content}</body></html>`;
+  let blob=new Blob([fullHtml],{type:'text/html'});
+  let url=URL.createObjectURL(blob);
+  let a=document.createElement('a'); a.href=url; a.download=name+'.html'; a.click();
+  try{
+    let driveData=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]');
+    driveData.unshift({id:Date.now(),name:document.getElementById('pName').value||'Report',mobile:document.getElementById('pIDMobile').value||'',type:document.getElementById('uType').value||'',date:new Date().toISOString().slice(0,10),html:content});
+    localStorage.setItem('azam_drive_backup',JSON.stringify(driveData));
+    document.getElementById('driveStatus').innerText='● Drive Saved - '+name+' | '+new Date().toLocaleString();
+    document.getElementById('driveStatus').style.color='#10b981';
+    renderDrive();
+    alert('☁️ Report Save ho gayi! HTML download ho gaya hai, ab is file ko Google Drive pe upload kar den. Drive Backup list me bhi save ho gayi hai.');
+    window.open('https://drive.google.com/drive/','_blank');
+  }catch(e){alert('Drive save error - '+e.message);}
+}
+function saveToDriveById(id){
+  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');
+  let r=all.find(x=>x.id===id);
+  if(!r){alert('Report not found');return;}
+  let name=(r.name||'Report').replace(/\s+/g,'_');
+  let fullHtml=`<html><head><meta charset="UTF-8"><title>${name}</title></head><body>${r.html||r.text}</body></html>`;
+  let blob=new Blob([fullHtml],{type:'text/html'});
+  let url=URL.createObjectURL(blob);
+  let a=document.createElement('a'); a.href=url; a.download=name+'.html'; a.click();
+  try{
+    let driveData=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]');
+    driveData.unshift({id:Date.now(),name:r.name,mobile:r.mobile,type:r.type,date:new Date().toISOString().slice(0,10),html:r.html||r.text});
+    localStorage.setItem('azam_drive_backup',JSON.stringify(driveData));
+    renderDrive();
+    alert('☁️ '+r.name+' Drive pe save ho gayi! File download ho gayi, Google Drive pe upload kar den.');
+    window.open('https://drive.google.com/drive/','_blank');
+  }catch(e){alert('Error: '+e.message);}
+}
+
+function render(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let q=(document.getElementById('sBox')?.value||'').toLowerCase();let listEl=document.getElementById('list');if(!listEl)return;let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')).toLowerCase().includes(q));if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:20px">No reports</p>';return;}listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:8px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between"><div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}</small></div><div><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="saveToDriveById(${r.id})">Drive</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}
+function renderDrive(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]');}catch(e){all=[];}let el=document.getElementById('driveList');if(!el)return;if(all.length===0){el.innerHTML='<p style="text-align:center;color:#888;padding:15px">No Drive backups yet. Save to Drive karen.</p>';return;}el.innerHTML=all.map(r=>`<div style="border:1px solid #a5b4fc;padding:8px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;background:#fff"><div><b>☁️ ${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date} | Drive Saved</small></div><div><button class="small" style="background:#0a4eb5" onclick="viewDriveR(${r.id})">View</button><button class="small" style="background:#ff3b30" onclick="delDriveR(${r.id})">Del</button></div></div>`).join('');}
+function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('pName').value=r.name;document.getElementById('pAge').value=r.age;document.getElementById('pGen').value=r.gen;document.getElementById('pIDMobile').value=r.mobile;document.getElementById('uType').value=r.type;document.getElementById('pDate').value=r.date;document.getElementById('ref').value=r.ref;document.getElementById('sono').value=r.sono;document.getElementById('rText').value=r.text;document.getElementById('pComplaint').value=r.complaint;document.getElementById('reportContent').innerHTML=r.html||'';document.getElementById('outCard').style.display='block';window.scrollTo(0,0);}
+function viewDriveR(id){let all=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('reportContent').innerHTML=r.html;document.getElementById('outCard').style.display='block';window.scrollTo(0,0);}
 function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();}
+function delDriveR(id){if(!confirm('Delete Drive backup?'))return;let all=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_drive_backup',JSON.stringify(all));renderDrive();}
 function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[180,210]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:document.getElementById('rText').value;doc.text(doc.splitTextToSize(txt,160),10,10);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}
-function init(){let s=document.getElementById('uType');if(s){s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate');if(pd)pd.valueAsDate=new Date();let tc=document.getElementById('templateCount');if(tc)tc.innerText=allTemplates.length+' Templates';render();}
+function init(){let s=document.getElementById('uType');if(s){s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate');if(pd)pd.valueAsDate=new Date();let tc=document.getElementById('templateCount');if(tc)tc.innerText=allTemplates.length+' Templates';render();renderDrive();}
 init();
 </script></body></html>
