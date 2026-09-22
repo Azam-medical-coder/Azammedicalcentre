@@ -1,50 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Azam Medical Centre - Final Report</title>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://apis.google.com/js/api.js"></script>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AZAM MEDICAL - Full Templates Final</title>
+<script src="https://accounts.google.com/gsi/client"></script><script src="https://apis.google.com/js/api.js"></script>
 <style>
-*{box-sizing:border-box}
-body{font-family:'Times New Roman', Times, serif; background:#f0f2f5; margin:0; padding:10px}
-.no-print{max-width:1100px; margin:0 auto}
-.card{background:white; padding:15px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1); margin-bottom:15px}
-input,select,textarea{width:100%; padding:8px; margin:4px 0; border:1px solid #ccc; border-radius:5px; font-size:14px}
-label{font-weight:bold; font-size:13px; margin-top:6px; display:block}
+body{font-family:'Times New Roman'; background:#f0f2f5; margin:0; padding:10px}
+.no-print{max-width:1150px; margin:auto}.card{background:#fff; padding:14px; border-radius:10px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,.1)}
+input,select,textarea{width:100%; padding:7px; border:1px solid #ccc; border-radius:5px; margin:3px 0}
+label{font-weight:bold; font-size:13px}.grid4{display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px}
 .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-.grid4{display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px}
-button{padding:10px 18px; border:none; border-radius:6px; cursor:pointer; font-weight:bold; margin:3px}
-.btn-blue{background:#0d47a1; color:white}.btn-green{background:#2e7d32; color:white}.btn-orange{background:#ef6c00; color:white}
+button{padding:9px 16px; border:none; border-radius:6px; font-weight:bold; cursor:pointer; margin:2px}
+.btn-blue{background:#0d47a1;color:#fff}.btn-green{background:#2e7d32;color:#fff}.btn-orange{background:#ef6c00;color:#fff}
 
-/* REPORT - FONT BARA */
-#reportPage{background:white; width:210mm; min-height:295mm; margin:15px auto; padding:12mm 15mm 10mm 15mm; position:relative; color:#000; font-size:14pt; line-height:1.5; border:1px solid #ddd}
-#reportPage::before{content:""; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:500px; height:500px; background:url('https://upload.wikimedia.org/wikipedia/commons/3/33/Blue_medical_cross.png') no-repeat center; background-size:contain; opacity:0.06; z-index:0}
-.report-content{position:relative; z-index:1}
-.header{text-align:center; border-bottom:3px double #0d47a1; padding-bottom:8px; margin-bottom:6px}
-.header h1{margin:0; color:#0d47a1; font-size:24pt}
-.header h2{margin:0; color:#0d47a1; font-size:14pt; font-weight:normal}
-.not-valid{text-align:center; font-weight:bold; color:#0d47a1; font-size:11pt; margin:6px 0; display:flex; justify-content:space-between}
-.patient-box{border:1.5px solid #000; padding:8px 12px; font-size:11.5pt; line-height:1.6; margin-bottom:8px}
-.patient-box span{margin-right:18px; display:inline-block}
-.co-line{font-size:12pt; font-style:italic; margin:6px 0; font-weight:bold}
-.exam-title{text-align:center; font-weight:bold; text-decoration:underline; font-size:14pt; margin:14px 0 12px 0; text-transform:uppercase}
-.section{margin-bottom:10px}
-.section-head{font-weight:bold; font-size:13pt; text-decoration:underline; margin:0 0 3px 0; text-transform:uppercase}
-.section-body{margin-left:14px; font-size:13pt; line-height:1.6}
-.footer{position:absolute; bottom:10mm; left:15mm; right:15mm; text-align:center; font-size:10pt; color:#0d47a1; font-weight:bold; line-height:1.3; border-top:1px solid #ccc; padding-top:6px}
-@media print{body{background:white; padding:0}.no-print{display:none} #reportPage{margin:0; width:100%; border:none; box-shadow:none}}
-</style>
-</head>
-<body>
+#reportPage{background:#fff; width:210mm; min-height:297mm; margin:15px auto; padding:12mm 14mm; position:relative; font-size:14pt; line-height:1.55; color:#000; border:1px solid #ddd}
+#reportPage::before{content:"AM"; position:absolute; top:48%; left:50%; transform:translate(-50%,-50%); font-size:320px; font-weight:900; color:#0d47a1; opacity:0.05; letter-spacing:20px}
+.report-content{position:relative; z-index:2}
+.header{text-align:center; border-bottom:3px double #0d47a1; padding-bottom:6px}
+.header h1{margin:0; color:#0d47a1; font-size:26pt; letter-spacing:1px}.header h2{margin:0; color:#0d47a1; font-size:14pt; font-weight:normal}
+.not-valid{display:flex; justify-content:space-between; font-weight:bold; color:#0d47a1; font-size:11pt; margin:7px 0}
+.patient-box{border:1.6px solid #000; padding:8px 10px; font-size:11.5pt; line-height:1.7}
+.patient-box span{margin-right:20px; display:inline-block}
+.co{font-style:italic; font-weight:bold; margin:6px 0; font-size:12pt}
+.exam-title{text-align:center; text-decoration:underline; font-weight:bold; font-size:15pt; margin:14px 0; text-transform:uppercase}
+.sec{margin-bottom:11px}.sec-h{font-weight:bold; text-decoration:underline; font-size:13.5pt; margin-bottom:2px}.sec-b{margin-left:14px; font-size:13.5pt; line-height:1.6}
+.footer{position:absolute; bottom:8mm; left:14mm; right:14mm; text-align:center; font-size:9.5pt; color:#0d47a1; font-weight:bold; border-top:1px solid #ccc; padding-top:5px}
+@media print{.no-print{display:none} body{background:#fff; padding:0} #reportPage{border:none; margin:0; width:100%}}
+</style></head><body>
 <div class="no-print">
-<div class="card" style="text-align:center">
-<h2 style="margin:0;color:#0d47a1">AZAM MEDICAL CENTRE - FINAL REPORTING</h2>
-<div id="driveStatus" style="margin:8px;font-weight:bold">Drive: Not Connected</div>
-<button class="btn-blue" onclick="connectDrive()">Connect Drive</button>
-<button class="btn-green" onclick="loadFromDrive()">Load from Drive</button>
-<button class="btn-orange" onclick="saveToDrive()">Save & Upload to Drive</button>
+<div class="card" style="text-align:center"><h2 style="margin:0;color:#0d47a1">AZAM MEDICAL CENTRE - Complete System</h2>
+<div id="driveStatus">Drive: Not Connected</div>
+<button class="btn-blue" onclick="connectDrive()">Connect Drive</button><button class="btn-orange" onclick="saveToDrive()">Save to Drive</button>
 </div>
 <div class="card">
 <div class="grid4">
@@ -52,148 +36,94 @@ button{padding:10px 18px; border:none; border-radius:6px; cursor:pointer; font-w
 <div><label>Age</label><input id="pAge" value="42 Y"></div>
 <div><label>Sex</label><select id="pSex"><option>Female</option><option>Male</option></select></div>
 <div><label>Date</label><input id="pDate" type="date"></div>
-<div><label>ID / Mobile</label><input id="pMobile" value="03032872740"></div>
+<div><label>Mobile</label><input id="pMobile" value="03032872740"></div>
 <div><label>Ref By</label><input id="pRef" value="Self"></div>
 <div><label>Sonologist</label><input id="pSono" value="DR. M. ZEESHAN"></div>
 <div><label>C/O</label><input id="pCO" value="Right lumber & hypogastric pain."></div>
 </div>
-<label>Exam Type</label>
+<label>Select Template</label>
 <select id="examType" onchange="generate()">
-<option value="WHOLE">ULTRASOUND WHOLE ABDOMEN</option>
-<option value="KUB">ULTRASOUND KUB</option>
-<option value="UPPER">ULTRASOUND UPPER ABDOMEN</option>
+<option value="WHOLE">WHOLE ABDOMEN</option>
+<option value="KUB">KUB</option>
+<option value="UPPER">UPPER ABDOMEN</option>
+<option value="PELVIS_F">PELVIS - Female</option>
+<option value="PELVIS_M">PELVIS - Male</option>
+<option value="OBS">OBSTETRICAL / PREGNANCY</option>
+<option value="BREAST">BREAST</option>
+<option value="THYROID">THYROID</option>
 </select>
 </div>
 <div class="card">
 <div class="grid4">
-<div><label>Liver Size cm</label><input id="liverSize" value="14.5"></div>
-<div><label>Gall Bladder Wall</label><input id="gbWall" value="3 mm"></div>
-<div><label>Spleen Size</label><input id="spleenSize" value="10.0 cm"></div>
-<div><label>PV / CBD</label><input id="liverPV" value="PV 12 mm, CBD 4 mm, No IHBR"></div>
-<div><label>Right Kidney</label><input id="rkSize" value="11.5 x 4.5 cm"></div>
-<div><label>Left Kidney</label><input id="lkSize" value="11.0 x 4.5 cm"></div>
-<div><label>Bladder Wall</label><input id="bladderWall" value="3 mm"></div>
-<div><label>Extra Finding</label><input id="extraFind" value=""></div>
+<div><label>Liver cm</label><input id="liver" value="14.5"></div>
+<div><label>GB Wall</label><input id="gb" value="3 mm"></div>
+<div><label>Spleen cm</label><input id="spleen" value="10.0 cm"></div>
+<div><label>PV/CBD</label><input id="pvcbd" value="PV 12 mm, CBD 4 mm, No IHBR"></div>
+<div><label>Right Kidney</label><input id="rk" value="11.5 x 4.5 cm"></div>
+<div><label>Left Kidney</label><input id="lk" value="11.0 x 4.5 cm"></div>
+<div><label>Bladder</label><input id="blad" value="Normal"></div>
+<div><label>Extra / Pathology</label><input id="extra" placeholder="Cyst, stone etc. khali to normal ayega"></div>
 </div>
-<label>Conclusion</label><textarea id="conclusion" rows="2">Rest of study unremarkable.</textarea>
-<br><button class="btn-blue" onclick="generate()">Update Report</button>
-<button class="btn-green" onclick="window.print()">Print Report</button>
+<label>Conclusion</label><textarea id="conc" rows="2">Rest of study unremarkable.</textarea>
+<button class="btn-blue" onclick="generate()">Update</button><button class="btn-green" onclick="window.print()">Print</button>
 </div>
 </div>
 
-<div id="reportPage">
-<div class="report-content">
-<div class="header">
-<h1>AZAM MEDICAL CENTRE</h1>
-<h2>& MATERNITY HOME</h2>
-</div>
-<div class="not-valid"><span>NOT VALID FOR COURT PURPOSE</span><span id="rDateTop">Date: ___________</span></div>
-<div class="patient-box" id="patientBox"></div>
-<div class="co-line" id="coLine"></div>
-<div class="exam-title" id="examTitle">ULTRASOUND WHOLE ABDOMEN:</div>
-<div id="reportBody"></div>
-<div class="conclusion" style="margin-top:14px"><div class="section-head">CONCLUSION:</div><div class="section-body" id="rConclusion"></div></div>
-<div class="advice" style="margin-top:10px"><div class="section-head" style="display:inline;">ADVICE:</div><span id="rAdvice" style="font-size:12pt"> As per findings, relevant labs and specialist consultation advised.</span></div>
+<div id="reportPage"><div class="report-content">
+<div class="header"><h1>AZAM MEDICAL CENTRE</h1><h2>& MATERNITY HOME</h2></div>
+<div class="not-valid"><span>NOT VALID FOR COURT PURPOSE</span><span id="rDate">Date: </span></div>
+<div class="patient-box" id="pBox"></div>
+<div class="co" id="rCO"></div>
+<div class="exam-title" id="rExam"></div>
+<div id="rBody"></div>
+<div style="margin-top:14px"><div class="sec-h">CONCLUSION:</div><div class="sec-b" id="rConc"></div></div>
+<div style="margin-top:8px"><span class="sec-h">ADVICE:</span><span style="font-size:12pt"> As per findings, relevant labs and specialist consultation advised.</span></div>
 <div style="margin-top:50px; text-align:center; font-size:10pt; font-style:italic">This is computer generated report no signature required.<br><b>Thanks for availing our services</b></div>
-</div>
-<div class="footer">
-Plot No. 27, New 460 Street No. 16, Allama Iqbal Road Manzoor Colony Karachi.<br>
-Email:azammedicalkhi@gmail.com, Ph:021-35803668;021-35386116<br>
-Facebook: Azam Medical Center Cell: 0300-3720299
-</div>
-</div>
+</div><div class="footer">Plot No. 27, New 460 Street No. 16, Allama Iqbal Road Manzoor Colony Karachi.<br>Email:azammedicalkhi@gmail.com, Ph:021-35803668;021-35386116<br>Facebook: Azam Medical Center Cell: 0300-3720299</div></div>
 
 <script>
-const CLIENT_ID = '153046624604-kicb2l87naq7862vvc9q5fb19fj1u4p1.apps.googleusercontent.com';
-const SCOPES = 'https://www.googleapis.com/auth/drive.file';
-let accessToken = localStorage.getItem('amc_token') || null;
-let tokenClient;
-document.getElementById('pDate').valueAsDate = new Date();
-if(accessToken) document.getElementById('driveStatus').innerText = 'Drive: Connected (Saved token)';
-function gapiLoaded(){ gapi.load('client', async ()=>{ await gapi.client.init({}); }); }
-window.onload = ()=>{
-  const s=document.createElement('script'); s.src='https://apis.google.com/js/api.js'; s.onload=gapiLoaded; document.head.appendChild(s);
-  const s2=document.createElement('script'); s2.src='https://accounts.google.com/gsi/client'; s2.onload=initTokenClient; document.head.appendChild(s2);
-  generate();
-}
-function initTokenClient(){
-  tokenClient = google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID, scope: SCOPES,
-    callback: (resp)=>{
-      accessToken = resp.access_token; localStorage.setItem('amc_token', accessToken);
-      document.getElementById('driveStatus').innerText='Drive: Connected';
-    }
-  });
-}
-function connectDrive(){ initTokenClient(); tokenClient.requestAccessToken({prompt:'consent'}); }
+const CLIENT_ID='153046624604-kicb2l87naq7862vvc9q5fb19fj1u4p1.apps.googleusercontent.com'; let token=localStorage.getItem('amc_token'); let tc;
+document.getElementById('pDate').valueAsDate=new Date();
+if(token) document.getElementById('driveStatus').innerText='Drive: Connected ✓';
+function initClient(){ tc=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID, scope:'https://www.googleapis.com/auth/drive.file', callback:(r)=>{token=r.access_token; localStorage.setItem('amc_token',token); document.getElementById('driveStatus').innerText='Drive Connected';}})}
+window.onload=()=>{ initClient(); generate();}
+function connectDrive(){ tc.requestAccessToken({prompt:'consent'}); }
 
 function generate(){
-  const name = document.getElementById('pName').value;
-  const age = document.getElementById('pAge').value;
-  const sex = document.getElementById('pSex').value;
-  const mobile = document.getElementById('pMobile').value;
-  const ref = document.getElementById('pRef').value;
-  const sono = document.getElementById('pSono').value;
-  const date = document.getElementById('pDate').value || new Date().toISOString().split('T')[0];
-  const co = document.getElementById('pCO').value;
-  const examText = document.getElementById('examType').selectedOptions[0].text;
-  const exam = document.getElementById('examType').value;
+let n=document.getElementById('pName').value, a=document.getElementById('pAge').value, s=document.getElementById('pSex').value, m=document.getElementById('pMobile').value, ref=document.getElementById('pRef').value, sono=document.getElementById('pSono').value, d=document.getElementById('pDate').value, co=document.getElementById('pCO').value;
+let exam=document.getElementById('examType').value, examT=document.getElementById('examType').selectedOptions[0].text;
+document.getElementById('pBox').innerHTML=`<span><b>Name:</b> ${n}</span> <span><b>Age:</b> ${a}</span> <span><b>Sex:</b> ${s}</span> <span><b>Date:</b> ${d}</span> <span><b>ID/Mobile:</b> ${m}</span><br><span><b>Ref By:</b> ${ref}</span> <span><b>Sonologist:</b> ${sono}</span>`;
+document.getElementById('rDate').innerText='Date: '+d; document.getElementById('rCO').innerText='C/O: '+co; document.getElementById('rExam').innerText='ULTRASOUND '+examT+':';
+let rk=document.getElementById('rk').value, lk=document.getElementById('lk').value, extra=document.getElementById('extra').value;
+let kidneyRight = `${rk}.<br>Normal in size, shape and texture.<br>Normal Cortical thickness and corticomedullary distinction is intact.<br>${extra? extra : 'No evidence of calculus, cyst or mass seen.'}`;
+let kidneyLeft = `${lk}.<br>Normal in size, shape and texture.<br>Normal Cortical thickness and corticomedullary distinction is intact.<br>No evidence of calculus, cyst or mass seen.`;
+let liver = `<div class="sec"><div class="sec-h">► LIVER:</div><div class="sec-b">Size ${document.getElementById('liver').value} cm, Homogenous, No focal lesion, ${document.getElementById('pvcbd').value}.</div></div>`;
+let gb = `<div class="sec"><div class="sec-h">► GALL BLADDER:</div><div class="sec-b">Well distended, Wall ${document.getElementById('gb').value}, Lumen clear, No calculus, No sludge, No fluid.</div></div>`;
+let panc = `<div class="sec"><div class="sec-h">► PANCREAS:</div><div class="sec-b">Normal in size and texture, No duct dilatation, No calcification.</div></div>`;
+let spleen = `<div class="sec"><div class="sec-h">► SPLEEN:</div><div class="sec-b">Size ${document.getElementById('spleen').value}, Normal, Homogenous, No focal lesion.</div></div>`;
+let rKid = `<div class="sec"><div class="sec-h">► RIGHT KIDNEY:</div><div class="sec-b">${kidneyRight}</div></div>`;
+let lKid = `<div class="sec"><div class="sec-h">► LEFT KIDNEY:</div><div class="sec-b">${kidneyLeft}</div></div>`;
+let bladder = `<div class="sec"><div class="sec-h">► URINARY BLADDER:</div><div class="sec-b">Normal mucosal wall.<br>No evidence of mass, hydronephrosis, calculus, diverticula seen.</div></div>`;
 
-  // 1. Patient detail with space
-  document.getElementById('patientBox').innerHTML =
-    `<span><b>Name:</b> ${name}</span> <span><b>Age:</b> ${age}</span> <span><b>Sex:</b> ${sex}</span> <span><b>Date:</b> ${date}</span> <span><b>ID/Mobile:</b> ${mobile}</span><br>
-     <span><b>Ref By:</b> ${ref}</span> <span><b>Sonologist:</b> ${sono}</span>`;
+let body='';
+if(exam==='WHOLE'){ body=liver+gb+panc+spleen+rKid+lKid+bladder; }
+else if(exam==='KUB'){ body=rKid+lKid+bladder; }
+else if(exam==='UPPER'){ body=liver+gb+panc+spleen; if(extra) body+=`<div class="sec"><div class="sec-b">${extra}</div></div>`; }
+else if(exam==='PELVIS_F'){ body=bladder+`<div class="sec"><div class="sec-h">► UTERUS:</div><div class="sec-b">Normal in size, anteverted, ${extra||'No focal lesion, Endometrium normal.'}</div></div><div class="sec"><div class="sec-h">► OVARIES:</div><div class="sec-b">Both ovaries normal in size and texture, No cyst or mass seen.</div></div>`; }
+else if(exam==='PELVIS_M'){ body=bladder+`<div class="sec"><div class="sec-h">► PROSTATE:</div><div class="sec-b">Normal in size, shape and texture, ${extra||'No focal lesion seen, Weight ~20g.'}</div></div>`; }
+else if(exam==='OBS'){ body=`<div class="sec"><div class="sec-b">Single live intrauterine fetus, Cephalic presentation, Fetal movements and cardiac activity present, Amniotic fluid adequate, Placenta anterior upper segment, No retroplacental clot.<br>${extra||''}</div></div>`; }
+else if(exam==='BREAST'){ body=`<div class="sec"><div class="sec-b">Both breasts normal fibro-glandular pattern, No focal lesion, No duct dilatation, No axillary lymphadenopathy.<br>${extra||''}</div></div>`; }
+else if(exam==='THYROID'){ body=`<div class="sec"><div class="sec-b">Thyroid gland normal in size, shape and texture, Both lobes normal, No focal lesion, No calcification, No lymphadenopathy.<br>${extra||''}</div></div>`; }
 
-  document.getElementById('rDateTop').innerText = `Date: ${date}`;
-  document.getElementById('coLine').innerText = `C/O: ${co}`;
-  document.getElementById('examTitle').innerText = examText + ':';
-
-  const rk = document.getElementById('rkSize').value;
-  const lk = document.getElementById('lkSize').value;
-  const extra = document.getElementById('extraFind').value;
-
-  let body = '';
-  if(exam!== 'KUB'){
-    body += `<div class="section"><div class="section-head">► LIVER:</div><div class="section-body">Size ${document.getElementById('liverSize').value} cm, Homogenous, No focal lesion, ${document.getElementById('liverPV').value}.</div></div>
-    <div class="section"><div class="section-head">► GALL BLADDER:</div><div class="section-body">Well distended, Wall ${document.getElementById('gbWall').value}, Lumen clear, No calculus, No sludge, No fluid.</div></div>
-    <div class="section"><div class="section-head">► PANCREAS:</div><div class="section-body">Normal in size and texture, No duct dilatation, No calcification.</div></div>
-    <div class="section"><div class="section-head">► SPLEEN:</div><div class="section-body">Size ${document.getElementById('spleenSize').value}, Normal, Homogenous, No focal lesion.</div></div>`;
-  }
-  // Your required kidney format
-  body += `
-    <div class="section"><div class="section-head">► RIGHT KIDNEY:</div><div class="section-body">
-      ${rk}.<br>
-      Normal in size, shape and texture.<br>
-      Normal Cortical thickness and corticomedullary distinction is intact.<br>
-      ${extra? extra : 'No evidence of calculus, cyst or mass seen.'}
-    </div></div>
-    <div class="section"><div class="section-head">► LEFT KIDNEY:</div><div class="section-body">
-      ${lk}.<br>
-      Normal in size, shape and texture.<br>
-      Normal Cortical thickness and corticomedullary distinction is intact.<br>
-      No evidence of calculus, cyst or mass seen.
-    </div></div>
-    <div class="section"><div class="section-head">► URINARY BLADDER:</div><div class="section-body">
-      Normal mucosal wall.<br>
-      No evidence of mass, hydronephrosis, calculus, diverticula seen.
-    </div></div>`;
-
-  document.getElementById('reportBody').innerHTML = body;
-  document.getElementById('rConclusion').innerText = document.getElementById('conclusion').value;
+document.getElementById('rBody').innerHTML=body;
+document.getElementById('rConc').innerText=document.getElementById('conc').value;
+localStorage.setItem('amc_last', JSON.stringify({n,a}));
 }
-
 async function saveToDrive(){
-  if(!accessToken){ connectDrive(); return; }
-  const content = document.documentElement.outerHTML;
-  const blob = new Blob([content], {type:'text/html'});
-  const form = new FormData();
-  form.append('metadata', new Blob([JSON.stringify({name:'Azam_Medical_Report_System.html', mimeType:'text/html'})], {type:'application/json'}));
-  form.append('file', blob);
-  let res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {method:'POST', headers:{'Authorization':'Bearer '+accessToken}, body:form});
-  let data = await res.json();
-  if(data.id){ document.getElementById('driveStatus').innerText = 'Drive: Saved ✓'; alert('Saved to Drive!'); }
+if(!token){ connectDrive(); return; }
+let blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});
+let fd=new FormData(); fd.append('metadata', new Blob([JSON.stringify({name:'Azam_Medical_Report_System.html', mimeType:'text/html'})],{type:'application/json'})); fd.append('file', blob);
+let r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST', headers:{'Authorization':'Bearer '+token}, body:fd});
+let j=await r.json(); if(j.id){ alert('Drive pe Save ho gaya ✓'); document.getElementById('driveStatus').innerText='Saved ✓'; }
 }
-async function loadFromDrive(){ alert('Your reports are auto saved in browser local + Drive.'); }
-</script>
-</body>
-</html>
+</script></body></html>
