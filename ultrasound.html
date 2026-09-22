@@ -1,2031 +1,990 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam Medical Final 120</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><script src="https://accounts.google.com/gsi/client" async defer></script><script src="https://apis.google.com/js/api.js" async defer></script><style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}body{background:#eef4ff;padding:10px}.card{background:#fff;border-radius:16px;padding:14px;margin:10px auto;max-width:1100px;box-shadow:0 6px 18px #0001}input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px solid #cbd5e1;margin:5px 0;font-size:14px}.btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin-top:8px}.small{padding:9px 12px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff;font-size:12px}.report{width:190mm;height:280mm;margin:auto;background:#fff;border:1px solid #000;position:relative;overflow:hidden}.report-inner{width:180mm;height:210mm;margin:40mm auto 0 auto;padding:5mm 6mm;line-height:1.7;font-size:13.5px;z-index:2;color:#000;position:relative}.diagram-wm{position:absolute;right:5mm;bottom:10mm;width:80mm;height:95mm;opacity:0.10;z-index:1;background-repeat:no-repeat;background-size:contain;background-position:bottom right}@media print{@page{size:190mm 280mm;margin:0}body{background:#fff}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:190mm;height:280mm;border:none;margin:0}.noPrint{display:none}}#loginOverlay{position:fixed;inset:0;background:#0a4eb5;display:flex;align-items:center;justify-content:center;z-index:99999}.loginBox{background:#fff;padding:30px;border-radius:20px;width:90%;max-width:400px;text-align:center}.boxTitle{font-size:15px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;justify-content:space-between}.editBanner{background:#fff3cd;border:2px solid #f59e0b;color:#92400e;padding:10px;border-radius:10px;margin:8px 0;font-weight:800;text-align:center;display:none}.calcBox{background:#f0f7ff;border:2px dashed #1e90ff;border-radius:12px;padding:12px;margin:10px 0}.calcGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.calcRes{background:#fff;padding:10px;border-radius:10px;border:1px solid #cbd5e1;font-size:12px;font-weight:800;text-align:center}</style></head><body>
-<div id="loginOverlay"><div class="loginBox"><img src="logo.png" style="width:80px;height:80px;border-radius:50%;border:3px solid #0a4eb5"><h2 style="color:#0a4eb5">Azam Medical Centre</h2><input id="passInput" type="password" placeholder="Enter Password" style="text-align:center"><button class="btn" onclick="checkPass()">Login</button><p id="passErr" style="color:red;display:none">Wrong Password!</p></div></div>
-<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px"><img src="logo.png" style="width:65px;height:65px;border-radius:50%"><div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981">● Ready - 120 Templates</div></div></div>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam Medical 120 Final</title><style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#eef4ff;padding:10px}.card{background:#fff;border-radius:16px;padding:14px;margin:10px auto;max-width:1100px;box-shadow:0 6px 18px #0001}input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px solid #cbd5e1;margin:5px 0;font-size:14px}.btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin-top:8px}.small{padding:9px 12px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff;font-size:12px}.report{width:190mm;height:280mm;margin:auto;background:#fff;border:1px solid #000;position:relative;overflow:hidden}.report-inner{width:180mm;height:210mm;margin:40mm auto 0 auto;padding:5mm 6mm;line-height:1.7;font-size:13.5px;z-index:2;color:#000;position:relative}.diagram-wm{position:absolute;right:5mm;bottom:10mm;width:80mm;height:95mm;opacity:0.10;z-index:1;background-repeat:no-repeat;background-size:contain;background-position:bottom right}@media print{@page{size:190mm 280mm;margin:0}body{background:#fff}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:190mm;height:280mm;border:none;margin:0}.noPrint{display:none}}.boxTitle{font-size:15px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;justify-content:space-between}</style></head><body>
+<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px"><div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981">● Ready - 120 Templates FINAL</div></div></div>
 <div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - 120</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search..." onkeyup="filterTemplates()"><select id="uType" size="18" style="height:400px;font-size:13px;font-weight:600"></select><button class="small" style="background:#8b5cf6;width:100%;padding:12px;margin-top:8px" onclick="useSelectedTemplate()">Use This Template</button></div>
-<div class="card noPrint" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Prepare Report</span><span id="draftStatus"></span></div><div id="editBanner" class="editBanner">Edit Mode - ID: <span id="editIdShow"></span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *" oninput="autoSaveDraft()"><input id="pAge" placeholder="Age" oninput="autoSaveDraft()"><select id="pGen" onchange="autoSaveDraft()"><option>Male</option><option>Female</option><option>Child</option></select></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date" onchange="autoSaveDraft()"><input id="pIDMobile" placeholder="Patient ID / Mobile" oninput="autoSaveDraft()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref" onchange="autoSaveDraft()"></select><select id="sono" onchange="autoSaveDraft()"></select></div><div style="border:2px solid #10b981;border-radius:12px;padding:10px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:12px">Present Complaint / C/O (Jo yahan likhenge wahi report me ayega)</label><textarea id="pComplaint" rows="2" placeholder="e.g. Lumber pain, Right side pain" oninput="autoSaveDraft()"></textarea></div><div id="fetalCalc" class="calcBox" style="display:none"><div class="calcGrid"><input id="cHC" type="number" placeholder="HC mm" oninput="calcFWB()"><input id="cAC" type="number" placeholder="AC mm" oninput="calcFWB()"><input id="cFL" type="number" placeholder="FL mm" oninput="calcFWB()"><input id="cBPD" type="number" placeholder="BPD mm" oninput="calcFWB()"><input id="cCRL" type="number" placeholder="CRL mm" oninput="calcFWB()"><input id="cAFI" type="number" placeholder="AFI mm" oninput="calcFWB()"></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><div class="calcRes" id="resGA">GA: --</div><div class="calcRes" id="resEDD">EDD: --</div><div class="calcRes" id="resEFW">Wt: --</div></div><button class="small" style="background:#10b981;width:100%" onclick="applyCalc()">Apply</button></div><div id="prostateCalc" class="calcBox" style="display:none;background:#fffbeb"><div class="calcGrid"><input id="pL" type="number" step="0.1" placeholder="L cm" oninput="calcProstate()"><input id="pW" type="number" step="0.1" placeholder="W cm" oninput="calcProstate()"><input id="pH" type="number" step="0.1" placeholder="H cm" oninput="calcProstate()"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div class="calcRes" id="resPVol">Vol: --</div><div class="calcRes" id="resPGm">Wt: --</div></div><button class="small" style="background:#f59e0b;width:100%" onclick="applyProstateCalc()">Apply</button></div><textarea id="rText" rows="28" style="font-family:Consolas,monospace;font-size:13px;line-height:1.5" oninput="autoSaveDraft()"></textarea><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button id="finalBtn" class="btn" onclick="make()">Generate Final Report</button><button class="btn" style="background:#10b981" onclick="saveR()">Save + Upload</button></div></div>
-<div class="card" id="outCard" style="display:none"><div class="boxTitle noPrint"><span>Final Preview</span></div><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#000;padding:12px" onclick="beforePrintClean()">Print Final Report</button><button class="small" style="background:#f59e0b" onclick="pdf()">PDF</button><button class="small" style="background:#10b981" onclick="saveR()">Save</button><button class="small" style="background:#8b5cf6" onclick="editCurrent()">Back to Edit</button></div></div>
-<div class="card noPrint"><div style="display:flex;justify-content:space-between"><h3>Saved Reports</h3><div style="display:flex;gap:6px"><button class="small" style="background:#0a4eb5" onclick="loadFromDrive()">Load from Drive</button><button class="small" style="background:#8b5cf6" onclick="openSummary()">Summary</button><button class="small" style="background:#ff3b30" onclick="clearDraft()">Clear Draft</button></div></div><input id="sBox" placeholder="Search Name / ID / Mobile" onkeyup="render()" style="margin-top:8px"><div id="list"></div></div>
+<div class="card noPrint" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Prepare Report</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><input id="pIDMobile" placeholder="Patient ID / Mobile"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref"></select><select id="sono"></select></div><div style="border:2px solid #10b981;border-radius:12px;padding:10px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:12px">C/O</label><textarea id="pComplaint" rows="2" placeholder="e.g. Lumber pain, burning micturition"></textarea></div><textarea id="rText" rows="28" style="font-family:Consolas,monospace;font-size:13px"></textarea><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn" onclick="make()">Generate Final Report</button><button class="btn" style="background:#10b981" onclick="saveR()">Save Report</button></div></div>
+<div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="diagramWM" class="diagram-wm"></div><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center"><button class="small" style="background:#000;padding:12px 20px" onclick="window.print()">Print</button><button class="small" style="background:#10b981;padding:12px 20px" onclick="pdf()">Download PDF</button></div></div>
+<div class="card noPrint"><div class="boxTitle"><span>Saved Reports</span></div><input id="sBox" placeholder="Search by name or mobile..." onkeyup="render()" style="margin-top:8px"><div id="list"></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-const CLIENT_ID='153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com';const SCOPES='https://www.googleapis.com/auth/drive.file';let tokenClient,gapiInited=false,gisInited=false,driveFolderId=null;
-function updateDriveStatus(m,c){let e=document.getElementById('driveStatus');if(e){e.innerText='● '+m;e.style.color=c||'#10b981';}}
-function gapiLoaded(){gapi.load('client',async()=>{try{await gapi.client.init({discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]});gapiInited=true;updateDriveStatus('Ready - 120 Templates','#10b981');}catch(e){updateDriveStatus('Drive Error','#ff3b30');}});}
-function gisLoaded(){try{tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:SCOPES,callback:''});gisInited=true;}catch(e){}}
-function ensureDriveAuth(){return new Promise((res,rej)=>{if(!tokenClient){rej('No tokenClient');return;}tokenClient.callback=(r)=>{if(r.error)rej(r);else res(r);};try{tokenClient.requestAccessToken({prompt:''});}catch(e){rej(e);}});}
-async function getOrCreateFolder(){if(driveFolderId)return driveFolderId;try{let r=await gapi.client.drive.files.list({q:"name='Azam_Medical_Reports' and mimeType='application/vnd.google-apps.folder' and trashed=false",fields:"files(id,name)"});if(r.result.files&&r.result.files.length>0){driveFolderId=r.result.files[0].id;return driveFolderId;}let c=await gapi.client.drive.files.create({resource:{name:'Azam_Medical_Reports',mimeType:'application/vnd.google-apps.folder'},fields:'id'});driveFolderId=c.result.id;return driveFolderId;}catch(e){return null;}}
-async function findFileInFolder(folderId,fileName){try{let q=`'${folderId}' in parents and name='${fileName}' and trashed=false`;let res=await gapi.client.drive.files.list({q:q,fields:"files(id,name)"});if(res.result.files&&res.result.files.length>0)return res.result.files[0];return null;}catch(e){return null;}}
-async function uploadToDriveFile(name,content){try{if(!gapiInited||!gisInited||!tokenClient){return;}await ensureDriveAuth();let folderId=await getOrCreateFolder();if(!folderId)return;let token=gapi.client.getToken();if(!token||!token.access_token)return;if(name==='Azam_Medical_Backup_ALL.json'){let existing=await findFileInFolder(folderId,name);if(existing){await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=media`,{method:'PATCH',headers:{'Authorization':'Bearer '+token.access_token,'Content-Type':'application/json'},body:content});updateDriveStatus('Saved to Drive','#10b981');return;}}const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents:[folderId]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file);await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form});updateDriveStatus('Saved to Drive','#10b981');}catch(e){updateDriveStatus('Local Saved','#f59e0b');}}
-async function loadFromDrive(){try{if(!gapiInited||!gisInited){alert('Drive loading, try after 2 seconds');return;}updateDriveStatus('Loading...','#f59e0b');await ensureDriveAuth();let folderId=await getOrCreateFolder();if(!folderId){alert('Folder not found');return;}let listResp=await gapi.client.drive.files.list({q:`'${folderId}' in parents and trashed=false`,fields:"files(id,name,modifiedTime)",pageSize:100,orderBy:"modifiedTime desc"});let files=listResp.result.files||[];if(files.length===0){alert('Drive empty');return;}let existing=[];try{existing=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){existing=[];}let ids=new Set(existing.map(r=>String(r.id)));let loaded=0;for(let f of files){try{let token=gapi.client.getToken();let resp=await fetch(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`,{headers:{'Authorization':'Bearer '+token.access_token}});if(!resp.ok)continue;let text=await resp.text();let data;try{data=JSON.parse(text);}catch(e){continue;}if(Array.isArray(data)){for(let rep of data){if(rep&&rep.id&&!ids.has(String(rep.id))){existing.unshift(rep);ids.add(String(rep.id));loaded++;}}}else if(data&&data.id){if(!ids.has(String(data.id))){existing.unshift(data);ids.add(String(data.id));loaded++;}}}catch(e){}}localStorage.setItem('azam_reports',JSON.stringify(existing));render();updateDriveStatus(`Loaded ${loaded} - Total ${existing.length}`,'#10b981');alert(`Loaded ${loaded} new! Total ${existing.length}`);}catch(e){alert('Drive error: '+(e.message||e));}}
-window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1200);});
-function beforePrintClean(){document.title=' ';setTimeout(()=>{window.print();},100);}
-function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';}else{document.getElementById('passErr').style.display='block';}}
-(function(){if(sessionStorage.getItem('azam_login')==='ok'){document.getElementById('loginOverlay').style.display='none';}})();
-const refDoctors=["Ref By - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel Arain","Dr. Aqsa Gull","Dr. Shahzad Sadaqat","Dr. Bilal","Dr. Sofia Butt","Dr. Talha Bhatti","Dr. Irfan","Dr. Raheel Arain","Self","Other"];
+const refDoctors=["Ref By - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel Arain","Dr. Aqsa Gull","Self","Other"];
 const sonoDoctors=["Sonologist - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN","DR. SAMAN AZAM","Other"];
 function fillSelect(id,list){let s=document.getElementById(id);if(!s)return;s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
 fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
-let prostateData={};function calcProstate(){let l=parseFloat(document.getElementById('pL')?.value)||0,w=parseFloat(document.getElementById('pW')?.value)||0,h=parseFloat(document.getElementById('pH')?.value)||0;if(l>0&&w>0&&h>0){let vol=l*w*h*0.52;prostateData={l:l,w:w,h:h,vol:vol};document.getElementById('resPVol').innerText=`Vol: ${vol.toFixed(1)} cc`;document.getElementById('resPGm').innerText=`Wt: ${vol.toFixed(1)} gm`;}}
-function applyProstateCalc(){if(!prostateData.vol){alert('Enter cm');return;}let txt=document.getElementById('rText').value;txt=txt.replace(/__ x __ x __ cm/g,`${prostateData.l} x ${prostateData.w} x ${prostateData.h} cm`);txt=txt.replace(/__ gm/g,`${prostateData.vol.toFixed(1)} gm`);txt=txt.replace(/__ cc/g,`${prostateData.vol.toFixed(1)} cc`);document.getElementById('rText').value=txt;}
-const DIAGRAMS={whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120'><ellipse cx='50' cy='30' rx='28' ry='18' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.3'/><path d='M30 50 Q50 60 70 50' fill='none' stroke='%23000' stroke-width='0.6' opacity='0.3'/></svg>`,kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120'><ellipse cx='30' cy='40' rx='12' ry='18' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.3'/><ellipse cx='70' cy='40' rx='12' ry='18' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.3'/></svg>`,scrotum:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120'><ellipse cx='50' cy='60' rx='30' ry='35' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.3'/></svg>`,pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120'><path d='M50 20 Q30 40 30 60 Q30 80 50 90 Q70 80 70 60 Q70 40 50 20' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.3'/></svg>`,fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120'><circle cx='50' cy='50' r='25' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.3'/></svg>`,breast:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120'><path d='M20 50 Q50 20 80 50 Q50 80 20 50' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.3'/></svg>`,thyroid:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120'><path d='M30 40 Q50 30 70 40 Q70 60 50 70 Q30 60 30 40' fill='none' stroke='%23000' stroke-width='0.8' opacity='0.3'/></svg>`};
+const DIAGRAMS={whole:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23f0f0f0'/></svg>`,kub:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='10' y='10' width='80' height='80' fill='%23f0f0f0'/></svg>`,scrotum:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><ellipse cx='50' cy='50' rx='40' ry='30' fill='%23f0f0f0'/></svg>`,pelvis:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M20 80 Q50 20 80 80' fill='%23f0f0f0'/></svg>`,fwb:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='30' r='15' fill='%23f0f0f0'/><path d='M50 45 Q30 80 50 90 Q70 80 50 45' fill='%23f0f0f0'/></svg>`,breast:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M20 50 Q50 10 80 50 Q50 90 20 50' fill='%23f0f0f0'/></svg>`,thyroid:`data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M30 40 Q50 20 70 40 Q50 60 30 40' fill='%23f0f0f0'/></svg>`};
 function getDiagramForType(t){t=(t||'').toLowerCase();if(t.includes('scrotum')||t.includes('testis')||t.includes('hydrocele')||t.includes('varicocele'))return DIAGRAMS.scrotum;if(t.includes('kub')||t.includes('bladder')||t.includes('calculus')||t.includes('hydronephrosis')||t.includes('prostate')||t.includes('cystitis'))return DIAGRAMS.kub;if(t.includes('pelvis')||t.includes('uterus')||t.includes('ovary')||t.includes('fibroid')||t.includes('pcos'))return DIAGRAMS.pelvis;if(t.includes('fwb')||t.includes('pregnancy')||t.includes('iugr'))return DIAGRAMS.fwb;if(t.includes('breast')||t.includes('axilla'))return DIAGRAMS.breast;if(t.includes('thyroid'))return DIAGRAMS.thyroid;return DIAGRAMS.whole;}
-let T={"WHOLE ABDOMEN - Normal":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Normal in size __ cm [Normal: <14 cm] homogenous texture and smooth margins, No focal lesion, Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR dilatation.
-
-GALL BLADDER:
-➢ Normally distended, wall thickness __ mm [Normal: <3 mm] regular, Lumen clear anechoic, No calculus, No sludge, No mass, No pericholecystic fluid, CBD __ mm [Normal: <6 mm].
-
-PANCREAS:
-➢ Normal in size Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal homogenous echotexture, No focal lesion, No duct dilatation, No calcification.
-
-SPLEEN:
-➢ Normal in size __ cm [Normal: <12 cm] homogenous, Splenic vein __ mm [Normal: <10 mm], No focal lesion, Hilum normal.
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm] smooth outline, Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis, No mass, Ureter __ mm [Normal: <4 mm] not dilated.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm] smooth outline, Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis, No mass.
-
-URINARY BLADDER:
-➢ Normal capacity __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm] regular, Lumen clear, No calculus, No mass, No diverticulum.
-
-PROSTATE:
-➢ __ x __ x __ cm, __ gm [Normal: 20-25 gm], Homogenous, Capsule intact.
-
-PERITONEUM:
-➢ No free fluid, No ascites, No lymphadenopathy.
-
-CONCLUSION:
-➢ Normal Whole Abdomen.
-
-ADVICE:
-➢ No significant abnormality.
+let T={
+"WHOLE ABDOMEN - Normal":`ULTRASOUND WHOLE ABDOMEN:
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Normal.
+`, - Fatty Liver Grade 1.
 `,
-
-"WHOLE ABDOMEN - Fatty Liver Grade 1":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Mildly enlarged __ cm [Normal: <14 cm] with Grade 1 fatty changes - minimal increased echogenicity, Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No focal lesion, Diaphragm and portal vein margins preserved.
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm] regular, Lumen clear, No calculus, No sludge.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm].
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm] homogenous.
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Hepatomegaly __ cm with Grade 1 fatty liver. Rest normal.
-
-ADVICE:
-➢ LFTs, lipid profile.
-`,
-
 "WHOLE ABDOMEN - Fatty Liver Grade 2":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Enlarged __ cm [Normal: <14 cm] with Grade 2 fatty liver - moderate increase echogenicity, Portal vein margins slightly blurred, Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No focal lesion.
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm] regular, Lumen clear.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Grade 2 fatty liver __ cm.
-
-ADVICE:
-➢ LFTs, diet control.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Fatty Liver Grade 2.
 `,
-
 "WHOLE ABDOMEN - Fatty Liver Grade 3":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Enlarged __ cm [Normal: <14 cm] with Grade 3 fatty liver - markedly increased echogenicity, Poor visualization of diaphragm and portal vein, No focal lesion.
-
-GALL BLADDER:
-➢ Normal / Obscured, wall __ mm [Normal: <3 mm].
-
-PANCREAS:
-➢ Normal / Obscured.
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Grade 3 fatty liver __ cm.
-
-ADVICE:
-➢ Gastroenterology consultation.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Fatty Liver Grade 3.
 `,
-
 "WHOLE ABDOMEN - Hepatomegaly":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Enlarged __ cm [Normal: <14 cm] homogenous, Smooth margins, No focal lesion, Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm].
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm], Lumen clear, No calculus.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Hepatomegaly __ cm.
-
-ADVICE:
-➢ LFTs.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Hepatomegaly.
 `,
-
 "WHOLE ABDOMEN - Splenomegaly":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Normal __ cm [Normal: <14 cm], Portal vein __ mm [Normal: <13 mm], No focal lesion.
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm], No calculus.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-
-SPLEEN:
-➢ Enlarged __ cm [Normal: <12 cm] homogenous, Splenic vein __ mm [Normal: <10 mm], No focal lesion.
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Splenomegaly __ cm.
-
-ADVICE:
-➢ CBC.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Splenomegaly.
 `,
-
 "WHOLE ABDOMEN - Hepatosplenomegaly":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Enlarged __ cm [Normal: <14 cm] homogenous, No focal lesion, Portal vein __ mm [Normal: <13 mm].
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm], No calculus.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-
-SPLEEN:
-➢ Enlarged __ cm [Normal: <12 cm] homogenous, No focal lesion.
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Hepatosplenomegaly.
-
-ADVICE:
-➢ LFTs, CBC.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Hepatosplenomegaly.
 `,
-
 "WHOLE ABDOMEN - Cholelithiasis Single":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Normal __ cm [Normal: <14 cm] homogenous, Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No focal lesion.
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm] regular, Single echogenic calculus __ mm [Normal: No calculus] with shadowing mobile, Lumen clear, No sludge, No pericholecystic fluid.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm].
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm], No focal lesion.
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
-
-CONCLUSION:
-➢ Cholelithiasis single __ mm with normal rest organs.
-
-ADVICE:
-➢ Surgical consultation.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Cholelithiasis Single.
 `,
-
 "WHOLE ABDOMEN - Cholelithiasis Multiple":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Normal __ cm [Normal: <14 cm], Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No focal lesion.
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm], Multiple calculi largest __ mm [Normal: No calculus] with shadowing mobile, No pericholecystic fluid.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Cholelithiasis multiple largest __ mm.
-
-ADVICE:
-➢ Surgical consultation.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Cholelithiasis Multiple.
 `,
-
 "WHOLE ABDOMEN - Gall Bladder Sludge":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Normal __ cm [Normal: <14 cm], Portal vein __ mm [Normal: <13 mm], No focal lesion.
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm], Sludge seen [Normal: Clear], No calculus.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Gall bladder sludge.
-
-ADVICE:
-➢ Hydration, low fat diet.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Gall Bladder Sludge.
 `,
-
 "WHOLE ABDOMEN - Cholecystitis Acute":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Normal __ cm [Normal: <14 cm], No focal lesion.
-
-GALL BLADDER:
-➢ Distended, wall thickened __ mm [Normal: <3 mm] edematous, Pericholecystic fluid __ cc, Tender on probe, Calculus __ mm [Normal: No calculus].
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Acute cholecystitis wall __ mm.
-
-ADVICE:
-➢ Urgent surgical consultation.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Cholecystitis Acute.
+`,Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - CBD Dilated.
 `,
-
-"WHOLE ABDOMEN - CBD Dilated":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Normal __ cm [Normal: <14 cm], IHBR dilatation seen, Portal vein __ mm [Normal: <13 mm].
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm], CBD __ mm [Normal: <6 mm] dilated.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ CBD dilated __ mm with IHBR dilatation.
-
-ADVICE:
-➢ MRCP.
-`,
-
 "WHOLE ABDOMEN - Appendicitis":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Normal __ cm [Normal: <14 cm], Portal vein __ mm [Normal: <13 mm], No focal lesion.
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm], Lumen clear, No calculus.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm].
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact.
-
-RIGHT ILIAC FOSSA:
-➢ Appendix __ mm [Normal: <6 mm], Non-compressible, Wall __ mm [Normal: <3 mm], Surrounding echogenic fat, Minimal fluid __ cc [Normal: No fluid].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Acute appendicitis appendix __ mm.
-
-ADVICE:
-➢ Urgent surgical consultation.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Appendicitis.
 `,
-
 "WHOLE ABDOMEN - Umbilical Hernia":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Normal __ cm [Normal: <14 cm], Portal vein __ mm [Normal: <13 mm], No focal lesion.
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm], No calculus.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-ANTERIOR WALL:
-➢ Defect __ x __ mm [Normal: No defect] at umbilical region with herniation of omental fat / bowel loops, Reducible, No strangulation.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Umbilical hernia __ mm.
-
-ADVICE:
-➢ Surgical consultation.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Umbilical Hernia.
 `,
-
 "WHOLE ABDOMEN - Inguinal Hernia Right":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Normal __ cm [Normal: <14 cm], No focal lesion.
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm], No calculus.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-RIGHT INGUINAL:
-➢ Defect __ mm [Normal: No defect] with herniation on Valsalva, Testis and cord normal.
-
-LEFT INGUINAL:
-➢ No hernia.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Right inguinal hernia __ mm.
-
-ADVICE:
-➢ Surgical consultation.
-`,"WHOLE ABDOMEN - Hepatosplenomegaly - Repeat":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Enlarged __ cm [Normal: <14 cm] homogenous, No focal lesion, Portal vein __ mm [Normal: <13 mm].
-
-GALL BLADDER:
-➢ Normally distended, wall __ mm [Normal: <3 mm], No calculus.
-
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-
-SPLEEN:
-➢ Enlarged __ cm [Normal: <12 cm] homogenous.
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-CONCLUSION:
-➢ Hepatosplenomegaly.
-
-ADVICE:
-➢ LFTs, CBC.
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Inguinal Hernia Right.
 `,
-
+"WHOLE ABDOMEN - Inguinal Hernia Left":`ULTRASOUND WHOLE ABDOMEN:
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Inguinal Hernia Left.
+`,
+"WHOLE ABDOMEN - Liver Cyst":`ULTRASOUND WHOLE ABDOMEN:
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Liver Cyst.
+`,
+"WHOLE ABDOMEN - Liver Hemangioma":`ULTRASOUND WHOLE ABDOMEN:
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Liver Hemangioma.
+`,
+"WHOLE ABDOMEN - Ascites":`ULTRASOUND WHOLE ABDOMEN:
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Ascites.
+`,
+"WHOLE ABDOMEN - Lymphadenopathy":`ULTRASOUND WHOLE ABDOMEN:
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Lymphadenopathy.
+`, __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Bilateral Renal Calculi.
+`,
+"WHOLE ABDOMEN - Hepatosplenomegaly - Repeat":`ULTRASOUND WHOLE ABDOMEN:
+LIVER: Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
+GALL BLADDER: Normally distended wall __ mm [Normal: <3 mm] lumen clear No calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
+SPLEEN: Normal __ cm [Normal: <12 cm] homogenous.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: __ gm [Normal: 20-25 gm] homogenous.
+CONCLUSION: WHOLE ABDOMEN - Hepatosplenomegaly - Repeat.
+`,
 "KUB - Normal":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 x 4-5 cm] smooth outline, Shape regular, Cortex __ mm [Normal: >6 mm], CMD intact, Echogenicity normal, No calculus, No hydronephrosis, No mass, Ureter __ mm [Normal: <4 mm] not dilated.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 x 4-5 cm] smooth outline, Shape regular, Cortex __ mm [Normal: >6 mm], CMD intact, Echogenicity normal, No calculus, No hydronephrosis, No mass, Ureter __ mm [Normal: <4 mm] not dilated.
-
-URINARY BLADDER:
-➢ Normal capacity __ cc [Normal: 300-400 cc] smooth walls, Wall __ mm [Normal: <3 mm] regular, Lumen clear anechoic, No calculus, No mass, No diverticulum.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm] homogenous, Capsule intact, No calcification.
-
-CONCLUSION:
-➢ Normal KUB.
-
-ADVICE:
-➢ Hydration, normal study.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Normal.
 `,
-
 "KUB - Renal Calculus Right":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Echogenic calculus __ mm [Normal: No calculus] at upper/mid/lower pole with posterior shadowing, Cortex __ mm [Normal: >6 mm], CMD intact, Pelvis __ mm [Normal: <10 mm] not dilated / mildly dilated, No perinephric collection.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm] smooth outline, Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis, Ureter __ mm [Normal: <4 mm] not dilated.
-
-URINARY BLADDER:
-➢ Normal capacity __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm] regular, Lumen clear, No calculus, No mass.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm] homogenous, Capsule intact.
-
-CONCLUSION:
-➢ Right renal calculus __ mm. Left kidney, bladder, prostate normal.
-
-ADVICE:
-➢ Hydration, urology consultation.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Renal Calculus Right.
 `,
-
 "KUB - Renal Calculus Left":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm] smooth outline, Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis, Ureter __ mm [Normal: <4 mm].
-
-LEFT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Echogenic calculus __ mm [Normal: No calculus] with shadowing, Cortex __ mm [Normal: >6 mm], CMD intact, Pelvis __ mm [Normal: <10 mm], No perinephric collection.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm] regular, No calculus.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm] homogenous.
-
-CONCLUSION:
-➢ Left renal calculus __ mm. Right kidney normal.
-
-ADVICE:
-➢ Urology consultation.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Renal Calculus Left.
 `,
-
 "KUB - Renal Calculus Bilateral":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Calculus __ mm [Normal: No calculus] with shadowing, Cortex __ mm [Normal: >6 mm], CMD intact, Pelvis __ mm [Normal: <10 mm].
-
-LEFT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Calculus __ mm [Normal: No calculus] with shadowing, Cortex __ mm [Normal: >6 mm], CMD intact, Pelvis __ mm [Normal: <10 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus, No mass.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm] homogenous, Capsule intact.
-
-CONCLUSION:
-➢ Bilateral renal calculi.
-
-ADVICE:
-➢ Urology consultation, hydration.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Renal Calculus Bilateral.
 `,
-
 "KUB - Staghorn Calculus":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Staghorn calculus __ mm [Normal: No calculus] filling pelvis and calyces with shadowing, Cortex __ mm [Normal: >6 mm], CMD intact, Mild hydronephrosis pelvis __ mm [Normal: <10 mm].
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm].
-
-CONCLUSION:
-➢ Right staghorn calculus __ mm.
-
-ADVICE:
-➢ CT KUB, urology.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Staghorn Calculus.
 `,
-
+"KUB - Staghorn Calculus Left":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Staghorn Calculus Left.
+`,
 "KUB - Microliths Bilateral":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Multiple tiny echogenic foci __ mm [Normal: No calculus] without shadowing - microliths, Cortex __ mm [Normal: >6 mm], CMD intact, No hydronephrosis.
-
-LEFT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Microliths __ mm [Normal: No calculus], Cortex __ mm [Normal: >6 mm], CMD intact, No hydronephrosis.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm].
-
-CONCLUSION:
-➢ Bilateral renal microlithiasis.
-
-ADVICE:
-➢ Hydration.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Microliths Bilateral.
 `,
-
+"KUB - Microliths Right":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Microliths Right.
+`,
 "KUB - Hydronephrosis Mild Right":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Mild hydronephrosis pelvis __ mm [Normal: <10 mm] dilated, Calyces prominent, Cortex __ mm [Normal: >6 mm] preserved, CMD intact.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm].
-
-CONCLUSION:
-➢ Mild right hydronephrosis pelvis __ mm.
-
-ADVICE:
-➢ Urology consultation.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydronephrosis Mild Right.
 `,
-
 "KUB - Hydronephrosis Moderate Right":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Moderate hydronephrosis pelvis __ mm [Normal: <10 mm], Calyces dilated blunted, Cortex __ mm [Normal: >6 mm] preserved, CMD intact.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm].
-
-CONCLUSION:
-➢ Moderate right hydronephrosis pelvis __ mm.
-
-ADVICE:
-➢ Urology consultation.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydronephrosis Moderate Right.
 `,
-
+"KUB - Hydronephrosis Severe Right":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydronephrosis Severe Right.
+`,
+"KUB - Hydronephrosis Mild Left":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydronephrosis Mild Left.
+`,r.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydronephrosis Moderate Left.
+`,
+"KUB - Hydronephrosis Severe Left":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydronephrosis Severe Left.
+`,
+"KUB - Hydronephrosis Bilateral Mild":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydronephrosis Bilateral Mild.
+`,
+"KUB - Hydronephrosis Bilateral Moderate":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydronephrosis Bilateral Moderate.
+`,
 "KUB - Hydronephrosis with Dilated Ureter - Right":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Mild/Moderate hydronephrosis pelvis __ mm [Normal: <10 mm], Calyces dilated, Cortex __ mm [Normal: >6 mm] preserved, CMD intact, Ureter dilated __ mm [Normal: <4 mm] down to VUJ tortuous.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis, Ureter __ mm [Normal: <4 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm] regular, No calculus, No mass.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm] homogenous, Capsule intact.
-
-CONCLUSION:
-➢ Right hydronephrosis pelvis __ mm with dilated ureter __ mm down to VUJ. Left kidney, bladder, prostate normal.
-
-ADVICE:
-➢ Urology, CT KUB.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydronephrosis with Dilated Ureter - Right.
 `,
-
 "KUB - Hydroureteronephrosis Right":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Moderate hydronephrosis pelvis __ mm [Normal: <10 mm], Calyces dilated, Cortex __ mm [Normal: >6 mm] preserved, CMD intact, Ureter dilated __ mm [Normal: <4 mm] down to lower ureter / VUJ tortuous, Echogenic calculus __ mm [Normal: No calculus] at lower ureter with shadowing.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm].
-
-CONCLUSION:
-➢ Right hydroureteronephrosis pelvis __ mm ureter __ mm with ureteric calculus __ mm.
-
-ADVICE:
-➢ Urgent urology, hydration.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydroureteronephrosis Right.
 `,
-
+"KUB - Hydroureteronephrosis Left":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydroureteronephrosis Left.
+`,
+"KUB - Hydroureteronephrosis Bilateral":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Hydroureteronephrosis Bilateral.
+`,
+"KUB - Ureteric Calculus with Hydronephrosis":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Ureteric Calculus with Hydronephrosis.
+`,
+"KUB - Ureteric Calculus Left with Hydronephrosis":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Ureteric Calculus Left with Hydronephrosis.
+`,
+"KUB - PUJ Obstruction Right":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - PUJ Obstruction Right.
+`,
+"KUB - PUJ Obstruction Left":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - PUJ Obstruction Left.
+`,
 "KUB - Parenchymal Changes Grade 1":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Slightly increased cortical echogenicity Grade 1 [Normal: Grade 0], CMD preserved, Cortex __ mm [Normal: >6 mm] preserved, No calculus, No hydronephrosis, Ureter __ mm [Normal: <4 mm].
-
-LEFT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Grade 1 increased echogenicity [Normal: Grade 0], CMD preserved, Cortex __ mm [Normal: >6 mm], No calculus, No hydronephrosis.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm].
-
-CONCLUSION:
-➢ Bilateral Grade 1 parenchymal changes.
-
-ADVICE:
-➢ RFTs, urine R/E, BP.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Parenchymal Changes Grade 1.
 `,
-
 "KUB - Parenchymal Changes Grade 2":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Increased echogenicity Grade 2 [Normal: Grade 0], CMD poorly preserved, Cortex __ mm [Normal: >6 mm], No calculus.
-
-LEFT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm], Grade 2 increased echogenicity, CMD poorly preserved, Cortex __ mm [Normal: >6 mm].
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm].
-
-CONCLUSION:
-➢ Grade 2 parenchymal changes.
-
-ADVICE:
-➢ RFTs, nephrology.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Parenchymal Changes Grade 2.
 `,
-
-"KUB - Simple Cortical Cyst Right":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline, Simple anechoic thin-walled cyst __ x __ mm [Normal: No cyst] at upper/mid/lower pole, No septations, No vascularity, Cortex __ mm [Normal: >6 mm], CMD intact, No hydronephrosis.
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis, No cyst.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm].
-
-CONCLUSION:
-➢ Right simple cortical cyst __ mm with normal left kidney, bladder, prostate.
-
-ADVICE:
-➢ Benign, follow-up.
+"KUB - Parenchymal Changes Grade 3":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Parenchymal Changes Grade 3.
+`,"KUB - Simple Cortical Cyst Right":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Simple Cortical Cyst Right.
 `,
-
+"KUB - Simple Cortical Cyst Left":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Simple Cortical Cyst Left.
+`,
+"KUB - Bilateral Cortical Cysts":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Bilateral Cortical Cysts.
+`,
+"KUB - Complex Cyst Right":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Complex Cyst Right.
+`,
+"KUB - Complex Cyst Left":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Complex Cyst Left.
+`,
+"KUB - Polycystic Kidneys":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Polycystic Kidneys.
+`,
 "KUB - Bladder Stone Single":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis, Ureter __ mm [Normal: <4 mm].
-
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-URINARY BLADDER:
-➢ __ cc [Normal: 300-400 cc] capacity, Wall __ mm [Normal: <3 mm] regular, Single echogenic calculus __ mm [Normal: No calculus] mobile with shadowing, No mass, No diverticulum.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm].
-
-CONCLUSION:
-➢ Bladder single calculus __ mm. Both kidneys normal.
-
-ADVICE:
-➢ Urology consultation.
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Bladder Stone Single.
 `,
-
-"KUB + PROSTATE - Normal":`ULTRASOUND KUB + PROSTATE:
-
-RIGHT KIDNEY:
-➢ 9.0 x 4.2 cm [Normal: 9-12 x 4-5 cm] smooth outline, Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, No hydronephrosis, Ureter __ mm [Normal: <4 mm].
-
-LEFT KIDNEY:
-➢ 10.4 x 5.4 cm [Normal: 9-12 x 4-5 cm] smooth outline, Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc] smooth walls, Wall __ mm [Normal: <3 mm], Lumen clear, No calculus, No mass.
-
-PROSTATE:
-➢ Normal __ x __ x __ cm, __ gm [Normal: 20-25 gm] homogenous, Capsule intact, No calcification.
-
-CONCLUSION:
-➢ Normal KUB with normal prostate.
-
-ADVICE:
-➢ Normal study.
+"KUB - Bladder Stones Multiple":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Bladder Stones Multiple.
 `,
-
-"KUB + PROSTATE - BPH":`ULTRASOUND KUB + PROSTATE:
-
-RIGHT KIDNEY:
-➢ 9.0 x 4.2 cm [Normal: 9-12 x 4-5 cm] smooth outline, Cortex __ mm [Normal: >6 mm], CMD intact, No calculus, Ureter __ mm [Normal: <4 mm].
-
-LEFT KIDNEY:
-➢ 10.4 x 5.4 cm [Normal: 9-12 x 4-5 cm] smooth outline, Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-
-URINARY BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Pre-void __ cc, Post-void residual __ cc [Normal: <50 cc], No calculus.
-
-PROSTATE:
-➢ Enlarged __ x __ x __ cm, __ gm [Normal: 20-25 gm] 22.7 gm, Median lobe hypertrophy, Homogenous, Capsule intact, Protruding into bladder base.
-
-CONCLUSION:
-➢ BPH prostate __ gm 22.7 gm.
-
-ADVICE:
-➢ Urology, PSA.
-`,"PELVIS - Normal":`ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] homogenous, Smooth outline, No fibroid, Endometrium __ mm [Normal: 6-12 mm] regular, Cervix __ mm [Normal: 25-35 mm], No free fluid in POD.
-
-OVARIES:
-➢ Right ovary __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc] normal, Follicles __ mm [Normal: <10 mm], No cyst.
-➢ Left ovary __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc] normal, No cyst, No mass.
-
-CONCLUSION:
-➢ Normal pelvis - Uterus and ovaries normal.
-
-ADVICE:
-➢ No abnormality.
+"KUB - Cystitis Thickened Wall":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Cystitis Thickened Wall.
 `,
-
+"KUB - Bladder Diverticulum":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Bladder Diverticulum.
+`,
+"KUB - Bladder Mass":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Bladder Mass.
+`,
+"KUB - Ectopic Kidney Right":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB - Ectopic Kidney Right.
+`,
+"KUB + PROSTATE - Normal":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB + PROSTATE - Normal.
+`,
+"KUB + PROSTATE - BPH":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB + PROSTATE - BPH.
+`,
+"KUB + PROSTATE - BPH with Cystitis":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB + PROSTATE - BPH with Cystitis.
+`,"KUB + PROSTATE - Prostatitis":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB + PROSTATE - Prostatitis.
+`,
+"KUB + PROSTATE - Prostate Calcification":`ULTRASOUND KUB:
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 x 4-5 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] clear.
+PROSTATE: Normal __ x __ x __ cm __ gm [Normal: 20-25 gm].
+CONCLUSION: KUB + PROSTATE - Prostate Calcification.
+`,
+"PELVIS - Normal":`ULTRASOUND PELVIS:
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Normal.
+`,
 "PELVIS - PCOS":`ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] smooth outline, Myometrium homogenous, Endometrium __ mm [Normal: 6-12 mm] regular, Cervix __ mm [Normal: 25-35 mm], No free fluid.
-
-OVARIES:
-➢ Right ovary enlarged __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc] __ cc enlarged, Multiple small peripheral follicles 12+ each __ mm [Normal: <10 follicles], Central stromal echogenicity increased.
-➢ Left ovary enlarged __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc] __ cc enlarged, Multiple follicles __ mm.
-
-CONCLUSION:
-➢ Polycystic ovaries - PCOS pattern.
-
-ADVICE:
-➢ Gynecology consultation, weight reduction.
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - PCOS.
 `,
-
 "PELVIS - Fibroid Intramural":`ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Bulky __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm], Myometrium heterogeneous, Intramural fibroid __ x __ mm [Normal: No fibroid] at anterior/posterior wall, Well-defined hypoechoic lesion with peripheral vascularity, Endometrium __ mm [Normal: 6-12 mm], Cervix normal.
-
-OVARIES:
-➢ Right ovary __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc] normal.
-➢ Left ovary __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc] normal.
-
-CONCLUSION:
-➢ Intramural fibroid __ x __ mm.
-
-ADVICE:
-➢ Gynecology consultation.
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Fibroid Intramural.
 `,
-
+"PELVIS - Fibroid Subserosal":`ULTRASOUND PELVIS:
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Fibroid Subserosal.
+`,
+"PELVIS - Fibroid Submucosal":`ULTRASOUND PELVIS:
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Fibroid Submucosal.
+`,
+"PELVIS - Multiple Fibroids":`ULTRASOUND PELVIS:
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Multiple Fibroids.
+`,
 "PELVIS - Ovarian Cyst Simple Right":`ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] normal homogenous, Endometrium __ mm [Normal: 6-12 mm], No free fluid.
-
-OVARIES:
-➢ Right ovary __ x __ cm [Normal: 3 x 2 cm], Simple anechoic thin-walled cyst __ x __ mm [Normal: No cyst] with posterior enhancement, No septations, No vascularity, Volume __ cc [Normal: <10 cc].
-➢ Left ovary __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc] normal.
-
-CONCLUSION:
-➢ Right simple ovarian cyst __ mm with normal uterus and left ovary.
-
-ADVICE:
-➢ Follow-up, gynecology consultation.
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Ovarian Cyst Simple Right.
 `,
-
+"PELVIS - Ovarian Cyst Simple Left":`ULTRASOUND PELVIS:
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Ovarian Cyst Simple Left.
+`,
+"PELVIS - Ovarian Cyst Bilateral":`ULTRASOUND PELVIS:
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Ovarian Cyst Bilateral.
+`,
 "PELVIS - Endometrioma":`ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] normal, Endometrium __ mm [Normal: 6-12 mm].
-
-OVARIES:
-➢ Right ovary __ x __ cm [Normal: 3 x 2 cm], Endometrioma __ x __ mm [Normal: No cyst] with low level echoes - chocolate cyst, Volume __ cc [Normal: <10 cc].
-➢ Left ovary __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc] normal.
-
-CONCLUSION:
-➢ Right endometrioma __ mm.
-
-ADVICE:
-➢ Gynecology consultation.
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Endometrioma.
 `,
-
+"PELVIS - Dermoid Cyst":`ULTRASOUND PELVIS:
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Dermoid Cyst.
+`,
 "PELVIS - PID":`ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Bulky __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm], Heterogeneous, Endometrium __ mm [Normal: 6-12 mm], Free fluid __ cc [Normal: No fluid] in POD.
-
-OVARIES:
-➢ Both bulky with increased vascularity, Right __ x __ cm [Normal: 3 x 2 cm], Volume __ cc [Normal: <10 cc].
-
-CONCLUSION:
-➢ PID with free fluid __ cc.
-
-ADVICE:
-➢ Gynecology, antibiotics.
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - PID.
 `,
-
-"FWB - Normal Single Pregnancy":`ULTRASOUND FWB:
-
-GRAVID UTERUS:
-➢ Single live fetus, Presentation cephalic / breech, FHR __ bpm [Normal: 120-160 bpm] regular, Cardiac activity present, Liquor adequate.
-
-FETAL BIOMETRY:
-➢ BPD __ mm [Normal: __ mm for GA], HC __ mm [Normal: __ mm], AC __ mm [Normal: __ mm], FL __ mm [Normal: __ mm], CRL __ mm [Normal: __ mm].
-➢ EFW __ gm [Normal: __ gm], GA __ weeks __ days [Normal: __], EDD __.
-
-PLACENTA:
-➢ Anterior / Posterior upper segment, Grade __ [Normal: Grade 0-1 early, Grade 2 late], No retroplacental bleed, No low lying.
-
-AMNIOTIC FLUID:
-➢ Adequate, AFI __ mm [Normal: 80-180 mm], Deepest pocket __ mm [Normal: 20-80 mm].
-
-CERVIX:
-➢ Length __ mm [Normal: >25 mm], Internal os closed, No funneling.
-
-CONCLUSION:
-➢ Single live intrauterine pregnancy __ weeks, Cephalic presentation, No gross anomaly seen at this GA.
-
-ADVICE:
-➢ Regular ANC, anomaly scan.
+"PELVIS - Free Fluid POD":`ULTRASOUND PELVIS:
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Free Fluid POD.
 `,
-
+"PELVIS - Early Pregnancy":`ULTRASOUND PELVIS:
+UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] No fibroid.
+OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
+CONCLUSION: PELVIS - Early Pregnancy.
+`,"FWB - Normal Single Pregnancy":`ULTRASOUND FWB:
+FETUS: Single live Presentation cephalic FHR __ bpm [Normal: 120-160 bpm] regular.
+BIOMETRY: BPD __ mm HC __ mm AC __ mm FL __ mm EFW __ gm GA __ weeks.
+PLACENTA: Anterior upper Grade __ [Normal: Grade 0-1] No low lying.
+FLUID: AFI __ mm [Normal: 80-180 mm] adequate.
+CERVIX: Length __ mm [Normal: >25 mm] closed.
+CONCLUSION: FWB - Normal Single Pregnancy __ weeks.
+`,
 "FWB - Breech Presentation":`ULTRASOUND FWB:
-
-GRAVID UTERUS:
-➢ Single live fetus, Presentation breech, FHR __ bpm [Normal: 120-160 bpm] regular.
-
-FETAL BIOMETRY:
-➢ BPD __ mm [Normal: __ mm], HC __ mm [Normal: __ mm], AC __ mm [Normal: __ mm], FL __ mm [Normal: __ mm], EFW __ gm [Normal: __ gm], GA __ weeks.
-
-PLACENTA:
-➢ Anterior / Posterior upper, Grade __ [Normal: Grade 0-3], No low lying.
-
-AMNIOTIC FLUID:
-➢ AFI __ mm [Normal: 80-180 mm] adequate.
-
-CERVIX:
-➢ Length __ mm [Normal: >25 mm], Internal os closed.
-
-CONCLUSION:
-➢ Single live fetus breech presentation __ weeks.
-
-ADVICE:
-➢ Obstetric consultation.
+FETUS: Single live Presentation cephalic FHR __ bpm [Normal: 120-160 bpm] regular.
+BIOMETRY: BPD __ mm HC __ mm AC __ mm FL __ mm EFW __ gm GA __ weeks.
+PLACENTA: Anterior upper Grade __ [Normal: Grade 0-1] No low lying.
+FLUID: AFI __ mm [Normal: 80-180 mm] adequate.
+CERVIX: Length __ mm [Normal: >25 mm] closed.
+CONCLUSION: FWB - Breech Presentation __ weeks.
 `,
-
 "FWB - IUGR":`ULTRASOUND FWB:
-
-GRAVID UTERUS:
-➢ Single live fetus, Presentation cephalic, FHR __ bpm [Normal: 120-160 bpm] regular, Liquor reduced / adequate.
-
-FETAL BIOMETRY:
-➢ BPD __ mm [Normal: __ mm] small for GA, HC __ mm [Normal: __ mm] small, AC __ mm [Normal: __ mm] small, FL __ mm [Normal: __ mm] small, EFW __ gm [Normal: __ gm] <10th centile, GA __ weeks.
-
-PLACENTA:
-➢ Anterior / Posterior, Grade __ [Normal: Grade 0-3], Calcifications.
-
-AMNIOTIC FLUID:
-➢ AFI __ mm [Normal: 80-180 mm] reduced / adequate.
-
-DOPPLER:
-➢ Umbilical artery PI __ [Normal: <1.2], RI __ [Normal: <0.7], S/D __ [Normal: <3].
-
-CONCLUSION:
-➢ Single live IUGR fetus __ weeks, EFW __ gm <10th centile.
-
-ADVICE:
-➢ Urgent obstetric consultation, Doppler follow-up.
+FETUS: Single live Presentation cephalic FHR __ bpm [Normal: 120-160 bpm] regular.
+BIOMETRY: BPD __ mm HC __ mm AC __ mm FL __ mm EFW __ gm GA __ weeks.
+PLACENTA: Anterior upper Grade __ [Normal: Grade 0-1] No low lying.
+FLUID: AFI __ mm [Normal: 80-180 mm] adequate.
+CERVIX: Length __ mm [Normal: >25 mm] closed.
+CONCLUSION: FWB - IUGR __ weeks.
 `,
-
 "FWB - Twins Normal":`ULTRASOUND FWB:
-
-GRAVID UTERUS:
-➢ Twin live fetuses, Both cephalic, FHR Twin1 __ bpm [Normal: 120-160 bpm], Twin2 __ bpm [Normal: 120-160 bpm].
-
-TWIN1:
-➢ BPD __ mm [Normal: __ mm], HC __ mm [Normal: __ mm], AC __ mm [Normal: __ mm], FL __ mm [Normal: __ mm], EFW __ gm [Normal: __ gm], GA __ weeks.
-
-TWIN2:
-➢ BPD __ mm [Normal: __ mm], HC __ mm [Normal: __ mm], AC __ mm [Normal: __ mm], FL __ mm [Normal: __ mm], EFW __ gm [Normal: __ gm].
-
-PLACENTA:
-➢ Anterior upper Grade __ [Normal: Grade 0-2], Single / Double, No bleed.
-
-AMNIOTIC FLUID:
-➢ AFI __ mm [Normal: 80-180 mm] adequate.
-
-CONCLUSION:
-➢ Twin live pregnancy __ weeks.
-
-ADVICE:
-➢ High risk ANC.
+FETUS: Single live Presentation cephalic FHR __ bpm [Normal: 120-160 bpm] regular.
+BIOMETRY: BPD __ mm HC __ mm AC __ mm FL __ mm EFW __ gm GA __ weeks.
+PLACENTA: Anterior upper Grade __ [Normal: Grade 0-1] No low lying.
+FLUID: AFI __ mm [Normal: 80-180 mm] adequate.
+CERVIX: Length __ mm [Normal: >25 mm] closed.
+CONCLUSION: FWB - Twins Normal __ weeks.
 `,
-
 "FWB - Oligohydramnios":`ULTRASOUND FWB:
-
-GRAVID UTERUS:
-➢ Single live fetus cephalic, FHR __ bpm [Normal: 120-160 bpm].
-
-FETAL BIOMETRY:
-➢ BPD __ mm [Normal: __ mm], HC __ mm [Normal: __ mm], AC __ mm [Normal: __ mm], FL __ mm [Normal: __ mm], EFW __ gm [Normal: __ gm], GA __ weeks.
-
-AMNIOTIC FLUID:
-➢ AFI __ mm [Normal: 80-180 mm] reduced oligohydramnios, Deepest pocket __ mm [Normal: 20-80 mm] reduced.
-
-PLACENTA:
-➢ Anterior / Posterior upper, Grade __ [Normal: Grade 0-2].
-
-CONCLUSION:
-➢ Oligohydramnios AFI __ mm with single live __ weeks.
-
-ADVICE:
-➢ Hydration, obstetric consultation.
+FETUS: Single live Presentation cephalic FHR __ bpm [Normal: 120-160 bpm] regular.
+BIOMETRY: BPD __ mm HC __ mm AC __ mm FL __ mm EFW __ gm GA __ weeks.
+PLACENTA: Anterior upper Grade __ [Normal: Grade 0-1] No low lying.
+FLUID: AFI __ mm [Normal: 80-180 mm] adequate.
+CERVIX: Length __ mm [Normal: >25 mm] closed.
+CONCLUSION: FWB - Oligohydramnios __ weeks.
 `,
-
+"FWB - Polyhydramnios":`ULTRASOUND FWB:
+FETUS: Single live Presentation cephalic FHR __ bpm [Normal: 120-160 bpm] regular.
+BIOMETRY: BPD __ mm HC __ mm AC __ mm FL __ mm EFW __ gm GA __ weeks.
+PLACENTA: Anterior upper Grade __ [Normal: Grade 0-1] No low lying.
+FLUID: AFI __ mm [Normal: 80-180 mm] adequate.
+CERVIX: Length __ mm [Normal: >25 mm] closed.
+CONCLUSION: FWB - Polyhydramnios __ weeks.
+`,
 "FWB - IUD":`ULTRASOUND FWB:
-
-GRAVID UTERUS:
-➢ Single fetus, No cardiac activity, No FHR [Normal: 120-160 bpm], No movements.
-
-FETAL BIOMETRY:
-➢ BPD __ mm [Normal: __ mm], HC __ mm [Normal: __ mm], AC __ mm [Normal: __ mm], FL __ mm [Normal: __ mm], GA __ weeks.
-
-PLACENTA:
-➢ Anterior / Posterior, Grade __ [Normal: Grade 0-2], No bleed.
-
-AMNIOTIC FLUID:
-➢ AFI __ mm [Normal: 80-180 mm] reduced.
-
-CONCLUSION:
-➢ Single IUD __ weeks, No cardiac activity.
-
-ADVICE:
-➢ Urgent obstetric consultation.
+FETUS: Single live Presentation cephalic FHR __ bpm [Normal: 120-160 bpm] regular.
+BIOMETRY: BPD __ mm HC __ mm AC __ mm FL __ mm EFW __ gm GA __ weeks.
+PLACENTA: Anterior upper Grade __ [Normal: Grade 0-1] No low lying.
+FLUID: AFI __ mm [Normal: 80-180 mm] adequate.
+CERVIX: Length __ mm [Normal: >25 mm] closed.
+CONCLUSION: FWB - IUD __ weeks.
 `,
-
+"FWB - Early Pregnancy 6-8 Weeks":`ULTRASOUND FWB:
+FETUS: Single live Presentation cephalic FHR __ bpm [Normal: 120-160 bpm] regular.
+BIOMETRY: BPD __ mm HC __ mm AC __ mm FL __ mm EFW __ gm GA __ weeks.
+PLACENTA: Anterior upper Grade __ [Normal: Grade 0-1] No low lying.
+FLUID: AFI __ mm [Normal: 80-180 mm] adequate.
+CERVIX: Length __ mm [Normal: >25 mm] closed.
+CONCLUSION: FWB - Early Pregnancy 6-8 Weeks __ weeks.
+`,
+"FWB - Anomaly Scan Normal":`ULTRASOUND FWB:
+FETUS: Single live Presentation cephalic FHR __ bpm [Normal: 120-160 bpm] regular.
+BIOMETRY: BPD __ mm HC __ mm AC __ mm FL __ mm EFW __ gm GA __ weeks.
+PLACENTA: Anterior upper Grade __ [Normal: Grade 0-1] No low lying.
+FLUID: AFI __ mm [Normal: 80-180 mm] adequate.
+CERVIX: Length __ mm [Normal: >25 mm] closed.
+CONCLUSION: FWB - Anomaly Scan Normal __ weeks.
+`,
+"FWB - Placenta Previa":`ULTRASOUND FWB:
+FETUS: Single live Presentation cephalic FHR __ bpm [Normal: 120-160 bpm] regular.
+BIOMETRY: BPD __ mm HC __ mm AC __ mm FL __ mm EFW __ gm GA __ weeks.
+PLACENTA: Anterior upper Grade __ [Normal: Grade 0-1] No low lying.
+FLUID: AFI __ mm [Normal: 80-180 mm] adequate.
+CERVIX: Length __ mm [Normal: >25 mm] closed.
+CONCLUSION: FWB - Placenta Previa __ weeks.
+`,
+"FWB - Placental Abruption":`ULTRASOUND FWB:
+FETUS: Single live Presentation cephalic FHR __ bpm [Normal: 120-160 bpm] regular.
+BIOMETRY: BPD __ mm HC __ mm AC __ mm FL __ mm EFW __ gm GA __ weeks.
+PLACENTA: Anterior upper Grade __ [Normal: Grade 0-1] No low lying.
+FLUID: AFI __ mm [Normal: 80-180 mm] adequate.
+CERVIX: Length __ mm [Normal: >25 mm] closed.
+CONCLUSION: FWB - Placental Abruption __ weeks.
+`,
 "BREAST - Normal":`ULTRASOUND BREAST:
-
-RIGHT BREAST:
-➢ Normal fibroglandular pattern, No focal lesion, No cyst, No mass, No duct dilatation, No calcification, Axillary tail normal, Skin __ mm [Normal: <2 mm], Nipple normal.
-
-LEFT BREAST:
-➢ Normal fibroglandular pattern, No focal lesion, No cyst, No mass, No duct dilatation.
-
-AXILLA BOTH:
-➢ No lymphadenopathy [Normal: <10 mm], Cortex __ mm [Normal: <3 mm], Hilum preserved.
-
-CONCLUSION:
-➢ Normal breast ultrasound - No focal lesion.
-
-ADVICE:
-➢ Routine self-examination.
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Normal.
 `,
-
 "BREAST - Fibroadenoma Right":`ULTRASOUND BREAST:
-
-RIGHT BREAST:
-➢ Well-defined oval hypoechoic lesion __ x __ mm [Normal: No lesion] at __ o'clock position __ cm from nipple, Homogenous, Smooth margins, No posterior shadowing, No calcification, No vascularity / Mild vascularity.
-
-LEFT BREAST:
-➢ Normal fibroglandular pattern, No focal lesion, No cyst.
-
-AXILLA BOTH:
-➢ No lymphadenopathy [Normal: <10 mm].
-
-CONCLUSION:
-➢ Right breast fibroadenoma __ mm at __ o'clock.
-
-ADVICE:
-➢ FNAC, follow-up.
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Fibroadenoma Right.
 `,
-
 "BREAST - Fibroadenoma Left":`ULTRASOUND BREAST:
-
-LEFT BREAST:
-➢ Well-defined oval hypoechoic lesion __ x __ mm [Normal: No lesion] at __ o'clock __ cm from nipple, Homogenous, Smooth margins.
-
-RIGHT BREAST:
-➢ Normal fibroglandular pattern, No focal lesion.
-
-AXILLA BOTH:
-➢ No lymphadenopathy [Normal: <10 mm].
-
-CONCLUSION:
-➢ Left breast fibroadenoma __ mm.
-
-ADVICE:
-➢ FNAC, follow-up.
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Fibroadenoma Left.
 `,
-
-"BREAST - Breast Cyst Right":`ULTRASOUND BREAST:
-
-RIGHT BREAST:
-➢ Simple anechoic thin-walled cyst __ x __ mm [Normal: No cyst] at __ o'clock position, No septations, No vascularity, Posterior enhancement.
-
-LEFT BREAST:
-➢ Normal fibroglandular pattern, No focal lesion.
-
-AXILLA BOTH:
-➢ No lymphadenopathy [Normal: <10 mm].
-
-CONCLUSION:
-➢ Right breast simple cyst __ mm.
-
-ADVICE:
-➢ Benign, follow-up.
-`,"THYROID - Normal":`ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm], Volume __ cc [Normal: 4-10 cc], Homogenous echotexture, No nodule, No cyst, No calcification.
-
-LEFT LOBE:
-➢ Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm], Volume __ cc [Normal: 4-10 cc] homogenous, No nodule.
-
-ISTHMUS:
-➢ __ mm [Normal: <5 mm] normal homogenous, No nodule.
-
-VASCULARITY:
-➢ Normal on color Doppler [Normal: Mild vascularity].
-
-NECK:
-➢ No lymphadenopathy [Normal: No nodes].
-
-CONCLUSION:
-➢ Normal thyroid ultrasound.
-
-ADVICE:
-➢ No abnormality.
+"BREAST - Fibroadenoma Bilateral":`ULTRASOUND BREAST:
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Fibroadenoma Bilateral.
+`,"BREAST - Breast Cyst Right":`ULTRASOUND BREAST:
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Breast Cyst Right.
 `,
-
+"BREAST - Breast Cyst Left":`ULTRASOUND BREAST:
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Breast Cyst Left.
+`,
+"BREAST - Breast Cysts Multiple":`ULTRASOUND BREAST:
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Breast Cysts Multiple.
+`,
+"BREAST - Fibrocystic Disease":`ULTRASOUND BREAST:
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Fibrocystic Disease.
+`,
+"BREAST - Mastitis":`ULTRASOUND BREAST:
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Mastitis.
+`,
+"BREAST - Breast Abscess":`ULTRASOUND BREAST:
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Breast Abscess.
+`,
+"BREAST - Gynecomastia":`ULTRASOUND BREAST:
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Gynecomastia.
+`,
+"BREAST - Suspicious Mass":`ULTRASOUND BREAST:
+RIGHT BREAST: Normal fibroglandular No focal lesion No cyst Skin __ mm [Normal: <2 mm].
+LEFT BREAST: Normal.
+AXILLA: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: BREAST - Suspicious Mass.
+`,
+"THYROID - Normal":`ULTRASOUND THYROID:
+RIGHT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous No nodule.
+LEFT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous.
+ISTHMUS: __ mm [Normal: <5 mm] normal.
+CONCLUSION: THYROID - Normal.
+`,
 "THYROID - Multinodular Goiter":`ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ Enlarged __ x __ x __ mm [Normal: 40-60 x 10-20 mm], Volume __ cc [Normal: 4-10 cc] __ cc enlarged, Multiple nodules largest __ x __ mm [Normal: No nodule] at upper/mid/lower pole, Isoechoic / Hypoechoic.
-
-LEFT LOBE:
-➢ Enlarged __ x __ x __ mm [Normal: 40-60 x 10-20 mm], Volume __ cc [Normal: 4-10 cc] __ cc enlarged, Multiple nodules largest __ x __ mm [Normal: No nodule].
-
-ISTHMUS:
-➢ Thickened __ mm [Normal: <5 mm] with nodule __ mm [Normal: No nodule].
-
-CONCLUSION:
-➢ Multinodular goiter - Multiple nodules both lobes largest __ mm.
-
-ADVICE:
-➢ TFTs, FNAC if needed.
+RIGHT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous No nodule.
+LEFT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous.
+ISTHMUS: __ mm [Normal: <5 mm] normal.
+CONCLUSION: THYROID - Multinodular Goiter.
 `,
-
 "THYROID - Solitary Nodule Right":`ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ Normal __ x __ x __ mm [Normal: 40-60 x 10-20 mm], Volume __ cc [Normal: 4-10 cc], Nodule __ x __ mm [Normal: No nodule] at upper/mid/lower pole, Isoechoic, Halo present, No calcification.
-
-LEFT LOBE:
-➢ Normal __ x __ x __ mm [Normal: 40-60 x 10-20 mm], Volume __ cc [Normal: 4-10 cc] homogenous, No nodule.
-
-ISTHMUS:
-➢ __ mm [Normal: <5 mm] normal.
-
-CONCLUSION:
-➢ Right solitary thyroid nodule __ mm.
-
-ADVICE:
-➢ TFTs, FNAC.
+RIGHT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous No nodule.
+LEFT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous.
+ISTHMUS: __ mm [Normal: <5 mm] normal.
+CONCLUSION: THYROID - Solitary Nodule Right.
 `,
-
+"THYROID - Solitary Nodule Left":`ULTRASOUND THYROID:
+RIGHT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous No nodule.
+LEFT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous.
+ISTHMUS: __ mm [Normal: <5 mm] normal.
+CONCLUSION: THYROID - Solitary Nodule Left.
+`,
+"THYROID - Thyroid Cyst Right":`ULTRASOUND THYROID:
+RIGHT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous No nodule.
+LEFT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous.
+ISTHMUS: __ mm [Normal: <5 mm] normal.
+CONCLUSION: THYROID - Thyroid Cyst Right.
+`,
+"THYROID - Thyroid Cyst Left":`ULTRASOUND THYROID:
+RIGHT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous No nodule.
+LEFT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous.
+ISTHMUS: __ mm [Normal: <5 mm] normal.
+CONCLUSION: THYROID - Thyroid Cyst Left.
+`,
 "THYROID - Thyroiditis":`ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ __ x __ x __ mm [Normal: 40-60 x 10-20 mm], Volume __ cc [Normal: 4-10 cc] heterogeneous, Increased vascularity.
-
-LEFT LOBE:
-➢ __ x __ x __ mm [Normal: 40-60 x 10-20 mm], Volume __ cc [Normal: 4-10 cc] heterogeneous.
-
-ISTHMUS:
-➢ Thickened __ mm [Normal: <5 mm].
-
-CONCLUSION:
-➢ Thyroiditis.
-
-ADVICE:
-➢ TFTs, anti-TPO.
+RIGHT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous No nodule.
+LEFT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous.
+ISTHMUS: __ mm [Normal: <5 mm] normal.
+CONCLUSION: THYROID - Thyroiditis.
 `,
-
-"SCROTUM - Normal":`ULTRASOUND SCROTUM:
-
-RIGHT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] homogenous, Smooth outline, No focal lesion, No calcification, Tunica albuginea intact, Vascularity normal on Doppler.
-
-RIGHT EPIDIDYMIS:
-➢ Head __ mm [Normal: <10 mm], Body __ mm [Normal: <3 mm], Tail __ mm [Normal: <5 mm], Normal.
-
-LEFT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] homogenous, No focal lesion, Vascularity normal.
-
-LEFT EPIDIDYMIS:
-➢ Head __ mm [Normal: <10 mm], Body __ mm [Normal: <3 mm], Tail __ mm [Normal: <5 mm], Normal.
-
-SCROTAL WALL:
-➢ Normal __ mm [Normal: <5 mm] regular.
-
-HYDROCELE:
-➢ No hydrocele [Normal: No fluid].
-
-CONCLUSION:
-➢ Normal scrotal ultrasound.
-
-ADVICE:
-➢ No abnormality.
+"THYROID - Hyperthyroid Goiter":`ULTRASOUND THYROID:
+RIGHT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous No nodule.
+LEFT LOBE: Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] homogenous.
+ISTHMUS: __ mm [Normal: <5 mm] normal.
+CONCLUSION: THYROID - Hyperthyroid Goiter.
+`,"SCROTUM - Normal":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Normal.
 `,
-
 "SCROTUM - Hydrocele Right":`ULTRASOUND SCROTUM:
-
-RIGHT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] homogenous, Compressed by fluid, No focal lesion, Vascularity normal.
-
-RIGHT HEMISCROTUM:
-➢ Large anechoic fluid collection __ cc [Normal: No fluid] around testis - Hydrocele, Thin wall, No septations, No debris.
-
-LEFT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] normal homogenous.
-
-LEFT HEMISCROTUM:
-➢ No hydrocele [Normal: No fluid].
-
-CONCLUSION:
-➢ Right hydrocele __ cc with normal right testis, Left side normal.
-
-ADVICE:
-➢ Urology consultation.
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Hydrocele Right.
 `,
-
+"SCROTUM - Hydrocele Left":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Hydrocele Left.
+`,
 "SCROTUM - Hydrocele Bilateral":`ULTRASOUND SCROTUM:
-
-RIGHT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] homogenous, No focal lesion.
-
-RIGHT HEMISCROTUM:
-➢ Fluid __ cc [Normal: No fluid] around testis - Hydrocele.
-
-LEFT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] normal.
-
-LEFT HEMISCROTUM:
-➢ Fluid __ cc [Normal: No fluid] around testis - Hydrocele.
-
-SCROTAL WALL:
-➢ Normal __ mm [Normal: <5 mm].
-
-CONCLUSION:
-➢ Bilateral hydrocele right __ cc, left __ cc.
-
-ADVICE:
-➢ Urology consultation.
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Hydrocele Bilateral.
 `,
-
 "SCROTUM - Varicocele Left":`ULTRASOUND SCROTUM:
-
-RIGHT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] homogenous, Vascularity normal.
-
-LEFT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] / Slightly small __ cc.
-
-PAMPINIFORM PLEXUS LEFT:
-➢ Dilated tortuous veins largest __ mm [Normal: <2 mm] at rest, __ mm [Normal: <3 mm] on Valsalva, Reflux on Doppler on Valsalva, Grade 1/2/3 varicocele.
-
-RIGHT PAMPINIFORM PLEXUS:
-➢ Normal __ mm [Normal: <2 mm] not dilated, No reflux.
-
-EPIDIDYMIS:
-➢ Right Head __ mm [Normal: <10 mm] normal, Left Head __ mm [Normal: <10 mm] normal.
-
-HYDROCELE:
-➢ No hydrocele [Normal: No fluid].
-
-CONCLUSION:
-➢ Left varicocele Grade __ veins __ mm at rest __ mm on Valsalva with reflux.
-
-ADVICE:
-➢ Urology, semen analysis.
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Varicocele Left.
 `,
-
+"SCROTUM - Varicocele Right":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Varicocele Right.
+`,
+"SCROTUM - Varicocele Bilateral":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Varicocele Bilateral.
+`,
 "SCROTUM - Epididymitis Right":`ULTRASOUND SCROTUM:
-
-RIGHT TESTIS:
-➢ __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] normal.
-
-RIGHT EPIDIDYMIS:
-➢ Enlarged Head __ mm [Normal: <10 mm] __ mm, Body __ mm [Normal: <3 mm] __ mm, Heterogeneous, Increased vascularity.
-
-LEFT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 mm], Volume __ cc [Normal: 12-20 cc] normal.
-
-CONCLUSION:
-➢ Right epididymitis head __ mm.
-
-ADVICE:
-➢ Antibiotics, urology.
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Epididymitis Right.
 `,
-
-"TESTIS - Normal":`ULTRASOUND TESTIS:
-
-RIGHT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] ovoid homogenous, No focal lesion, No microlithiasis, Tunica albuginea intact, Vascularity normal low flow on Doppler.
-
-LEFT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] homogenous, No lesion, Vascularity normal.
-
-EPIDIDYMIS BOTH:
-➢ Head __ mm [Normal: <10 mm], Body __ mm [Normal: <3 mm], Tail __ mm [Normal: <5 mm] normal, No cyst.
-
-HYDROCELE:
-➢ No hydrocele [Normal: No fluid].
-
-CONCLUSION:
-➢ Both testes normal.
-
-ADVICE:
-➢ Normal study.
+"SCROTUM - Epididymitis Left":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Epididymitis Left.
 `,
-
+"SCROTUM - Epididymo-orchitis Right":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Epididymo-orchitis Right.
+`,
+"SCROTUM - Epididymo-orchitis Left":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Epididymo-orchitis Left.
+`,
+"SCROTUM - Orchitis":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Orchitis.
+`,
+"SCROTUM - Testicular Torsion":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: SCROTUM - Testicular Torsion.
+`,
+"TESTIS - Normal":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: TESTIS - Normal.
+`,
+"TESTIS - Microlithiasis":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: TESTIS - Microlithiasis.
+`,
+"TESTIS - Testicular Cyst":`ULTRASOUND SCROTUM:
+RIGHT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous No lesion.
+LEFT TESTIS: Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] homogenous.
+EPIDIDYMIS: Head __ mm [Normal: <10 mm] Body __ mm [Normal: <3 mm] Tail __ mm [Normal: <5 mm] normal.
+HYDROCELE: No hydrocele [Normal: No fluid].
+CONCLUSION: TESTIS - Testicular Cyst.
+`,
 "AXILLA - Normal":`ULTRASOUND AXILLA:
-
-RIGHT AXILLA:
-➢ No lymphadenopathy [Normal: <10 mm], No focal lesion, Fatty hilum preserved, Cortex __ mm [Normal: <3 mm].
-
-LEFT AXILLA:
-➢ No lymphadenopathy [Normal: <10 mm], Cortex __ mm [Normal: <3 mm], Hilum preserved.
-
-BREAST TAIL:
-➢ No extension, No mass.
-
-CONCLUSION:
-➢ Normal axilla - No lymphadenopathy.
-
-ADVICE:
-➢ No abnormality.
+RIGHT: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm] hilum preserved.
+LEFT: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: AXILLA - Normal.
 `,
-
 "AXILLA - Lymphadenopathy Reactive":`ULTRASOUND AXILLA:
-
-RIGHT AXILLA:
-➢ Enlarged lymph nodes largest __ x __ mm [Normal: <10 mm], Cortex __ mm [Normal: <3 mm] thickened, Hilum preserved, Vascularity present.
-
-LEFT AXILLA:
-➢ No lymphadenopathy [Normal: <10 mm] / Reactive nodes __ mm [Normal: <10 mm].
-
-CONCLUSION:
-➢ Reactive axillary lymphadenopathy __ mm.
-
-ADVICE:
-➢ Antibiotics, follow-up.
+RIGHT: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm] hilum preserved.
+LEFT: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: AXILLA - Lymphadenopathy Reactive.
+`,
+"AXILLA - Lymphadenopathy Left":`ULTRASOUND AXILLA:
+RIGHT: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm] hilum preserved.
+LEFT: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: AXILLA - Lymphadenopathy Left.
+`,
+"NECK - Normal":`ULTRASOUND NECK:
+RIGHT: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm] hilum preserved.
+LEFT: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: NECK - Normal.
+`,
+"NECK - Cervical Lymphadenopathy":`ULTRASOUND NECK:
+RIGHT: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm] hilum preserved.
+LEFT: No lymphadenopathy [Normal: <10 mm] Cortex __ mm [Normal: <3 mm].
+CONCLUSION: NECK - Cervical Lymphadenopathy.
+`,
+"ABDOMEN + PELVIS - Normal Male":`ULTRASOUND ABDOMEN + PELVIS:
+LIVER: Normal __ cm [Normal: <14 cm].
+GALL BLADDER: Normal wall __ mm [Normal: <3 mm] no calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm].
+SPLEEN: Normal __ cm [Normal: <12 cm].
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm].
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm].
+CONCLUSION: ABDOMEN + PELVIS - Normal Male.
+`,
+"ABDOMEN + PELVIS - Normal Female":`ULTRASOUND ABDOMEN + PELVIS:
+LIVER: Normal __ cm [Normal: <14 cm].
+GALL BLADDER: Normal wall __ mm [Normal: <3 mm] no calculus.
+PANCREAS: Normal Head __ mm [Normal: <30 mm].
+SPLEEN: Normal __ cm [Normal: <12 cm].
+RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm].
+LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm].
+BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm].
+CONCLUSION: ABDOMEN + PELVIS - Normal Female.
 `
 };
-
 let allTemplates=Object.keys(T);
-let fetalData={},editId=null,lastViewedId=null;
-function filterTemplates(){try{let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');if(!s)return;let cur=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(cur)){s.value=cur;}}catch(e){}}
-function cleanTemplateText(txt){try{let lines=txt.split('\n');let cleaned=lines.filter(l=>{let t=l.trim().toUpperCase();return!t.startsWith('C/O:')&&!t.startsWith('C/O :');});return cleaned.join('\n').trim();}catch(e){return txt;}}
-function useSelectedTemplate(){try{let sel=document.getElementById('uType');let v=sel?.value;if(!v){alert('Select template first');return;}let raw=T[v]||'';let cleaned=cleanTemplateText(raw);let rt=document.getElementById('rText');if(rt)rt.value=cleaned;checkFetal(false);autoSaveDraft();}catch(e){alert('Template error: '+e.message);}}
-function calcFWB(){try{let bpd=parseFloat(document.getElementById('cBPD')?.value)||0,hc=parseFloat(document.getElementById('cHC')?.value)||0,ac=parseFloat(document.getElementById('cAC')?.value)||0,fl=parseFloat(document.getElementById('cFL')?.value)||0,crl=parseFloat(document.getElementById('cCRL')?.value)||0,afi=parseFloat(document.getElementById('cAFI')?.value)||0;let gas=[];if(hc>0)gas.push(hc*0.111+5.5);if(ac>0)gas.push(ac*0.117+3.8);if(fl>0)gas.push(fl*0.4+9.5);if(crl>0)gas.push(crl*0.16+6.8);if(bpd>0)gas.push(bpd*0.33+4);let avg=gas.length?gas.reduce((a,b)=>a+b,0)/gas.length:0;let efw=0;if(hc>0&&ac>0&&fl>0){let log10=1.326-(0.00326*(ac/10)*(fl/10))+(0.0107*(hc/10))+(0.0438*(ac/10))+(0.158*(fl/10));efw=Math.pow(10,log10);}fetalData={ga:avg,efw:efw,hc,ac,fl,bpd,crl,afi};document.getElementById('resGA').innerText=avg?`GA: ${avg.toFixed(1)}w`:'GA: --';document.getElementById('resEFW').innerText=efw?`Wt: ${Math.round(efw)} gm`:'Wt: --';document.getElementById('resEDD').innerText=avg?`EDD: ${new Date(Date.now()+(40-avg)*7*24*3600*1000).toLocaleDateString()}`:'EDD: --';}catch(e){}}
-function applyCalc(){try{let rt=document.getElementById('rText');if(!rt)return;let txt=rt.value;txt=txt.replace(/HC: __ mm/g,`HC: ${fetalData.hc} mm`);txt=txt.replace(/AC: __ mm/g,`AC: ${fetalData.ac} mm`);txt=txt.replace(/FL: __ mm/g,`FL: ${fetalData.fl} mm`);txt=txt.replace(/BPD: __ mm/g,`BPD: ${fetalData.bpd} mm`);document.getElementById('rText').value=txt;autoSaveDraft();}catch(e){}}
-function init(){try{let s=document.getElementById('uType');if(s){s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate');if(pd)pd.valueAsDate=new Date();let tc=document.getElementById('templateCount');if(tc)tc.innerText=allTemplates.length+' Templates';loadDraft();checkFetal(true);render();}catch(e){}}
-function checkFetal(){try{let sel=document.getElementById('uType');let v=sel?.value||allTemplates[0];let isFWB=v.toLowerCase().includes('fwb')||v.toLowerCase().includes('pregnancy');let isProstate=v.toLowerCase().includes('prostate');document.getElementById('fetalCalc').style.display=isFWB?'block':'none';document.getElementById('prostateCalc').style.display=isProstate?'block':'none';let d=getDiagramForType(v);let wm=document.getElementById('diagramWM');if(wm){wm.style.backgroundImage=`url("${d}")`;wm.style.display='block';}}catch(e){}}
-function formatReportToHTML(text){let lines=text.split('\n');let html='';let inConclusion=false;let inAdvice=false;lines.forEach(line=>{let l=line.trim();if(!l){html+='<div style="height:5px"></div>';return;}let clean=l.replace(/\[Normal:[^\]]*\]/gi,'').trim();if(!clean)return;if(clean.toUpperCase().startsWith('C/O:')){html+=`<div style="margin-bottom:8px"><b><i>${clean}</i></b></div>`;return;}if(clean.toUpperCase().startsWith('ULTRASOUND')){html+=`<div style="text-align:center;margin:10px 0;font-weight:900;text-decoration:underline">${clean}</div>`;return;}if(clean.toUpperCase().startsWith('CONCLUSION:')||clean.toUpperCase().startsWith('IMPRESSION:')){inConclusion=true;inAdvice=false;html+=`<div style="margin-top:16px"><b><u>${clean.split(':')[0]}:</u></b> <b>${clean.split(':').slice(1).join(':')}</b></div>`;return;}if(clean.toUpperCase().startsWith('ADVICE:')){inAdvice=true;inConclusion=false;html+=`<div style="margin-top:14px"><b><u>ADVICE:</u></b> <b>${clean.replace(/ADVICE:/i,'')}</b></div>`;return;}if(clean.endsWith(':')&&!clean.startsWith('➢')&&clean.length<80){html+=`<div style="margin:9px 0 3px 0"><b><u>${clean}</u></b></div>`;return;}html+=`<div style="margin:3px 0 3px 16px"><i>➢ ${clean.replace('➢','').trim()}</i></div>`;});return html;}
-function make(){let pn=document.getElementById('pName');if(!pn?.value){alert('Enter Patient Name');return;}let d=getDiagramForType(document.getElementById('uType')?.value);let wm=document.getElementById('diagramWM');if(wm){wm.style.backgroundImage=`url("${d}")`;wm.style.display='block';}let pid=document.getElementById('pIDMobile')?.value||'__';let complaintText=(document.getElementById('pComplaint')?.value||'').trim();let patientBorder=`<div style="border:1.5px solid #000;padding:8px 10px;margin-bottom:12px"><div><b>Name:</b> ${document.getElementById('pName').value} | <b>Age:</b> ${document.getElementById('pAge').value} | <b>Sex:</b> ${document.getElementById('pGen').value} | <b>Date:</b> ${document.getElementById('pDate').value} | <b>ID/Mobile:</b> ${pid}</div><div><b>Ref By:</b> ${document.getElementById('ref').value} | <b>Sonologist:</b> ${document.getElementById('sono').value}</div></div>`;let bodyHTML=formatReportToHTML(document.getElementById('rText').value);if(complaintText){bodyHTML=`<div style="margin-bottom:10px"><b><i>C/O: ${complaintText}</i></b></div>`+bodyHTML;}let footer=`<div style="margin-top:24px;text-align:center;font-size:11px"><i>This is computer generated report no signature required.</i></div>`;let rc=document.getElementById('reportContent');if(rc)rc.innerHTML=patientBorder+bodyHTML+footer;let oc=document.getElementById('outCard');if(oc)oc.style.display='block';}
-function autoSaveDraft(){try{let draft={name:document.getElementById('pName')?.value||'',age:document.getElementById('pAge')?.value||'',gen:document.getElementById('pGen')?.value||'',mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',ref:document.getElementById('ref')?.value||'',sono:document.getElementById('sono')?.value||'',text:document.getElementById('rText')?.value||'',complaint:document.getElementById('pComplaint')?.value||''};localStorage.setItem('azam_draft',JSON.stringify(draft));}catch(e){}}
-function loadDraft(){try{let d=localStorage.getItem('azam_draft');if(!d)return;let draft=JSON.parse(d);if(draft.name)document.getElementById('pName').value=draft.name;if(draft.age)document.getElementById('pAge').value=draft.age;if(draft.gen)document.getElementById('pGen').value=draft.gen;if(draft.mobile)document.getElementById('pIDMobile').value=draft.mobile;if(draft.type)document.getElementById('uType').value=draft.type;if(draft.date)document.getElementById('pDate').value=draft.date;if(draft.ref)document.getElementById('ref').value=draft.ref;if(draft.sono)document.getElementById('sono').value=draft.sono;if(draft.text)document.getElementById('rText').value=draft.text;if(draft.complaint)document.getElementById('pComplaint').value=draft.complaint;}catch(e){}}
-function clearDraft(){if(confirm('Clear draft?')){localStorage.removeItem('azam_draft');location.reload();}}
-function saveR(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let rec={id:Date.now(),name:document.getElementById('pName')?.value||'',age:document.getElementById('pAge')?.value||'',gen:document.getElementById('pGen')?.value||'',mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',ref:document.getElementById('ref')?.value||'',sono:document.getElementById('sono')?.value||'',text:document.getElementById('rText')?.value||'',complaint:document.getElementById('pComplaint')?.value||'',html:document.getElementById('reportContent')?.innerHTML||''};all.unshift(rec);localStorage.setItem('azam_reports',JSON.stringify(all));render();alert('Saved! Uploading...');setTimeout(()=>{uploadToDriveFile(`Azam_Medical_Backup_ALL.json`,JSON.stringify(all));},500);}
-function render(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let q=(document.getElementById('sBox')?.value||'').toLowerCase();let listEl=document.getElementById('list');if(!listEl)return;let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')).toLowerCase().includes(q));if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:20px">No reports. Click Load from Drive.</p>';return;}listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between"><div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}</small></div><div><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}
+function filterTemplates(){let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');if(!s)return;let cur=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(cur)){s.value=cur;}}
+function useSelectedTemplate(){let v=document.getElementById('uType')?.value;if(!v){alert('Select template');return;}document.getElementById('rText').value=T[v]||'';let d=getDiagramForType(v);let wm=document.getElementById('diagramWM');if(wm){wm.style.backgroundImage=`url("${d}")`;wm.style.display='block';}}
+function formatReportToHTML(text){let lines=text.split('\n');let html='';lines.forEach(line=>{let l=line.trim();if(!l){html+='<div style="height:5px"></div>';return;}let clean=l.replace(/\[Normal:[^\]]*\]/gi,'').trim();if(!clean)return;if(clean.toUpperCase().startsWith('ULTRASOUND')){html+=`<div style="text-align:center;margin:10px 0;font-weight:900;text-decoration:underline">${clean}</div>`;return;}if(clean.toUpperCase().startsWith('CONCLUSION:')){html+=`<div style="margin-top:16px"><b><u>CONCLUSION:</u></b> <b>${clean.replace(/CONCLUSION:/i,'')}</b></div>`;return;}if(clean.toUpperCase().startsWith('ADVICE:')){html+=`<div style="margin-top:14px"><b><u>ADVICE:</u></b> <b>${clean.replace(/ADVICE:/i,'')}</b></div>`;return;}html+=`<div style="margin:3px 0 3px 16px"><i>➢ ${clean.replace('➢','').trim()}</i></div>`;});return html;}
+function make(){let pn=document.getElementById('pName');if(!pn?.value){alert('Enter Patient Name');return;}let d=getDiagramForType(document.getElementById('uType')?.value);let wm=document.getElementById('diagramWM');if(wm){wm.style.backgroundImage=`url("${d}")`;wm.style.display='block';}let pid=document.getElementById('pIDMobile')?.value||'__';let complaintText=(document.getElementById('pComplaint')?.value||'').trim();let patientBorder=`<div style="border:1.5px solid #000;padding:8px 10px;margin-bottom:12px"><div><b>Name:</b> ${document.getElementById('pName').value} | <b>Age:</b> ${document.getElementById('pAge').value} | <b>Sex:</b> ${document.getElementById('pGen').value} | <b>Date:</b> ${document.getElementById('pDate').value} | <b>ID/Mobile:</b> ${pid}</div><div><b>Ref By:</b> ${document.getElementById('ref').value} | <b>Sonologist:</b> ${document.getElementById('sono').value}</div></div>`;let bodyHTML=formatReportToHTML(document.getElementById('rText').value);if(complaintText){bodyHTML=`<div style="margin-bottom:10px"><b><i>C/O: ${complaintText}</i></b></div>`+bodyHTML;}let footer=`<div style="margin-top:24px;text-align:center;font-size:11px"><i>This is computer generated report no signature required.</i></div>`;document.getElementById('reportContent').innerHTML=patientBorder+bodyHTML+footer;document.getElementById('outCard').style.display='block';}
+function saveR(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let rec={id:Date.now(),name:document.getElementById('pName')?.value||'',age:document.getElementById('pAge')?.value||'',gen:document.getElementById('pGen')?.value||'',mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',ref:document.getElementById('ref')?.value||'',sono:document.getElementById('sono')?.value||'',text:document.getElementById('rText')?.value||'',complaint:document.getElementById('pComplaint')?.value||'',html:document.getElementById('reportContent')?.innerHTML||''};all.unshift(rec);localStorage.setItem('azam_reports',JSON.stringify(all));render();alert('Saved');}
+function render(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let q=(document.getElementById('sBox')?.value||'').toLowerCase();let listEl=document.getElementById('list');if(!listEl)return;let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')).toLowerCase().includes(q));if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:20px">No reports</p>';return;}listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:10px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between"><div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}</small></div><div><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}
 function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('pName').value=r.name;document.getElementById('pAge').value=r.age;document.getElementById('pGen').value=r.gen;document.getElementById('pIDMobile').value=r.mobile;document.getElementById('uType').value=r.type;document.getElementById('pDate').value=r.date;document.getElementById('ref').value=r.ref;document.getElementById('sono').value=r.sono;document.getElementById('rText').value=r.text;document.getElementById('pComplaint').value=r.complaint;make();}
 function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();}
-function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[190,280]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:document.getElementById('rText').value;doc.text(doc.splitTextToSize(txt,165),10,45);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}
-function beforePrintClean(){document.title=' ';setTimeout(()=>{window.print();},100);}
+function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[190,280]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:document.getElementById('rText').value;doc.text(doc.splitTextToSize(txt,165),10,10);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}
+function init(){let s=document.getElementById('uType');if(s){s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate');if(pd)pd.valueAsDate=new Date();let tc=document.getElementById('templateCount');if(tc)tc.innerText=allTemplates.length+' Templates';render();}
 init();
-</script></body></html>"KUB - Staghorn Calculus Left":`ULTRASOUND KUB:
-LEFT KIDNEY:
-➢ Staghorn calculus __ mm [Normal: No calculus] filling pelvis and calyces with shadowing, Cortex __ mm [Normal: >6 mm], Mild hydronephrosis pelvis __ mm [Normal: <10 mm].
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm], CMD intact, No calculus.
-BLADDER: Normal __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm].
-PROSTATE: Normal __ gm [Normal: 20-25 gm].
-CONCLUSION: Staghorn calculus left __ mm.
-`,
-
-"KUB - Microliths Right":`ULTRASOUND KUB:
-RIGHT KIDNEY: Microliths __ mm [Normal: No calculus] tiny foci without shadowing, Cortex __ mm [Normal: >6 mm], CMD intact, No hydronephrosis.
-LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-CONCLUSION: Right renal microlithiasis.
-`,
-
-"KUB - Hydronephrosis Severe Right":`ULTRASOUND KUB:
-RIGHT KIDNEY: Severe hydronephrosis pelvis __ mm [Normal: <10 mm] markedly dilated, Calyces ballooned, Cortex thinned __ mm [Normal: >6 mm].
-LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-CONCLUSION: Severe right hydronephrosis.
-`,
-
-"KUB - Hydronephrosis Mild Left":`ULTRASOUND KUB:
-LEFT KIDNEY: Mild hydronephrosis pelvis __ mm [Normal: <10 mm] dilated, Cortex __ mm [Normal: >6 mm] preserved, CMD intact.
-RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm], Cortex __ mm [Normal: >6 mm].
-CONCLUSION: Mild left hydronephrosis pelvis __ mm.
-`,
-
-"KUB - Hydronephrosis Moderate Left":`ULTRASOUND KUB:
-LEFT KIDNEY: Moderate hydronephrosis pelvis __ mm [Normal: <10 mm] calyces dilated blunted, Cortex __ mm [Normal: >6 mm] preserved.
-RIGHT KIDNEY: Normal.
-CONCLUSION: Moderate left hydronephrosis.
-`,
-
-"KUB - Hydronephrosis Severe Left":`ULTRASOUND KUB:
-LEFT KIDNEY: Severe hydronephrosis pelvis __ mm [Normal: <10 mm] ballooned, Cortex thinned __ mm [Normal: >6 mm].
-RIGHT KIDNEY: Normal.
-CONCLUSION: Severe left hydronephrosis.
-`,
-
-"KUB - Hydronephrosis Bilateral Mild":`ULTRASOUND KUB:
-RIGHT KIDNEY: Mild hydronephrosis pelvis __ mm [Normal: <10 mm] Cortex __ mm [Normal: >6 mm].
-LEFT KIDNEY: Mild hydronephrosis pelvis __ mm [Normal: <10 mm] Cortex __ mm [Normal: >6 mm].
-CONCLUSION: Bilateral mild hydronephrosis.
-`,
-
-"KUB - Hydronephrosis Bilateral Moderate":`ULTRASOUND KUB:
-RIGHT KIDNEY: Moderate hydronephrosis pelvis __ mm [Normal: <10 mm] Cortex __ mm [Normal: >6 mm].
-LEFT KIDNEY: Moderate hydronephrosis pelvis __ mm [Normal: <10 mm] Cortex __ mm [Normal: >6 mm].
-CONCLUSION: Bilateral moderate hydronephrosis.
-`,
-
-"KUB - Hydroureteronephrosis Left":`ULTRASOUND KUB:
-LEFT KIDNEY: Moderate hydronephrosis pelvis __ mm [Normal: <10 mm] Ureter dilated __ mm [Normal: <4 mm] down to VUJ.
-RIGHT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm].
-CONCLUSION: Left hydroureteronephrosis ureter __ mm.
-`,
-
-"KUB - Hydroureteronephrosis Bilateral":`ULTRASOUND KUB:
-RIGHT KIDNEY: Hydronephrosis pelvis __ mm [Normal: <10 mm] Ureter __ mm [Normal: <4 mm] dilated.
-LEFT KIDNEY: Hydronephrosis pelvis __ mm [Normal: <10 mm] Ureter __ mm [Normal: <4 mm] dilated.
-CONCLUSION: Bilateral hydroureteronephrosis.
-`,
-
-"KUB - Ureteric Calculus Left with Hydronephrosis":`ULTRASOUND KUB:
-LEFT KIDNEY: Hydronephrosis pelvis __ mm [Normal: <10 mm] Ureter __ mm [Normal: <4 mm] dilated Calculus __ mm [Normal: No calculus] left lower ureter.
-RIGHT KIDNEY: Normal.
-CONCLUSION: Left ureteric calculus __ mm with hydronephrosis.
-`,
-
-"KUB - PUJ Obstruction Right":`ULTRASOUND KUB:
-RIGHT KIDNEY: Hydronephrosis pelvis __ mm [Normal: <10 mm] PUJ narrowing Ureter not dilated __ mm [Normal: <4 mm] Cortex __ mm [Normal: >6 mm].
-LEFT KIDNEY: Normal.
-CONCLUSION: PUJ obstruction right pelvis __ mm.
-`,
-
-"KUB - PUJ Obstruction Left":`ULTRASOUND KUB:
-LEFT KIDNEY: Hydronephrosis pelvis __ mm [Normal: <10 mm] PUJ narrowing Ureter not dilated __ mm [Normal: <4 mm].
-RIGHT KIDNEY: Normal.
-CONCLUSION: PUJ obstruction left.
-`,
-
-"KUB - Parenchymal Changes Grade 3":`ULTRASOUND KUB:
-RIGHT KIDNEY: Small __ x __ cm [Normal: 9-12 cm] Grade 3 increased echogenicity [Normal: Grade 0] CMD lost Cortex thinned __ mm [Normal: >6 mm].
-LEFT KIDNEY: Small __ x __ cm [Normal: 9-12 cm] Grade 3 CMD lost Cortex __ mm [Normal: >6 mm].
-CONCLUSION: Grade 3 parenchymal changes CKD.
-`,
-
-"KUB - Complex Cyst Right":`ULTRASOUND KUB:
-RIGHT KIDNEY: Complex cyst __ x __ mm [Normal: No cyst] with septations debris vascularity __.
-LEFT KIDNEY: Normal.
-CONCLUSION: Right complex cyst __ mm.
-`,
-
-"KUB - Complex Cyst Left":`ULTRASOUND KUB:
-LEFT KIDNEY: Complex cyst __ x __ mm [Normal: No cyst] with septations.
-RIGHT KIDNEY: Normal.
-CONCLUSION: Left complex cyst __ mm.
-`,
-
-"KUB - Polycystic Kidneys":`ULTRASOUND KUB:
-RIGHT KIDNEY: Enlarged __ x __ cm [Normal: 9-12 cm] Multiple cysts largest __ x __ mm [Normal: No cyst] Cortex __ mm [Normal: >6 mm].
-LEFT KIDNEY: Enlarged __ x __ cm [Normal: 9-12 cm] Multiple cysts largest __ x __ mm [Normal: No cyst].
-CONCLUSION: Bilateral polycystic kidneys.
-`,
-
-"KUB - Bladder Diverticulum":`ULTRASOUND KUB:
-BLADDER: Diverticulum __ x __ mm [Normal: No diverticulum] at wall Wall __ mm [Normal: <3 mm] Lumen clear.
-CONCLUSION: Bladder diverticulum __ mm.
-`,
-
-"KUB - Bladder Mass":`ULTRASOUND KUB:
-BLADDER: Mass __ x __ mm [Normal: No mass] at wall vascular Wall __ mm [Normal: <3 mm].
-RIGHT KIDNEY: Normal.
-LEFT KIDNEY: Normal.
-CONCLUSION: Bladder mass __ mm.
-`,
-
-"KUB - Ectopic Kidney Right":`ULTRASOUND KUB:
-RIGHT KIDNEY: Ectopic pelvic location __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
-LEFT KIDNEY: Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm].
-CONCLUSION: Right ectopic pelvic kidney.
-`,
-
-"KUB + PROSTATE - BPH with Cystitis":`ULTRASOUND KUB + PROSTATE:
-PROSTATE: Enlarged __ gm [Normal: 20-25 gm] BPH median lobe hypertrophy.
-BLADDER: Wall thickened __ mm [Normal: <3 mm] irregular debris __ cc [Normal: Clear].
-KIDNEYS: Right __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] normal. Left __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] normal.
-CONCLUSION: BPH prostate __ gm with cystitis wall __ mm.
-`,
-
-"KUB + PROSTATE - Prostatitis":`ULTRASOUND KUB + PROSTATE:
-PROSTATE: Enlarged __ x __ x __ cm __ gm [Normal: 20-25 gm] heterogeneous increased vascularity tender.
-BLADDER: Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm].
-KIDNEYS: Normal.
-CONCLUSION: Prostatitis prostate __ gm.
-`,
-
-"KUB + PROSTATE - Prostate Calcification":`ULTRASOUND KUB + PROSTATE:
-PROSTATE: Normal size __ gm [Normal: 20-25 gm] with calcifications __ mm [Normal: No calcification] homogenous capsule intact.
-CONCLUSION: Prostate calcifications.
-`,
-
-"PELVIS - Fibroid Submucosal":`ULTRASOUND PELVIS:
-UTERUS: Bulky __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Submucosal fibroid __ x __ mm [Normal: No fibroid] indenting endometrium Endometrium __ mm [Normal: 6-12 mm].
-OVARIES: Right __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal. Left __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal.
-CONCLUSION: Submucosal fibroid __ mm.
-`,
-
-"PELVIS - Multiple Fibroids":`ULTRASOUND PELVIS:
-UTERUS: Bulky __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Multiple fibroids largest __ x __ mm [Normal: No fibroid] heterogeneous Endometrium __ mm [Normal: 6-12 mm].
-OVARIES: Normal.
-CONCLUSION: Multiple uterine fibroids largest __ mm.
-`,
-
-"PELVIS - Ovarian Cyst Simple Left":`ULTRASOUND PELVIS:
-UTERUS: Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm] normal.
-OVARIES: Left simple cyst __ x __ mm [Normal: No cyst] thin-walled Volume __ cc [Normal: <10 cc] Right normal __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc].
-CONCLUSION: Left simple ovarian cyst __ mm.
-`,
-
-"PELVIS - Ovarian Cyst Bilateral":`ULTRASOUND PELVIS:
-OVARIES: Right cyst __ x __ mm [Normal: No cyst] Left cyst __ x __ mm [Normal: No cyst].
-UTERUS: Normal __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm].
-CONCLUSION: Bilateral simple ovarian cysts.
-`,
-
-"PELVIS - Dermoid Cyst":`ULTRASOUND PELVIS:
-OVARIES: Dermoid __ x __ mm [Normal: No cyst] with fat calcification hair Rokitansky nodule.
-UTERUS: Normal.
-CONCLUSION: Dermoid cyst __ mm.
-`,
-
-"PELVIS - Free Fluid POD":`ULTRASOUND PELVIS:
-POD: Free fluid __ cc [Normal: No fluid] anechoic.
-UTERUS: Normal __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] Endometrium __ mm [Normal: 6-12 mm].
-OVARIES: Normal.
-CONCLUSION: Free fluid in POD __ cc.
-`,
-
-"PELVIS - Early Pregnancy":`ULTRASOUND PELVIS:
-UTERUS: Gestational sac __ mm [Normal: __ mm] CRL __ mm [Normal: __ mm] __ weeks cardiac activity present FHR __ bpm [Normal: 120-160 bpm] Yolk sac present.
-OVARIES: Right corpus luteum __ x __ mm [Normal: No cyst].
-CONCLUSION: Early intrauterine pregnancy __ weeks."FWB - Polyhydramnios":`ULTRASOUND FWB:
-AMNIOTIC FLUID:
-➢ AFI __ mm [Normal: 80-180 mm] increased __ mm polyhydramnios, Deepest pocket __ mm [Normal: 20-80 mm] increased.
-GRAVID UTERUS:
-➢ Single live fetus cephalic, FHR __ bpm [Normal: 120-160 bpm] regular, EFW __ gm [Normal: __ gm], GA __ weeks.
-PLACENTA:
-➢ Anterior / Posterior upper Grade __ [Normal: Grade 0-2], No low lying.
-CERVIX:
-➢ Length __ mm [Normal: >25 mm] closed.
-CONCLUSION:
-➢ Polyhydramnios AFI __ mm with single live __ weeks.
-ADVICE:
-➢ Obstetric consultation, GTT, anomaly scan.
-`,
-
-"FWB - Early Pregnancy 6-8 Weeks":`ULTRASOUND FWB:
-GESTATIONAL SAC:
-➢ Single sac __ mm [Normal: __ mm for GA] intrauterine, Yolk sac present, CRL __ mm [Normal: __ mm] __ weeks __ days, Cardiac activity present FHR __ bpm [Normal: 120-160 bpm] regular.
-UTERUS:
-➢ Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm], Endometrium __ mm [Normal: 6-12 mm], No fibroid, No free fluid.
-OVARIES:
-➢ Right corpus luteum __ x __ mm [Normal: No cyst], Left normal.
-CONCLUSION:
-➢ Early single live intrauterine pregnancy __ weeks __ days CRL __ mm.
-ADVICE:
-➢ Folic acid, ANC.
-`,
-
-"FWB - Anomaly Scan Normal":`ULTRASOUND FWB:
-GRAVID UTERUS:
-➢ Single live fetus cephalic, FHR __ bpm [Normal: 120-160 bpm] regular, No gross anomaly seen at this GA, Spine intact, Head normal, Abdomen normal, Limbs normal.
-FETAL BIOMETRY:
-➢ BPD __ mm [Normal: __ mm], HC __ mm [Normal: __ mm], AC __ mm [Normal: __ mm], FL __ mm [Normal: __ mm], EFW __ gm [Normal: __ gm], GA __ weeks.
-PLACENTA:
-➢ Anterior / Posterior upper Grade __ [Normal: Grade 1-2], No low lying, No retroplacental bleed.
-AMNIOTIC FLUID:
-➢ AFI __ mm [Normal: 80-180 mm] adequate.
-CERVIX:
-➢ Length __ mm [Normal: >25 mm] closed, Internal os closed.
-CONCLUSION:
-➢ Anomaly scan normal __ weeks, Single live cephalic, No gross anomaly.
-ADVICE:
-➢ Regular ANC.
-`,
-
-"FWB - Placenta Previa":`ULTRASOUND FWB:
-PLACENTA:
-➢ Low lying __ mm [Normal: >20 mm from os] from internal os, Anterior / Posterior, Grade __ [Normal: Grade 0-2], Covering os partially / completely, No retroplacental bleed.
-GRAVID UTERUS:
-➢ Single live fetus cephalic / breech, FHR __ bpm [Normal: 120-160 bpm] regular, EFW __ gm [Normal: __ gm], GA __ weeks.
-AMNIOTIC FLUID:
-➢ AFI __ mm [Normal: 80-180 mm] adequate.
-CERVIX:
-➢ Length __ mm [Normal: >25 mm].
-CONCLUSION:
-➢ Low lying placenta previa __ mm from os, Single live __ weeks.
-ADVICE:
-➢ Bed rest, avoid intercourse, obstetric consultation.
-`,
-
-"FWB - Placental Abruption":`ULTRASOUND FWB:
-PLACENTA:
-➢ Anterior / Posterior upper Grade __ [Normal: Grade 0-2], Retroplacental hematoma __ x __ mm [Normal: No bleed] __ cc, No low lying.
-GRAVID UTERUS:
-➢ Single live fetus FHR __ bpm [Normal: 120-160 bpm] regular / bradycardia, EFW __ gm [Normal: __ gm], GA __ weeks.
-AMNIOTIC FLUID:
-➢ AFI __ mm [Normal: 80-180 mm].
-CONCLUSION:
-➢ Retroplacental hematoma __ mm abruption with single live __ weeks.
-ADVICE:
-➢ Urgent obstetric admission.
-`,
-
-"BREAST - Breast Cysts Multiple":`ULTRASOUND BREAST:
-RIGHT BREAST:
-➢ Multiple simple cysts largest __ x __ mm [Normal: No cyst] thin-walled anechoic posterior enhancement, No septations, No vascularity, No mass.
-LEFT BREAST:
-➢ Multiple cysts largest __ x __ mm [Normal: No cyst] simple.
-AXILLA BOTH:
-➢ No lymphadenopathy [Normal: <10 mm], Cortex __ mm [Normal: <3 mm], Hilum preserved.
-CONCLUSION:
-➢ Bilateral multiple breast cysts largest __ mm right, __ mm left.
-ADVICE:
-➢ Benign, follow-up.
-`,
-
-"BREAST - Fibrocystic Disease":`ULTRASOUND BREAST:
-RIGHT BREAST:
-➢ Heterogeneous fibroglandular pattern with multiple small cysts __ mm [Normal: No cyst] and solid areas, No dominant mass, No calcification.
-LEFT BREAST:
-➢ Fibrocystic pattern with small cysts __ mm [Normal: No cyst].
-AXILLA BOTH:
-➢ No lymphadenopathy [Normal: <10 mm].
-CONCLUSION:
-➢ Fibrocystic disease both breasts.
-ADVICE:
-➢ Benign, follow-up.
-`,
-
-"BREAST - Mastitis":`ULTRASOUND BREAST:
-RIGHT BREAST:
-➢ Edematous thickened skin __ mm [Normal: <2 mm], Increased echogenicity, Increased vascularity, No collection, Axillary nodes reactive __ x __ mm [Normal: <10 mm].
-LEFT BREAST:
-➢ Normal.
-CONCLUSION:
-➢ Mastitis right breast skin __ mm.
-ADVICE:
-➢ Antibiotics, follow-up.
-`,
-
-"BREAST - Breast Abscess":`ULTRASOUND BREAST:
-RIGHT BREAST:
-➢ Heterogeneous collection __ x __ mm [Normal: No collection] with internal debris, Thick wall, Peripheral vascularity, Edema around.
-LEFT BREAST:
-➢ Normal.
-AXILLA BOTH:
-➢ Reactive nodes __ mm [Normal: <10 mm].
-CONCLUSION:
-➢ Breast abscess __ mm right breast.
-ADVICE:
-➢ Urgent surgical consultation.
-`,
-
-"BREAST - Gynecomastia":`ULTRASOUND BREAST:
-BOTH BREASTS:
-➢ Gynecomastia __ x __ mm [Normal: No lesion] retroareolar hypoechoic glandular tissue, No mass, No cyst.
-AXILLA:
-➢ No lymphadenopathy [Normal: <10 mm].
-CONCLUSION:
-➢ Gynecomastia __ mm.
-ADVICE:
-➢ Hormonal profile.
-`,
-
-"BREAST - Suspicious Mass":`ULTRASOUND BREAST:
-RIGHT BREAST:
-➢ Irregular hypoechoic mass __ x __ mm [Normal: No lesion] at __ o'clock __ cm from nipple, Spiculated margins, Posterior shadowing, Microcalcifications __, Vascularity increased.
-LEFT BREAST:
-➢ Normal.
-AXILLA:
-➢ Lymph node __ x __ mm [Normal: <10 mm] cortex __ mm [Normal: <3 mm] thickened suspicious.
-CONCLUSION:
-➢ Suspicious mass right breast __ mm BIRADS 4c/5 - Axillary lymphadenopathy __ mm.
-ADVICE:
-➢ Urgent FNAC / biopsy, oncology consultation.
-`,
-
-"THYROID - Thyroid Cyst Left":`ULTRASOUND THYROID:
-LEFT LOBE:
-➢ Simple anechoic thin-walled cyst __ x __ mm [Normal: No cyst] with posterior enhancement, No septations, No vascularity, No calcification, Volume __ cc [Normal: 4-10 cc] normal.
-RIGHT LOBE:
-➢ Normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm], Volume __ cc [Normal: 4-10 cc] homogenous, No nodule.
-ISTHMUS:
-➢ __ mm [Normal: <5 mm] normal.
-CONCLUSION:
-➢ Left thyroid simple cyst __ mm.
-ADVICE:
-➢ Benign, follow-up.
-`,
-
-"THYROID - Thyroiditis":`ULTRASOUND THYROID:
-RIGHT LOBE:
-➢ Enlarged __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm], Volume __ cc [Normal: 4-10 cc] heterogeneous hypoechoic, Increased vascularity on Doppler.
-LEFT LOBE:
-➢ Enlarged __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm], Volume __ cc [Normal: 4-10 cc] heterogeneous.
-ISTHMUS:
-➢ Thickened __ mm [Normal: <5 mm] heterogeneous.
-NECK:
-➢ No lymphadenopathy [Normal: No nodes] / Reactive nodes __ mm [Normal: <10 mm].
-CONCLUSION:
-➢ Thyroiditis both lobes heterogeneous increased vascularity.
-ADVICE:
-➢ TFTs, anti-TPO, follow-up.
-`,
-
-"THYROID - Hyperthyroid Goiter":`ULTRASOUND THYROID:
-BOTH LOBES:
-➢ Enlarged Right __ x __ x __ mm [Normal: 40-60 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] Left __ x __ x __ mm [Normal: 40-60 x 10-20 mm] Volume __ cc [Normal: 4-10 cc] heterogeneous, Markedly increased vascularity on Doppler - thyroid inferno.
-ISTHMUS:
-➢ Thickened __ mm [Normal: <5 mm].
-CONCLUSION:
-➢ Diffuse goiter with hypervascularity - Graves / thyroiditis.
-ADVICE:
-➢ TFTs, TRAb.
-`,
-
-"SCROTUM - Varicocele Right":`ULTRASOUND SCROTUM:
-RIGHT PAMPINIFORM PLEXUS:
-➢ Dilated tortuous veins largest __ mm [Normal: <2 mm] at rest, __ mm [Normal: <3 mm] on Valsalva, Reflux present on Doppler on Valsalva, Grade __ varicocele.
-LEFT PAMPINIFORM PLEXUS:
-➢ Normal __ mm [Normal: <2 mm] not dilated, No reflux.
-RIGHT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] homogenous, Vascularity normal.
-LEFT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] homogenous.
-CONCLUSION:
-➢ Right varicocele Grade __ veins __ mm at rest __ mm on Valsalva with reflux.
-ADVICE:
-➢ Urology, semen analysis.
-`,
-
-"SCROTUM - Varicocele Bilateral":`ULTRASOUND SCROTUM:
-RIGHT PAMPINIFORM PLEXUS:
-➢ Dilated veins __ mm [Normal: <2 mm] at rest __ mm [Normal: <3 mm] on Valsalva with reflux.
-LEFT PAMPINIFORM PLEXUS:
-➢ Dilated veins __ mm [Normal: <2 mm] at rest __ mm [Normal: <3 mm] on Valsalva with reflux.
-BOTH TESTES:
-➢ Right __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] normal, Left __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm] Volume __ cc [Normal: 12-20 cc] normal.
-CONCLUSION:
-➢ Bilateral varicocele right __ mm left __ mm with reflux.
-ADVICE:
-➢ Urology, semen analysis.
-`,
-
-"SCROTUM - Epididymo-orchitis Right":`ULTRASOUND SCROTUM:
-RIGHT TESTIS:
-➢ Enlarged __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] __ cc enlarged, Heterogeneous hypoechoic, Increased vascularity on Doppler.
-RIGHT EPIDIDYMIS:
-➢ Enlarged Head __ mm [Normal: <10 mm] __ mm Body __ mm [Normal: <3 mm] __ mm Tail __ mm [Normal: <5 mm] __ mm heterogeneous increased vascularity.
-LEFT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] homogenous.
-CONCLUSION:
-➢ Right epididymo-orchitis testis __ mm epididymis head __ mm.
-ADVICE:
-➢ Antibiotics, scrotal support, urology.
-`,
-
-"SCROTUM - Epididymo-orchitis Left":`ULTRASOUND SCROTUM:
-LEFT TESTIS:
-➢ Enlarged __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] enlarged heterogeneous increased vascularity.
-LEFT EPIDIDYMIS:
-➢ Enlarged Head __ mm [Normal: <10 mm] __ mm heterogeneous increased vascularity.
-RIGHT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] normal.
-CONCLUSION:
-➢ Left epididymo-orchitis.
-ADVICE:
-➢ Antibiotics, urology.
-`,
-
-"SCROTUM - Orchitis":`ULTRASOUND SCROTUM:
-RIGHT TESTIS:
-➢ Enlarged __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] enlarged heterogeneous increased vascularity.
-LEFT TESTIS:
-➢ Normal / Enlarged __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc].
-EPIDIDYMIS BOTH:
-➢ Right Head __ mm [Normal: <10 mm] normal, Left Head __ mm [Normal: <10 mm] normal / enlarged.
-CONCLUSION:
-➢ Orchitis right / left / bilateral.
-ADVICE:
-➢ Antibiotics, urology.
-`,
-
-"SCROTUM - Testicular Torsion":`ULTRASOUND SCROTUM:
-RIGHT TESTIS:
-➢ Enlarged __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] heterogeneous hypoechoic, No vascularity on color Doppler - absent flow, Twisted cord __ mm [Normal: No twist].
-LEFT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] normal vascularity.
-CONCLUSION:
-➢ Right testicular torsion - No flow - Urgent surgical emergency.
-ADVICE:
-➢ Urgent urology - Time critical.
-`,
-
-"TESTIS - Microlithiasis":`ULTRASOUND SCROTUM / TESTIS:
-RIGHT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] homogenous, Multiple tiny echogenic foci __ mm [Normal: No microlithiasis] without shadowing - microlithiasis, No mass, Vascularity normal.
-LEFT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] homogenous, Microliths __ mm [Normal: No microlithiasis].
-EPIDIDYMIS BOTH:
-➢ Head __ mm [Normal: <10 mm] normal.
-HYDROCELE:
-➢ No hydrocele [Normal: No fluid].
-CONCLUSION:
-➢ Bilateral testicular microlithiasis.
-ADVICE:
-➢ Follow-up, urology.
-`,
-
-"TESTIS - Testicular Cyst":`ULTRASOUND TESTIS:
-RIGHT TESTIS:
-➢ Simple anechoic thin-walled cyst __ x __ mm [Normal: No cyst] with posterior enhancement, No septations, No vascularity, Volume __ cc [Normal: 12-20 cc] normal.
-LEFT TESTIS:
-➢ Normal __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc] normal.
-CONCLUSION:
-➢ Right testicular simple cyst __ mm.
-ADVICE:
-➢ Benign, follow-up.
-`,
-
-"AXILLA - Lymphadenopathy Left":`ULTRASOUND AXILLA:
-LEFT AXILLA:
-➢ Enlarged lymph nodes largest __ x __ mm [Normal: <10 mm], Cortex __ mm [Normal: <3 mm] thickened __ mm, Hilum preserved / effaced, Vascularity __.
-RIGHT AXILLA:
-➢ No lymphadenopathy [Normal: <10 mm], Cortex __ mm [Normal: <3 mm] normal.
-CONCLUSION:
-➢ Left axillary lymphadenopathy __ mm cortex __ mm.
-ADVICE:
-➢ Antibiotics, follow-up, FNAC if persistent.
-`,
-
-"NECK - Normal":`ULTRASOUND NECK:
-RIGHT NECK:
-➢ No lymphadenopathy [Normal: No nodes], No mass, No collection, Thyroid lobe normal __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm].
-LEFT NECK:
-➢ No lymphadenopathy [Normal: No nodes], No mass.
-MIDLINE:
-➢ No thyroglossal cyst [Normal: No cyst].
-CONCLUSION:
-➢ Normal neck ultrasound - No lymphadenopathy.
-ADVICE:
-➢ No abnormality.
-`,
-
-"NECK - Cervical Lymphadenopathy":`ULTRASOUND NECK:
-RIGHT NECK:
-➢ Multiple enlarged lymph nodes largest __ x __ mm [Normal: <10 mm] at Level II / III / IV / V, Cortex __ mm [Normal: <3 mm] thickened, Hilum preserved / absent, Matted / Discrete.
-LEFT NECK:
-➢ Enlarged nodes __ x __ mm [Normal: <10 mm] Level __.
-CONCLUSION:
-➢ Cervical lymphadenopathy right largest __ mm left __ mm Level __.
-ADVICE:
-➢ CBC, ESR, FNAC, chest X-ray.
-`,
-
-"ABDOMEN + PELVIS - Normal Male":`ULTRASOUND ABDOMEN + PELVIS:
-LIVER:
-➢ Normal __ cm [Normal: <14 cm] homogenous smooth margins No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm] No IHBR dilatation.
-GALL BLADDER:
-➢ Normally distended wall __ mm [Normal: <3 mm] regular lumen clear No calculus.
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm] Body __ mm [Normal: <25 mm] Tail __ mm [Normal: <25 mm] homogenous.
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm] homogenous No focal lesion.
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus No hydronephrosis Ureter __ mm [Normal: <4 mm].
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
-BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] regular lumen clear.
-PROSTATE:
-➢ Normal __ x __ x __ cm __ gm [Normal: 20-25 gm] homogenous capsule intact.
-PERITONEUM:
-➢ No free fluid No ascites No lymphadenopathy.
-CONCLUSION:
-➢ Normal Abdomen + Pelvis Male.
-ADVICE:
-➢ No significant abnormality.
-`,
-
-"ABDOMEN + PELVIS - Normal Female":`ULTRASOUND ABDOMEN + PELVIS:
-LIVER:
-➢ Normal __ cm [Normal: <14 cm] homogenous No focal lesion.
-GALL BLADDER:
-➢ Normally distended wall __ mm [Normal: <3 mm] regular lumen clear No calculus.
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm] homogenous.
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm] homogenous.
-RIGHT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
-LEFT KIDNEY:
-➢ Normal __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] CMD intact No calculus.
-BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] regular lumen clear No calculus.
-UTERUS:
-➢ Anteverted __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm] homogenous smooth outline No fibroid Endometrium __ mm [Normal: 6-12 mm] regular Cervix __ mm [Normal: 25-35 mm] No free fluid POD.
-OVARIES:
-➢ Right ovary __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal follicles __ mm [Normal: <10 mm] No cyst.
-➢ Left ovary __ x __ cm [Normal: 3 x 2 cm] Volume __ cc [Normal: <10 cc] normal No cyst.
-CONCLUSION:
-➢ Normal Abdomen + Pelvis Female - Uterus and ovaries normal.
-ADVICE:
-➢ No abnormality.
-`,
-
-"WHOLE ABDOMEN - Liver Hemangioma":`ULTRASOUND WHOLE ABDOMEN:
-LIVER:
-➢ Normal __ cm [Normal: <14 cm] homogenous, Well-defined hyperechoic lesion __ x __ mm [Normal: No lesion] at right / left lobe, No vascularity / mild vascularity, No halo, No calcification, PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
-GALL BLADDER:
-➢ Normally distended wall __ mm [Normal: <3 mm] regular lumen clear No calculus.
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-KIDNEYS:
-➢ Right __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] normal. Left __ x __ cm [Normal: 9-12 cm] Cortex __ mm [Normal: >6 mm] normal.
-CONCLUSION:
-➢ Liver hemangioma __ mm right / left lobe.
-ADVICE:
-➢ Benign, follow-up.
-`,
-
-"WHOLE ABDOMEN - Bilateral Renal Calculi":`ULTRASOUND WHOLE ABDOMEN:
-RIGHT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline Calculus __ mm [Normal: No calculus] with shadowing at upper / mid / lower pole Cortex __ mm [Normal: >6 mm] CMD intact Pelvis __ mm [Normal: <10 mm] not dilated.
-LEFT KIDNEY:
-➢ __ x __ cm [Normal: 9-12 cm] smooth outline Calculus __ mm [Normal: No calculus] with shadowing Cortex __ mm [Normal: >6 mm] CMD intact.
-LIVER:
-➢ Normal __ cm [Normal: <14 cm] homogenous No focal lesion PV __ mm [Normal: <13 mm] CBD __ mm [Normal: <6 mm].
-GALL BLADDER:
-➢ Normally distended wall __ mm [Normal: <3 mm] regular lumen clear No calculus.
-PANCREAS:
-➢ Normal Head __ mm [Normal: <30 mm].
-SPLEEN:
-➢ Normal __ cm [Normal: <12 cm].
-BLADDER:
-➢ Normal __ cc [Normal: 300-400 cc] Wall __ mm [Normal: <3 mm] regular.
-CONCLUSION:
-➢ Bilateral renal calculi right __ mm left __ mm.
-ADVICE:
-➢ Hydration, urology consultation.
-`
-`,
+</script></body></html>
