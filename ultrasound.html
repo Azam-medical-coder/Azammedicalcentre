@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam 140 Final Realistic</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam 140 Final Watermark</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#eef4ff;padding:10px}
@@ -7,19 +7,19 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin-top:8px}
 .small{padding:9px 12px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff;font-size:12px}
 .report{width:180mm;min-height:210mm;margin:auto;background:#fff;border:1.5px solid #0a4eb5;border-radius:10px;padding:0 5mm 5mm 5mm;padding-top:36mm;line-height:1.55;box-sizing:border-box;position:relative;overflow:hidden}
-.report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;background-image:url('logo.png'),url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.05;filter:grayscale(100%) brightness(1.4);z-index:0;pointer-events:none}
+.report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:180px;height:180px;background-image:url('logo.png'),url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.04;filter:grayscale(100%) brightness(1.5);z-index:0;pointer-events:none}
 .report-inner{width:170mm;min-height:165mm;margin:2mm auto 2mm auto;padding:3mm 4mm;line-height:1.55;font-size:11.5px;z-index:2;color:#000;position:relative}
-.diagramBox{float:right;width:62mm;border:1px solid #bbb;border-radius:6px;padding:4px;margin:8px 0 4px 10px;background:#fcfcfc;text-align:center;clear:right}
-.diagramBox svg{width:100%;height:auto;max-height:85px}
+.diagramBox{float:right;width:58mm;border:none;background:transparent;padding:0;margin:5px 0 5px 12px;opacity:0.18;filter:grayscale(100%);pointer-events:none;clear:right}
+.diagramBox svg{width:100%;height:auto;max-height:95px}
 #loginOverlay{position:fixed;inset:0;background:#0a4eb5;display:flex;align-items:center;justify-content:center;z-index:99999}
 .loginBox{background:#fff;padding:30px;border-radius:20px;width:90%;max-width:400px;text-align:center;box-shadow:0 20px 40px #0005}
-@media print{@page{size:180mm 210mm;margin:0}body{background:#fff}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:180mm;min-height:210mm;border:none;margin:0}.report::before{opacity:0.05;filter:grayscale(100%) brightness(1.4);-webkit-print-color-adjust:exact;print-color-adjust:exact}.noPrint{display:none}.diagramBox{border:1px solid #999;background:#fff}}
+@media print{@page{size:180mm 210mm;margin:0}body{background:#fff}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:180mm;min-height:210mm;border:none;margin:0}.report::before{opacity:0.04;width:180px;height:180px;-webkit-print-color-adjust:exact;print-color-adjust:exact}.diagramBox{opacity:0.18;-webkit-print-color-adjust:exact;print-color-adjust:exact}.noPrint{display:none}}
 .boxTitle{font-size:15px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;justify-content:space-between}
 </style></head><body>
 
 <div id="loginOverlay">
 <div class="loginBox">
-<img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:80px;height:80px;border-radius:50%;border:3px solid #0a4eb5;margin-bottom:10px;filter:grayscale(100%)">
+<img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:75px;height:75px;border-radius:50%;border:3px solid #0a4eb5;margin-bottom:10px;filter:grayscale(100%)">
 <h2 style="color:#0a4eb5;margin-bottom:5px">Azam Medical Centre</h2>
 <input id="passInput" type="password" placeholder="Password Zee" style="text-align:center;font-size:18px;letter-spacing:4px">
 <button class="btn" onclick="checkPass()">Login</button>
@@ -28,8 +28,8 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 </div>
 
 <div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px">
-<img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:65px;height:65px;border-radius:50%;border:2px solid #0a4eb5;filter:grayscale(20%)">
-<div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981">● 140 Templates | 21x18cm | Realistic Gray Diagram Right Side</div></div>
+<img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:60px;height:60px;border-radius:50%;border:2px solid #0a4eb5;filter:grayscale(20%)">
+<div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981">● 140 Templates | 21x18cm | Watermark Diagram No Text</div></div>
 </div>
 
 <div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - 140</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search template..." onkeyup="filterTemplates()"><select id="uType" size="20" style="height:400px;font-size:13px;font-weight:600"></select><button class="small" style="background:#8b5cf6;width:100%;padding:12px;margin-top:8px" onclick="useSelectedTemplate()">Use This Template</button></div>
@@ -85,140 +85,84 @@ function getAdvice(n){
 }
 
 function getDiagram(n){
-  // Realistic light gray diagrams - anatomically correct shapes
+  // Realistic organs - NO TEXT - light gray watermark style
+  let lightGray = '#bbbbbb';
+  let fillGray = '#f2f2f2';
   if(n.startsWith("WHOLE ABDOMEN")||n.startsWith("ABDOMEN")){
     return `<div class="diagramBox">
-      <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
-        <!-- Liver realistic -->
-        <path d="M15 15 Q50 8 85 18 Q95 28 88 45 Q60 52 35 48 Q18 35 15 15 Z" fill="#f0f0f0" stroke="#999" stroke-width="1.2"/>
-        <text x="35" y="35" font-size="8" fill="#666" font-family="Arial">LIVER</text>
-        <!-- GB under liver -->
-        <ellipse cx="75" cy="50" rx="8" ry="12" fill="#e8e8e8" stroke="#999" stroke-width="1"/>
-        <text x="68" y="53" font-size="5" fill="#666">GB</text>
-        <!-- Pancreas -->
-        <path d="M90 55 Q115 58 145 52 Q150 48 145 42 Q120 45 90 48 Z" fill="#f5f5f5" stroke="#999" stroke-width="1"/>
-        <text x="105" y="52" font-size="5" fill="#666">PANCREAS</text>
-        <!-- Spleen -->
-        <ellipse cx="165" cy="25" rx="12" ry="18" fill="#eeeeee" stroke="#999" stroke-width="1"/>
-        <text x="155" y="28" font-size="5" fill="#666">SPLEEN</text>
-        <!-- Kidneys bean shape realistic -->
-        <path d="M25 85 Q20 95 25 108 Q35 112 42 108 Q48 95 42 85 Q35 78 25 85 Z M30 90 Q32 100 30 105" fill="none" stroke="#999" stroke-width="1.2"/>
-        <path d="M25 85 Q20 95 25 108 Q35 112 42 108 Q48 95 42 85 Q35 78 25 85 Z" fill="#f0f0f0" stroke="#999" stroke-width="1.2"/>
-        <path d="M130 85 Q125 95 130 108 Q140 112 147 108 Q153 95 147 85 Q140 78 130 85 Z" fill="#f0f0f0" stroke="#999" stroke-width="1.2"/>
-        <text x="22" y="125" font-size="6" fill="#777">RT KIDNEY</text>
-        <text x="128" y="125" font-size="6" fill="#777">LT KIDNEY</text>
-        <!-- Bladder -->
-        <path d="M80 115 Q95 108 110 115 Q110 125 95 128 Q80 125 80 115 Z" fill="#f8f8f8" stroke="#999" stroke-width="1"/>
-        <text x="86" y="122" font-size="5" fill="#666">BLADDER</text>
+      <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 12 Q45 5 80 15 Q92 25 85 42 Q55 50 30 45 Q15 30 10 12 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
+        <ellipse cx="70" cy="48" rx="7" ry="11" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
+        <path d="M85 52 Q110 55 140 50 Q145 46 140 40 Q115 42 85 46 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
+        <ellipse cx="160" cy="22" rx="11" ry="16" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
+        <path d="M20 78 Q15 88 20 100 Q30 104 38 100 Q44 88 38 78 Q30 72 20 78 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
+        <path d="M125 78 Q120 88 125 100 Q135 104 143 100 Q149 88 143 78 Q135 72 125 78 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
+        <path d="M75 108 Q90 102 105 108 Q108 116 90 120 Q75 116 75 108 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
       </svg>
-      <div style="font-size:7px;color:#888;margin-top:2px">Whole Abdomen - Realistic Anatomy</div>
     </div>`;
   }
   if(n.startsWith("KUB")){
     return `<div class="diagramBox">
-      <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-        <!-- Right kidney realistic bean with hilum -->
-        <path d="M30 20 Q18 35 22 60 Q30 75 48 70 Q60 55 55 35 Q45 18 30 20 Z" fill="#f0f0f0" stroke="#999" stroke-width="1.3"/>
-        <path d="M28 40 Q38 45 28 50" fill="none" stroke="#999" stroke-width="1"/>
-        <!-- Left kidney -->
-        <path d="M130 20 Q118 35 122 60 Q130 75 148 70 Q160 55 155 35 Q145 18 130 20 Z" fill="#f0f0f0" stroke="#999" stroke-width="1.3"/>
-        <path d="M150 40 Q140 45 150 50" fill="none" stroke="#999" stroke-width="1"/>
-        <!-- Ureters -->
-        <path d="M35 70 Q40 85 45 95" stroke="#999" stroke-width="0.8" fill="none" stroke-dasharray="3 2"/>
-        <path d="M135 70 Q130 85 125 95" stroke="#999" stroke-width="0.8" fill="none" stroke-dasharray="3 2"/>
-        <!-- Bladder realistic -->
-        <path d="M70 90 Q85 85 100 90 Q105 100 112 Q85 116 70 112 Q65 100 70 90 Z" fill="#f8f8f8" stroke="#999" stroke-width="1.2"/>
-        <text x="20" y="12" font-size="7" fill="#777">RT KIDNEY</text>
-        <text x="120" y="12" font-size="7" fill="#777">LT KIDNEY</text>
-        <text x="78" y="107" font-size="6" fill="#777">BLADDER</text>
+      <svg viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">
+        <path d="M28 18 Q16 32 20 55 Q28 68 46 63 Q58 50 53 32 Q43 16 28 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.3"/>
+        <path d="M128 18 Q116 32 120 55 Q128 68 146 63 Q158 50 153 32 Q143 16 128 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.3"/>
+        <path d="M33 63 Q38 78 43 88" stroke="${lightGray}" stroke-width="0.9" fill="none" stroke-dasharray="3 2"/>
+        <path d="M133 63 Q128 78 123 88" stroke="${lightGray}" stroke-width="0.9" fill="none" stroke-dasharray="3 2"/>
+        <path d="M68 85 Q83 80 98 85 Q103 95 98 105 Q83 110 68 105 Q63 95 68 85 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
       </svg>
-      <div style="font-size:7px;color:#888">KUB - Realistic Kidneys & Bladder</div>
     </div>`;
   }
   if(n.startsWith("PELVIS")){
     return `<div class="diagramBox">
-      <svg viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">
-        <!-- Uterus pear shape realistic -->
-        <path d="M85 10 Q100 5 115 10 Q118 25 115 45 Q108 60 100 65 Q92 60 85 45 Q82 25 85 10 Z" fill="#f2f2f2" stroke="#999" stroke-width="1.2"/>
-        <!-- Cervix -->
-        <rect x="93" y="65" width="14" height="15" rx="3" fill="#e8e8e8" stroke="#999" stroke-width="1"/>
-        <!-- Right ovary with follicles -->
-        <ellipse cx="55" cy="50" rx="18" ry="12" fill="#f5f5f5" stroke="#999" stroke-width="1"/>
-        <circle cx="50" cy="48" r="2.5" fill="#fff" stroke="#aaa" stroke-width="0.5"/>
-        <circle cx="58" cy="50" r="2" fill="#fff" stroke="#aaa" stroke-width="0.5"/>
-        <circle cx="54" cy="54" r="1.8" fill="#fff" stroke="#aaa" stroke-width="0.5"/>
-        <!-- Left ovary -->
-        <ellipse cx="145" cy="50" rx="18" ry="12" fill="#f5f5f5" stroke="#999" stroke-width="1"/>
-        <circle cx="140" cy="48" r="2.5" fill="#fff" stroke="#aaa" stroke-width="0.5"/>
-        <circle cx="148" cy="50" r="2" fill="#fff" stroke="#aaa" stroke-width="0.5"/>
-        <text x="75" y="30" font-size="6" fill="#666">UTERUS</text>
-        <text x="35" y="70" font-size="5" fill="#777">RT OVARY</text>
-        <text x="128" y="70" font-size="5" fill="#777">LT OVARY</text>
+      <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M80 8 Q100 3 120 8 Q123 23 120 42 Q113 57 100 62 Q87 57 80 42 Q77 23 80 8 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
+        <rect x="92" y="62" width="16" height="14" rx="3" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
+        <ellipse cx="50" cy="48" rx="17" ry="11" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
+        <ellipse cx="150" cy="48" rx="17" ry="11" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
       </svg>
-      <div style="font-size:7px;color:#888">Pelvis - Uterus & Ovaries (Realistic)</div>
     </div>`;
   }
   if(n.startsWith("FWB")){
     return `<div class="diagramBox">
-      <svg viewBox="0 0 200 115" xmlns="http://www.w3.org/2000/svg">
-        <!-- Uterus outline -->
-        <path d="M20 15 Q100 5 180 15 Q185 60 100 100 Q15 60 20 15 Z" fill="#f9f9f9" stroke="#aaa" stroke-width="1" stroke-dasharray="4 2"/>
-        <!-- Fetus curled realistic -->
-        <path d="M60 45 Q70 35 85 38 Q95 42 92 55 Q88 68 75 70 Q60 68 55 Z" fill="#efefef" stroke="#999" stroke-width="1.2"/>
-        <circle cx="80" cy="42" r="8" fill="#f5f5f5" stroke="#999" stroke-width="1"/>
-        <path d="M65 60 Q70 65 78 63" stroke="#999" stroke-width="0.8" fill="none"/>
-        <!-- Placenta -->
-        <path d="M125 25 Q145 20 155 35 Q150 55 130 50 Q120 40 125 25 Z" fill="#e8e8e8" stroke="#999" stroke-width="1"/>
-        <!-- Umbilical cord -->
-        <path d="M90 55 Q110 60 130 50" stroke="#999" stroke-width="0.8" fill="none"/>
-        <text x="65" y="80" font-size="6" fill="#666">FETUS</text>
-        <text x="125" y="20" font-size="6" fill="#666">PLACENTA</text>
-        <text x="70" y="102" font-size="5" fill="#888">AF: Adequate</text>
+      <svg viewBox="0 0 200 105" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 12 Q100 3 182 12 Q187 55 100 95 Q13 55 18 12 Z" fill="#fafafa" stroke="${lightGray}" stroke-width="0.9" stroke-dasharray="4 2"/>
+        <path d="M58 42 Q68 32 83 35 Q93 39 90 52 Q86 65 73 67 Q58 65 53 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
+        <circle cx="78" cy="39" r="7" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
+        <path d="M123 22 Q143 18 153 32 Q148 52 128 47 Q118 37 123 22 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
+        <path d="M88 52 Q108 57 128 47" stroke="${lightGray}" stroke-width="0.8" fill="none"/>
       </svg>
-      <div style="font-size:7px;color:#888">FWB - Fetus, Placenta, Amniotic Fluid</div>
     </div>`;
   }
   if(n.startsWith("THYROID")){
     return `<div class="diagramBox">
-      <svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
-        <path d="M60 15 Q40 25 45 45 Q55 60 75 55 Q85 40 80 20 Q70 10 60 15 Z" fill="#f0f0f0" stroke="#999" stroke-width="1.2"/>
-        <path d="M140 15 Q160 25 155 45 Q145 60 125 55 Q115 40 120 20 Q130 10 140 15 Z" fill="#f0f0f0" stroke="#999" stroke-width="1.2"/>
-        <path d="M80 30 Q100 28 120 30 Q120 40 100 42 Q80 40 80 30 Z" fill="#e8e8e8" stroke="#999" stroke-width="1"/>
-        <text x="50" y="70" font-size="6" fill="#777">RT LOBE</text>
-        <text x="125" y="70" font-size="6" fill="#777">LT LOBE</text>
-        <text x="85" y="25" font-size="5" fill="#777">ISTHMUS</text>
+      <svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg">
+        <path d="M58 12 Q38 22 43 42 Q53 57 73 52 Q83 37 78 17 Q68 7 58 12 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
+        <path d="M142 12 Q162 22 157 42 Q147 57 127 52 Q117 37 122 17 Q132 7 142 12 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
+        <path d="M78 27 Q100 25 122 27 Q122 37 100 39 Q78 37 78 27 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
       </svg>
-      <div style="font-size:7px;color:#888">Thyroid - Realistic Lobes</div>
     </div>`;
   }
   if(n.startsWith("BREAST")){
     return `<div class="diagramBox">
-      <svg viewBox="0 0 200 75" xmlns="http://www.w3.org/2000/svg">
-        <path d="M30 20 Q50 10 75 20 Q85 35 75 55 Q50 65 30 55 Q20 35 30 20 Z" fill="#f5f5f5" stroke="#999" stroke-width="1"/>
-        <path d="M125 20 Q145 10 170 20 Q180 35 170 55 Q145 65 125 55 Q115 35 125 20 Z" fill="#f5f5f5" stroke="#999" stroke-width="1"/>
-        <circle cx="55" cy="35" r="3" fill="#e0e0e0" stroke="#999" stroke-width="0.6"/>
-        <circle cx="150" cy="35" r="3" fill="#e0e0e0" stroke="#999" stroke-width="0.6"/>
+      <svg viewBox="0 0 200 65" xmlns="http://www.w3.org/2000/svg">
+        <path d="M28 18 Q48 8 73 18 Q83 33 73 53 Q48 63 28 53 Q18 33 28 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
+        <path d="M123 18 Q143 8 168 18 Q178 33 168 53 Q143 63 123 53 Q113 33 123 18 Z" fill="${fillGray}" stroke="${lightGray}" stroke-width="1"/>
       </svg>
-      <div style="font-size:7px;color:#888">Breast - Right & Left</div>
     </div>`;
   }
   if(n.startsWith("SCROTUM")||n.startsWith("TESTIS")){
     return `<div class="diagramBox">
-      <svg viewBox="0 0 200 75" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="60" cy="35" rx="22" ry="28" fill="#f0f0f0" stroke="#999" stroke-width="1.2"/>
-        <ellipse cx="60" cy="38" rx="12" ry="16" fill="#e8e8e8" stroke="#999" stroke-width="1"/>
-        <ellipse cx="140" cy="35" rx="22" ry="28" fill="#f0f0f0" stroke="#999" stroke-width="1.2"/>
-        <ellipse cx="140" cy="38" rx="12" ry="16" fill="#e8e8e8" stroke="#999" stroke-width="1"/>
-        <text x="45" y="70" font-size="6" fill="#777">RT TESTIS</text>
-        <text x="125" y="70" font-size="6" fill="#777">LT TESTIS</text>
+      <svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="60" cy="32" rx="20" ry="26" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
+        <ellipse cx="60" cy="35" rx="11" ry="15" fill="#e9e9e9" stroke="${lightGray}" stroke-width="1"/>
+        <ellipse cx="140" cy="32" rx="20" ry="26" fill="${fillGray}" stroke="${lightGray}" stroke-width="1.2"/>
+        <ellipse cx="140" cy="35" rx="11" ry="15" fill="#e9e9e9" stroke="${lightGray}" stroke-width="1"/>
       </svg>
-      <div style="font-size:7px;color:#888">Scrotum - Testis Realistic</div>
     </div>`;
   }
   return `<div class="diagramBox">
-    <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
-      <rect x="20" y="15" width="160" height="30" rx="6" fill="#f5f5f5" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/>
-      <text x="50" y="35" font-size="8" fill="#777">${n.split(' - ')[0]} View</text>
+    <svg viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="12" width="160" height="26" rx="6" fill="${fillGray}" stroke="${lightGray}" stroke-width="1" stroke-dasharray="3 2"/>
     </svg>
   </div>`;
 }
@@ -314,7 +258,6 @@ function make(){
   let bodyHTML=formatReportToHTML(document.getElementById('rText').value);
   let diagramHTML=getDiagram(templateName);
   if(complaintText){bodyHTML=`<div style="margin-bottom:5px;font-size:10px"><b><i>C/O: ${complaintText}</i></b></div>`+bodyHTML;}
-  // Insert diagram right side bottom - after body but float right
   bodyHTML+=diagramHTML+`<div style="clear:both"></div>`;
   let footer=`<div style="margin-top:12px;text-align:center;clear:both"><div style="font-size:8px"><i>This is computer generated report no signature required.</i></div><div style="font-size:10px;margin-top:5px;font-weight:700">Thanks for availing our services</div></div>`;
   document.getElementById('reportContent').innerHTML=patientBorder+bodyHTML+footer;
