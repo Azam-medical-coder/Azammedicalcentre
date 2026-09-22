@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam Medical 132 FULL</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam 132 Full</title>
 <style>*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}body{background:#eef4ff;padding:10px}.card{background:#fff;border-radius:16px;padding:14px;margin:10px auto;max-width:1100px;box-shadow:0 6px 18px #0001}
 input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px solid #cbd5e1;margin:5px 0;font-size:14px}
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin-top:8px}
@@ -7,989 +7,225 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 .report-inner{width:180mm;min-height:210mm;margin:40mm auto 10mm auto;padding:5mm 6mm;line-height:1.7;font-size:13.5px;z-index:2;color:#000;position:relative}
 @media print{@page{size:190mm 280mm;margin:0}body{background:#fff}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:190mm;min-height:280mm;border:none;margin:0}.noPrint{display:none}}
 .boxTitle{font-size:15px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;justify-content:space-between}</style></head><body>
-<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff"><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981">● Ready - 132 Full Detailed</div></div>
+<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff"><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981">● Ready - 132 Full Detailed</div></div>
 <div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - 132 Full Detailed</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search template..." onkeyup="filterTemplates()"><select id="uType" size="20" style="height:450px;font-size:13px;font-weight:600"></select><button class="small" style="background:#8b5cf6;width:100%;padding:12px;margin-top:8px" onclick="useSelectedTemplate()">Use This Template</button></div>
-<div class="card noPrint" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Prepare Report</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><input id="pIDMobile" placeholder="Patient ID / Mobile"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref"></select><select id="sono"></select></div><div style="border:2px solid #10b981;border-radius:12px;padding:10px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:12px">C/O</label><textarea id="pComplaint" rows="2" placeholder="e.g. Lumber pain, burning micturition"></textarea></div><textarea id="rText" rows="30" style="font-family:Consolas,monospace;font-size:13px"></textarea><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn" onclick="make()">Generate Final Report</button><button class="btn" style="background:#10b981" onclick="saveR()">Save Report</button></div></div>
-<div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center"><button class="small" style="background:#000;padding:12px 20px" onclick="window.print()">Print</button><button class="small" style="background:#10b981;padding:12px 20px" onclick="pdf()">Download PDF</button></div></div>
-<div class="card noPrint"><div class="boxTitle"><span>Saved Reports</span></div><input id="sBox" placeholder="Search by name or mobile..." onkeyup="render()" style="margin-top:8px"><div id="list"></div></div>
+<div class="card noPrint" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Prepare Report</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><input id="pIDMobile" placeholder="Patient ID / Mobile"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref"></select><select id="sono"></select></div><div style="border:2px solid #10b981;border-radius:12px;padding:10px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:12px">C/O</label><textarea id="pComplaint" rows="2"></textarea></div><textarea id="rText" rows="30" style="font-family:Consolas,monospace;font-size:13px"></textarea><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn" onclick="make()">Generate Final Report</button><button class="btn" style="background:#10b981" onclick="saveR()">Save</button></div></div>
+<div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center"><button class="small" style="background:#000;padding:12px 20px" onclick="window.print()">Print</button><button class="small" style="background:#10b981;padding:12px 20px" onclick="pdf()">PDF</button></div></div>
+<div class="card noPrint"><div class="boxTitle"><span>Saved Reports</span></div><input id="sBox" placeholder="Search..." onkeyup="render()"><div id="list"></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-const refDoctors=["Ref By - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel Arain","Dr. Aqsa Gull","Self","Other"];
+const refDoctors=["Ref By - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Self","Other"];
 const sonoDoctors=["Sonologist - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN","DR. SAMAN AZAM","Other"];
 function fillSelect(id,list){let s=document.getElementById(id);if(!s)return;s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
 fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
 let T={
 "WHOLE ABDOMEN - Normal":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Echotexture homogenous [Normal: homogenous], Surface smooth [Normal: smooth], Edge sharp [Normal: sharp].
-➢ No focal lesion [Normal: No focal lesion], Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR dilatation [Normal: No IHBR dilatation].
-
-GALL BLADDER:
-➢ Distension well distended [Normal: well distended], Wall thickness __ mm [Normal: <3 mm], Lumen clear [Normal: clear].
-➢ No calculus [Normal: No calculus], No sludge [Normal: No sludge], No pericholecystic fluid [Normal: No fluid], No mass [Normal: No mass].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Size normal [Normal: normal].
-➢ Echotexture homogenous [Normal: homogenous], Echogenicity normal [Normal: normal], No focal lesion [Normal: No lesion], No duct dilatation [Normal: No dilatation], No calcification [Normal: No calcification].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Shape crescent [Normal: crescent], Echotexture homogenous [Normal: homogenous].
-➢ No focal lesion [Normal: No focal lesion], Splenic vein __ mm [Normal: <10 mm], No accessory spleen [Normal: No accessory].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Position normal [Normal: normal], Mobility normal [Normal: normal], Shape bean-shaped [Normal: bean-shaped], Outline regular [Normal: regular].
-➢ CMD intact [Normal: intact], Echogenicity normal [Normal: normal], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-➢ Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm], Perinephric space clear [Normal: clear].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Position normal [Normal: normal], Shape bean-shaped [Normal: bean-shaped], Outline regular [Normal: regular], CMD intact [Normal: intact].
-➢ Echogenicity normal [Normal: normal], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-➢ Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm], Perinephric space clear [Normal: clear].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall thickness __ mm [Normal: <3 mm], Distension adequate [Normal: adequate], Shape oval [Normal: oval].
-➢ Lumen anechoic [Normal: anechoic], Mucosa smooth [Normal: smooth], No calculus [Normal: No calculus], No mass [Normal: No mass], No diverticulum [Normal: No diverticulum].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ gm [Normal: 20-25 gm], Echotexture homogenous [Normal: homogenous], Capsule intact [Normal: intact].
-
-PERITONEUM:
-➢ No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy], No mass [Normal: No mass].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Normal.`,
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Normal.`,
 "WHOLE ABDOMEN - Fatty Liver Grade 1":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Increased echogenicity Grade 1 fatty liver [Normal: homogenous], Surface smooth [Normal: smooth], Edge sharp [Normal: sharp].
-➢ No focal lesion [Normal: No focal lesion], Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR dilatation [Normal: No IHBR dilatation].
-
-GALL BLADDER:
-➢ Distension well distended [Normal: well distended], Wall thickness __ mm [Normal: <3 mm], Lumen clear [Normal: clear].
-➢ No calculus [Normal: No calculus], No sludge [Normal: No sludge], No pericholecystic fluid [Normal: No fluid].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal].
-➢ No focal lesion [Normal: No lesion], No duct dilatation [Normal: No dilatation].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm].
-➢ CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus], No mass [Normal: No mass].
-
-PERITONEUM:
-➢ No free fluid [Normal: No free fluid].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Fatty Liver Grade 1 __ cm.`,
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Fatty Liver Grade 1.`,
 "WHOLE ABDOMEN - Fatty Liver Grade 2":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Increased echogenicity Grade 2 fatty liver with posterior attenuation [Normal: homogenous].
-➢ No focal lesion [Normal: No focal lesion], Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm].
-
-GALL BLADDER:
-➢ Distension well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal partially obscured [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Homogenous [Normal: homogenous].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Fatty Liver Grade 2 __ cm.`,
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Fatty Liver Grade 2.`,
 "WHOLE ABDOMEN - Fatty Liver Grade 3":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Markedly increased echogenicity Grade 3 fatty liver with poor visualization of diaphragm and portal veins [Normal: homogenous].
-
-GALL BLADDER:
-➢ Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PANCREAS:
-➢ Obscured by fatty liver [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Normal [Normal: normal].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Fatty Liver Grade 3 __ cm.`,
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Fatty Liver Grade 3.`,
 "WHOLE ABDOMEN - Hepatomegaly":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Enlarged, Echotexture homogenous [Normal: homogenous], Surface smooth [Normal: smooth], Edge sharp [Normal: sharp].
-➢ No focal lesion [Normal: No focal lesion], Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR dilatation [Normal: No IHBR dilatation].
-
-GALL BLADDER:
-➢ Distension well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus], No sludge [Normal: No sludge].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal], Homogenous [Normal: homogenous].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Hepatomegaly __ cm.`,
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Hepatomegaly.`,
 "WHOLE ABDOMEN - Splenomegaly":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Normal [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion].
-
-GALL BLADDER:
-➢ Normal distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PANCREAS:
-➢ Normal [Normal: normal], Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Enlarged, Echotexture homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion], Splenic vein __ mm [Normal: <10 mm].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Splenomegaly __ cm.`,
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Splenomegaly.`,
 "WHOLE ABDOMEN - Hepatosplenomegaly":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Enlarged, Homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion], Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm].
-
-GALL BLADDER:
-➢ Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Enlarged, Homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Hepatosplenomegaly liver __ cm, spleen __ cm.`,
-"WHOLE ABDOMEN - Cholelithiasis Single":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion], Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm].
-
-GALL BLADDER:
-➢ Distension well distended [Normal: well distended], Wall thickness __ mm [Normal: <3 mm], Single calculus __ mm [Normal: No calculus] with posterior acoustic shadowing [Normal: No shadowing].
-➢ Location fundus/body/neck [Normal: No calculus], Mobility mobile [Normal: No calculus], No pericholecystic fluid [Normal: No fluid], No mass [Normal: No mass].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal], Homogenous [Normal: homogenous].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus], No mass [Normal: No mass].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Cholelithiasis single calculus __ mm.`,"WHOLE ABDOMEN - Cholelithiasis Multiple":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion], Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR dilatation [Normal: No IHBR dilatation].
-
-GALL BLADDER:
-➢ Distension well distended [Normal: well distended], Wall thickness __ mm [Normal: <3 mm], Multiple calculi largest __ mm [Normal: No calculus] with shadowing [Normal: No shadowing].
-➢ Number multiple [Normal: No calculus], Mobility mobile [Normal: No calculus], No pericholecystic fluid [Normal: No fluid], No mass [Normal: No mass].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Cholelithiasis multiple calculi largest __ mm.`,
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Hepatosplenomegaly.`,"WHOLE ABDOMEN - Cholelithiasis Single":`ULTRASOUND WHOLE ABDOMEN:
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Cholelithiasis Single.`,
+"WHOLE ABDOMEN - Cholelithiasis Multiple":`ULTRASOUND WHOLE ABDOMEN:
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Cholelithiasis Multiple.`,
 "WHOLE ABDOMEN - Gall Bladder Sludge":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Normal [Normal: normal], Homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion].
-
-GALL BLADDER:
-➢ Distension well distended [Normal: well distended], Wall thickness __ mm [Normal: <3 mm], Sludge present low level echoes [Normal: clear], No calculus [Normal: No calculus], No shadowing [Normal: No shadowing].
-➢ Mobility sludge moves with position [Normal: No sludge], No pericholecystic fluid [Normal: No fluid], No mass [Normal: No mass].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Gall bladder sludge.`,
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Gall Bladder Sludge.`,
 "WHOLE ABDOMEN - Cholecystitis Acute":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion].
-
-GALL BLADDER:
-➢ Distension distended [Normal: well distended], Wall thickness __ mm [Normal: <3 mm], Thickened edematous [Normal: <3 mm], Double wall sign [Normal: No double wall].
-➢ Pericholecystic fluid present [Normal: No fluid], Tenderness on probe pressure Murphy positive [Normal: No tenderness], Calculus __ mm [Normal: No calculus] impacted at neck [Normal: No calculus].
-➢ No mass [Normal: No mass].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Normal [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Normal [Normal: normal].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Acute cholecystitis wall __ mm with calculus __ mm.`,
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Cholecystitis Acute.`,
 "WHOLE ABDOMEN - CBD Dilated":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Normal [Normal: normal], IHBR dilatation present [Normal: No IHBR dilatation], No focal lesion [Normal: No focal lesion].
-
-GALL BLADDER:
-➢ Distension well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-CBD:
-➢ Diameter __ mm [Normal: <6 mm], Dilated [Normal: <6 mm], No calculus in CBD [Normal: No calculus], No mass at lower CBD [Normal: No mass].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation], No mass [Normal: No mass].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Normal [Normal: normal].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - CBD dilated __ mm with IHBR dilatation.`,
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - CBD Dilated.`,
 "WHOLE ABDOMEN - Appendicitis":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion], Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm].
-
-GALL BLADDER:
-➢ Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-RIGHT ILIAC FOSSA:
-➢ Appendix diameter __ mm [Normal: <6 mm], Non-compressible [Normal: compressible], Wall thickness __ mm [Normal: <2 mm], Blind ended [Normal: blind ended].
-➢ Surrounding echogenic fat stranding [Normal: No stranding], Free fluid present [Normal: No fluid], No appendicolith [Normal: No appendicolith].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Acute appendicitis appendix __ mm.`,
-"WHOLE ABDOMEN - Umbilical Hernia":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion].
-
-GALL BLADDER:
-➢ Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus].
-
-ANTERIOR ABDOMINAL WALL:
-➢ Umbilical region defect __ x __ mm [Normal: No defect], Herniation of omentum/bowel loops [Normal: No herniation], Content reducible [Normal: No defect].
-➢ Neck __ mm [Normal: No defect], No strangulation [Normal: No strangulation], No obstruction [Normal: No obstruction].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Normal [Normal: normal].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Umbilical hernia defect __ mm.`,
-"WHOLE ABDOMEN - Inguinal Hernia Right":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion].
-
-GALL BLADDER:
-➢ Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PANCREAS:
-➢ Normal [Normal: normal], Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus].
-
-RIGHT INGUINAL REGION:
-➢ Defect __ x __ mm [Normal: No defect], Herniation on Valsalva [Normal: No herniation], Content bowel/omentum [Normal: No content].
-➢ Neck __ mm [Normal: No defect], Reducible [Normal: No defect], No strangulation [Normal: No strangulation].
-
-LEFT INGUINAL:
-➢ No defect [Normal: No defect], No herniation [Normal: No herniation].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Normal [Normal: normal].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Right inguinal hernia defect __ mm.`,
-"WHOLE ABDOMEN - Inguinal Hernia Left":`ULTRASOUND WHOLE ABDOMEN:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Normal [Normal: normal], Homogenous [Normal: homogenous].
-
-GALL BLADDER:
-➢ Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PANCREAS:
-➢ Normal [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus].
-
-LEFT INGUINAL REGION:
-➢ Defect __ x __ mm [Normal: No defect], Herniation on Valsalva [Normal: No herniation], Content bowel/omentum [Normal: No content].
-➢ Neck __ mm [Normal: No defect], Reducible [Normal: No defect].
-
-RIGHT INGUINAL:
-➢ No defect [Normal: No defect].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Normal [Normal: normal].
-
-CONCLUSION:
-➢ WHOLE ABDOMEN - Left inguinal hernia defect __ mm.`,
+LIVER: Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], PV __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm], No IHBR [Normal: No IHBR]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], Lumen clear [Normal: clear], No calculus [Normal: No calculus], No sludge [Normal: No sludge]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal], No duct dilatation [Normal: No dilatation]
+SPLEEN: Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+PERITONEUM: No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: WHOLE ABDOMEN - Appendicitis.`,
 "KUB - Normal":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Position normal [Normal: normal], Mobility normal [Normal: normal], Shape bean-shaped [Normal: bean-shaped], Outline regular [Normal: regular].
-➢ CMD intact [Normal: intact], Echogenicity normal [Normal: normal], Corticomedullary differentiation maintained [Normal: maintained].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm], Perinephric space clear [Normal: clear].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Position normal [Normal: normal], Shape bean-shaped [Normal: bean-shaped], Outline regular [Normal: regular], CMD intact [Normal: intact].
-➢ Echogenicity normal [Normal: normal], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall thickness __ mm [Normal: <3 mm], Distension adequate [Normal: adequate], Shape oval [Normal: oval].
-➢ Lumen anechoic [Normal: anechoic], Mucosa smooth [Normal: smooth], No calculus [Normal: No calculus], No mass [Normal: No mass], No diverticulum [Normal: No diverticulum].
-➢ Post-void residual __ cc [Normal: <50 cc], Ureteric jets present [Normal: present].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ gm [Normal: 20-25 gm], Echotexture homogenous [Normal: homogenous], Capsule intact [Normal: intact].
-
-CONCLUSION:
-➢ KUB - Normal.`,
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc], Position normal [Normal: normal], Shape bean [Normal: bean], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm], Perinephric clear [Normal: clear]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass], Post-void __ cc [Normal: <50 cc]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+CONCLUSION: KUB - Normal.`,
 "KUB - Renal Calculus Right":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Position normal [Normal: normal], Shape bean-shaped [Normal: bean-shaped], Outline regular [Normal: regular], CMD intact [Normal: intact].
-➢ Calculus __ mm [Normal: No calculus] with posterior acoustic shadowing [Normal: No shadowing], Location upper/mid/lower pole [Normal: No calculus], Number single [Normal: No calculus].
-➢ No hydronephrosis [Normal: No hydronephrosis] / Mild hydronephrosis pelvis __ mm [Normal: <10 mm], Perinephric space clear [Normal: clear].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus], No mass [Normal: No mass].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous].
-
-CONCLUSION:
-➢ KUB - Right renal calculus __ mm.`,
-"KUB - Renal Calculus Left":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Position normal [Normal: normal], Shape bean-shaped [Normal: bean-shaped], Outline regular [Normal: regular], CMD intact [Normal: intact].
-➢ Calculus __ mm [Normal: No calculus] with posterior shadowing [Normal: No shadowing], Location upper/mid/lower pole [Normal: No calculus].
-➢ Mild hydronephrosis / No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ gm [Normal: 20-25 gm], Normal [Normal: homogenous].
-
-CONCLUSION:
-➢ KUB - Left renal calculus __ mm.`,
-"KUB - Hydronephrosis Mild Right":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Position normal [Normal: normal], Shape bean-shaped [Normal: bean-shaped], Outline regular [Normal: regular], CMD intact [Normal: intact].
-➢ Mild hydronephrosis [Normal: No hydronephrosis], Pelvis dilated __ mm [Normal: <10 mm], Calyces mildly dilated [Normal: not dilated], Cortex preserved __ mm [Normal: >6 mm].
-➢ No calculus [Normal: No calculus], Ureter __ mm [Normal: <4 mm], No perinephric collection [Normal: No collection].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus], No mass [Normal: No mass].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ gm [Normal: 20-25 gm], Normal [Normal: normal].
-
-CONCLUSION:
-➢ KUB - Mild right hydronephrosis pelvis __ mm.`,"KUB - Hydronephrosis Moderate Right":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Position normal [Normal: normal], Shape bean-shaped [Normal: bean-shaped], Outline regular [Normal: regular], CMD intact but blunted [Normal: intact].
-➢ Moderate hydronephrosis [Normal: No hydronephrosis], Pelvis dilated __ mm [Normal: <10 mm], Calyces dilated [Normal: not dilated], Cortex thinned __ mm [Normal: >6 mm].
-➢ No calculus [Normal: No calculus], Ureter __ mm [Normal: <4 mm], Perinephric clear [Normal: clear].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ gm [Normal: 20-25 gm], Normal [Normal: normal].
-
-CONCLUSION:
-➢ KUB - Moderate right hydronephrosis pelvis __ mm.`,
-"KUB - Hydronephrosis Severe Right":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Position normal [Normal: normal], Shape hydronephrotic [Normal: bean-shaped], Outline irregular due to dilatation [Normal: regular], CMD poorly preserved [Normal: intact].
-➢ Severe hydronephrosis [Normal: No hydronephrosis], Pelvis grossly dilated __ mm [Normal: <10 mm], Calyces grossly dilated [Normal: not dilated], Cortex thinned __ mm [Normal: >6 mm].
-➢ No calculus [Normal: No calculus], Ureter __ mm [Normal: <4 mm], Perinephric collection absent [Normal: No collection].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ gm [Normal: 20-25 gm], Normal [Normal: normal].
-
-CONCLUSION:
-➢ KUB - Severe right hydronephrosis cortex __ mm.`,
-"KUB - Parenchymal Changes Grade 1":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Position normal [Normal: normal], Shape bean-shaped [Normal: bean-shaped], Outline regular [Normal: regular], CMD preserved [Normal: intact].
-➢ Echogenicity Grade 1 increased [Normal: normal], CMD preserved [Normal: intact], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Echogenicity Grade 1 increased [Normal: normal], CMD preserved [Normal: intact], Cortex __ mm [Normal: >6 mm], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus], No mass [Normal: No mass].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ gm [Normal: 20-25 gm], Normal [Normal: normal].
-
-CONCLUSION:
-➢ KUB - Grade 1 parenchymal changes bilateral.`,
-"KUB - Simple Cortical Cyst Right":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc].
-➢ Position normal [Normal: normal], Shape bean-shaped [Normal: bean-shaped], Outline regular [Normal: regular], CMD intact [Normal: intact].
-➢ Simple cortical cyst __ mm [Normal: No cyst], Anechoic [Normal: No cyst], Thin walled [Normal: No cyst], No internal echoes [Normal: No echoes], No septation [Normal: No septation], No calcification [Normal: No calcification], No vascularity [Normal: No vascularity].
-➢ Location upper/mid/lower pole [Normal: No cyst], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], No cyst [Normal: No cyst], Pelvis __ mm [Normal: <10 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus], No mass [Normal: No mass].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ gm [Normal: 20-25 gm], Normal [Normal: normal].
-
-CONCLUSION:
-➢ KUB - Right simple cortical cyst __ mm.`,
-"KUB - Bladder Stone Single":`ULTRASOUND KUB:
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall thickness __ mm [Normal: <3 mm], Distension adequate [Normal: adequate], Shape oval [Normal: oval].
-➢ Single calculus __ mm [Normal: No calculus] with posterior acoustic shadowing [Normal: No shadowing], Mobility mobile with change of position [Normal: No calculus], Location base/posterior wall [Normal: No calculus].
-➢ Lumen anechoic [Normal: anechoic], Mucosa smooth [Normal: smooth], No mass [Normal: No mass], No diverticulum [Normal: No diverticulum].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], No calcification [Normal: No calcification].
-
-CONCLUSION:
-➢ KUB - Bladder calculus single __ mm.`,
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc], Position normal [Normal: normal], Shape bean [Normal: bean], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm], Perinephric clear [Normal: clear]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], Lumen anechoic [Normal: anechoic], No calculus [Normal: No calculus], No mass [Normal: No mass], Post-void __ cc [Normal: <50 cc]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact]
+CONCLUSION: KUB - Renal Calculus Right.`,
 "KUB + PROSTATE - Normal":`ULTRASOUND KUB + PROSTATE:
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc], CMD intact [Normal: intact].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], Volume __ cc [Normal: 100-150 cc], CMD intact [Normal: intact].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm], Ureter __ mm [Normal: <4 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall thickness __ mm [Normal: <3 mm], Distension adequate [Normal: adequate], Shape oval [Normal: oval].
-➢ Lumen anechoic [Normal: anechoic], Mucosa smooth [Normal: smooth], No calculus [Normal: No calculus], No mass [Normal: No mass], Post-void __ cc [Normal: <50 cc].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ cc [Normal: 20-25 cc], Weight __ gm [Normal: 20-25 gm], Shape walnut [Normal: walnut].
-➢ Echotexture homogenous [Normal: homogenous], Echogenicity normal [Normal: normal], Capsule intact regular [Normal: intact], No focal lesion [Normal: No lesion].
-➢ Median lobe not hypertrophied [Normal: not hypertrophied], No calcification [Normal: No calcification], No mass [Normal: No mass], Vascularity normal [Normal: normal].
-
-CONCLUSION:
-➢ KUB + PROSTATE - Normal study.`,
-"KUB + PROSTATE - BPH":`ULTRASOUND KUB + PROSTATE:
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact].
-➢ No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall thickness __ mm [Normal: <3 mm], Trabeculated [Normal: smooth], No calculus [Normal: No calculus], Post-void residual __ cc [Normal: <50 cc].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ cc [Normal: 20-25 cc], Weight __ gm [Normal: 20-25 gm], Enlarged [Normal: 20-25 gm].
-➢ Echotexture heterogenous [Normal: homogenous], Echogenicity increased [Normal: normal], Capsule intact [Normal: intact], Median lobe hypertrophied __ mm [Normal: not hypertrophied].
-➢ Intravesical protrusion __ mm [Normal: No protrusion], No focal lesion [Normal: No lesion], No calcification [Normal: No calcification], Vascularity increased [Normal: normal].
-
-CONCLUSION:
-➢ KUB + PROSTATE - BPH prostate __ gm with median lobe hypertrophy.`,
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], Adequate [Normal: adequate], No calculus [Normal: No calculus], Post-void __ cc [Normal: <50 cc]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ cc [Normal: 20-25 cc], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], Capsule intact [Normal: intact], Median lobe not hypertrophied [Normal: not hypertrophied]
+CONCLUSION: KUB + PROSTATE - Normal.`,
 "PELVIS - Normal":`ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Position anteverted [Normal: anteverted], Size __ x __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm], Volume __ cc [Normal: 40-90 cc], Shape pear-shaped [Normal: pear-shaped].
-➢ Contour regular [Normal: regular], Myometrium homogenous [Normal: homogenous], Echotexture normal [Normal: normal], No fibroid [Normal: No fibroid], No focal lesion [Normal: No lesion].
-➢ Endometrium thickness __ mm [Normal: 6-12 mm], Echogenicity homogenous trilaminar [Normal: homogenous], No polyp [Normal: No polyp], No fluid [Normal: No fluid], No mass [Normal: No mass].
-➢ Cervix length __ mm [Normal: 25-35 mm], Echotexture homogenous [Normal: homogenous], No nabothian cyst [Normal: No cyst], No mass [Normal: No mass], Internal os closed [Normal: closed].
-
-RIGHT OVARY:
-➢ Size __ x __ x __ cm [Normal: 3 x 2 x 2 cm], Volume __ cc [Normal: <10 cc], Position lateral [Normal: lateral], Shape ovoid [Normal: ovoid].
-➢ Echotexture normal [Normal: normal], Follicles __ in number [Normal: <10], Largest follicle __ mm [Normal: <25 mm], Cortex normal [Normal: normal].
-➢ No cyst [Normal: No cyst], No solid mass [Normal: No mass], Vascularity normal [Normal: normal], No torsion [Normal: No torsion].
-
-LEFT OVARY:
-➢ Size __ x __ x __ cm [Normal: 3 x 2 x 2 cm], Volume __ cc [Normal: <10 cc], Position lateral [Normal: lateral], Shape ovoid [Normal: ovoid].
-➢ Echotexture normal [Normal: normal], Follicles __ in number [Normal: <10], Largest follicle __ mm [Normal: <25 mm], Cortex normal [Normal: normal].
-➢ No cyst [Normal: No cyst], No solid mass [Normal: No mass], Vascularity normal [Normal: normal].
-
-POD & ADNEXA:
-➢ No free fluid [Normal: No fluid], No adnexal mass [Normal: No mass], No lymphadenopathy [Normal: No lymphadenopathy], No collection [Normal: No collection].
-
-CONCLUSION:
-➢ PELVIS - Normal.`,
-"PELVIS - PCOS":`ULTRASOUND PELVIS:
-
-UTERUS:
-➢ Position anteverted [Normal: anteverted], Size __ x __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm], Volume __ cc [Normal: 40-90 cc], Shape normal [Normal: pear-shaped].
-➢ Myometrium homogenous [Normal: homogenous], No fibroid [Normal: No fibroid], Endometrium __ mm [Normal: 6-12 mm].
-
-RIGHT OVARY:
-➢ Size __ x __ x __ cm [Normal: 3 x 2 x 2 cm], Volume __ cc [Normal: <10 cc], Enlarged [Normal: <10 cc], Position lateral [Normal: lateral].
-➢ Echotexture heterogeneous [Normal: normal], Multiple small peripheral follicles __ in number [Normal: <10], Follicle size __ mm [Normal: <10 mm], String of pearls appearance [Normal: No string of pearls].
-➢ Stroma echogenic [Normal: normal], Stromal volume increased [Normal: normal], No dominant cyst [Normal: No cyst], Vascularity increased [Normal: normal].
-
-LEFT OVARY:
-➢ Size __ x __ x __ cm [Normal: 3 x 2 x 2 cm], Volume __ cc [Normal: <10 cc], Enlarged [Normal: <10 cc].
-➢ Multiple peripheral follicles __ in number [Normal: <10], Size __ mm [Normal: <10 mm], String of pearls [Normal: No string of pearls], Stroma echogenic [Normal: normal].
-
-POD:
-➢ No free fluid [Normal: No fluid].
-
-CONCLUSION:
-➢ PELVIS - Polycystic ovaries PCOS.`,
-"FWB - Normal Single Pregnancy":`ULTRASOUND FWB - FETAL WELL BEING:
-
-FETAL STATUS:
-➢ Number single [Normal: Single], Viability alive [Normal: alive], Presentation cephalic [Normal: cephalic], Lie longitudinal [Normal: longitudinal], Attitude flexed [Normal: flexed].
-➢ Cardiac activity present [Normal: present], FHR __ bpm [Normal: 120-160 bpm], Rhythm regular [Normal: regular], Movement present [Normal: present], Tone normal [Normal: normal].
-
-BIOMETRY:
-➢ BPD __ mm [Normal: GA correlating], HC __ mm [Normal: GA correlating], AC __ mm [Normal: GA correlating], FL __ mm [Normal: GA correlating], HL __ mm [Normal: GA correlating].
-➢ EFW __ gm [Normal: GA correlating], GA __ weeks __ days [Normal: dates correlating], Growth percentile __% [Normal: 10-90%], Interval growth adequate [Normal: adequate].
-
-ANATOMY SURVEY:
-➢ Head: Skull shape normal [Normal: normal], Brain parenchyma normal [Normal: normal], Ventricles normal [Normal: normal], Face normal [Normal: normal], Lips intact [Normal: intact].
-➢ Neck: No mass [Normal: No mass], No cystic hygroma [Normal: No hygroma].
-➢ Chest: Heart 4-chamber view normal [Normal: normal], Outflow tracts normal [Normal: normal], Lungs normal [Normal: normal], Diaphragm intact [Normal: intact].
-➢ Abdomen: Stomach present [Normal: present], Kidneys present [Normal: present], Bladder present [Normal: present], Cord insertion normal [Normal: normal], No ascites [Normal: No ascites].
-➢ Spine: Spine intact [Normal: intact], No spina bifida [Normal: No spina bifida].
-➢ Limbs: Upper limbs normal [Normal: normal], Lower limbs normal [Normal: normal], No clubfoot [Normal: No clubfoot].
-
-AMNIOTIC FLUID & PLACENTA:
-➢ AFI __ cm [Normal: 8-18 cm], Single deepest pocket __ cm [Normal: 2-8 cm], Volume adequate [Normal: adequate], Clear [Normal: clear], No debris [Normal: No debris].
-➢ Placenta location anterior/posterior/fundal upper segment [Normal: upper segment], Grade __ [Normal: Grade 0-II], Thickness __ mm [Normal: 20-40 mm], No retroplacental clot [Normal: No clot], No calcification [Normal: No/minimal].
-➢ Distance from internal os __ mm [Normal: >20 mm], No low lying [Normal: No low lying], No previa [Normal: No previa].
-
-CORD & DOPPLER:
-➢ Cord 3 vessels [Normal: 3 vessels], Insertion central [Normal: central], No knot [Normal: No knot], No nuchal cord [Normal: No nuchal], Doppler normal [Normal: normal].
-
-CERVIX:
-➢ Length __ mm [Normal: >25 mm], Internal os closed [Normal: closed], External os closed [Normal: closed], No funneling [Normal: No funneling], No sludge [Normal: No sludge].
-
-CONCLUSION:
-➢ FWB - Normal single live pregnancy __ weeks __ days cephalic EFW __ gm.`,
+UTERUS: Position anteverted [Normal: anteverted], Size __ x __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm], Volume __ cc [Normal: 40-90 cc], Myometrium homogenous [Normal: homogenous], No fibroid [Normal: No fibroid], Endometrium __ mm [Normal: 6-12 mm], No polyp [Normal: No polyp], Cervix __ mm [Normal: 25-35 mm], No cyst [Normal: No cyst]
+RIGHT OVARY: __ x __ x __ cm [Normal: 3 x 2 x 2 cm], Volume __ cc [Normal: <10 cc], No cyst [Normal: No cyst], No mass [Normal: No mass], Follicles __ [Normal: <10]
+LEFT OVARY: __ x __ x __ cm [Normal: 3 x 2 x 2 cm], Volume __ cc [Normal: <10 cc], No cyst [Normal: No cyst], No mass [Normal: No mass], Follicles __ [Normal: <10]
+POD: No free fluid [Normal: No fluid], No mass [Normal: No mass]
+CONCLUSION: PELVIS - Normal.`,
+"FWB - Normal Single Pregnancy":`ULTRASOUND FWB:
+FETUS: Single alive [Normal: Single], Cephalic [Normal: cephalic], Lie longitudinal [Normal: longitudinal], Cardiac activity present [Normal: present], FHR __ bpm [Normal: 120-160 bpm], Movement present [Normal: present]
+BIOMETRY: BPD __ mm [Normal: GA], HC __ mm [Normal: GA], AC __ mm [Normal: GA], FL __ mm [Normal: GA], EFW __ gm [Normal: GA], GA __ weeks, Growth __% [Normal: 10-90%]
+FLUID & PLACENTA: AFI __ cm [Normal: 8-18 cm], Adequate [Normal: adequate], Placenta upper [Normal: upper], Grade __ [Normal: 0-II], Thickness __ mm [Normal: 20-40 mm], No clot [Normal: No clot]
+CERVIX: Length __ mm [Normal: >25 mm], Internal os closed [Normal: closed], No funneling [Normal: No funneling]
+CONCLUSION: FWB - Normal Single Pregnancy __ weeks.`,
 "BREAST - Normal":`ULTRASOUND BREAST:
-
-RIGHT BREAST:
-➢ Fibroglandular pattern normal [Normal: normal], Echotexture homogenous [Normal: homogenous], Skin thickness __ mm [Normal: <2 mm], Subcutaneous fat normal [Normal: normal].
-➢ No focal lesion [Normal: No lesion], No cyst [Normal: No cyst], No solid mass [Normal: No mass], No duct ectasia [Normal: No ectasia], No architectural distortion [Normal: No distortion].
-➢ Nipple normal [Normal: normal], Retroareolar region clear [Normal: clear], No axillary tail lesion [Normal: No lesion].
-
-LEFT BREAST:
-➢ Fibroglandular pattern normal [Normal: normal], Skin thickness __ mm [Normal: <2 mm], Subcutaneous fat normal [Normal: normal].
-➢ No focal lesion [Normal: No lesion], No cyst [Normal: No cyst], No solid mass [Normal: No mass], No duct ectasia [Normal: No ectasia].
-
-AXILLA:
-➢ Right axilla No lymphadenopathy [Normal: <10 mm], Cortex __ mm [Normal: <3 mm], Hilum preserved [Normal: preserved], No matting [Normal: No matting].
-➢ Left axilla No lymphadenopathy [Normal: <10 mm], Cortex __ mm [Normal: <3 mm], Hilum preserved [Normal: preserved].
-
-CONCLUSION:
-➢ BREAST - Normal bilateral breast ultrasound.`,
+EXAMINATION: Size __ x __ x __ mm [Normal: normal], Volume __ cc [Normal: normal], Homogenous [Normal: homogenous], No lesion [Normal: No lesion], No cyst [Normal: No cyst], No calcification [Normal: No calcification], Vascularity normal [Normal: normal], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: BREAST - Normal.`,
 "THYROID - Normal":`ULTRASOUND THYROID:
-
-RIGHT LOBE:
-➢ Size __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm], Volume __ cc [Normal: 4-10 cc], Shape normal [Normal: normal], Contour regular [Normal: regular].
-➢ Echotexture homogenous [Normal: homogenous], Echogenicity isoechoic [Normal: isoechoic], Vascularity normal [Normal: normal], No nodule [Normal: No nodule], No cyst [Normal: No cyst], No calcification [Normal: No calcification].
-
-LEFT LOBE:
-➢ Size __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm], Volume __ cc [Normal: 4-10 cc], Shape normal [Normal: normal], Contour regular [Normal: regular].
-➢ Echotexture homogenous [Normal: homogenous], Echogenicity isoechoic [Normal: isoechoic], Vascularity normal [Normal: normal], No nodule [Normal: No nodule], No cyst [Normal: No cyst].
-
-ISTHMUS:
-➢ Thickness __ mm [Normal: <3 mm], Echotexture homogenous [Normal: homogenous], Echogenicity isoechoic [Normal: isoechoic], No nodule [Normal: No nodule].
-
-NECK:
-➢ No cervical lymphadenopathy [Normal: <10 mm], No mass [Normal: No mass], No collection [Normal: No collection], Trachea central [Normal: central].
-
-CONCLUSION:
-➢ THYROID - Normal thyroid ultrasound.`,"SCROTUM - Normal":`ULTRASOUND SCROTUM:
-
-RIGHT TESTIS:
-➢ Size __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Position scrotal [Normal: scrotal], Shape ovoid [Normal: ovoid], Contour regular [Normal: regular].
-➢ Echotexture homogenous [Normal: homogenous], Echogenicity medium [Normal: medium], No focal lesion [Normal: No lesion], No microlithiasis [Normal: No microlithiasis].
-➢ Tunica albuginea intact [Normal: intact], Mediastinum testis visible [Normal: visible], Vascularity normal on Doppler [Normal: normal], No torsion [Normal: No torsion].
-
-RIGHT EPIDIDYMIS:
-➢ Head __ mm [Normal: <10 mm], Body __ mm [Normal: <3 mm], Tail __ mm [Normal: <5 mm], Size normal [Normal: normal], Shape comma-shaped [Normal: comma].
-➢ Echotexture homogenous [Normal: homogenous], No cyst [Normal: No cyst], No mass [Normal: No mass], No calcification [Normal: No calcification], Vascularity normal [Normal: normal].
-
-LEFT TESTIS:
-➢ Size __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Position scrotal [Normal: scrotal], Shape ovoid [Normal: ovoid], Contour regular [Normal: regular].
-➢ Echotexture homogenous [Normal: homogenous], Echogenicity medium [Normal: medium], No focal lesion [Normal: No lesion], No microlithiasis [Normal: No microlithiasis].
-➢ Tunica albuginea intact [Normal: intact], Vascularity normal [Normal: normal], No torsion [Normal: No torsion].
-
-LEFT EPIDIDYMIS:
-➢ Head __ mm [Normal: <10 mm], Body __ mm [Normal: <3 mm], Tail __ mm [Normal: <5 mm], Size normal [Normal: normal].
-➢ Echotexture homogenous [Normal: homogenous], No cyst [Normal: No cyst], No mass [Normal: No mass], Vascularity normal [Normal: normal].
-
-SCROTAL WALL & FLUID:
-➢ Wall thickness __ mm [Normal: <5 mm], No edema [Normal: No edema], No thickening [Normal: No thickening], Skin normal [Normal: normal].
-➢ Hydrocele No fluid [Normal: No fluid], Varicocele No varicocele [Normal: No varicocele], Pampiniform plexus __ mm [Normal: <2 mm], No hernia [Normal: No hernia].
-
-CONCLUSION:
-➢ SCROTUM - Normal scrotal ultrasound.`,
-"SCROTUM - Hydrocele Right":`ULTRASOUND SCROTUM:
-
-RIGHT TESTIS:
-➢ Size __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Position scrotal [Normal: scrotal], Shape ovoid [Normal: ovoid].
-➢ Echotexture homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], Vascularity normal [Normal: normal].
-
-RIGHT HEMISCROTUM:
-➢ Fluid collection __ cc [Normal: No fluid] anechoic [Normal: No fluid] around testis - Hydrocele [Normal: No fluid].
-➢ Septation No septation [Normal: No septation], Debris No debris [Normal: No debris], No mass [Normal: No mass].
-
-LEFT TESTIS:
-➢ Size __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Position scrotal [Normal: scrotal], Normal [Normal: normal].
-
-LEFT HEMISCROTUM:
-➢ No hydrocele [Normal: No fluid], No varicocele [Normal: No varicocele].
-
-EPIDIDYMIS:
-➢ Right epididymis Head __ mm [Normal: <10 mm], Normal [Normal: normal], Left epididymis Head __ mm [Normal: <10 mm], Normal [Normal: normal].
-
-CONCLUSION:
-➢ SCROTUM - Right hydrocele __ cc.`,
-"SCROTUM - Varicocele Left":`ULTRASOUND SCROTUM:
-
-RIGHT TESTIS:
-➢ Size __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Position scrotal [Normal: scrotal], Normal [Normal: normal].
-
-LEFT TESTIS:
-➢ Size __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Position scrotal [Normal: scrotal], Echotexture homogenous [Normal: homogenous].
-➢ No focal lesion [Normal: No lesion], Vascularity normal [Normal: normal].
-
-PAMPINIFORM PLEXUS:
-➢ Left side dilated veins __ mm [Normal: <2 mm] at rest [Normal: <2 mm], __ mm [Normal: <3 mm] on Valsalva [Normal: <3 mm], Reflux present on Doppler [Normal: No reflux].
-➢ Number of veins __ [Normal: <3], Tortuous [Normal: No tortuosity], No thrombosis [Normal: No thrombosis].
-
-RIGHT PAMPINIFORM:
-➢ Normal __ mm [Normal: <2 mm], No varicocele [Normal: No varicocele].
-
-CONCLUSION:
-➢ SCROTUM - Left varicocele veins __ mm with reflux.`,
-"SCROTUM - Epididymo-orchitis Right":`ULTRASOUND SCROTUM:
-
-RIGHT TESTIS:
-➢ Size __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Enlarged bulky [Normal: 40-50 x 20-30 x 30 mm], Heterogeneous [Normal: homogenous].
-➢ Echogenicity decreased [Normal: medium], No focal abscess [Normal: No abscess], Tunica albuginea intact [Normal: intact].
-➢ Vascularity increased on Doppler [Normal: normal], No torsion [Normal: No torsion].
-
-RIGHT EPIDIDYMIS:
-➢ Head __ mm [Normal: <10 mm], Body __ mm [Normal: <3 mm], Tail __ mm [Normal: <5 mm], Enlarged [Normal: <10 mm], Heterogeneous [Normal: homogenous].
-➢ Increased vascularity [Normal: normal], No cyst [Normal: No cyst], No abscess [Normal: No abscess].
-
-LEFT TESTIS:
-➢ Size __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Normal [Normal: normal], Vascularity normal [Normal: normal].
-
-SCROTAL WALL:
-➢ Wall thickness __ mm [Normal: <5 mm], Thickened edematous [Normal: <5 mm], Hyperemia present [Normal: No hyperemia].
-
-HYDROCELE:
-➢ Minimal reactive hydrocele __ cc [Normal: No fluid], No debris [Normal: No debris].
-
-CONCLUSION:
-➢ SCROTUM - Right epididymo-orchitis.`,
-"TESTIS - Normal":`ULTRASOUND TESTIS:
-
-RIGHT TESTIS:
-➢ Size __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Position scrotal [Normal: scrotal], Shape ovoid [Normal: ovoid].
-➢ Echotexture homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], No microlithiasis [Normal: No microlithiasis], Vascularity normal [Normal: normal].
-
-LEFT TESTIS:
-➢ Size __ x __ x __ mm [Normal: 40-50 x 20-30 x 30 mm], Volume __ cc [Normal: 12-20 cc], Position scrotal [Normal: scrotal], Shape ovoid [Normal: ovoid].
-➢ Echotexture homogenous [Normal: homogenous], No focal lesion [Normal: No lesion], Vascularity normal [Normal: normal].
-
-EPIDIDYMIS BOTH:
-➢ Head __ mm [Normal: <10 mm], Body __ mm [Normal: <3 mm], Tail __ mm [Normal: <5 mm], Normal [Normal: normal], No cyst [Normal: No cyst].
-
-CONCLUSION:
-➢ TESTIS - Both testes normal.`,
+EXAMINATION: Size __ x __ x __ mm [Normal: normal], Volume __ cc [Normal: normal], Homogenous [Normal: homogenous], No lesion [Normal: No lesion], No cyst [Normal: No cyst], No calcification [Normal: No calcification], Vascularity normal [Normal: normal], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: THYROID - Normal.`,
+"SCROTUM - Normal":`ULTRASOUND SCROTUM:
+EXAMINATION: Size __ x __ x __ mm [Normal: normal], Volume __ cc [Normal: normal], Homogenous [Normal: homogenous], No lesion [Normal: No lesion], No cyst [Normal: No cyst], No calcification [Normal: No calcification], Vascularity normal [Normal: normal], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: SCROTUM - Normal.`,
 "NECK - Normal":`ULTRASOUND NECK:
-
-RIGHT SIDE:
-➢ No cervical lymphadenopathy [Normal: <10 mm], No mass [Normal: No mass], No collection [Normal: No collection], Vessels normal [Normal: normal].
-
-LEFT SIDE:
-➢ No cervical lymphadenopathy [Normal: <10 mm], No mass [Normal: No mass].
-
-THYROID:
-➢ Right lobe __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm], Volume __ cc [Normal: 4-10 cc], Normal [Normal: normal].
-➢ Left lobe __ x __ x __ mm [Normal: 40-60 x 10-20 x 10-20 mm], Volume __ cc [Normal: 4-10 cc], Normal [Normal: normal].
-➢ Isthmus __ mm [Normal: <3 mm], Normal [Normal: normal].
-
-SALIVARY GLANDS:
-➢ Submandibular glands normal [Normal: normal], Parotid glands normal [Normal: normal].
-
-CONCLUSION:
-➢ NECK - Normal neck ultrasound.`,
+EXAMINATION: Size __ x __ x __ mm [Normal: normal], Volume __ cc [Normal: normal], Homogenous [Normal: homogenous], No lesion [Normal: No lesion], No cyst [Normal: No cyst], No calcification [Normal: No calcification], Vascularity normal [Normal: normal], No lymphadenopathy [Normal: No lymphadenopathy]
+CONCLUSION: NECK - Normal.`,
 "ABDOMEN + PELVIS - Normal Male":`ULTRASOUND ABDOMEN + PELVIS - MALE:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Echotexture homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion], Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm].
-
-GALL BLADDER:
-➢ Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus], No sludge [Normal: No sludge].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal], No focal lesion [Normal: No focal lesion].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], Parenchyma __ mm [Normal: 12-18 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis], Pelvis __ mm [Normal: <10 mm].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus], No mass [Normal: No mass].
-
-PROSTATE:
-➢ Size __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], Volume __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous], No lesion [Normal: No lesion].
-
-PERITONEUM:
-➢ No free fluid [Normal: No free fluid], No lymphadenopathy [Normal: No lymphadenopathy].
-
-CONCLUSION:
-➢ ABDOMEN + PELVIS - Normal male study.`,
+LIVER: __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus]
+PANCREAS: Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal]
+SPLEEN: __ cm [Normal: <12 cm], Normal [Normal: normal]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus]
+PROSTATE: __ x __ x __ cm [Normal: 3.5 x 3 x 2.5 cm], __ gm [Normal: 20-25 gm], Homogenous [Normal: homogenous]
+PERITONEUM: No free fluid [Normal: No free fluid]
+CONCLUSION: ABDOMEN + PELVIS - Normal Male.`,
 "ABDOMEN + PELVIS - Normal Female":`ULTRASOUND ABDOMEN + PELVIS - FEMALE:
-
-LIVER:
-➢ Size __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No focal lesion], Portal vein __ mm [Normal: <13 mm], CBD __ mm [Normal: <6 mm].
-
-GALL BLADDER:
-➢ Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-PANCREAS:
-➢ Head __ mm [Normal: <30 mm], Body __ mm [Normal: <25 mm], Tail __ mm [Normal: <25 mm], Normal [Normal: normal].
-
-SPLEEN:
-➢ Size __ cm [Normal: <12 cm], Normal [Normal: normal].
-
-RIGHT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-LEFT KIDNEY:
-➢ Size __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis].
-
-URINARY BLADDER:
-➢ Volume __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus].
-
-UTERUS:
-➢ Size __ x __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm], Anteverted [Normal: anteverted], Myometrium homogenous [Normal: homogenous], No fibroid [Normal: No fibroid], Endometrium __ mm [Normal: 6-12 mm].
-
-OVARIES:
-➢ Right ovary __ x __ x __ cm [Normal: 3 x 2 x 2 cm], Volume __ cc [Normal: <10 cc], No cyst [Normal: No cyst], Left ovary __ x __ x __ cm [Normal: 3 x 2 x 2 cm], Volume __ cc [Normal: <10 cc], No cyst [Normal: No cyst].
-
-POD:
-➢ No free fluid [Normal: No fluid].
-
-CONCLUSION:
-➢ ABDOMEN + PELVIS - Normal female study.`
+LIVER: __ cm [Normal: <14 cm], Homogenous [Normal: homogenous], No focal lesion [Normal: No lesion]
+GALL BLADDER: Well distended [Normal: well distended], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus]
+PANCREAS: Normal [Normal: normal]
+SPLEEN: __ cm [Normal: <12 cm], Normal [Normal: normal]
+RIGHT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis]
+LEFT KIDNEY: __ x __ cm [Normal: 9-12 x 4-5 cm], Cortex __ mm [Normal: >6 mm], CMD intact [Normal: intact], No calculus [Normal: No calculus], No hydronephrosis [Normal: No hydronephrosis]
+URINARY BLADDER: __ cc [Normal: 300-400 cc], Wall __ mm [Normal: <3 mm], No calculus [Normal: No calculus]
+UTERUS: __ x __ x __ cm [Normal: 7-9 x 4-5 x 3-5 cm], Anteverted [Normal: anteverted], Myometrium homogenous [Normal: homogenous], No fibroid [Normal: No fibroid], Endometrium __ mm [Normal: 6-12 mm]
+OVARIES: Right __ x __ x __ cm [Normal: 3 x 2 x 2 cm], No cyst [Normal: No cyst], Left __ x __ x __ cm [Normal: 3 x 2 x 2 cm], No cyst [Normal: No cyst]
+POD: No free fluid [Normal: No fluid]
+CONCLUSION: ABDOMEN + PELVIS - Normal Female.`
 };
 let allTemplates=Object.keys(T);
 function filterTemplates(){let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');if(!s)return;let cur=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(cur))s.value=cur;}
