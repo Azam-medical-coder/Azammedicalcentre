@@ -1,11 +1,11 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam 140 Final Drive Fixed</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Azam 140 Final Edit Added</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 body{background:#eef4ff;padding:10px}
 .card{background:#fff;border-radius:16px;padding:14px;margin:10px auto;max-width:1100px;box-shadow:0 6px 18px #0001}
 input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px solid #cbd5e1;margin:5px 0;font-size:14px}
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:14px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin-top:8px}
-.small{padding:9px 12px;border-radius:8px;border:none;margin:3px;font-weight:700;cursor:pointer;color:#fff;font-size:12px}
+.small{padding:8px 10px;border-radius:8px;border:none;margin:2px;font-weight:700;cursor:pointer;color:#fff;font-size:11px}
 .report{width:180mm;min-height:210mm;margin:auto;background:#fff;border:1.5px solid #0a4eb5;border-radius:10px;padding:0 5mm 5mm 5mm;padding-top:36mm;line-height:1.55;box-sizing:border-box;position:relative;overflow:hidden}
 .report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:180px;height:180px;background-image:url('logo.png'),url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.04;filter:grayscale(100%) brightness(1.5);z-index:0;pointer-events:none}
 .report-inner{width:170mm;min-height:165mm;margin:2mm auto 2mm auto;padding:3mm 4mm;line-height:1.55;font-size:11.5px;z-index:2;color:#000;position:relative}
@@ -15,6 +15,7 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 .loginBox{background:#fff;padding:30px;border-radius:20px;width:90%;max-width:400px;text-align:center;box-shadow:0 20px 40px #0005}
 @media print{@page{size:180mm 210mm;margin:0}body{background:#fff}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:180mm;min-height:210mm;border:none;margin:0}.report::before{opacity:0.04;width:180px;height:180px;-webkit-print-color-adjust:exact;print-color-adjust:exact}.diagramBox{opacity:0.18;-webkit-print-color-adjust:exact;print-color-adjust:exact}.noPrint{display:none}}
 .boxTitle{font-size:15px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;justify-content:space-between}
+.editing{border:3px solid #f59e0b!important;background:#fffbeb!important}
 </style></head><body>
 
 <div id="loginOverlay">
@@ -29,16 +30,16 @@ input,select,textarea{width:100%;padding:11px;border-radius:10px;border:2px soli
 
 <div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px">
 <img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:60px;height:60px;border-radius:50%;border:2px solid #0a4eb5;filter:grayscale(20%)">
-<div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981">● 140 Templates | Drive Fixed | 21x18cm</div></div>
+<div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p>Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:11px;color:#10b981">● 140 Templates | Edit Added | 21x18cm | Drive Fixed</div></div>
 </div>
 
 <div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - 140</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search template..." onkeyup="filterTemplates()"><select id="uType" size="20" style="height:400px;font-size:13px;font-weight:600"></select><button class="small" style="background:#8b5cf6;width:100%;padding:12px;margin-top:8px" onclick="useSelectedTemplate()">Use This Template</button></div>
 
-<div class="card noPrint" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Prepare Report</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><input id="pIDMobile" placeholder="Patient ID / Mobile"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref"></select><select id="sono"></select></div><div style="border:2px solid #10b981;border-radius:12px;padding:10px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:12px">C/O</label><textarea id="pComplaint" rows="2"></textarea></div><textarea id="rText" rows="24" style="font-family:Consolas,monospace;font-size:11.5px"></textarea><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn" onclick="make()">Generate Final Report</button><button class="btn" style="background:#10b981" onclick="saveR()">Save Report</button></div></div>
+<div class="card noPrint" id="formCard" style="border:3px solid #1e90ff"><div class="boxTitle"><span id="formTitle">Prepare Report</span><span id="editingBadge" style="display:none;background:#f59e0b;color:#fff;padding:4px 10px;border-radius:20px;font-size:10px">EDIT MODE</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><input id="pIDMobile" placeholder="Patient ID / Mobile"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref"></select><select id="sono"></select></div><div style="border:2px solid #10b981;border-radius:12px;padding:10px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:12px">C/O</label><textarea id="pComplaint" rows="2"></textarea></div><textarea id="rText" rows="24" style="font-family:Consolas,monospace;font-size:11.5px"></textarea><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button class="btn" onclick="make()">Generate Final Report</button><button class="btn" id="saveBtn" style="background:#10b981" onclick="saveR()">Save Report</button></div><button id="cancelEditBtn" class="btn" style="background:#64748b;display:none;margin-top:8px" onclick="cancelEdit()">Cancel Edit - New Report</button></div>
 
 <div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#000;padding:12px 20px" onclick="window.print()">Print</button><button class="small" style="background:#10b981;padding:12px 20px" onclick="pdf()">PDF</button><button class="small" style="background:#0a4eb5;padding:12px 20px" onclick="saveCurrentToDrive()">☁️ Save to Google Drive</button></div></div>
 
-<div class="card noPrint"><div class="boxTitle"><span>Saved Reports - Local</span><span style="font-size:10px;color:#666">View / Drive / Del</span></div><input id="sBox" placeholder="Search..." onkeyup="render()"><div id="list"></div></div>
+<div class="card noPrint"><div class="boxTitle"><span>Saved Reports - Local</span><span style="font-size:10px;color:#666">View / Edit / Drive / Del</span></div><input id="sBox" placeholder="Search..." onkeyup="render()"><div id="list"></div></div>
 
 <div class="card noPrint" style="border:2px dashed #0a4eb5;background:#f0f7ff"><div class="boxTitle"><span>☁️ Google Drive Backups</span><button class="small" style="background:#0a4eb5" onclick="renderDrive()">Refresh</button></div><div id="driveList"></div></div>
 
@@ -51,6 +52,8 @@ fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
 function checkPass(){let p=document.getElementById('passInput').value;if(p==='Zee'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';}else{document.getElementById('passErr').style.display='block';}}
 if(sessionStorage.getItem('azam_login')==='ok'){document.getElementById('loginOverlay').style.display='none';}
 document.getElementById('passInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkPass();});
+
+let editingId = null; // Edit mode tracking
 
 const allNames=["WHOLE ABDOMEN - Normal","WHOLE ABDOMEN - Fatty Liver Grade 1","WHOLE ABDOMEN - Fatty Liver Grade 2","WHOLE ABDOMEN - Fatty Liver Grade 3","WHOLE ABDOMEN - Hepatomegaly","WHOLE ABDOMEN - Splenomegaly","WHOLE ABDOMEN - Hepatosplenomegaly","WHOLE ABDOMEN - Cholelithiasis Single","WHOLE ABDOMEN - Cholelithiasis Multiple","WHOLE ABDOMEN - Gall Bladder Sludge","WHOLE ABDOMEN - Cholecystitis Acute","WHOLE ABDOMEN - CBD Dilated","WHOLE ABDOMEN - Appendicitis","WHOLE ABDOMEN - Umbilical Hernia","WHOLE ABDOMEN - Inguinal Hernia Right","WHOLE ABDOMEN - Inguinal Hernia Left","WHOLE ABDOMEN - Liver Cyst","WHOLE ABDOMEN - Liver Hemangioma","WHOLE ABDOMEN - Ascites Mild","WHOLE ABDOMEN - Ascites Moderate to Gross","WHOLE ABDOMEN - Liver Abscess","WHOLE ABDOMEN - Renal Cyst","WHOLE ABDOMEN - Gall Bladder Polyp","WHOLE ABDOMEN - Pancreatitis Acute","WHOLE ABDOMEN - Paraumbilical Hernia","WHOLE ABDOMEN - Ventral Hernia","WHOLE ABDOMEN - Incisional Hernia","WHOLE ABDOMEN - Lymphadenopathy","KUB - Normal","KUB - Renal Calculus Right","KUB - Renal Calculus Left","KUB - Renal Calculus Bilateral","KUB - Staghorn Calculus","KUB - Microliths Bilateral","KUB - Hydronephrosis Mild Right","KUB - Hydronephrosis Moderate Right","KUB - Hydronephrosis Severe Right","KUB - Hydronephrosis Mild Left","KUB - Hydronephrosis Moderate Left","KUB - Hydronephrosis Severe Left","KUB - Hydronephrosis Bilateral Mild","KUB - Hydronephrosis Bilateral Moderate","KUB - Hydroureteronephrosis Right","KUB - Hydroureteronephrosis Left","KUB - Hydroureteronephrosis Bilateral","KUB - Ureteric Calculus with Hydronephrosis","KUB - PUJ Obstruction Right","KUB - PUJ Obstruction Left","KUB - Parenchymal Changes Grade 1","KUB - Parenchymal Changes Grade 2","KUB - Parenchymal Changes Grade 3","KUB - Simple Cortical Cyst Right","KUB - Simple Cortical Cyst Left","KUB - Bilateral Cortical Cysts","KUB - Complex Cyst Right","KUB - Complex Cyst Left","KUB - Polycystic Kidneys","KUB - Bladder Stone Single","KUB - Bladder Stones Multiple","KUB - Cystitis Thickened Wall","KUB - Bladder Diverticulum","KUB - Bladder Mass","KUB - Ectopic Kidney Right","KUB - Bladder Trabeculation","KUB - High Post Void Residual","KUB + PROSTATE - Normal","KUB + PROSTATE - BPH","KUB + PROSTATE - BPH with Cystitis","KUB + PROSTATE - Prostatitis","KUB + PROSTATE - Prostate Calcification","PELVIS - Normal","PELVIS - PCOS","PELVIS - Fibroid Intramural","PELVIS - Fibroid Subserosal","PELVIS - Fibroid Submucosal","PELVIS - Multiple Fibroids","PELVIS - Ovarian Cyst Simple Right","PELVIS - Ovarian Cyst Simple Left","PELVIS - Ovarian Cyst Bilateral","PELVIS - Endometrioma","PELVIS - Dermoid Cyst","PELVIS - PID","PELVIS - Free Fluid POD","PELVIS - Early Pregnancy","PELVIS - Bulky Uterus","PELVIS - Endometrial Hyperplasia","PELVIS - Endometrial Polyp","FWB - Normal Single Pregnancy","FWB - Breech Presentation","FWB - IUGR","FWB - Twins Normal","FWB - Oligohydramnios","FWB - Polyhydramnios","FWB - Early Pregnancy 6-8 Weeks","FWB - Anomaly Scan Normal","FWB - Placenta Previa","FWB - Placental Abruption","FWB - Growth Scan Normal","FWB - IUD / Demise","BREAST - Normal","BREAST - Fibroadenoma Right","BREAST - Fibroadenoma Left","BREAST - Fibroadenoma Bilateral","BREAST - Breast Cyst Right","BREAST - Breast Cyst Left","BREAST - Breast Cysts Multiple","BREAST - Fibrocystic Disease","BREAST - Mastitis","BREAST - Breast Abscess","BREAST - Gynecomastia","BREAST - Suspicious Mass","THYROID - Normal","THYROID - Multinodular Goiter","THYROID - Solitary Nodule Right","THYROID - Solitary Nodule Left","THYROID - Thyroid Cyst Right","THYROID - Thyroid Cyst Left","THYROID - Thyroiditis","THYROID - Hyperthyroid Goiter","SCROTUM - Normal","SCROTUM - Hydrocele Right","SCROTUM - Hydrocele Left","SCROTUM - Hydrocele Bilateral","SCROTUM - Varicocele Left","SCROTUM - Varicocele Right","SCROTUM - Varicocele Bilateral","SCROTUM - Epididymitis Right","SCROTUM - Epididymitis Left","SCROTUM - Epididymo-orchitis Right","SCROTUM - Epididymo-orchitis Left","SCROTUM - Orchitis","SCROTUM - Testicular Torsion","TESTIS - Microlithiasis","TESTIS - Testicular Cyst","AXILLA - Normal","AXILLA - Lymphadenopathy Left","NECK - Normal","NECK - Cervical Lymphadenopathy","ABDOMEN + PELVIS - Normal Male","ABDOMEN + PELVIS - Normal Female"];
 
@@ -185,7 +188,50 @@ function make(){
   document.getElementById('reportContent').innerHTML=patientBorder+bodyHTML+footer;
   document.getElementById('outCard').style.display='block';
 }
-function saveR(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let rec={id:Date.now(),name:document.getElementById('pName')?.value||'',age:document.getElementById('pAge')?.value||'',gen:document.getElementById('pGen')?.value||'',mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',ref:document.getElementById('ref')?.value||'',sono:document.getElementById('sono')?.value||'',text:document.getElementById('rText')?.value||'',complaint:document.getElementById('pComplaint')?.value||'',html:document.getElementById('reportContent')?.innerHTML||''};all.unshift(rec);localStorage.setItem('azam_reports',JSON.stringify(all));render();alert('Saved locally');}
+
+function saveR(){
+  let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}
+  let rec={
+    id: editingId || Date.now(),
+    name:document.getElementById('pName')?.value||'',
+    age:document.getElementById('pAge')?.value||'',
+    gen:document.getElementById('pGen')?.value||'',
+    mobile:document.getElementById('pIDMobile')?.value||'',
+    type:document.getElementById('uType')?.value||'Normal',
+    date:document.getElementById('pDate')?.value||'',
+    ref:document.getElementById('ref')?.value||'',
+    sono:document.getElementById('sono')?.value||'',
+    text:document.getElementById('rText')?.value||'',
+    complaint:document.getElementById('pComplaint')?.value||'',
+    html:document.getElementById('reportContent')?.innerHTML||''
+  };
+  if(editingId){
+    let idx=all.findIndex(x=>x.id===editingId);
+    if(idx>=0){all[idx]=rec; alert('✅ Report Updated Successfully!');}
+    else{all.unshift(rec);}
+    cancelEdit();
+  }else{
+    all.unshift(rec);
+    alert('✅ Saved locally');
+  }
+  localStorage.setItem('azam_reports',JSON.stringify(all));
+  render();
+}
+
+function cancelEdit(){
+  editingId=null;
+  document.getElementById('formCard').classList.remove('editing');
+  document.getElementById('editingBadge').style.display='none';
+  document.getElementById('formTitle').innerText='Prepare Report';
+  document.getElementById('saveBtn').innerText='Save Report';
+  document.getElementById('saveBtn').style.background='#10b981';
+  document.getElementById('cancelEditBtn').style.display='none';
+  document.getElementById('pName').value='';
+  document.getElementById('pAge').value='';
+  document.getElementById('pIDMobile').value='';
+  document.getElementById('pComplaint').value='';
+  document.getElementById('rText').value='';
+}
 
 function saveCurrentToDrive(){
   let content=document.getElementById('reportContent').innerHTML;
@@ -197,12 +243,12 @@ function saveCurrentToDrive(){
   let a=document.createElement('a'); a.href=url; a.download=name+'.html'; a.click();
   try{
     let driveData=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]');
-    driveData.unshift({id:Date.now(),name:document.getElementById('pName').value||'Report',mobile:document.getElementById('pIDMobile').value||'',type:document.getElementById('uType').value||'',date:new Date().toISOString().slice(0,10),html:content});
+    driveData.unshift({id:Date.now(),name:document.getElementById('pName').value||'Report',mobile:document.getElementById('pIDMobile').value||'',type:document.getElementById('uType').value||'Normal',date:new Date().toISOString().slice(0,10),html:content});
     localStorage.setItem('azam_drive_backup',JSON.stringify(driveData));
     document.getElementById('driveStatus').innerText='● Drive Saved - '+name+' | '+new Date().toLocaleString();
     document.getElementById('driveStatus').style.color='#10b981';
     renderDrive();
-    alert('☁️ Report Save ho gayi! HTML download ho gaya hai, ab is file ko Google Drive pe upload kar den. Drive Backup list me bhi save ho gayi hai.');
+    alert('☁️ Report Save ho gayi! HTML download ho gaya hai, ab is file ko Google Drive pe upload kar den.');
     window.open('https://drive.google.com/drive/','_blank');
   }catch(e){alert('Drive save error - '+e.message);}
 }
@@ -217,19 +263,35 @@ function saveToDriveById(id){
   let a=document.createElement('a'); a.href=url; a.download=name+'.html'; a.click();
   try{
     let driveData=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]');
-    driveData.unshift({id:Date.now(),name:r.name,mobile:r.mobile,type:r.type,date:new Date().toISOString().slice(0,10),html:r.html||r.text});
+    driveData.unshift({id:Date.now(),name:r.name,mobile:r.mobile,type:r.type||'Normal',date:new Date().toISOString().slice(0,10),html:r.html||r.text});
     localStorage.setItem('azam_drive_backup',JSON.stringify(driveData));
     renderDrive();
-    alert('☁️ '+r.name+' Drive pe save ho gayi! File download ho gayi, Google Drive pe upload kar den.');
+    alert('☁️ '+r.name+' Drive pe save ho gayi!');
     window.open('https://drive.google.com/drive/','_blank');
   }catch(e){alert('Error: '+e.message);}
 }
 
-function render(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let q=(document.getElementById('sBox')?.value||'').toLowerCase();let listEl=document.getElementById('list');if(!listEl)return;let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')).toLowerCase().includes(q));if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:20px">No reports</p>';return;}listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:8px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between"><div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}</small></div><div><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#10b981" onclick="saveToDriveById(${r.id})">Drive</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}
-function renderDrive(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]');}catch(e){all=[];}let el=document.getElementById('driveList');if(!el)return;if(all.length===0){el.innerHTML='<p style="text-align:center;color:#888;padding:15px">No Drive backups yet. Save to Drive karen.</p>';return;}el.innerHTML=all.map(r=>`<div style="border:1px solid #a5b4fc;padding:8px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;background:#fff"><div><b>☁️ ${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date} | Drive Saved</small></div><div><button class="small" style="background:#0a4eb5" onclick="viewDriveR(${r.id})">View</button><button class="small" style="background:#ff3b30" onclick="delDriveR(${r.id})">Del</button></div></div>`).join('');}
-function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('pName').value=r.name;document.getElementById('pAge').value=r.age;document.getElementById('pGen').value=r.gen;document.getElementById('pIDMobile').value=r.mobile;document.getElementById('uType').value=r.type;document.getElementById('pDate').value=r.date;document.getElementById('ref').value=r.ref;document.getElementById('sono').value=r.sono;document.getElementById('rText').value=r.text;document.getElementById('pComplaint').value=r.complaint;document.getElementById('reportContent').innerHTML=r.html||'';document.getElementById('outCard').style.display='block';window.scrollTo(0,0);}
+function render(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let q=(document.getElementById('sBox')?.value||'').toLowerCase();let listEl=document.getElementById('list');if(!listEl)return;let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')).toLowerCase().includes(q));if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:20px">No reports</p>';return;}listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:8px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;flex-wrap:wrap"><div style="flex:1"><b>${r.name||'Unnamed'}</b> - ${r.type||'Normal'}<br><small>${r.mobile||''} | ${r.date||''}</small></div><div style="display:flex;flex-wrap:wrap"><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#f59e0b" onclick="editR(${r.id})">Edit</button><button class="small" style="background:#10b981" onclick="saveToDriveById(${r.id})">Drive</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}
+function renderDrive(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]');}catch(e){all=[];}let el=document.getElementById('driveList');if(!el)return;if(all.length===0){el.innerHTML='<p style="text-align:center;color:#888;padding:15px">No Drive backups yet. Save to Drive karen.</p>';return;}el.innerHTML=all.map(r=>`<div style="border:1px solid #a5b4fc;padding:8px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;background:#fff"><div><b>☁️ ${r.name||'Unnamed'}</b> - ${r.type||'Normal'}<br><small>${r.mobile||''} | ${r.date||''} | Drive Saved</small></div><div><button class="small" style="background:#0a4eb5" onclick="viewDriveR(${r.id})">View</button><button class="small" style="background:#ff3b30" onclick="delDriveR(${r.id})">Del</button></div></div>`).join('');}
+
+function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('reportContent').innerHTML=r.html||'';document.getElementById('outCard').style.display='block';window.scrollTo(0,document.getElementById('outCard').offsetTop);}
+function editR(id){
+  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;
+  editingId = id;
+  document.getElementById('pName').value=r.name||'';document.getElementById('pAge').value=r.age||'';document.getElementById('pGen').value=r.gen||'Male';document.getElementById('pIDMobile').value=r.mobile||'';document.getElementById('uType').value=r.type||'';document.getElementById('pDate').value=r.date||'';document.getElementById('ref').value=r.ref||'';document.getElementById('sono').value=r.sono||'';document.getElementById('rText').value=r.text||'';document.getElementById('pComplaint').value=r.complaint||'';
+  document.getElementById('formCard').classList.add('editing');
+  document.getElementById('editingBadge').style.display='inline-block';
+  document.getElementById('formTitle').innerText='Editing: '+(r.name||'Report');
+  document.getElementById('saveBtn').innerText='Update Report';
+  document.getElementById('saveBtn').style.background='#f59e0b';
+  document.getElementById('cancelEditBtn').style.display='block';
+  document.getElementById('reportContent').innerHTML=r.html||'';
+  document.getElementById('outCard').style.display='block';
+  window.scrollTo(0,document.getElementById('formCard').offsetTop);
+  alert('✏️ Edit Mode: Ab aap is report ko edit kar sakte hain. Change karke Update Report dabayen.');
+}
 function viewDriveR(id){let all=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('reportContent').innerHTML=r.html;document.getElementById('outCard').style.display='block';window.scrollTo(0,0);}
-function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();}
+function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));if(editingId===id)cancelEdit();render();}
 function delDriveR(id){if(!confirm('Delete Drive backup?'))return;let all=JSON.parse(localStorage.getItem('azam_drive_backup')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_drive_backup',JSON.stringify(all));renderDrive();}
 function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[180,210]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:document.getElementById('rText').value;doc.text(doc.splitTextToSize(txt,160),10,10);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}
 function init(){let s=document.getElementById('uType');if(s){s.innerHTML='';allTemplates.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate');if(pd)pd.valueAsDate=new Date();let tc=document.getElementById('templateCount');if(tc)tc.innerText=allTemplates.length+' Templates';render();renderDrive();}
