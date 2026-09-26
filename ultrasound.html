@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - Final 2 Lines Fix</title>
+<title>Azam Medical Centre - Final with Drive Load</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -19,7 +19,7 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 #loginOverlay{position:fixed;inset:0;background:#0a4eb5;display:flex;align-items:center;justify-content:center;z-index:99999}
 .loginBox{background:#fff;padding:30px;border-radius:20px;width:90%;max-width:400px;text-align:center}
 @media print{@page{size:180mm 210mm;margin:0}body{background:#fff}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:180mm;min-height:210mm;border:none;margin:0}.noPrint{display:none}}
-.boxTitle{font-size:13px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;justify-content:space-between}
+.boxTitle{font-size:13px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
 .calcBox{border:2px solid #f59e0b;background:#fffbeb;padding:10px;border-radius:12px;margin:10px 0;display:none}
 .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
 </style></head><body>
@@ -54,7 +54,17 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 <button class="small" style="background:#0a4eb5;padding:12px 22px" onclick="saveR()">Save to Drive</button>
 </div></div>
 
-<div class="card noPrint"><div class="boxTitle"><span>Saved Reports</span></div><input id="sBox" placeholder="Search..." onkeyup="render()"><div id="list"></div></div>
+<div class="card noPrint">
+<div class="boxTitle">
+<span>Saved Reports</span>
+<div style="display:flex;gap:6px">
+<button class="small" style="background:#7c3aed;padding:8px 14px" onclick="loadFromDrive()">☁️ Load from Drive</button>
+<button class="small" style="background:#10b981;padding:8px 14px" onclick="render()">Refresh</button>
+</div>
+</div>
+<input id="sBox" placeholder="Search..." onkeyup="render()"><div id="list"></div>
+<p style="font-size:9px;color:#666;margin-top:8px">Tip: Kisi aur PC me pehle Google Login karke "Load from Drive" dabayen, sari reports aa jayengi.</p>
+</div>
 
 <script>
 const CLIENT_ID='153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com';
@@ -62,10 +72,49 @@ const SCOPES='https://www.googleapis.com/auth/drive.file';
 let tokenClient,driveFolderId=null,editingId=null;
 function gapiLoaded(){gapi.load('client', async()=>{try{await gapi.client.init({discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]});}catch(e){}});}
 function gisLoaded(){try{tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID, scope:SCOPES, callback:''});}catch(e){}}
-function ensureDriveAuth(){return new Promise((res,rej)=>{if(!tokenClient){rej('No tokenClient');return;}tokenClient.callback=(r)=>{if(r.error)rej(r);else{localStorage.setItem('gdrive_token',JSON.stringify(gapi.client.getToken())); res(r);}};tokenClient.requestAccessToken({prompt:'consent'});});}
+function ensureDriveAuth(){return new Promise((res,rej)=>{if(!tokenClient){alert('Google API load ho rahi hai, 2 second baad try karen');rej('No tokenClient');return;}tokenClient.callback=(r)=>{if(r.error)rej(r);else{localStorage.setItem('gdrive_token',JSON.stringify(gapi.client.getToken())); document.getElementById('driveStatus').innerText='● Drive Connected'; res(r);}};tokenClient.requestAccessToken({prompt:''});});}
 async function getOrCreateFolder(){if(driveFolderId)return driveFolderId;try{let r=await gapi.client.drive.files.list({q:"name='Azam_Medical_Reports' and mimeType='application/vnd.google-apps.folder' and trashed=false",fields:"files(id,name)"});if(r.result.files&&r.result.files.length>0){driveFolderId=r.result.files[0].id;return driveFolderId;}let c=await gapi.client.drive.files.create({resource:{name:'Azam_Medical_Reports', mimeType:'application/vnd.google-apps.folder'},fields:'id'});driveFolderId=c.result.id;return driveFolderId;}catch(e){return null;}}
 async function findFileInFolder(folderId,fileName){try{let q=`'${folderId}' in parents and name='${fileName}' and trashed=false`;let res=await gapi.client.drive.files.list({q:q,fields:"files(id,name)"});if(res.result.files&&res.result.files.length>0) return res.result.files[0]; return null;}catch(e){return null;}}
-async function uploadToDriveFile(name,content){ try{ let savedToken=localStorage.getItem('gdrive_token'); if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}} await ensureDriveAuth(); let folderId=await getOrCreateFolder(); if(!folderId) return; let token=gapi.client.getToken(); let existing=await findFileInFolder(folderId,name); if(existing){ await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=media`,{method:'PATCH',headers:{'Authorization':'Bearer '+token.access_token,'Content-Type':'application/json'},body:content}); return; } const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents:[folderId]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file); await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form}); }catch(e){} }
+async function uploadToDriveFile(name,content){
+ try{
+  let savedToken=localStorage.getItem('gdrive_token');
+  if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}}
+  await ensureDriveAuth();
+  let folderId=await getOrCreateFolder(); if(!folderId) return;
+  let token=gapi.client.getToken();
+  let existing=await findFileInFolder(folderId,name);
+  if(existing){
+   await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=media`,{method:'PATCH',headers:{'Authorization':'Bearer '+token.access_token,'Content-Type':'application/json'},body:content});
+   return;
+  }
+  const file=new Blob([content],{type:'application/json'});
+  const meta={name:name,mimeType:'application/json',parents:[folderId]};
+  const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file);
+  await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form});
+ }catch(e){console.log(e)}
+}
+async function loadFromDrive(){
+ try{
+  document.getElementById('driveStatus').innerText='● Loading...';
+  let savedToken=localStorage.getItem('gdrive_token');
+  if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}}
+  await ensureDriveAuth();
+  let folderId=await getOrCreateFolder();
+  if(!folderId){alert('Drive folder nahi mila');return;}
+  let file=await findFileInFolder(folderId,'Azam_Medical_Backup_ALL.json');
+  if(!file){alert('Drive par koi backup nahi mila');document.getElementById('driveStatus').innerText='● No Backup';return;}
+  let token=gapi.client.getToken();
+  let res=await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`,{headers:{'Authorization':'Bearer '+token.access_token}});
+  if(!res.ok){alert('Load failed');return;}
+  let text=await res.text();
+  let data=JSON.parse(text);
+  if(!Array.isArray(data)){alert('Invalid backup');return;}
+  localStorage.setItem('azam_reports',JSON.stringify(data));
+  render();
+  document.getElementById('driveStatus').innerText='● Loaded '+data.length+' reports';
+  alert('✅ '+data.length+' reports Drive se load ho gayi hain');
+ }catch(e){console.log(e);alert('Load error: '+e.message);document.getElementById('driveStatus').innerText='● Error';}
+}
 window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1500);});
 function checkCalculator(){ let v=document.getElementById('uType').value||''; document.getElementById('obsCalc').style.display = (v.includes('FWB'))? 'block' : 'none'; document.getElementById('prosCalc').style.display = (v.includes('PROSTATE'))? 'block' : 'none'; }
 function calcOBS(){ let bpd=parseFloat(document.getElementById('bpd').value)||0; let hc=parseFloat(document.getElementById('hc').value)||0; let ac=parseFloat(document.getElementById('ac').value)||0; let fl=parseFloat(document.getElementById('fl').value)||0; if(fl>0){ let fl_cm = fl/10; let ga_fl = 10.1 + (fl_cm * 2.4); let avgGA = ga_fl; if(bpd>0) avgGA=(ga_fl + (bpd*0.4+4))/2; document.getElementById('gaResult').value = avgGA.toFixed(1)+' wks'; if(ac>0 && hc>0){ let AC = ac/10, FL = fl/10, BPD = bpd>0?bpd/10:5; let logEFW = 1.335 - (0.0034*AC*FL) + (0.0316*BPD) + (0.0457*AC) + (0.1623*FL); let w = Math.pow(10, logEFW)*100; document.getElementById('efwResult').value = Math.round(w)+' gms'; } } }
@@ -165,11 +214,21 @@ function make(){
   if(!pn?.value){alert('Enter Name');return;}
   let pid=document.getElementById('pIDMobile')?.value||'';
 
-  // *** FIXED - 2 LINES ONLY - SMALL FONT TO FIT ALL ***
+  // *** FIXED: 2 LINES + SPACE + JUSTIFIED ***
   let patientBorder=`
-  <div style="border:1.2px solid #000;padding:5px 6px;margin-bottom:8px;font-size:8.5pt!important;line-height:1.4;font-family:Calibri!important">
-    <div style="font-size:8.5pt!important;white-space:nowrap">Name: ${document.getElementById('pName').value} | Age: ${document.getElementById('pAge').value} | Sex: ${document.getElementById('pGen').value} | Date: ${document.getElementById('pDate').value} | ID: ${pid}</div>
-    <div style="font-size:8.5pt!important">Ref By: ${document.getElementById('ref').value} | Sonologist: ${document.getElementById('sono').value}</div>
+  <div style="border:1.2px solid #000;padding:6px 8px;margin-bottom:8px;font-size:8.8pt!important;line-height:1.5">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:8.8pt!important">
+      <span>Name: ${document.getElementById('pName').value}</span>
+      <span>Age: ${document.getElementById('pAge').value}</span>
+      <span>Sex: ${document.getElementById('pGen').value}</span>
+      <span>Date: ${document.getElementById('pDate').value}</span>
+      <span>ID: ${pid}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:2px;font-size:8.8pt!important">
+      <span>Ref By: ${document.getElementById('ref').value}</span>
+      <span>Sonologist: ${document.getElementById('sono').value}</span>
+      <span style="opacity:0">.</span>
+    </div>
   </div>`;
 
   let complaintText=(document.getElementById('pComplaint')?.value||'').trim();
