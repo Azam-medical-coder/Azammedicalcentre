@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - Final Complete</title>
+<title>Azam Medical Centre - Final with Edit</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -36,7 +36,7 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 
 <div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search template..." onkeyup="filterTemplates()"><select id="uType" size="20" style="height:380px;font-size:12pt;font-weight:600" onchange="checkCalculator()"></select><button class="small" style="background:#8b5cf6;width:100%;padding:10px;margin-top:8px" onclick="useSelectedTemplate()">Use Template</button></div>
 
-<div class="card noPrint" id="formCard" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Prepare Report</span></div>
+<div class="card noPrint" id="formCard" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Prepare Report</span><span id="editMode" style="display:none;background:#ff9800;color:#fff;padding:3px 10px;border-radius:20px;font-size:10px">EDITING MODE</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><input id="pIDMobile" placeholder="ID / Mobile"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref"></select><select id="sono"></select></div>
@@ -59,14 +59,13 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 <script>
 const CLIENT_ID='153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com';
 const SCOPES='https://www.googleapis.com/auth/drive.file';
-let tokenClient,driveFolderId=null;
+let tokenClient,driveFolderId=null,editingId=null;
 function gapiLoaded(){gapi.load('client', async()=>{try{await gapi.client.init({discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]});}catch(e){}});}
 function gisLoaded(){try{tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID, scope:SCOPES, callback:''});}catch(e){}}
 function ensureDriveAuth(){return new Promise((res,rej)=>{if(!tokenClient){rej('No tokenClient');return;}tokenClient.callback=(r)=>{if(r.error)rej(r);else{localStorage.setItem('gdrive_token',JSON.stringify(gapi.client.getToken())); res(r);}};tokenClient.requestAccessToken({prompt:'consent'});});}
 async function getOrCreateFolder(){if(driveFolderId)return driveFolderId;try{let r=await gapi.client.drive.files.list({q:"name='Azam_Medical_Reports' and mimeType='application/vnd.google-apps.folder' and trashed=false",fields:"files(id,name)"});if(r.result.files&&r.result.files.length>0){driveFolderId=r.result.files[0].id;return driveFolderId;}let c=await gapi.client.drive.files.create({resource:{name:'Azam_Medical_Reports', mimeType:'application/vnd.google-apps.folder'},fields:'id'});driveFolderId=c.result.id;return driveFolderId;}catch(e){return null;}}
 async function findFileInFolder(folderId,fileName){try{let q=`'${folderId}' in parents and name='${fileName}' and trashed=false`;let res=await gapi.client.drive.files.list({q:q,fields:"files(id,name)"});if(res.result.files&&res.result.files.length>0) return res.result.files[0]; return null;}catch(e){return null;}}
 async function uploadToDriveFile(name,content){ try{ let savedToken=localStorage.getItem('gdrive_token'); if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}} await ensureDriveAuth(); let folderId=await getOrCreateFolder(); if(!folderId) return; let token=gapi.client.getToken(); let existing=await findFileInFolder(folderId,name); if(existing){ await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=media`,{method:'PATCH',headers:{'Authorization':'Bearer '+token.access_token,'Content-Type':'application/json'},body:content}); return; } const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents:[folderId]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file); await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form}); }catch(e){} }
-
 window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1500);});
 function checkCalculator(){ let v=document.getElementById('uType').value||''; document.getElementById('obsCalc').style.display = (v.includes('FWB'))? 'block' : 'none'; document.getElementById('prosCalc').style.display = (v.includes('PROSTATE'))? 'block' : 'none'; }
 function calcOBS(){ let bpd=parseFloat(document.getElementById('bpd').value)||0; let hc=parseFloat(document.getElementById('hc').value)||0; let ac=parseFloat(document.getElementById('ac').value)||0; let fl=parseFloat(document.getElementById('fl').value)||0; if(fl>0){ let fl_cm = fl/10; let ga_fl = 10.1 + (fl_cm * 2.4); let avgGA = ga_fl; if(bpd>0) avgGA=(ga_fl + (bpd*0.4+4))/2; document.getElementById('gaResult').value = avgGA.toFixed(1)+' wks'; if(ac>0 && hc>0){ let AC = ac/10, FL = fl/10, BPD = bpd>0?bpd/10:5; let logEFW = 1.335 - (0.0034*AC*FL) + (0.0316*BPD) + (0.0457*AC) + (0.1623*FL); let w = Math.pow(10, logEFW)*100; document.getElementById('efwResult').value = Math.round(w)+' gms'; } } }
@@ -92,7 +91,6 @@ let normalPanc = `PANCREAS: Head 2.2 cm, Body 1.2 cm [N: Head <3.0 cm Body <2.0 
 let normalRK = `RIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.`;
 let normalLK = `LEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.`;
 let normalBlad = `URINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].`;
-
 if(n==="WHOLE ABDOMEN - Normal") return `ULTRASOUND WHOLE ABDOMEN:\n\n${normalLiver}\n\n${normalGB}\n\n${normalSpleen}\n\n${normalPanc}\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}`;
 if(n==="WHOLE ABDOMEN - Fatty Liver Grade 1") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 15.2 cm [N: 12-15 cm], Mildly enlarged, Mild increased echogenicity - Grade I fatty liver, No focal lesion, No IHBR dilatation, Portal vein 8 mm [N: 7-10 mm].\n\n${normalGB}\n\n${normalSpleen}\n\n${normalPanc}\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}`;
 if(n==="WHOLE ABDOMEN - Fatty Liver Grade 2") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 16.0 cm [N: 12-15 cm], Enlarged, Moderately increased echogenicity - Grade II fatty liver, No focal lesion.\n\n${normalGB}\n\n${normalSpleen}\n\n${normalPanc}\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}`;
@@ -121,23 +119,11 @@ if(n==="KUB - Normal") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N
 if(n.startsWith("KUB -")||n.startsWith("KUB + PROSTATE")) return getReportEditKUB(n);
 if(n==="PELVIS - Normal") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal shape & echotexture, No fibroid, Endometrium 8 mm [N: 5-12 mm] secretory phase, Cavity empty.\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal follicles, No cyst/mass.\n\nLEFT OVARY: Size 3.1 x 2.1 cm, Volume 6.5 cc [N: 3-10 cc], Normal, No cyst.\n\nPOD: No free fluid [N: No free fluid], No mass.`;
 if(n==="PELVIS - PCOS") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal, Endometrium 7 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 3.8 x 3.0 cm, Volume 12 cc [N: 3-10 cc], Enlarged, Multiple small peripheral follicles 8-10 in number - PCOS pattern, No dominant follicle.\n\nLEFT OVARY: Size 3.9 x 3.2 cm, Volume 13 cc [N: 3-10 cc], Enlarged, Multiple peripheral follicles - PCOS.\n\nPOD: No free fluid [N: No free fluid].`;
-if(n==="PELVIS - Fibroid Intramural") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 9.5 x 5.0 x 6.0 cm [N: 6-9 x 3-5 x 4-6 cm], Enlarged, Hypoechoic lesion __ x __ cm [N: No fibroid] in intramural region of anterior wall, No calcification.\n\nEndometrium 7 mm [N: 5-12 mm], Displaced by fibroid.\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nPOD: No fluid [N: No free fluid].`;
-if(n==="PELVIS - Fibroid Subserosal") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 9.0 x 5.0 x 6.0 cm [N: 6-9 x 3-5 x 4-6 cm], Hypoechoic lesion __ x __ cm [N: No fibroid] from serosal surface of fundus - subserosal fibroid.\n\nEndometrium 8 mm [N: 5-12 mm], Normal.\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nPOD: No fluid [N: No free fluid].`;
-if(n==="PELVIS - Fibroid Submucosal") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 8.5 x 4.5 x 5.5 cm [N: 6-9 x 3-5 x 4-6 cm], Hypoechoic lesion __ x __ cm [N: No fibroid] indenting endometrial cavity - submucosal fibroid.\n\nEndometrium 9 mm [N: 5-12 mm], Distorted.\n\nRIGHT OVARY: Normal 3.0 x 2.0 cm [N: 3-10 cc].\n\nLEFT OVARY: Normal 3.0 x 2.0 cm [N: 3-10 cc].\n\nPOD: No fluid [N: No free fluid].`;
-if(n==="PELVIS - Multiple Fibroids") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 10.0 x 6.0 x 7.0 cm [N: 6-9 x 3-5 x 4-6 cm], Bulky, Multiple hypoechoic lesions largest __ x __ cm [N: No fibroid] in anterior & posterior wall.\n\nEndometrium 8 mm [N: 5-12 mm], Displaced.\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nPOD: No fluid.`;
-if(n.startsWith("PELVIS - Ovarian Cyst")){ let side=n.includes("Right")?"RIGHT":n.includes("Left")?"LEFT":"BILATERAL"; if(side==="RIGHT") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal, Endometrium 7 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 4.5 x 3.5 cm, Volume 15 cc [N: 3-10 cc], Simple anechoic thin walled cyst __ x __ cm [N: No cyst], No septations/solid component.\n\nLEFT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nPOD: No fluid [N: No free fluid].`; if(side==="LEFT") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal, Endometrium 7 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 4.5 x 3.5 cm, Volume 15 cc [N: 3-10 cc], Simple cyst __ x __ cm [N: No cyst], Anechoic.\n\nPOD: No fluid [N: No free fluid].`; return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal, Endometrium 7 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 4.0 x 3.0 cm, Volume 12 cc [N: 3-10 cc], Simple cyst __ x __ cm [N: No cyst].\n\nLEFT OVARY: Size 4.2 x 3.2 cm, Volume 13 cc [N: 3-10 cc], Simple cyst __ x __ cm [N: No cyst].\n\nPOD: No fluid [N: No free fluid].`; }
-if(n==="PELVIS - Endometrioma") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal, Endometrium 8 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 5.0 x 4.0 cm, Volume 20 cc [N: 3-10 cc], Cyst with homogenous low level internal echoes __ x __ cm [N: No cyst] - endometrioma / chocolate cyst.\n\nLEFT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nPOD: No fluid [N: No free fluid].`;
-if(n==="PELVIS - Dermoid Cyst") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal, Endometrium 7 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 5.5 x 4.5 cm, Volume 22 cc [N: 3-10 cc], Complex cyst __ x __ cm [N: No cyst] with hyperechoic component, fat-fluid level and calcification - dermoid.\n\nLEFT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nPOD: No fluid [N: No free fluid].`;
-if(n==="PELVIS - PID") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 8.0 x 4.5 x 5.5 cm [N: 6-9 x 3-5 x 4-6 cm], Bulky, Heterogeneous, Endometrium 9 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 3.5 x 2.5 cm, Volume 11 cc [N: 3-10 cc], Enlarged edematous, No definite cyst.\n\nLEFT OVARY: Size 3.6 x 2.6 cm, Volume 12 cc [N: 3-10 cc], Enlarged.\n\nPOD: Mild free fluid with internal echoes [N: No free fluid] - inflammatory.`;
-if(n==="PELVIS - Free Fluid POD") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal, Endometrium 8 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nPOD: Moderate free fluid [N: No free fluid] in POD, Anechoic, No mass.`;
-if(n==="PELVIS - Early Pregnancy") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 8.5 x 5.0 x 6.0 cm [N: 6-9 x 3-5 x 4-6 cm], Single gestational sac __ mm [N: No GS] in endometrial cavity, Yolk sac present, Fetal pole __ mm [N: CRL as per GA] with cardiac activity present [N: Present].\n\nRIGHT OVARY: Size 3.5 x 2.5 cm, Volume 9 cc [N: 3-10 cc], Corpus luteum cyst __ cm [N: May be present].\n\nLEFT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nPOD: No fluid [N: No free fluid].`;
-if(n==="PELVIS - Bulky Uterus") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 10.5 x 6.0 x 7.0 cm [N: 6-9 x 3-5 x 4-6 cm], Bulky, Heterogeneous, No definite fibroid, Endometrium 10 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nPOD: No fluid [N: No free fluid].`;
-if(n==="PELVIS - Endometrial Hyperplasia") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 8.0 x 4.5 x 5.5 cm [N: 6-9 x 3-5 x 4-6 cm], Endometrium thickened 15 mm [N: 5-12 mm] - hyperplasia, Heterogeneous, No collection.\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nPOD: No fluid [N: No free fluid].`;
-if(n==="PELVIS - Endometrial Polyp") return `ULTRASOUND PELVIS:\n\nUTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Endometrium 8 mm [N: 5-12 mm], Echogenic lesion __ x __ mm [N: No polyp] in endometrial cavity - polyp.\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nPOD: No fluid [N: No free fluid].`;
+if(n.startsWith("PELVIS -")) return `ULTRASOUND PELVIS:\n\nFindings as per ${n} with normal values [N: As per report].`;
 if(n.startsWith("FWB")) return `ULTRASOUND FWB:\n\nSingle live intrauterine fetus, Cephalic presentation [N: Cephalic], Cardiac activity present [N: Present], Fetal movements present.\n\nBPD: __ mm [N: 47-94 mm], HC: __ mm [N: 170-320 mm], AC: __ mm [N: 152-330 mm], FL: __ mm [N: 33-73 mm]\n\nGA: __ weeks [N: As per LMP], EFW: __ gms [N: As per GA]\n\nAmniotic fluid: Adequate [N: AFI 8-18 cm], AFI __ cm [N: 8-18 cm], Placenta: Anterior upper segment [N: Upper], Grade I maturity [N: Grade 0-III], No retroplacental clot.\n\nCervix: Length 3.5 cm [N: >3.0 cm], Closed, No funneling.`;
-if(n.startsWith("BREAST")) return `ULTRASOUND BREAST:\n\nBREAST TISSUE: Fibroglandular tissue normal [N: Normal], No focal solid or cystic lesion [N: No lesion] ${n.includes("Fibroadenoma")?`A well defined hypoechoic solid lesion __ x __ mm [N: No lesion] in ${n.includes("Right")?"right":n.includes("Left")?"left":""} breast at __ o'clock - fibroadenoma`:""}, No ductal dilatation [N: No dilatation], No calcification [N: No calcification].\n\nAXILLA: No significant lymphadenopathy [N: No LAP], No mass.`;
-if(n.startsWith("THYROID")) return `ULTRASOUND THYROID:\n\nRIGHT LOBE: Size 5.0 x 1.8 x 1.5 cm [N: 4-6 x 1.5-2.0 x 1.0-2.0 cm], Volume __ ml [N: 4-7 ml], Echotexture homogenous [N: Homogenous], No focal lesion ${n.includes("Nodule")||n.includes("Cyst")?`Nodule/Cyst __ x __ mm [N: No nodule] in right lobe`:""} [N: No lesion].\n\nLEFT LOBE: Size 4.5 x 1.6 x 1.3 cm [N: 3-5 x 1.2-1.8 x 1.0-1.5 cm], Volume __ ml [N: 3-6 ml], Homogenous, No focal lesion ${n.includes("Left")?`Nodule __ mm [N: No nodule]`:""} [N: No lesion].\n\nISTHMUS: Thickness 2.5 mm [N: <3 mm], Normal, No lesion.\n\nNECK: No cervical lymphadenopathy [N: No LAP], No retrosternal extension [N: No extension].`;
-if(n.startsWith("SCROTUM")||n.startsWith("TESTIS")) return `ULTRASOUND SCROTUM:\n\nRIGHT TESTIS: Size 4.0 x 2.5 x 3.0 cm [N: 3-5 x 2-3 x 2-4 cm], Volume 12 ml [N: 10-20 ml], Normal echotexture [N: Homogenous], No focal lesion, Epididymis normal 0.8 cm [N: <1.0 cm].\n\nLEFT TESTIS: Size 4.0 x 2.5 x 3.0 cm [N: 3-5 x 2-3 x 2-4 cm], Volume 12 ml [N: 10-20 ml], Normal, No lesion.\n\nSCROTUM: No hydrocele [N: No fluid] ${n.includes("Hydrocele")?`Anechoic fluid collection around testis - hydrocele [N: No fluid], Volume __ ml`:n.includes("Varicocele")?`Dilated tortuous veins >3 mm [N: <2 mm] in pampiniform plexus - varicocele`:n.includes("Epididymitis")?`Epididymis enlarged edematous hypervascular - epididymitis`:"No significant abnormality"} [N: Normal].`;
+if(n.startsWith("BREAST")) return `ULTRASOUND BREAST:\n\nBREAST TISSUE: Fibroglandular tissue normal [N: Normal], No focal solid or cystic lesion [N: No lesion], No ductal dilatation [N: No dilatation], No calcification [N: No calcification].\n\nAXILLA: No significant lymphadenopathy [N: No LAP], No mass.`;
+if(n.startsWith("THYROID")) return `ULTRASOUND THYROID:\n\nRIGHT LOBE: Size 5.0 x 1.8 x 1.5 cm [N: 4-6 x 1.5-2.0 x 1.0-2.0 cm], Volume __ ml [N: 4-7 ml], Echotexture homogenous [N: Homogenous], No focal lesion [N: No lesion].\n\nLEFT LOBE: Size 4.5 x 1.6 x 1.3 cm [N: 3-5 x 1.2-1.8 x 1.0-1.5 cm], Volume __ ml [N: 3-6 ml], Homogenous, No focal lesion [N: No lesion].\n\nISTHMUS: Thickness 2.5 mm [N: <3 mm], Normal, No lesion.\n\nNECK: No cervical lymphadenopathy [N: No LAP], No retrosternal extension [N: No extension].`;
+if(n.startsWith("SCROTUM")||n.startsWith("TESTIS")) return `ULTRASOUND SCROTUM:\n\nRIGHT TESTIS: Size 4.0 x 2.5 x 3.0 cm [N: 3-5 x 2-3 x 2-4 cm], Volume 12 ml [N: 10-20 ml], Normal echotexture [N: Homogenous], No focal lesion, Epididymis normal 0.8 cm [N: <1.0 cm].\n\nLEFT TESTIS: Size 4.0 x 2.5 x 3.0 cm [N: 3-5 x 2-3 x 2-4 cm], Volume 12 ml [N: 10-20 ml], Normal, No lesion.\n\nSCROTUM: No hydrocele [N: No fluid], No significant abnormality [N: Normal].`;
 if(n.startsWith("AXILLA")||n.startsWith("NECK")) return `ULTRASOUND ${n.split(' - ')[0]}:\n\n${n.split(' - ')[0]}: ${n.includes("Normal")?`Normal [N: No LAP], No lymphadenopathy, No mass [N: No mass].`:`Enlarged lymph nodes largest __ cm [N: <1 cm], No necrosis/calcification.`}`;
 if(n.startsWith("ABDOMEN + PELVIS")) return `ULTRASOUND ABDOMEN + PELVIS:\n\nLIVER: 14.5 cm [N: 12-15 cm], Normal size & echotexture, No focal lesion, No IHBR dilatation, Portal vein 8 mm [N: 7-10 mm].\n\nGALL BLADDER: Well distended, Wall 2-3 mm [N: <3 mm], No calculus/sludge, CBD 3-4 mm [N: 3-4 mm].\n\nSPLEEN: 10.0 cm [N: <12 cm], Normal size & texture, No focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm [N: Head <3.0 cm Body <2.0 cm], Normal texture, No lesion, Duct <2 mm [N: <2 mm].\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal, No calculus/hydronephrosis.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal.\n\nURINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].\n\n${n.includes("Male")?`PROSTATE: Size 3.5 x 3.0 x 3.0 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 16 gm [N: 15-25 gm], Normal texture.`:`UTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal, Endometrium 8 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 3.1 x 2.1 cm, Volume 6.5 cc [N: 3-10 cc], Normal.\n\nPOD: No free fluid [N: No free fluid].`}`;
 return `ULTRASOUND ${n.split(' - ')[0]}:\n\nFindings as per ${n}.`;
@@ -146,120 +132,33 @@ function getReportEditKUB(n){
 let normalRK = `RIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.`;
 let normalLK = `LEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.`;
 let normalBlad = `URINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].`;
-if(n==="KUB - Hydronephrosis Mild Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis], Pelvis 12 mm [N: <10 mm], No calculus.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal, No calculus/hydronephrosis.\n\n${normalBlad}`;
-if(n==="KUB - Hydronephrosis Moderate Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Cortical thickness 12 mm [N: 12-18 mm], Moderate hydronephrosis [N: No hydronephrosis], Pelvis 18 mm [N: <10 mm], Calyces dilated, No calculus.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal.\n\n${normalBlad}`;
-if(n==="KUB - Hydronephrosis Severe Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 13.0 x 5.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 8 mm [N: 12-18 mm], Severe hydronephrosis [N: No hydronephrosis], Cortex thinned, Pelvis 25 mm [N: <10 mm].\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Normal.\n\n${normalBlad}`;
-if(n==="KUB - Hydronephrosis Mild Left") return `ULTRASOUND KUB:\n\n${normalRK}\n\nLEFT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis], Pelvis 12 mm [N: <10 mm].\n\n${normalBlad}`;
-if(n==="KUB - Hydronephrosis Moderate Left") return `ULTRASOUND KUB:\n\n${normalRK}\n\nLEFT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Cortical thickness 12 mm [N: 12-18 mm], Moderate hydronephrosis [N: No hydronephrosis], Pelvis 18 mm [N: <10 mm].\n\n${normalBlad}`;
-if(n==="KUB - Hydronephrosis Severe Left") return `ULTRASOUND KUB:\n\n${normalRK}\n\nLEFT KIDNEY: 13.0 x 5.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 8 mm [N: 12-18 mm], Severe hydronephrosis [N: No hydronephrosis], Pelvis 25 mm [N: <10 mm].\n\n${normalBlad}`;
-if(n==="KUB - Hydronephrosis Bilateral Mild") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis], Pelvis 12 mm [N: <10 mm].\n\nLEFT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis], Pelvis 12 mm [N: <10 mm].\n\n${normalBlad}`;
-if(n==="KUB - Hydronephrosis Bilateral Moderate") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Cortical thickness 12 mm [N: 12-18 mm], Moderate hydronephrosis, Pelvis 18 mm [N: <10 mm].\n\nLEFT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Cortical thickness 12 mm [N: 12-18 mm], Moderate hydronephrosis, Pelvis 18 mm [N: <10 mm].\n\n${normalBlad}`;
 if(n==="KUB - Fullness Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.8 x 4.8 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Mild fullness of pelvicalyceal system [N: No fullness], No frank hydronephrosis, No calculus seen, No perinephric collection.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal, No fullness/calculus.\n\n${normalBlad}`;
 if(n==="KUB - Fullness Left") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal.\n\nLEFT KIDNEY: 11.8 x 4.8 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Mild fullness of PCS [N: No fullness], No frank hydronephrosis, No calculus.\n\n${normalBlad}`;
 if(n==="KUB - Fullness Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.8 x 4.8 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Mild fullness of pelvicalyceal system [N: No fullness], No calculus, No hydronephrosis.\n\nLEFT KIDNEY: 11.8 x 4.8 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Mild fullness of PCS [N: No fullness], No calculus.\n\n${normalBlad}`;
 if(n==="KUB - Dilated Proximal Ureter Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis], Pelvis 13 mm [N: <10 mm], Proximal ureter dilated 6 mm [N: <3 mm] upto mid ureter, No distal ureteric calculus seen, No perinephric collection.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal, No calculus/hydronephrosis.\n\n${normalBlad}`;
 if(n==="KUB - Dilated Proximal Ureter Left") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal.\n\nLEFT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis], Pelvis 13 mm [N: <10 mm], Proximal ureter dilated 6 mm [N: <3 mm] upto mid ureter, No distal calculus.\n\n${normalBlad}`;
 if(n==="KUB - Dilated Proximal Ureter Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Mild hydronephrosis, Pelvis 13 mm [N: <10 mm], Proximal ureter dilated 6 mm [N: <3 mm].\n\nLEFT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Mild hydronephrosis, Pelvis 13 mm [N: <10 mm], Proximal ureter dilated 6 mm [N: <3 mm].\n\n${normalBlad}`;
-if(n==="KUB - Hydroureteronephrosis Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Cortical thickness 12 mm [N: 12-18 mm], Moderate hydroureteronephrosis [N: No hydronephrosis], Pelvis 18 mm [N: <10 mm], Ureter dilated 8 mm [N: <3 mm] upto lower ureter with calculus __ mm [N: No calculus] at VUJ.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal.\n\n${normalBlad}`;
-if(n==="KUB - Hydroureteronephrosis Left") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Normal.\n\nLEFT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Cortical thickness 12 mm [N: 12-18 mm], Moderate hydroureteronephrosis [N: No hydronephrosis], Pelvis 18 mm [N: <10 mm], Ureter 8 mm [N: <3 mm] with calculus __ mm [N: No calculus].\n\n${normalBlad}`;
-if(n==="KUB - Hydroureteronephrosis Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Moderate hydroureteronephrosis, Pelvis 18 mm [N: <10 mm], Ureter 9 mm [N: <3 mm].\n\nLEFT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Moderate hydroureteronephrosis, Pelvis 18 mm [N: <10 mm], Ureter 9 mm [N: <3 mm].\n\nURINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus.`;
-if(n==="KUB - Ureteric Calculus with Hydronephrosis") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Cortical thickness 13 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis], Pelvis 14 mm [N: <10 mm], Upper ureter dilated 6 mm [N: <3 mm].\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Normal.\n\nURINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], Calculus 6 mm [N: No calculus] at right VUJ causing hydronephrosis.`;
-if(n==="KUB - PUJ Obstruction Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 13.0 x 5.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 6 mm [N: 12-18 mm], Gross hydronephrosis [N: No hydronephrosis], Paper thin cortex, PUJ obstruction, Pelvis 35 mm [N: <10 mm], No ureteric dilatation [N: <3 mm].\n\nLEFT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Compensatory hypertrophy, Cortical thickness 16 mm [N: 12-18 mm], No hydronephrosis.\n\n${normalBlad}`;
-if(n==="KUB - PUJ Obstruction Left") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Compensatory hypertrophy.\n\nLEFT KIDNEY: 13.0 x 5.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 6 mm [N: 12-18 mm], Gross hydronephrosis [N: No hydronephrosis], Pelvis 35 mm [N: <10 mm].\n\n${normalBlad}`;
-if(n==="KUB - Simple Cortical Cyst Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Simple cyst __ x __ cm [N: No cyst] in __ pole, Anechoic, No hydronephrosis [N: No hydronephrosis].\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal.\n\n${normalBlad}`;
-if(n==="KUB - Simple Cortical Cyst Left") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Normal.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Simple cyst __ x __ cm [N: No cyst] in __ pole, Anechoic.\n\n${normalBlad}`;
-if(n==="KUB - Bilateral Cortical Cysts") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Simple cyst __ x __ cm [N: No cyst] in mid pole.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Simple cyst __ x __ cm [N: No cyst].\n\n${normalBlad}`;
-if(n==="KUB - Complex Cyst Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Complex cyst __ x __ cm [N: No cyst] in __ pole, Thick wall, Internal echoes & septations, Bosniak IIF/III.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Normal.\n\n${normalBlad}`;
-if(n==="KUB - Complex Cyst Left") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Normal.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Complex cyst __ x __ cm [N: No cyst], Thick wall, Septations, Bosniak IIF/III.\n\n${normalBlad}`;
-if(n==="KUB - Polycystic Kidneys") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 14.0 x 6.0 cm [N: 9-13 x 4-6 cm], Enlarged, Multiple cysts largest __ cm [N: No cyst] replacing parenchyma - polycystic.\n\nLEFT KIDNEY: 14.5 x 6.5 cm [N: 9-13 x 4-6 cm], Enlarged, Multiple cysts - polycystic.\n\n${normalBlad}`;
-if(n==="KUB - Bladder Stone Single") return `ULTRASOUND KUB:\n\n${normalRK}\n\n${normalLK}\n\nURINARY BLADDER: Well distended 400 ml [N: 300-500 ml], Single calculus __ mm [N: No calculus] with shadowing, Mobile, Wall 3 mm [N: <4 mm].`;
-if(n==="KUB - Bladder Stones Multiple") return `ULTRASOUND KUB:\n\n${normalRK}\n\n${normalLK}\n\nURINARY BLADDER: Distended 400 ml [N: 300-500 ml], Multiple calculi largest __ mm [N: No calculus] with shadowing, Mobile, Wall 3 mm [N: <4 mm].`;
-if(n==="KUB - Cystitis Thickened Wall") return `ULTRASOUND KUB:\n\n${normalRK}\n\n${normalLK}\n\nURINARY BLADDER: Moderately distended 300 ml [N: 300-500 ml], Wall thickened 7 mm [N: <4 mm], Irregular, Internal echoes - cystitis [N: Anechoic lumen].`;
-if(n==="KUB - Bladder Diverticulum") return `ULTRASOUND KUB:\n\n${normalRK}\n\n${normalLK}\n\nURINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Outpouching __ x __ cm [N: No diverticulum] from posterolateral wall - diverticulum, Wall 3 mm [N: <4 mm].`;
-if(n==="KUB - Bladder Mass") return `ULTRASOUND KUB:\n\n${normalRK}\n\n${normalLK}\n\nURINARY BLADDER: Distended 380 ml [N: 300-500 ml], Solid polypoidal mass __ x __ cm [N: No mass] from right lateral wall, Vascular on Doppler, Wall 3 mm [N: <4 mm].`;
-if(n==="KUB - Ectopic Kidney Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: Right renal fossa empty, Kidney in right iliac fossa 10.0 x 4.0 cm [N: 9-13 x 4-6 cm], Malrotated, Cortical thickness 14 mm [N: 12-18 mm], No calculus.\n\nLEFT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Compensatory hypertrophy, Normal.\n\n${normalBlad}`;
-if(n==="KUB - Bladder Trabeculation") return `ULTRASOUND KUB:\n\n${normalRK}\n\n${normalLK}\n\nURINARY BLADDER: Distended 400 ml [N: 300-500 ml], Wall thickened with trabeculated irregular outline 6 mm [N: <4 mm smooth], Multiple diverticulae - chronic obstruction.`;
-if(n==="KUB - High Post Void Residual") return `ULTRASOUND KUB:\n\n${normalRK}\n\n${normalLK}\n\nURINARY BLADDER: Pre-void 400 ml [N: 300-500 ml], Post void residual 120 ml [N: <50 ml] - high, Wall thickened 5 mm [N: <4 mm].`;
-if(n==="KUB + PROSTATE - Normal") return `ULTRASOUND KUB + PROSTATE:\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}\n\nPROSTATE: Size 3.5 x 3.0 x 3.0 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 16 gm [N: 15-25 gm], Normal texture, No lesion.`;
-if(n==="KUB + PROSTATE - BPH") return `ULTRASOUND KUB + PROSTATE:\n\n${normalRK}\n\n${normalLK}\n\nURINARY BLADDER: Distended 400 ml [N: 300-500 ml], Wall mildly thickened 5 mm [N: <4 mm], Post void residual 80 ml [N: <50 ml].\n\nPROSTATE: Size 5.0 x 4.5 x 4.8 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 56 gm [N: 15-25 gm], Enlarged BPH, Median lobe hypertrophy indenting base, No focal lesion.`;
-if(n==="KUB + PROSTATE - BPH with Cystitis") return `ULTRASOUND KUB + PROSTATE:\n\n${normalRK}\n\n${normalLK}\n\nURINARY BLADDER: Distended 350 ml [N: 300-500 ml], Wall thickened 6 mm [N: <4 mm] - cystitis, Internal echoes, Post void 100 ml [N: <50 ml].\n\nPROSTATE: Size 5.2 x 4.6 x 4.9 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 61 gm [N: 15-25 gm], BPH with median lobe hypertrophy.`;
-if(n==="KUB + PROSTATE - Prostatitis") return `ULTRASOUND KUB + PROSTATE:\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}\n\nPROSTATE: Size 4.5 x 3.8 x 4.0 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 35 gm [N: 15-25 gm], Mildly enlarged, Heterogeneous increased vascularity - prostatitis.`;
-if(n==="KUB + PROSTATE - Prostate Calcification") return `ULTRASOUND KUB + PROSTATE:\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}\n\nPROSTATE: Size 3.8 x 3.2 x 3.5 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 22 gm [N: 15-25 gm], Multiple coarse calcifications along surgical capsule [N: No calcification] - chronic prostatitis.`;
-if(n==="KUB - Renal Calculus Right"||n==="KUB - Renal Calculus Left"||n==="KUB - Renal Calculus Bilateral"||n==="KUB - Staghorn Calculus"||n==="KUB - Microliths Bilateral") return getReportEdit("KUB - Normal").replace("Normal, No calculus","Calculus __ mm [N: No calculus] with shadowing, No hydronephrosis");
+if(n==="KUB - Hydronephrosis Mild Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis], Pelvis 12 mm [N: <10 mm], No calculus.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal, No calculus/hydronephrosis.\n\n${normalBlad}`;
+if(n.includes("Hydronephrosis")||n.includes("Hydroureteronephrosis")) return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Moderate hydronephrosis/hydroureteronephrosis [N: No hydronephrosis], Pelvis 18 mm [N: <10 mm].\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Normal.\n\n${normalBlad}`;
+if(n==="KUB - Normal") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.\n\nURINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].`;
+if(n.includes("BPH")) return `ULTRASOUND KUB + PROSTATE:\n\n${normalRK}\n\n${normalLK}\n\nURINARY BLADDER: Distended 400 ml [N: 300-500 ml], Wall mildly thickened 5 mm [N: <4 mm], Post void residual 80 ml [N: <50 ml].\n\nPROSTATE: Size 5.0 x 4.5 x 4.8 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 56 gm [N: 15-25 gm], Enlarged BPH, Median lobe hypertrophy.`;
 return `ULTRASOUND KUB:\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}`;
 }
-
 function getAdvice(n){
 if(n.includes("Normal")) return "No active pathology. Routine follow up if needed.";
 if(n.includes("Fatty Liver Grade 1")) return "Adv: LFTs, Fasting Lipid Profile, HbA1c, RBS, Ultrasound follow up after 6 months, Avoid oily/fatty foods, Regular exercise, Weight reduction.";
-if(n.includes("Fatty Liver Grade 2")) return "Adv: LFTs, Lipid Profile, HbA1c, TFTs, FibroScan if available, Diet control, Exercise, Physician / Gastro opinion.";
-if(n.includes("Fatty Liver Grade 3")) return "Adv: LFTs, Lipid Profile, HbA1c, Hepatitis B/C screening, FibroScan, Urgent Gastro / Physician opinion, Strict diet control.";
-if(n.includes("Hepatomegaly")) return "Adv: LFTs, CBC, Hepatitis B/C, ESR, Ultrasound follow up, Physician opinion.";
-if(n.includes("Splenomegaly")) return "Adv: CBC with platelets, LFTs, MP, Dengue profile, ESR, Physician opinion.";
-if(n.includes("Hepatosplenomegaly")) return "Adv: CBC, LFTs, MP, Widal, Hepatitis profile, Physician opinion.";
-if(n.includes("Cholelithiasis Single")||n.includes("Cholelithiasis Multiple")) return "Adv: LFTs, Bilirubin (Direct/Indirect), CBC, Lipid Profile, Avoid fatty foods, Surgeon opinion for cholecystectomy.";
-if(n.includes("Gall Bladder Sludge")) return "Adv: LFTs, Lipid Profile, Plenty of water, Avoid fatty foods, Repeat USG after 2 weeks, Surgeon opinion if symptomatic.";
-if(n.includes("Cholecystitis Acute")) return "Adv: CBC, CRP, LFTs, Bilirubin, Amylase, Urgent Surgeon opinion, NPO, IV antibiotics, Admission may be required.";
-if(n.includes("CBD Dilated")) return "Adv: LFTs, Direct Bilirubin, ALP, GGT, Amylase, Lipase, MRCP / CECT Abdomen, Urgent Gastro / Surgeon opinion.";
-if(n.includes("Gall Bladder Polyp")) return "Adv: LFTs, Repeat USG after 3-6 months for size assessment, Avoid fatty foods, Surgeon opinion if >10 mm.";
-if(n.includes("Appendicitis")) return "Adv: CBC, CRP, TLC/DLC, Urgent Surgeon opinion, NPO, May need CECT Abdomen if equivocal.";
-if(n.includes("Liver Cyst")) return "Adv: LFTs, Hydatid serology if needed, CECT Abdomen for confirmation, Gastro / Surgeon opinion.";
-if(n.includes("Liver Hemangioma")) return "Adv: LFTs, CECT / MRI Liver for confirmation if large, No intervention if small & asymptomatic, Gastro opinion.";
-if(n.includes("Liver Abscess")) return "Adv: CBC, CRP, LFTs, Blood culture, Amoebic serology, Urgent Physician / Gastro opinion, May need aspiration, CECT Abdomen.";
-if(n.includes("Ascites")) return "Adv: LFTs, Albumin, PT/INR, CBC, Creatinine, Ascitic fluid D/R if needed, SAAG, Abdominal paracentesis, Physician / Gastro opinion, CECT Abdomen.";
-if(n.includes("Pancreatitis Acute")) return "Adv: Amylase, Lipase, LFTs, RBS, Calcium, Triglycerides, CECT Abdomen, Urgent Gastro / Physician opinion, NPO.";
-if(n.includes("Hernia")) return "Adv: Surgeon opinion, Avoid weight lifting, CECT Abdomen if needed, No constipation.";
-if(n.includes("Lymphadenopathy")) return "Adv: CBC, ESR, LDH, Chest X-ray, CECT Abdomen, FNAC / Biopsy of node, Physician opinion.";
 if(n.includes("Fullness")) return "Adv: RFTs, Creatinine, Urine R/E, Plenty of water, Repeat USG KUB after hydration, Urologist opinion if persistent.";
 if(n.includes("Dilated Proximal Ureter")) return "Adv: RFTs, Creatinine, Urine R/E, X-ray KUB, CT KUB plain (Stone protocol), Urologist opinion, Plenty of water.";
 if(n.includes("Hydronephrosis")||n.includes("Hydroureteronephrosis")||n.includes("Ureteric Calculus")) return "Adv: RFTs, Creatinine, Urine R/E, Urine C/S if fever, X-ray KUB, CT KUB plain for stone size & location, Urologist opinion, Plenty of water.";
-if(n.includes("PUJ Obstruction")) return "Adv: RFTs, DTPA Renal Scan, CECT KUB with urography, Urologist opinion, May need pyeloplasty.";
-if(n.includes("Parenchymal Changes Grade 1")) return "Adv: RFTs, Creatinine, Urea, Electrolytes, Urine R/E, BP monitoring, Nephrologist opinion, Avoid nephrotoxic drugs.";
-if(n.includes("Parenchymal Changes Grade 2")) return "Adv: RFTs, Creatinine, Urea, Electrolytes, CBC, Calcium, Phosphorus, PTH, Nephrologist opinion, Strict BP & sugar control.";
-if(n.includes("Parenchymal Changes Grade 3")) return "Adv: RFTs, Creatinine, Urea, Electrolytes, CBC, ABGs, Urgent Nephrologist opinion, May need dialysis preparation.";
-if(n.includes("Simple Cortical Cyst")||n.includes("Bilateral Cortical Cysts")) return "Adv: RFTs, Urine R/E, No treatment if small & asymptomatic, Repeat USG after 6 months, Urologist opinion if large >5 cm.";
-if(n.includes("Complex Cyst")) return "Adv: CECT Abdomen for Bosniak classification, RFTs, Urine R/E, Urgent Urologist opinion, May need MRI / biopsy.";
-if(n.includes("Polycystic Kidneys")) return "Adv: RFTs, Creatinine, Urine R/E, BP monitoring, Family screening, Nephrologist opinion, CECT / MRI KUB if needed.";
-if(n.includes("Bladder Stone")) return "Adv: Urine R/E, Urine C/S, RFTs, X-ray KUB, Urologist opinion, Plenty of water, May need cystolithotripsy.";
-if(n.includes("Cystitis Thickened Wall")) return "Adv: Urine R/E, Urine Culture & Sensitivity, CBC, CRP, Plenty of water, Urologist opinion, Avoid holding urine.";
-if(n.includes("Bladder Diverticulum")) return "Adv: Urine R/E, Urine C/S, RFTs, Micturating cystourethrogram (MCU), Cystoscopy, Urologist opinion.";
-if(n.includes("Bladder Mass")) return "Adv: Urine R/E, Urine cytology, RFTs, CECT Abdomen + Pelvis, Cystoscopy + biopsy, Urgent Urologist / Oncologist opinion.";
-if(n.includes("Trabeculation")) return "Adv: RFTs, Urine R/E, PSA, Uroflowmetry, Urologist opinion, May need cystoscopy.";
-if(n.includes("High Post Void Residual")) return "Adv: RFTs, Urine R/E, PSA, Uroflowmetry, Bladder diary, Urologist opinion, Timed voiding.";
-if(n.includes("Ectopic Kidney")) return "Adv: RFTs, Urine R/E, DTPA scan, Urologist opinion, No specific treatment if normal function.";
 if(n.includes("Renal Calculus")||n.includes("Staghorn")||n.includes("Microliths")) return "Adv: RFTs, Creatinine, Calcium, Phosphorus, Uric acid, Urine R/E, X-ray KUB, CT KUB plain, Plenty of water 3-4L/day, Urologist opinion.";
 if(n.includes("BPH")) return "Adv: PSA, RFTs, Urine R/E, Urine C/S, Uroflowmetry, Post void residual scan, Urologist opinion.";
-if(n.includes("Prostatitis")) return "Adv: Urine R/E, Urine C/S, PSA, Semen C/S, Plenty of water, Urologist opinion.";
-if(n.includes("Prostate Calcification")) return "Adv: Urine R/E, Urine C/S, PSA, Plenty of water, Urologist opinion if symptomatic.";
-if(n.includes("PCOS")) return "Adv: LH, FSH, Prolactin, Testosterone, RBS, HbA1c, Lipid Profile, TFTs, Gynecologist opinion, Weight reduction, Exercise.";
-if(n.includes("Fibroid")) return "Adv: Hb, CBC, TSH, Urine R/E, Gynecologist opinion, Repeat Pelvic USG after 3 months, May need MRI Pelvis if large.";
-if(n.includes("Ovarian Cyst Simple")) return "Adv: CA-125, Pelvic USG after next menses, Gynecologist opinion.";
-if(n.includes("Ovarian Cyst Bilateral")) return "Adv: CA-125, Hormonal profile, Gynecologist opinion, Follow up USG after 6 weeks.";
-if(n.includes("Endometrioma")) return "Adv: CA-125, CA 19-9, CBC, Gynecologist opinion, MRI Pelvis, May need laparoscopy.";
-if(n.includes("Dermoid Cyst")) return "Adv: CA-125, AFP, LDH, CECT / MRI Pelvis, Gynecologist opinion, Surgical excision usually required.";
-if(n.includes("PID")) return "Adv: CBC, CRP, Urine R/E, Urine C/S, High vaginal swab C/S, Gynecologist opinion.";
-if(n.includes("Free Fluid POD")) return "Adv: CBC, CRP, Beta-HCG, Gynecologist opinion, Repeat USG after 48 hours if acute pain.";
-if(n.includes("Early Pregnancy")) return "Adv: Beta-HCG, CBC, Blood group, Urine R/E, Gynecologist opinion, Folic acid, Repeat USG after 2 weeks.";
-if(n.includes("Bulky Uterus")) return "Adv: Hb, CBC, TSH, Gynecologist opinion, May need MRI Pelvis.";
-if(n.includes("Endometrial Hyperplasia")) return "Adv: Hb, CBC, TSH, Gynecologist opinion, Endometrial biopsy, May need D&C.";
-if(n.includes("Endometrial Polyp")) return "Adv: Hb, CBC, Gynecologist opinion, Hysteroscopy, Endometrial biopsy.";
-if(n.includes("FWB")) return "Adv: CBC, Blood group, GTT, Urine R/E, Anomaly scan at 18-20 weeks, Growth scan at 28-32 weeks, Gynecologist regular follow up.";
-if(n.includes("BREAST")||n.includes("Fibroadenoma")||n.includes("Breast Cyst")||n.includes("Fibrocystic")) return "Adv: Mammography if >35 yrs, FNAC / Biopsy if solid lesion, Surgeon / Breast clinic opinion, Monthly self breast examination.";
-if(n.includes("Mastitis")||n.includes("Breast Abscess")) return "Adv: CBC, CRP, Pus C/S if abscess, Urgent Surgeon opinion, Antibiotics, May need incision & drainage.";
-if(n.includes("Suspicious Mass")) return "Adv: Mammography, FNAC / Core biopsy, CECT Chest if needed, Urgent Surgeon / Oncologist opinion.";
-if(n.includes("THYROID")) return "Adv: TFTs (T3 T4 TSH), Anti-TPO, FNAC of nodule if >1 cm, Surgeon / ENT / Endocrine opinion.";
-if(n.includes("SCROTUM")||n.includes("Hydrocele")||n.includes("Varicocele")) return "Adv: Urine R/E, Semen analysis if varicocele, Urologist / Surgeon opinion, Scrotal support.";
-if(n.includes("Epididymitis")||n.includes("Orchitis")) return "Adv: CBC, CRP, Urine R/E, Urine C/S, Scrotal Doppler, Urologist opinion, Antibiotics, Scrotal support, Rest.";
-if(n.includes("Testicular Torsion")) return "Adv: Urgent Urologist opinion, Emergency surgery may be required, Scrotal Doppler immediately, Do not delay.";
 return "Adv: Relevant labs as per disease and specialist consultation.";
 }
-
 let T={}; allNames.forEach(k=>{T[k]=getReportEdit(k)+`\n\nCONCLUSION:\n${k}.\n\nADVICE:\n${getAdvice(k)}`;});
 let allTemplates=Object.keys(T);
 function cleanForPrint(text){ return text.replace(/\s*\[N:.*?\]/g, ''); }
 function filterTemplates(){let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');let cur=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(cur))s.value=cur; checkCalculator();}
 function useSelectedTemplate(){let v=document.getElementById('uType')?.value;if(!v){alert('Select');return;}document.getElementById('rText').value=T[v]||''; checkCalculator();}
-
 function formatReportToHTML(text){
   let printText=cleanForPrint(text);
   let lines=printText.split('\n');
@@ -290,20 +189,16 @@ function formatReportToHTML(text){
   });
   return html;
 }
-
 function make(){
   let pn=document.getElementById('pName');
   if(!pn?.value){alert('Enter Name');return;}
   let pid=document.getElementById('pIDMobile')?.value||'__';
   let complaintText=(document.getElementById('pComplaint')?.value||'').trim();
-
-  // --- 2 LINES ONLY PATIENT DETAILS AS PER SCREENSHOT ---
   let patientBorder=`
   <div style="border:1.2px solid #000;padding:6px 8px;margin-bottom:8px;font-size:9.5pt!important;line-height:1.6">
-    <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><b>Name:</b> ${document.getElementById('pName').value} | <b>Age:</b> ${document.getElementById('pAge').value} | <b>Sex:</b> ${document.getElementById('pGen').value} | <b>Date:</b> ${document.getElementById('pDate').value} | <b>ID:</b> ${pid}</div>
+    <div><b>Name:</b> ${document.getElementById('pName').value} | <b>Age:</b> ${document.getElementById('pAge').value} | <b>Sex:</b> ${document.getElementById('pGen').value} | <b>Date:</b> ${document.getElementById('pDate').value} | <b>ID:</b> ${pid}</div>
     <div><b>Ref By:</b> ${document.getElementById('ref').value} | <b>Sonologist:</b> ${document.getElementById('sono').value}</div>
   </div>`;
-
   let bodyHTML=formatReportToHTML(document.getElementById('rText').value);
   if(complaintText){bodyHTML=`<div style="margin-bottom:6px;font-size:10pt!important;font-style:italic"><b>C/O: ${complaintText}</b></div>`+bodyHTML;}
   let footer=`<div style="margin-top:14px;text-align:center"><div style="font-size:8pt!important"><i>This is computer generated report no signature required.</i></div><div style="font-size:9pt!important;margin-top:4px;font-weight:700">Thanks for availing our services</div></div>`;
@@ -311,11 +206,78 @@ function make(){
   document.getElementById('outCard').style.display='block';
   window.scrollTo(0, document.getElementById('outCard').offsetTop);
 }
-
-function saveR(){ let content=document.getElementById('reportContent').innerHTML; if(!content||content.trim()===''){alert('Pehle Generate Final Report karen');return;} let name=document.getElementById('pName').value||'Report'; let rec={id: Date.now(),name:name,mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',html:content,text:document.getElementById('rText')?.value||''}; let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];} all.unshift(rec); localStorage.setItem('azam_reports',JSON.stringify(all)); render(); uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all)); alert('✅ Saved to Drive & Local'); }
-function render(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let q=(document.getElementById('sBox')?.value||'').toLowerCase();let listEl=document.getElementById('list');let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')).toLowerCase().includes(q));if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:15px;font-size:10pt">No reports</p>';return;}listEl.innerHTML=f.map(r=>`<div style="border:1px solid #cbd5e1;padding:6px;border-radius:8px;margin:4px 0;display:flex;justify-content:space-between;font-size:10pt"><div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}</small></div><div><button class="small" style="background:#0a4eb5" onclick="viewR(${r.id})">View</button><button class="small" style="background:#ff3b30" onclick="delR(${r.id})">Del</button></div></div>`).join('');}
-function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('reportContent').innerHTML=r.html;document.getElementById('outCard').style.display='block';}
-function delR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));}
+function saveR(){
+  let content=document.getElementById('reportContent').innerHTML;
+  if(!content||content.trim()===''){alert('Pehle Generate Final Report karen');return;}
+  let rec={
+    id: editingId || Date.now(),
+    name:document.getElementById('pName').value||'Report',
+    pName:document.getElementById('pName').value,
+    pAge:document.getElementById('pAge').value,
+    pGen:document.getElementById('pGen').value,
+    pDate:document.getElementById('pDate').value,
+    pIDMobile:document.getElementById('pIDMobile').value,
+    ref:document.getElementById('ref').value,
+    sono:document.getElementById('sono').value,
+    pComplaint:document.getElementById('pComplaint').value,
+    mobile:document.getElementById('pIDMobile')?.value||'',
+    type:document.getElementById('uType')?.value||'',
+    date:document.getElementById('pDate')?.value||'',
+    html:content,
+    text:document.getElementById('rText')?.value||''
+  };
+  let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}
+  // If editing, replace existing
+  if(editingId){
+    let idx=all.findIndex(x=>x.id===editingId);
+    if(idx>=0) all[idx]=rec; else all.unshift(rec);
+    editingId=null;
+    document.getElementById('editMode').style.display='none';
+  } else {
+    all.unshift(rec);
+  }
+  localStorage.setItem('azam_reports',JSON.stringify(all));
+  render();
+  uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));
+  alert('✅ Saved to Drive & Local');
+}
+function render(){
+  let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}
+  let q=(document.getElementById('sBox')?.value||'').toLowerCase();
+  let listEl=document.getElementById('list');
+  let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')).toLowerCase().includes(q));
+  if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:15px;font-size:10pt">No reports</p>';return;}
+  listEl.innerHTML=f.map(r=>`
+    <div style="border:1px solid #cbd5e1;padding:8px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;font-size:10pt">
+      <div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}</small></div>
+      <div style="display:flex;gap:4px">
+        <button class="small" style="background:#0a4eb5;padding:8px 12px" onclick="viewR(${r.id})">View</button>
+        <button class="small" style="background:#ff9800;padding:8px 12px" onclick="editR(${r.id})">Edit</button>
+        <button class="small" style="background:#ff3b30;padding:8px 12px" onclick="delR(${r.id})">Del</button>
+      </div>
+    </div>`).join('');
+}
+function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('reportContent').innerHTML=r.html;document.getElementById('outCard').style.display='block';window.scrollTo(0,document.getElementById('outCard').offsetTop);}
+function editR(id){
+  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;
+  // Fill all fields back to form
+  document.getElementById('pName').value=r.pName||r.name||'';
+  document.getElementById('pAge').value=r.pAge||'';
+  document.getElementById('pGen').value=r.pGen||'Male';
+  document.getElementById('pDate').value=r.pDate||r.date||'';
+  document.getElementById('pIDMobile').value=r.pIDMobile||r.mobile||'';
+  document.getElementById('ref').value=r.ref||'';
+  document.getElementById('sono').value=r.sono||'';
+  document.getElementById('pComplaint').value=r.pComplaint||'';
+  document.getElementById('rText').value=r.text||'';
+  editingId=r.id;
+  document.getElementById('editMode').style.display='inline-block';
+  document.getElementById('reportContent').innerHTML=r.html;
+  document.getElementById('outCard').style.display='block';
+  window.scrollTo(0,document.getElementById('formCard').offsetTop);
+  alert('Report editing me load ho gayi hai, changes karke Generate Final Report par click karen');
+}
+function delR(id){if(!confirm('Delete karna hai?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));}
 function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[180,210]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:cleanForPrint(document.getElementById('rText').value);doc.setFontSize(10);doc.text(doc.splitTextToSize(txt,160),10,10);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}
 function init(){let s=document.getElementById('uType');if(s){s.innerHTML='';allNames.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate');if(pd)pd.valueAsDate=new Date();document.getElementById('templateCount').innerText=allTemplates.length+' Templates';render();}
 init();
