@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - Final with Drive Load</title>
+<title>Azam Medical Centre - Final Bold Fix</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -22,6 +22,7 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 .boxTitle{font-size:13px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
 .calcBox{border:2px solid #f59e0b;background:#fffbeb;padding:10px;border-radius:12px;margin:10px 0;display:none}
 .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.customInput{display:none;border:2px solid #ff9800;background:#fff8e1}
 </style></head><body>
 
 <div id="loginOverlay"><div class="loginBox">
@@ -39,7 +40,10 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 <div class="card noPrint" id="formCard" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Prepare Report</span><span id="editMode" style="display:none;background:#ff9800;color:#fff;padding:3px 10px;border-radius:20px;font-size:10px">EDITING MODE</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><input id="pIDMobile" placeholder="ID / Mobile"></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><select id="ref"></select><select id="sono"></select></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div><select id="ref" onchange="checkOther('ref')"></select><input id="refOther" class="customInput" placeholder="Other Doctor ka naam likhen"></div>
+<div><select id="sono" onchange="checkOther('sono')"></select><input id="sonoOther" class="customInput" placeholder="Other Sonologist naam"></div>
+</div>
 <div style="border:2px solid #10b981;border-radius:12px;padding:8px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:11px">C/O</label><textarea id="pComplaint" rows="2"></textarea></div>
 <div id="obsCalc" class="calcBox"><h4>🤰 FWB Calculator</h4><div class="grid4"><div><label>BPD mm</label><input id="bpd" type="number" oninput="calcOBS()"></div><div><label>HC mm</label><input id="hc" type="number" oninput="calcOBS()"></div><div><label>AC mm</label><input id="ac" type="number" oninput="calcOBS()"></div><div><label>FL mm</label><input id="fl" type="number" oninput="calcOBS()"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><div><label>EDD</label><input id="lmp" type="date" onchange="calcEDD()"></div><div><label>GA</label><input id="gaResult" readonly style="background:#fef3c7;font-weight:bold"></div></div><div style="margin-top:8px"><label>EFW</label><input id="efwResult" readonly style="background:#dcfce7;font-weight:bold"></div><button class="small" style="background:#f59e0b;width:100%;margin-top:8px" onclick="insertOBS()">Insert</button></div>
 <div id="prosCalc" class="calcBox"><h4>🧮 Prostate Calculator</h4><div class="grid4"><div><label>L cm</label><input id="prosL" type="number" step="0.1" oninput="calcProstate()"></div><div><label>W cm</label><input id="prosW" type="number" step="0.1" oninput="calcProstate()"></div><div><label>H cm</label><input id="prosH" type="number" step="0.1" oninput="calcProstate()"></div><div><label>Vol</label><input id="prosVol" readonly style="background:#dcfce7;font-weight:bold"></div></div><button class="small" style="background:#f59e0b;width:100%;margin-top:8px" onclick="insertProstate()">Insert</button></div>
@@ -55,15 +59,8 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 </div></div>
 
 <div class="card noPrint">
-<div class="boxTitle">
-<span>Saved Reports</span>
-<div style="display:flex;gap:6px">
-<button class="small" style="background:#7c3aed;padding:8px 14px" onclick="loadFromDrive()">☁️ Load from Drive</button>
-<button class="small" style="background:#10b981;padding:8px 14px" onclick="render()">Refresh</button>
-</div>
-</div>
+<div class="boxTitle"><span>Saved Reports</span><div style="display:flex;gap:6px"><button class="small" style="background:#7c3aed;padding:8px 14px" onclick="loadFromDrive()">☁️ Load from Drive</button><button class="small" style="background:#10b981;padding:8px 14px" onclick="render()">Refresh</button></div></div>
 <input id="sBox" placeholder="Search..." onkeyup="render()"><div id="list"></div>
-<p style="font-size:9px;color:#666;margin-top:8px">Tip: Kisi aur PC me pehle Google Login karke "Load from Drive" dabayen, sari reports aa jayengi.</p>
 </div>
 
 <script>
@@ -72,49 +69,11 @@ const SCOPES='https://www.googleapis.com/auth/drive.file';
 let tokenClient,driveFolderId=null,editingId=null;
 function gapiLoaded(){gapi.load('client', async()=>{try{await gapi.client.init({discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]});}catch(e){}});}
 function gisLoaded(){try{tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID, scope:SCOPES, callback:''});}catch(e){}}
-function ensureDriveAuth(){return new Promise((res,rej)=>{if(!tokenClient){alert('Google API load ho rahi hai, 2 second baad try karen');rej('No tokenClient');return;}tokenClient.callback=(r)=>{if(r.error)rej(r);else{localStorage.setItem('gdrive_token',JSON.stringify(gapi.client.getToken())); document.getElementById('driveStatus').innerText='● Drive Connected'; res(r);}};tokenClient.requestAccessToken({prompt:''});});}
+function ensureDriveAuth(){return new Promise((res,rej)=>{if(!tokenClient){alert('Google API load ho rahi hai');rej('No tokenClient');return;}tokenClient.callback=(r)=>{if(r.error)rej(r);else{localStorage.setItem('gdrive_token',JSON.stringify(gapi.client.getToken())); document.getElementById('driveStatus').innerText='● Drive Connected'; res(r);}};tokenClient.requestAccessToken({prompt:''});});}
 async function getOrCreateFolder(){if(driveFolderId)return driveFolderId;try{let r=await gapi.client.drive.files.list({q:"name='Azam_Medical_Reports' and mimeType='application/vnd.google-apps.folder' and trashed=false",fields:"files(id,name)"});if(r.result.files&&r.result.files.length>0){driveFolderId=r.result.files[0].id;return driveFolderId;}let c=await gapi.client.drive.files.create({resource:{name:'Azam_Medical_Reports', mimeType:'application/vnd.google-apps.folder'},fields:'id'});driveFolderId=c.result.id;return driveFolderId;}catch(e){return null;}}
 async function findFileInFolder(folderId,fileName){try{let q=`'${folderId}' in parents and name='${fileName}' and trashed=false`;let res=await gapi.client.drive.files.list({q:q,fields:"files(id,name)"});if(res.result.files&&res.result.files.length>0) return res.result.files[0]; return null;}catch(e){return null;}}
-async function uploadToDriveFile(name,content){
- try{
-  let savedToken=localStorage.getItem('gdrive_token');
-  if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}}
-  await ensureDriveAuth();
-  let folderId=await getOrCreateFolder(); if(!folderId) return;
-  let token=gapi.client.getToken();
-  let existing=await findFileInFolder(folderId,name);
-  if(existing){
-   await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=media`,{method:'PATCH',headers:{'Authorization':'Bearer '+token.access_token,'Content-Type':'application/json'},body:content});
-   return;
-  }
-  const file=new Blob([content],{type:'application/json'});
-  const meta={name:name,mimeType:'application/json',parents:[folderId]};
-  const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file);
-  await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form});
- }catch(e){console.log(e)}
-}
-async function loadFromDrive(){
- try{
-  document.getElementById('driveStatus').innerText='● Loading...';
-  let savedToken=localStorage.getItem('gdrive_token');
-  if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}}
-  await ensureDriveAuth();
-  let folderId=await getOrCreateFolder();
-  if(!folderId){alert('Drive folder nahi mila');return;}
-  let file=await findFileInFolder(folderId,'Azam_Medical_Backup_ALL.json');
-  if(!file){alert('Drive par koi backup nahi mila');document.getElementById('driveStatus').innerText='● No Backup';return;}
-  let token=gapi.client.getToken();
-  let res=await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`,{headers:{'Authorization':'Bearer '+token.access_token}});
-  if(!res.ok){alert('Load failed');return;}
-  let text=await res.text();
-  let data=JSON.parse(text);
-  if(!Array.isArray(data)){alert('Invalid backup');return;}
-  localStorage.setItem('azam_reports',JSON.stringify(data));
-  render();
-  document.getElementById('driveStatus').innerText='● Loaded '+data.length+' reports';
-  alert('✅ '+data.length+' reports Drive se load ho gayi hain');
- }catch(e){console.log(e);alert('Load error: '+e.message);document.getElementById('driveStatus').innerText='● Error';}
-}
+async function uploadToDriveFile(name,content){ try{ let savedToken=localStorage.getItem('gdrive_token'); if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}} await ensureDriveAuth(); let folderId=await getOrCreateFolder(); if(!folderId) return; let token=gapi.client.getToken(); let existing=await findFileInFolder(folderId,name); if(existing){ await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=media`,{method:'PATCH',headers:{'Authorization':'Bearer '+token.access_token,'Content-Type':'application/json'},body:content}); return; } const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents:[folderId]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file); await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form}); }catch(e){} }
+async function loadFromDrive(){ try{ document.getElementById('driveStatus').innerText='● Loading...'; let savedToken=localStorage.getItem('gdrive_token'); if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}} await ensureDriveAuth(); let folderId=await getOrCreateFolder(); if(!folderId){alert('Drive folder nahi mila');return;} let file=await findFileInFolder(folderId,'Azam_Medical_Backup_ALL.json'); if(!file){alert('Drive par koi backup nahi mila');return;} let token=gapi.client.getToken(); let res=await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`,{headers:{'Authorization':'Bearer '+token.access_token}}); if(!res.ok){alert('Load failed');return;} let text=await res.text(); let data=JSON.parse(text); if(!Array.isArray(data)){alert('Invalid backup');return;} localStorage.setItem('azam_reports',JSON.stringify(data)); render(); document.getElementById('driveStatus').innerText='● Loaded '+data.length; alert('✅ '+data.length+' reports loaded'); }catch(e){alert('Load error: '+e.message);} }
 window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1500);});
 function checkCalculator(){ let v=document.getElementById('uType').value||''; document.getElementById('obsCalc').style.display = (v.includes('FWB'))? 'block' : 'none'; document.getElementById('prosCalc').style.display = (v.includes('PROSTATE'))? 'block' : 'none'; }
 function calcOBS(){ let bpd=parseFloat(document.getElementById('bpd').value)||0; let hc=parseFloat(document.getElementById('hc').value)||0; let ac=parseFloat(document.getElementById('ac').value)||0; let fl=parseFloat(document.getElementById('fl').value)||0; if(fl>0){ let fl_cm = fl/10; let ga_fl = 10.1 + (fl_cm * 2.4); let avgGA = ga_fl; if(bpd>0) avgGA=(ga_fl + (bpd*0.4+4))/2; document.getElementById('gaResult').value = avgGA.toFixed(1)+' wks'; if(ac>0 && hc>0){ let AC = ac/10, FL = fl/10, BPD = bpd>0?bpd/10:5; let logEFW = 1.335 - (0.0034*AC*FL) + (0.0316*BPD) + (0.0457*AC) + (0.1623*FL); let w = Math.pow(10, logEFW)*100; document.getElementById('efwResult').value = Math.round(w)+' gms'; } } }
@@ -122,10 +81,23 @@ function calcEDD(){ let lmp=document.getElementById('lmp').value; if(!lmp)return
 function insertOBS(){ let bpd=document.getElementById('bpd').value||'__', hc=document.getElementById('hc').value||'__', ac=document.getElementById('ac').value||'__', fl=document.getElementById('fl').value||'__', ga=document.getElementById('gaResult').value||'', efw=document.getElementById('efwResult').value||''; document.getElementById('rText').value += `\nBPD: ${bpd} mm [N: 47-94 mm], HC: ${hc} mm [N: 170-320 mm], AC: ${ac} mm [N: 152-330 mm], FL: ${fl} mm [N: 33-73 mm]\nGA: ${ga}, EFW: ${efw}\n`; }
 function calcProstate(){ let l=parseFloat(document.getElementById('prosL').value)||0; let w=parseFloat(document.getElementById('prosW').value)||0; let h=parseFloat(document.getElementById('prosH').value)||0; if(l&&w&&h){ let vol = l*w*h*0.52; document.getElementById('prosVol').value = vol.toFixed(1)+' gm'; } }
 function insertProstate(){ let l=document.getElementById('prosL').value||'__', w=document.getElementById('prosW').value||'__', h=document.getElementById('prosH').value||'__', vol=document.getElementById('prosVol').value||''; document.getElementById('rText').value += `\nProstate: ${l} x ${w} x ${h} cm [N: <4.0 x 3.0 x 3.0 cm], Vol: ${vol} [N: 15-25 gm]\n`; }
-const refDoctors=["Ref By - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Self","Other"];
+
+const refDoctors=["Ref By - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel","Dr. Shahzad Sadaqat","Dr. Bilal","Self","Other"];
 const sonoDoctors=["Sonologist - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN","DR. SAMAN AZAM","Other"];
 function fillSelect(id,list){let s=document.getElementById(id);s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
 fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
+function checkOther(type){
+ if(type==='ref'){
+  let v=document.getElementById('ref').value;
+  document.getElementById('refOther').style.display = (v==='Other')? 'block' : 'none';
+ } else {
+  let v=document.getElementById('sono').value;
+  document.getElementById('sonoOther').style.display = (v==='Other')? 'block' : 'none';
+ }
+}
+function getRefValue(){let v=document.getElementById('ref').value; if(v==='Other'){return document.getElementById('refOther').value||'Other';} return v;}
+function getSonoValue(){let v=document.getElementById('sono').value; if(v==='Other'){return document.getElementById('sonoOther').value||'Other';} return v;}
+
 function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777' || p==='Zee'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';}else{document.getElementById('passErr').style.display='block';}}
 if(sessionStorage.getItem('azam_login')==='ok'){document.getElementById('loginOverlay').style.display='none';}
 const allNames=["WHOLE ABDOMEN - Normal","WHOLE ABDOMEN - Fatty Liver Grade 1","WHOLE ABDOMEN - Fatty Liver Grade 2","WHOLE ABDOMEN - Fatty Liver Grade 3","WHOLE ABDOMEN - Hepatomegaly","WHOLE ABDOMEN - Splenomegaly","WHOLE ABDOMEN - Hepatosplenomegaly","WHOLE ABDOMEN - Cholelithiasis Single","WHOLE ABDOMEN - Cholelithiasis Multiple","WHOLE ABDOMEN - Gall Bladder Sludge","WHOLE ABDOMEN - Cholecystitis Acute","WHOLE ABDOMEN - CBD Dilated","WHOLE ABDOMEN - Appendicitis","WHOLE ABDOMEN - Umbilical Hernia","WHOLE ABDOMEN - Inguinal Hernia Right","WHOLE ABDOMEN - Inguinal Hernia Left","WHOLE ABDOMEN - Liver Cyst","WHOLE ABDOMEN - Liver Hemangioma","WHOLE ABDOMEN - Ascites Mild","WHOLE ABDOMEN - Ascites Moderate to Gross","WHOLE ABDOMEN - Liver Abscess","WHOLE ABDOMEN - Renal Cyst","WHOLE ABDOMEN - Gall Bladder Polyp","WHOLE ABDOMEN - Pancreatitis Acute","WHOLE ABDOMEN - Paraumbilical Hernia","WHOLE ABDOMEN - Ventral Hernia","WHOLE ABDOMEN - Incisional Hernia","WHOLE ABDOMEN - Lymphadenopathy","KUB - Normal","KUB - Renal Calculus Right","KUB - Renal Calculus Left","KUB - Renal Calculus Bilateral","KUB - Staghorn Calculus","KUB - Microliths Bilateral","KUB - Hydronephrosis Mild Right","KUB - Hydronephrosis Moderate Right","KUB - Hydronephrosis Severe Right","KUB - Hydronephrosis Mild Left","KUB - Hydronephrosis Moderate Left","KUB - Hydronephrosis Severe Left","KUB - Hydronephrosis Bilateral Mild","KUB - Hydronephrosis Bilateral Moderate","KUB - Hydroureteronephrosis Right","KUB - Hydroureteronephrosis Left","KUB - Hydroureteronephrosis Bilateral","KUB - Ureteric Calculus with Hydronephrosis","KUB - PUJ Obstruction Right","KUB - PUJ Obstruction Left","KUB - Parenchymal Changes Grade 1","KUB - Parenchymal Changes Grade 2","KUB - Parenchymal Changes Grade 3","KUB - Simple Cortical Cyst Right","KUB - Simple Cortical Cyst Left","KUB - Bilateral Cortical Cysts","KUB - Complex Cyst Right","KUB - Complex Cyst Left","KUB - Polycystic Kidneys","KUB - Bladder Stone Single","KUB - Bladder Stones Multiple","KUB - Cystitis Thickened Wall","KUB - Bladder Diverticulum","KUB - Bladder Mass","KUB - Ectopic Kidney Right","KUB - Bladder Trabeculation","KUB - High Post Void Residual","KUB - Fullness Right","KUB - Fullness Left","KUB - Fullness Bilateral","KUB - Dilated Proximal Ureter Right","KUB - Dilated Proximal Ureter Left","KUB - Dilated Proximal Ureter Bilateral","KUB + PROSTATE - Normal","KUB + PROSTATE - BPH","KUB + PROSTATE - BPH with Cystitis","KUB + PROSTATE - Prostatitis","KUB + PROSTATE - Prostate Calcification","PELVIS - Normal","PELVIS - PCOS","PELVIS - Fibroid Intramural","PELVIS - Fibroid Subserosal","PELVIS - Fibroid Submucosal","PELVIS - Multiple Fibroids","PELVIS - Ovarian Cyst Simple Right","PELVIS - Ovarian Cyst Simple Left","PELVIS - Ovarian Cyst Bilateral","PELVIS - Endometrioma","PELVIS - Dermoid Cyst","PELVIS - PID","PELVIS - Free Fluid POD","PELVIS - Early Pregnancy","PELVIS - Bulky Uterus","PELVIS - Endometrial Hyperplasia","PELVIS - Endometrial Polyp","FWB - Normal Single Pregnancy","FWB - Breech Presentation","FWB - IUGR","FWB - Twins Normal","FWB - Oligohydramnios","FWB - Polyhydramnios","FWB - Early Pregnancy 6-8 Weeks","FWB - Anomaly Scan Normal","FWB - Placenta Previa","FWB - Placental Abruption","FWB - Growth Scan Normal","FWB - IUD / Demise","BREAST - Normal","BREAST - Fibroadenoma Right","BREAST - Fibroadenoma Left","BREAST - Fibroadenoma Bilateral","BREAST - Breast Cyst Right","BREAST - Breast Cyst Left","BREAST - Breast Cysts Multiple","BREAST - Fibrocystic Disease","BREAST - Mastitis","BREAST - Breast Abscess","BREAST - Gynecomastia","BREAST - Suspicious Mass","THYROID - Normal","THYROID - Multinodular Goiter","THYROID - Solitary Nodule Right","THYROID - Solitary Nodule Left","THYROID - Thyroid Cyst Right","THYROID - Thyroid Cyst Left","THYROID - Thyroiditis","THYROID - Hyperthyroid Goiter","SCROTUM - Normal","SCROTUM - Hydrocele Right","SCROTUM - Hydrocele Left","SCROTUM - Hydrocele Bilateral","SCROTUM - Varicocele Left","SCROTUM - Varicocele Right","SCROTUM - Varicocele Bilateral","SCROTUM - Epididymitis Right","SCROTUM - Epididymitis Left","SCROTUM - Epididymo-orchitis Right","SCROTUM - Epididymo-orchitis Left","SCROTUM - Orchitis","SCROTUM - Testicular Torsion","TESTIS - Microlithiasis","TESTIS - Testicular Cyst","AXILLA - Normal","AXILLA - Lymphadenopathy Left","NECK - Normal","NECK - Cervical Lymphadenopathy","ABDOMEN + PELVIS - Normal Male","ABDOMEN + PELVIS - Normal Female"];
@@ -139,16 +111,16 @@ let normalRK = `RIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickne
 let normalLK = `LEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.`;
 let normalBlad = `URINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].`;
 if(n==="WHOLE ABDOMEN - Normal") return `ULTRASOUND WHOLE ABDOMEN:\n\n${normalLiver}\n\n${normalGB}\n\n${normalSpleen}\n\n${normalPanc}\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}`;
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 1") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 15.2 cm [N: 12-15 cm], Mildly enlarged, Mild increased echogenicity - Grade I fatty liver, No focal lesion, No IHBR dilatation, Portal vein 8 mm [N: 7-10 mm].\n\n${normalGB}\n\n${normalSpleen}\n\n${normalPanc}\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}`;
+if(n==="WHOLE ABDOMEN - Fatty Liver Grade 1") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 15.0 cm [N: 12-15 cm], Mildly enlarged, Mild increased echogenicity - Grade I fatty liver, No focal lesion, No IHBR dilatation, Portal vein 8 mm [N: 7-10 mm].\n\n${normalGB}\n\n${normalSpleen}\n\n${normalPanc}\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}`;
 if(n==="KUB - Normal") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.\n\nURINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].`;
 if(n.startsWith("KUB -")||n.startsWith("KUB + PROSTATE")) return getReportEditKUB(n);
-if(n.startsWith("PELVIS -")) return `ULTRASOUND PELVIS:\n\nFindings as per ${n} with normal values [N: As per report].`;
+if(n.startsWith("PELVIS -")) return `ULTRASOUND PELVIS:\n\nFindings as per ${n.split(' - ')[1]} with normal values [N: As per report].`;
 if(n.startsWith("FWB")) return `ULTRASOUND FWB:\n\nSingle live intrauterine fetus, Cephalic presentation [N: Cephalic], Cardiac activity present [N: Present], Fetal movements present.\n\nBPD: __ mm [N: 47-94 mm], HC: __ mm [N: 170-320 mm], AC: __ mm [N: 152-330 mm], FL: __ mm [N: 33-73 mm]\n\nGA: __ weeks [N: As per LMP], EFW: __ gms [N: As per GA]\n\nAmniotic fluid: Adequate [N: AFI 8-18 cm], AFI __ cm [N: 8-18 cm], Placenta: Anterior upper segment [N: Upper], Grade I maturity [N: Grade 0-III], No retroplacental clot.\n\nCervix: Length 3.5 cm [N: >3.0 cm], Closed, No funneling.`;
 if(n.startsWith("BREAST")) return `ULTRASOUND BREAST:\n\nBREAST TISSUE: Fibroglandular tissue normal [N: Normal], No focal solid or cystic lesion [N: No lesion], No ductal dilatation [N: No dilatation], No calcification [N: No calcification].\n\nAXILLA: No significant lymphadenopathy [N: No LAP], No mass.`;
 if(n.startsWith("THYROID")) return `ULTRASOUND THYROID:\n\nRIGHT LOBE: Size 5.0 x 1.8 x 1.5 cm [N: 4-6 x 1.5-2.0 x 1.0-2.0 cm], Volume __ ml [N: 4-7 ml], Echotexture homogenous [N: Homogenous], No focal lesion [N: No lesion].\n\nLEFT LOBE: Size 4.5 x 1.6 x 1.3 cm [N: 3-5 x 1.2-1.8 x 1.0-1.5 cm], Volume __ ml [N: 3-6 ml], Homogenous, No focal lesion [N: No lesion].\n\nISTHMUS: Thickness 2.5 mm [N: <3 mm], Normal, No lesion.\n\nNECK: No cervical lymphadenopathy [N: No LAP], No retrosternal extension [N: No extension].`;
 if(n.startsWith("SCROTUM")||n.startsWith("TESTIS")) return `ULTRASOUND SCROTUM:\n\nRIGHT TESTIS: Size 4.0 x 2.5 x 3.0 cm [N: 3-5 x 2-3 x 2-4 cm], Volume 12 ml [N: 10-20 ml], Normal echotexture [N: Homogenous], No focal lesion, Epididymis normal 0.8 cm [N: <1.0 cm].\n\nLEFT TESTIS: Size 4.0 x 2.5 x 3.0 cm [N: 3-5 x 2-3 x 2-4 cm], Volume 12 ml [N: 10-20 ml], Normal, No lesion.\n\nSCROTUM: No hydrocele [N: No fluid], No significant abnormality [N: Normal].`;
 if(n.startsWith("ABDOMEN + PELVIS")) return `ULTRASOUND ABDOMEN + PELVIS:\n\nLIVER: 14.5 cm [N: 12-15 cm], Normal size & echotexture, No focal lesion, No IHBR dilatation, Portal vein 8 mm [N: 7-10 mm].\n\nGALL BLADDER: Well distended, Wall 2-3 mm [N: <3 mm], No calculus/sludge, CBD 3-4 mm [N: 3-4 mm].\n\nSPLEEN: 10.0 cm [N: <12 cm], Normal size & texture, No focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm [N: Head <3.0 cm Body <2.0 cm], Normal texture, No lesion, Duct <2 mm [N: <2 mm].\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal, No calculus/hydronephrosis.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal.\n\nURINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].\n\n${n.includes("Male")?`PROSTATE: Size 3.5 x 3.0 x 3.0 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 16 gm [N: 15-25 gm], Normal texture.`:`UTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal, Endometrium 8 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 3.1 x 2.1 cm, Volume 6.5 cc [N: 3-10 cc], Normal.\n\nPOD: No free fluid [N: No free fluid].`}`;
-return `ULTRASOUND ${n.split(' - ')[0]}:\n\nFindings as per ${n}.`;
+return `ULTRASOUND ${n.split(' - ')[0]}:\n\nFindings as per ${n.split(' - ')[1]||n}.`;
 }
 function getReportEditKUB(n){
 let normalRK = `RIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.`;
@@ -174,7 +146,22 @@ if(n.includes("Renal Calculus")) return "Adv: RFTs, Creatinine, Calcium, Phospho
 if(n.includes("BPH")) return "Adv: PSA, RFTs, Urine R/E, Urine C/S, Uroflowmetry, Post void residual scan, Urologist opinion.";
 return "Adv: Relevant labs as per disease and specialist consultation.";
 }
-let T={}; allNames.forEach(k=>{T[k]=getReportEdit(k)+`\n\nCONCLUSION:\n${k}.\n\nADVICE:\n${getAdvice(k)}`;});
+function getDiagnosis(n){
+ // Sirf diagnosis ka hissa return karna hai, template ka naam nahi
+ let parts = n.split(' - ');
+ if(parts.length>1){
+   let diag = parts.slice(1).join(' - ').trim();
+   // "WHOLE ABDOMEN - Normal" -> "Normal", "KUB - Fullness Right" -> "Fullness Right" etc
+   return diag;
+ }
+ return n;
+}
+let T={}; allNames.forEach(k=>{
+ let diag = getDiagnosis(k);
+ let reportText = getReportEdit(k);
+ // Conclusion me sirf diagnosis, bold ke liye yahan sirf text
+ T[k]=reportText+`\n\nCONCLUSION:\n${diag}.\n\nADVICE:\n${getAdvice(k)}`;
+});
 let allTemplates=Object.keys(T);
 function cleanForPrint(text){ return text.replace(/\s*\[N:.*?\]/g, ''); }
 function filterTemplates(){let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');let cur=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(cur))s.value=cur; checkCalculator();}
@@ -189,11 +176,13 @@ function formatReportToHTML(text){
     if(l.toUpperCase().startsWith('ULTRASOUND')){html+=`<div style="text-align:center;margin:10px 0;font-weight:900;text-decoration:underline;font-size:13pt!important">`+l+`</div>`;return;}
     if(l.toUpperCase().startsWith('CONCLUSION:')){
       let rest=l.replace(/CONCLUSION:/i,'').trim();
-      html+=`<div style="margin-top:12px"><b style="text-decoration:underline;font-weight:900">CONCLUSION:</b> <b>${rest}</b></div>`;return;
+      // Bold conclusion
+      html+=`<div style="margin-top:12px"><b style="text-decoration:underline;font-weight:900">CONCLUSION:</b></div><div style="margin-left:10px;font-weight:900"><b>• ${rest}</b></div>`;return;
     }
     if(l.toUpperCase().startsWith('ADVICE:')){
       let rest=l.replace(/ADVICE:/i,'').trim();
-      html+=`<div style="margin-top:8px"><b style="text-decoration:underline;font-weight:900">ADVICE:</b> ${rest}</div>`;return;
+      // Bold advice
+      html+=`<div style="margin-top:8px"><b style="text-decoration:underline;font-weight:900">ADVICE:</b></div><div style="margin-left:10px;font-weight:900"><b>• ${rest}</b></div>`;return;
     }
     if(l.includes(':')){
       let parts=l.split(':');
@@ -213,20 +202,19 @@ function make(){
   let pn=document.getElementById('pName');
   if(!pn?.value){alert('Enter Name');return;}
   let pid=document.getElementById('pIDMobile')?.value||'';
-
-  // *** FIXED: 2 LINES + SPACE + JUSTIFIED ***
+  // Bold patient details + space justified 2 lines
   let patientBorder=`
-  <div style="border:1.2px solid #000;padding:6px 8px;margin-bottom:8px;font-size:8.8pt!important;line-height:1.5">
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:8.8pt!important">
-      <span>Name: ${document.getElementById('pName').value}</span>
-      <span>Age: ${document.getElementById('pAge').value}</span>
-      <span>Sex: ${document.getElementById('pGen').value}</span>
-      <span>Date: ${document.getElementById('pDate').value}</span>
-      <span>ID: ${pid}</span>
+  <div style="border:1.2px solid #000;padding:6px 8px;margin-bottom:8px;font-size:8.8pt!important;line-height:1.5;font-weight:900">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:8.8pt!important;font-weight:900">
+      <span><b>Name: ${document.getElementById('pName').value}</b></span>
+      <span><b>Age: ${document.getElementById('pAge').value}</b></span>
+      <span><b>Sex: ${document.getElementById('pGen').value}</b></span>
+      <span><b>Date: ${document.getElementById('pDate').value}</b></span>
+      <span><b>ID: ${pid}</b></span>
     </div>
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:2px;font-size:8.8pt!important">
-      <span>Ref By: ${document.getElementById('ref').value}</span>
-      <span>Sonologist: ${document.getElementById('sono').value}</span>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:2px;font-size:8.8pt!important;font-weight:900">
+      <span><b>Ref By: ${getRefValue()}</b></span>
+      <span><b>Sonologist: ${getSonoValue()}</b></span>
       <span style="opacity:0">.</span>
     </div>
   </div>`;
@@ -250,8 +238,8 @@ function saveR(){
     pGen:document.getElementById('pGen').value,
     pDate:document.getElementById('pDate').value,
     pIDMobile:document.getElementById('pIDMobile').value,
-    ref:document.getElementById('ref').value,
-    sono:document.getElementById('sono').value,
+    ref:getRefValue(),
+    sono:getSonoValue(),
     pComplaint:document.getElementById('pComplaint').value,
     mobile:document.getElementById('pIDMobile')?.value||'',
     type:document.getElementById('uType')?.value||'',
@@ -297,8 +285,9 @@ function editR(id){
   document.getElementById('pGen').value=r.pGen||'Male';
   document.getElementById('pDate').value=r.pDate||r.date||'';
   document.getElementById('pIDMobile').value=r.pIDMobile||r.mobile||'';
-  document.getElementById('ref').value=r.ref||'';
-  document.getElementById('sono').value=r.sono||'';
+  // For ref/sonologist handle custom
+  if(refDoctors.includes(r.ref)){document.getElementById('ref').value=r.ref; document.getElementById('refOther').style.display='none';} else {document.getElementById('ref').value='Other'; document.getElementById('refOther').style.display='block'; document.getElementById('refOther').value=r.ref||'';}
+  if(sonoDoctors.includes(r.sono)){document.getElementById('sono').value=r.sono; document.getElementById('sonoOther').style.display='none';} else {document.getElementById('sono').value='Other'; document.getElementById('sonoOther').style.display='block'; document.getElementById('sonoOther').value=r.sono||'';}
   document.getElementById('pComplaint').value=r.pComplaint||'';
   document.getElementById('rText').value=r.text||'';
   editingId=r.id;
@@ -306,7 +295,6 @@ function editR(id){
   document.getElementById('reportContent').innerHTML=r.html;
   document.getElementById('outCard').style.display='block';
   window.scrollTo(0,document.getElementById('formCard').offsetTop);
-  alert('Report editing me load ho gayi hai, changes karke Generate Final Report par click karen');
 }
 function delR(id){if(!confirm('Delete karna hai?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));}
 function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[180,210]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:cleanForPrint(document.getElementById('rText').value);doc.setFontSize(10);doc.text(doc.splitTextToSize(txt,160),10,10);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}
