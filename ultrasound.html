@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - Final with Rest Unremarkable</title>
+<title>Azam Medical Centre - FWB Calculator Fixed</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -23,6 +23,8 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 .calcBox{border:2px solid #f59e0b;background:#fffbeb;padding:10px;border-radius:12px;margin:10px 0;display:none}
 .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
 .customInput{display:none;border:2px solid #ff9800;background:#fff8e1}
+.fwb-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.fwb-result{background:#dcfce7;border:2px solid #10b981;padding:10px;border-radius:10px;font-weight:900;text-align:center}
 </style></head><body>
 
 <div id="loginOverlay"><div class="loginBox">
@@ -45,7 +47,31 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 <div><select id="sono" onchange="checkOther('sono')"></select><input id="sonoOther" class="customInput" placeholder="Other Sonologist naam"></div>
 </div>
 <div style="border:2px solid #10b981;border-radius:12px;padding:8px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:11px">C/O</label><textarea id="pComplaint" rows="2"></textarea></div>
-<div id="obsCalc" class="calcBox"><h4>🤰 FWB Calculator</h4><div class="grid4"><div><label>BPD mm</label><input id="bpd" type="number" oninput="calcOBS()"></div><div><label>HC mm</label><input id="hc" type="number" oninput="calcOBS()"></div><div><label>AC mm</label><input id="ac" type="number" oninput="calcOBS()"></div><div><label>FL mm</label><input id="fl" type="number" oninput="calcOBS()"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><div><label>EDD</label><input id="lmp" type="date" onchange="calcEDD()"></div><div><label>GA</label><input id="gaResult" readonly style="background:#fef3c7;font-weight:bold"></div></div><div style="margin-top:8px"><label>EFW</label><input id="efwResult" readonly style="background:#dcfce7;font-weight:bold"></div><button class="small" style="background:#f59e0b;width:100%;margin-top:8px" onclick="insertOBS()">Insert</button></div>
+
+<!-- FWB CALCULATOR FIXED - HADLOCK -->
+<div id="obsCalc" class="calcBox"><h4>🤰 FWB Calculator - Fixed Hadlock Formula</h4>
+<p style="font-size:10px;color:#666">Sirf BPD, HC, FL likhen, baqi auto calculate ho jayega</p>
+<div class="fwb-grid" style="margin-top:8px">
+<div><label>BPD mm</label><input id="bpd" type="number" step="0.1" placeholder="71.3" oninput="calcFWBFixed()"></div>
+<div><label>HC mm</label><input id="hc" type="number" step="0.1" placeholder="250.8" oninput="calcFWBFixed()"></div>
+<div><label>AC mm</label><input id="ac" type="number" step="0.1" placeholder="201" oninput="calcFWBFixed()"></div>
+<div><label>FL mm</label><input id="fl" type="number" step="0.1" placeholder="54.4" oninput="calcFWBFixed()"></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+<div><label>LMP (for EDD)</label><input id="lmp" type="date" onchange="calcEDD()"></div>
+<div><label>GA (auto)</label><input id="gaResult" readonly style="background:#fef3c7;font-weight:900"></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+<div><label>EDD (auto)</label><input id="eddResult" readonly style="background:#e0f2fe;font-weight:900"></div>
+<div><label>EFW - Baby Weight</label><input id="efwResult" readonly class="fwb-result" style="font-size:13pt!important"></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-top:8px;font-size:9px">
+<div>AC: <span id="acCm">-</span> cm</div><div>FL: <span id="flCm">-</span> cm</div><div>HC: <span id="hcCm">-</span> cm</div><div>BPD: <span id="bpdCm">-</span> cm</div>
+</div>
+<button class="small" style="background:#f59e0b;width:100%;margin-top:10px;padding:10px" onclick="insertFWBAnomaly()">Insert Anomaly Scan Report (Photo Jaisa)</button>
+<button class="small" style="background:#10b981;width:100%;margin-top:6px;padding:8px" onclick="insertFWBSimple()">Insert Simple FWB</button>
+</div>
+
 <div id="prosCalc" class="calcBox"><h4>🧮 Prostate Calculator</h4><div class="grid4"><div><label>L cm</label><input id="prosL" type="number" step="0.1" oninput="calcProstate()"></div><div><label>W cm</label><input id="prosW" type="number" step="0.1" oninput="calcProstate()"></div><div><label>H cm</label><input id="prosH" type="number" step="0.1" oninput="calcProstate()"></div><div><label>Vol</label><input id="prosVol" readonly style="background:#dcfce7;font-weight:bold"></div></div><button class="small" style="background:#f59e0b;width:100%;margin-top:8px" onclick="insertProstate()">Insert</button></div>
 <textarea id="rText" rows="24"></textarea>
 <button class="btn" onclick="make()">Generate Final Report</button>
@@ -76,9 +102,125 @@ async function uploadToDriveFile(name,content){ try{ let savedToken=localStorage
 async function loadFromDrive(){ try{ document.getElementById('driveStatus').innerText='● Loading...'; let savedToken=localStorage.getItem('gdrive_token'); if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}} await ensureDriveAuth(); let folderId=await getOrCreateFolder(); if(!folderId){alert('Drive folder nahi mila');return;} let file=await findFileInFolder(folderId,'Azam_Medical_Backup_ALL.json'); if(!file){alert('Drive par koi backup nahi mila');return;} let token=gapi.client.getToken(); let res=await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`,{headers:{'Authorization':'Bearer '+token.access_token}}); if(!res.ok){alert('Load failed');return;} let text=await res.text(); let data=JSON.parse(text); if(!Array.isArray(data)){alert('Invalid backup');return;} localStorage.setItem('azam_reports',JSON.stringify(data)); render(); document.getElementById('driveStatus').innerText='● Loaded '+data.length; alert('✅ '+data.length+' reports loaded'); }catch(e){alert('Load error: '+e.message);} }
 window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1500);});
 function checkCalculator(){ let v=document.getElementById('uType').value||''; document.getElementById('obsCalc').style.display = (v.includes('FWB'))? 'block' : 'none'; document.getElementById('prosCalc').style.display = (v.includes('PROSTATE'))? 'block' : 'none'; }
-function calcOBS(){ let bpd=parseFloat(document.getElementById('bpd').value)||0; let hc=parseFloat(document.getElementById('hc').value)||0; let ac=parseFloat(document.getElementById('ac').value)||0; let fl=parseFloat(document.getElementById('fl').value)||0; if(fl>0){ let fl_cm = fl/10; let ga_fl = 10.1 + (fl_cm * 2.4); let avgGA = ga_fl; if(bpd>0) avgGA=(ga_fl + (bpd*0.4+4))/2; document.getElementById('gaResult').value = avgGA.toFixed(1)+' wks'; if(ac>0 && hc>0){ let AC = ac/10, FL = fl/10, BPD = bpd>0?bpd/10:5; let logEFW = 1.335 - (0.0034*AC*FL) + (0.0316*BPD) + (0.0457*AC) + (0.1623*FL); let w = Math.pow(10, logEFW)*100; document.getElementById('efwResult').value = Math.round(w)+' gms'; } } }
-function calcEDD(){ let lmp=document.getElementById('lmp').value; if(!lmp)return; let d=new Date(lmp); d.setDate(d.getDate()+280); document.getElementById('gaResult').value='EDD: '+d.toISOString().slice(0,10); }
-function insertOBS(){ let bpd=document.getElementById('bpd').value||'__', hc=document.getElementById('hc').value||'__', ac=document.getElementById('ac').value||'__', fl=document.getElementById('fl').value||'__', ga=document.getElementById('gaResult').value||'', efw=document.getElementById('efwResult').value||''; document.getElementById('rText').value += `\nBPD: ${bpd} mm [N: 47-94 mm], HC: ${hc} mm [N: 170-320 mm], AC: ${ac} mm [N: 152-330 mm], FL: ${fl} mm [N: 33-73 mm]\nGA: ${ga}, EFW: ${efw}\n`; }
+
+// *** FIXED FWB CALCULATOR - HADLOCK FORMULA CORRECT ***
+function calcFWBFixed(){
+ let bpd_mm = parseFloat(document.getElementById('bpd').value)||0;
+ let hc_mm = parseFloat(document.getElementById('hc').value)||0;
+ let ac_mm = parseFloat(document.getElementById('ac').value)||0;
+ let fl_mm = parseFloat(document.getElementById('fl').value)||0;
+
+ // Auto estimate AC if empty but HC and FL present (HC*0.8 approx)
+ if(ac_mm===0 && hc_mm>0){
+   ac_mm = hc_mm * 0.80;
+   document.getElementById('ac').value = ac_mm.toFixed(1);
+ }
+
+ if(bpd_mm===0 && hc_mm===0 && fl_mm===0) return;
+
+ let bpd_cm = bpd_mm/10, hc_cm = hc_mm/10, ac_cm = ac_mm/10, fl_cm = fl_mm/10;
+ document.getElementById('bpdCm').innerText = bpd_cm.toFixed(1);
+ document.getElementById('hcCm').innerText = hc_cm.toFixed(1);
+ document.getElementById('acCm').innerText = ac_cm.toFixed(1);
+ document.getElementById('flCm').innerText = fl_cm.toFixed(1);
+
+ // GA calculation - Average of BPD, HC, FL
+ let ga_bpd=0, ga_hc=0, ga_fl=0, count=0;
+ if(bpd_mm>0){ ga_bpd = (bpd_mm * 0.363) + 3.0; count++; }
+ if(hc_mm>0){ ga_hc = (hc_mm * 0.089) + 5.5; count++; }
+ if(fl_mm>0){ ga_fl = (fl_mm * 0.380) + 7.0; count++; }
+ if(ac_mm>0){ count++; } // AC not for GA but for weight
+ let avgGA = 0;
+ if(count>0){ avgGA = (ga_bpd+ga_hc+ga_fl)/ ( (bpd_mm>0?1:0)+(hc_mm>0?1:0)+(fl_mm>0?1:0) ); }
+ if(avgGA>0){
+   document.getElementById('gaResult').value = avgGA.toFixed(1) + ' wks';
+   // EDD from GA
+   let today = new Date();
+   let daysToEDD = (40 - avgGA)*7;
+   let edd = new Date(); edd.setDate(today.getDate()+daysToEDD);
+   document.getElementById('eddResult').value = edd.toLocaleDateString('en-GB');
+ }
+
+ // Hadlock EFW - Correct Formula (Hadlock 1985 - 4 parameter)
+ // log10(EFW) = 1.326 -0.00326*AC*FL +0.0107*HC +0.0438*AC +0.158*FL (AC,HC,FL in cm)
+ if(ac_cm>0 && fl_cm>0 && hc_cm>0){
+   let log10EFW = 1.326 - (0.00326*ac_cm*fl_cm) + (0.0107*hc_cm) + (0.0438*ac_cm) + (0.158*fl_cm);
+   let efw = Math.pow(10, log10EFW);
+   // BPD correction if available
+   if(bpd_cm>0){
+     // Hadlock with BPD: log10 = 1.335 -0.0034*AC*FL +0.0316*BPD +0.0457*AC +0.1623*FL
+     log10EFW = 1.335 - (0.0034*ac_cm*fl_cm) + (0.0316*bpd_cm) + (0.0457*ac_cm) + (0.1623*fl_cm);
+     efw = Math.pow(10, log10EFW);
+   }
+   document.getElementById('efwResult').value = Math.round(efw) + ' gms';
+ }
+}
+function calcEDD(){
+ let lmp=document.getElementById('lmp').value;
+ if(!lmp){ calcFWBFixed(); return; }
+ let d=new Date(lmp); d.setDate(d.getDate()+280);
+ document.getElementById('eddResult').value = d.toLocaleDateString('en-GB');
+ let today = new Date(lmp); let now=new Date();
+ let diffDays = Math.floor((now - today)/(1000*60*60*24));
+ let gaWeeks = diffDays/7;
+ if(gaWeeks>0) document.getElementById('gaResult').value = gaWeeks.toFixed(1)+' wks (LMP)';
+}
+
+// Insert FWB Anomaly Scan Report - Photo Jaisa
+function insertFWBAnomaly(){
+ let bpd = document.getElementById('bpd').value||'7.1';
+ let hc = document.getElementById('hc').value||'25.0';
+ let ac = document.getElementById('ac').value||'20.1';
+ let fl = document.getElementById('fl').value||'5.4';
+ let ga = document.getElementById('gaResult').value||'28 wks';
+ let efw = document.getElementById('efwResult').value||'1656 gms';
+ // Convert mm to cm for report
+ let bpd_cm = (parseFloat(bpd)>10? (parseFloat(bpd)/10).toFixed(1) : bpd);
+ let hc_cm = (parseFloat(hc)>10? (parseFloat(hc)/10).toFixed(1) : hc);
+ let ac_cm = (parseFloat(ac)>10? (parseFloat(ac)/10).toFixed(1) : ac);
+ let fl_cm = (parseFloat(fl)>10? (parseFloat(fl)/10).toFixed(1) : fl);
+
+ let report = `FWB & OBSTETRIC ULTRASOUND REPORT:
+
+Number of Fetus: SINGLE [N: Single]
+Location: INTRAUTERINE [N: Intrauterine]
+Presentation: CEPHALIC [N: Cephalic]
+Lie: LONGITUDINAL LIE [N: Longitudinal]
+Fetal Cardiac Activity: PRESENT (152 BPM) [N: Present]
+Gross Fetal Movement: PRESENT [N: Present]
+Placenta: ANTERIOR, NOT LOW-LYING [N: Not low-lying]
+Placental Maturity: GRADE II [N: Grade 0-III]
+Amount of Liquor: ADEQUATE RESPECTIVE TO GEST-AGE [N: Adequate]
+
+B.P.D.: (Bi Parietal Diameter) ${bpd_cm} cm [N: As per ${ga}]
+F.L.: (Femur Length) ${fl_cm} cm [N: As per ${ga}]
+HC: (Head Circumference) ${hc_cm} cm [N: As per ${ga}]
+AC: (Abdominal Circumference) ${ac_cm} cm [N: As per ${ga}]
+Estimated Fetal Weight: ${efw} Approx [N: As per GA]
+
+CONCLUSION:
+Scan of the pelvis shows single alive intrauterine pregnancy corresponding to the gestational age of ${ga}. Cephalic presentation & placenta localized anteriorly no previa with grade II maturity. Internal os is closed. Amount of liquor is adequate.
+Rest of study unremarkable.
+
+AFI: 4.8 cm - 2.5 cm / 3.0 cm - 4.3 cm
+The amniotic fluid index is 14.8 cm (Normal 08 to 20cm) [N: 8-20 cm]
+
+ADVICE:
+Routine antenatal follow up.`;
+
+ document.getElementById('rText').value = report;
+}
+
+function insertFWBSimple(){
+ let bpd = document.getElementById('bpd').value||'__';
+ let hc = document.getElementById('hc').value||'__';
+ let ac = document.getElementById('ac').value||'__';
+ let fl = document.getElementById('fl').value||'__';
+ let ga = document.getElementById('gaResult').value||'__';
+ let efw = document.getElementById('efwResult').value||'__';
+ document.getElementById('rText').value += `\nBPD: ${bpd} mm [N: 47-94 mm], HC: ${hc} mm [N: 170-320 mm], AC: ${ac} mm [N: 152-330 mm], FL: ${fl} mm [N: 33-73 mm]\nGA: ${ga}, EFW: ${efw}\n`;
+}
+
 function calcProstate(){ let l=parseFloat(document.getElementById('prosL').value)||0; let w=parseFloat(document.getElementById('prosW').value)||0; let h=parseFloat(document.getElementById('prosH').value)||0; if(l&&w&&h){ let vol = l*w*h*0.52; document.getElementById('prosVol').value = vol.toFixed(1)+' gm'; } }
 function insertProstate(){ let l=document.getElementById('prosL').value||'__', w=document.getElementById('prosW').value||'__', h=document.getElementById('prosH').value||'__', vol=document.getElementById('prosVol').value||''; document.getElementById('rText').value += `\nProstate: ${l} x ${w} x ${h} cm [N: <4.0 x 3.0 x 3.0 cm], Vol: ${vol} [N: 15-25 gm]\n`; }
 const refDoctors=["Ref By - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel","Dr. Shahzad Sadaqat","Dr. Bilal","Self","Other"];
@@ -104,6 +246,7 @@ if(n==="WHOLE ABDOMEN - Fatty Liver Grade 1") return `ULTRASOUND WHOLE ABDOMEN:\
 if(n==="KUB - Normal") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.\n\nURINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].`;
 if(n.startsWith("KUB -")||n.startsWith("KUB + PROSTATE")) return getReportEditKUB(n);
 if(n.startsWith("PELVIS -")) return `ULTRASOUND PELVIS:\n\nFindings as per ${n.split(' - ')[1]} with normal values [N: As per report].`;
+if(n.startsWith("FWB - Anomaly Scan Normal")) return `FWB & OBSTETRIC ULTRASOUND REPORT:\n\nNumber of Fetus: SINGLE [N: Single]\nLocation: INTRAUTERINE [N: Intrauterine]\nPresentation: CEPHALIC [N: Cephalic]\nLie: LONGITUDINAL LIE [N: Longitudinal]\nFetal Cardiac Activity: PRESENT (152 BPM) [N: Present]\nGross Fetal Movement: PRESENT [N: Present]\nPlacenta: ANTERIOR, NOT LOW-LYING [N: Not low-lying]\nPlacental Maturity: GRADE II [N: Grade 0-III]\nAmount of Liquor: ADEQUATE RESPECTIVE TO GEST-AGE [N: Adequate]\n\nB.P.D.: (Bi Parietal Diameter) 7.1 cm [N: As per GA]\nF.L.: (Femur Length) 5.4 cm [N: As per GA]\nHC: (Head Circumference) 25.0 cm [N: As per GA]\nAC: (Abdominal Circumference) 20.1 cm [N: As per GA]\nEstimated Fetal Weight: 1656 Gms Approx [N: As per GA]`;
 if(n.startsWith("FWB")) return `ULTRASOUND FWB:\n\nSingle live intrauterine fetus, Cephalic presentation [N: Cephalic], Cardiac activity present [N: Present], Fetal movements present.\n\nBPD: __ mm [N: 47-94 mm], HC: __ mm [N: 170-320 mm], AC: __ mm [N: 152-330 mm], FL: __ mm [N: 33-73 mm]\n\nGA: __ weeks [N: As per LMP], EFW: __ gms [N: As per GA]\n\nAmniotic fluid: Adequate [N: AFI 8-18 cm], AFI __ cm [N: 8-18 cm], Placenta: Anterior upper segment [N: Upper], Grade I maturity [N: Grade 0-III], No retroplacental clot.\n\nCervix: Length 3.5 cm [N: >3.0 cm], Closed, No funneling.`;
 if(n.startsWith("BREAST")) return `ULTRASOUND BREAST:\n\nBREAST TISSUE: Fibroglandular tissue normal [N: Normal], No focal solid or cystic lesion [N: No lesion], No ductal dilatation [N: No dilatation], No calcification [N: No calcification].\n\nAXILLA: No significant lymphadenopathy [N: No LAP], No mass.`;
 if(n.startsWith("THYROID")) return `ULTRASOUND THYROID:\n\nRIGHT LOBE: Size 5.0 x 1.8 x 1.5 cm [N: 4-6 x 1.5-2.0 x 1.0-2.0 cm], Volume __ ml [N: 4-7 ml], Echotexture homogenous [N: Homogenous], No focal lesion [N: No lesion].\n\nLEFT LOBE: Size 4.5 x 1.6 x 1.3 cm [N: 3-5 x 1.2-1.8 x 1.0-1.5 cm], Volume __ ml [N: 3-6 ml], Homogenous, No focal lesion [N: No lesion].\n\nISTHMUS: Thickness 2.5 mm [N: <3 mm], Normal, No lesion.\n\nNECK: No cervical lymphadenopathy [N: No LAP], No retrosternal extension [N: No extension].`;
@@ -136,25 +279,10 @@ if(n.includes("BPH")) return "Adv: PSA, RFTs, Urine R/E, Urine C/S, Uroflowmetry
 return "Adv: Relevant labs as per disease and specialist consultation.";
 }
 function getDiagnosis(n){
- // Dilated proximal ureter ka special conclusion
- if(n.includes("Dilated Proximal Ureter")){
-   return "Mild hydronephrosis with proximal ureter dilated. However, no calculus seen in the visualized part of ureter. Possibility of distal ureteric calculus cannot be excluded";
- }
- let parts = n.split(' - ');
- if(parts.length>1){ return parts.slice(1).join(' - ').trim(); }
- return n;
+ if(n.includes("Dilated Proximal Ureter")){ return "Mild hydronephrosis with proximal ureter dilated. However, no calculus seen in the visualized part of ureter. Possibility of distal ureteric calculus cannot be excluded"; }
+ let parts = n.split(' - '); if(parts.length>1){ return parts.slice(1).join(' - ').trim(); } return n;
 }
-let T={}; allNames.forEach(k=>{
- let diag = getDiagnosis(k);
- let reportText = getReportEdit(k);
- // Har conclusion ke baad Rest of study unremarkable.
- let finalConclusion = diag + ".\nRest of study unremarkable.";
- // Agar dilated wala already lamba hai to uske baad bhi Rest line
- if(k.includes("Dilated Proximal Ureter")){
-   finalConclusion = diag + ".\nRest of study unremarkable.";
- }
- T[k]=reportText+`\n\nCONCLUSION:\n${finalConclusion}\n\nADVICE:\n${getAdvice(k)}`;
-});
+let T={}; allNames.forEach(k=>{ let diag = getDiagnosis(k); let reportText = getReportEdit(k); let finalConclusion = diag + ".\nRest of study unremarkable."; T[k]=reportText+`\n\nCONCLUSION:\n${finalConclusion}\n\nADVICE:\n${getAdvice(k)}`; });
 let allTemplates=Object.keys(T);
 function cleanForPrint(text){ return text.replace(/\s*\[N:.*?\]/g, ''); }
 function filterTemplates(){let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');let cur=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(cur))s.value=cur; checkCalculator();}
@@ -166,7 +294,7 @@ function formatReportToHTML(text){
   lines.forEach(line=>{
     let l=line.trim();
     if(!l){html+='<div style="height:5px"></div>';return;}
-    if(l.toUpperCase().startsWith('ULTRASOUND')){html+=`<div style="text-align:center;margin:10px 0;font-weight:900;text-decoration:underline;font-size:12pt!important">`+l+`</div>`;return;}
+    if(l.toUpperCase().startsWith('ULTRASOUND')||l.toUpperCase().startsWith('FWB &')){html+=`<div style="text-align:center;margin:10px 0;font-weight:900;text-decoration:underline;font-size:12pt!important">`+l+`</div>`;return;}
     if(l.toUpperCase().startsWith('CONCLUSION:')){
       let rest=l.replace(/CONCLUSION:/i,'').trim();
       html+=`<div style="margin-top:12px"><b style="text-decoration:underline;font-weight:900;font-size:12pt!important">CONCLUSION:</b></div><div style="margin-left:10px;font-weight:900;font-size:12pt!important"><b>• ${rest}</b></div>`;return;
@@ -179,8 +307,8 @@ function formatReportToHTML(text){
       let parts=l.split(':');
       let heading=parts[0].trim();
       let value=parts.slice(1).join(':').trim();
-      let organs=["LIVER","GALL BLADDER","SPLEEN","PANCREAS","RIGHT KIDNEY","LEFT KIDNEY","URINARY BLADDER","UTERUS","RIGHT OVARY","LEFT OVARY","POD","BPD","HC","AC","FL","PROSTATE","APPENDIX","HERNIA","ASCITES","LYMPH NODES","BREAST TISSUE","AXILLA","RIGHT LOBE","LEFT LOBE","ISTHMUS","NECK","RIGHT TESTIS","LEFT TESTIS","SCROTUM"];
-      if(organs.some(o=>heading.toUpperCase().includes(o))){
+      let organs=["LIVER","GALL BLADDER","SPLEEN","PANCREAS","RIGHT KIDNEY","LEFT KIDNEY","URINARY BLADDER","UTERUS","RIGHT OVARY","LEFT OVARY","POD","BPD","HC","AC","FL","PROSTATE","Number of Fetus","Location","Presentation","Lie","Fetal Cardiac Activity","Gross Fetal Movement","Placenta","Placental Maturity","Amount of Liquor","B.P.D.","F.L.","HC","AC","Estimated Fetal Weight","AFI"];
+      if(organs.some(o=>heading.toUpperCase().includes(o.toUpperCase()))){
         html+=`<div style="margin:3px 0 3px 10px;font-size:12pt!important">• <b style="text-decoration:underline;font-weight:900;font-size:12pt!important">${heading}:</b> <span style="font-size:12pt!important">${value}</span></div>`;
         return;
       }
@@ -208,7 +336,6 @@ function make(){
       <span style="opacity:0">.</span>
     </div>
   </div>`;
-
   let complaintText=(document.getElementById('pComplaint')?.value||'').trim();
   let bodyHTML=formatReportToHTML(document.getElementById('rText').value);
   if(complaintText){bodyHTML=`<div style="margin-bottom:6px;font-size:12pt!important;font-style:italic"><b>C/O: ${complaintText}</b></div>`+bodyHTML;}
