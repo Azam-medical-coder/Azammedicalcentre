@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - Final Bold Fix</title>
+<title>Azam Medical Centre - Final 5cm Logo</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -12,8 +12,9 @@ input,select,textarea{width:100%;padding:10px;border-radius:10px;border:2px soli
 textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:600}
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin-top:8px}
 .small{padding:7px 9px;border-radius:8px;border:none;margin:2px;font-weight:700;cursor:pointer;color:#fff;font-size:11px}
+/* Report: 5cm x 5cm logo centre */
 .report{width:180mm;min-height:210mm;margin:auto;background:#fff;border:1.5px solid #0a4eb5;border-radius:10px;padding:0 5mm 5mm 5mm;padding-top:36mm;position:relative;overflow:hidden}
-.report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:380px;height:380px;background-image:url('logo.png'),url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.12;z-index:0;pointer-events:none;filter:grayscale(100%) brightness(1.2) contrast(0.8);}
+.report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5cm;height:5cm;background-image:url('logo.png'),url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.12;z-index:0;pointer-events:none;filter:grayscale(100%) brightness(1.2) contrast(0.8);}
 .report-inner{width:170mm;min-height:165mm;margin:2mm auto;padding:3mm 4mm;font-size:12pt!important;line-height:1.6;z-index:2;color:#000;position:relative}
 .report-inner *{font-family:Calibri!important;font-size:12pt!important}
 #loginOverlay{position:fixed;inset:0;background:#0a4eb5;display:flex;align-items:center;justify-content:center;z-index:99999}
@@ -81,27 +82,16 @@ function calcEDD(){ let lmp=document.getElementById('lmp').value; if(!lmp)return
 function insertOBS(){ let bpd=document.getElementById('bpd').value||'__', hc=document.getElementById('hc').value||'__', ac=document.getElementById('ac').value||'__', fl=document.getElementById('fl').value||'__', ga=document.getElementById('gaResult').value||'', efw=document.getElementById('efwResult').value||''; document.getElementById('rText').value += `\nBPD: ${bpd} mm [N: 47-94 mm], HC: ${hc} mm [N: 170-320 mm], AC: ${ac} mm [N: 152-330 mm], FL: ${fl} mm [N: 33-73 mm]\nGA: ${ga}, EFW: ${efw}\n`; }
 function calcProstate(){ let l=parseFloat(document.getElementById('prosL').value)||0; let w=parseFloat(document.getElementById('prosW').value)||0; let h=parseFloat(document.getElementById('prosH').value)||0; if(l&&w&&h){ let vol = l*w*h*0.52; document.getElementById('prosVol').value = vol.toFixed(1)+' gm'; } }
 function insertProstate(){ let l=document.getElementById('prosL').value||'__', w=document.getElementById('prosW').value||'__', h=document.getElementById('prosH').value||'__', vol=document.getElementById('prosVol').value||''; document.getElementById('rText').value += `\nProstate: ${l} x ${w} x ${h} cm [N: <4.0 x 3.0 x 3.0 cm], Vol: ${vol} [N: 15-25 gm]\n`; }
-
 const refDoctors=["Ref By - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel","Dr. Shahzad Sadaqat","Dr. Bilal","Self","Other"];
 const sonoDoctors=["Sonologist - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN","DR. SAMAN AZAM","Other"];
 function fillSelect(id,list){let s=document.getElementById(id);s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
 fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
-function checkOther(type){
- if(type==='ref'){
-  let v=document.getElementById('ref').value;
-  document.getElementById('refOther').style.display = (v==='Other')? 'block' : 'none';
- } else {
-  let v=document.getElementById('sono').value;
-  document.getElementById('sonoOther').style.display = (v==='Other')? 'block' : 'none';
- }
-}
+function checkOther(type){ if(type==='ref'){ let v=document.getElementById('ref').value; document.getElementById('refOther').style.display = (v==='Other')? 'block' : 'none'; } else { let v=document.getElementById('sono').value; document.getElementById('sonoOther').style.display = (v==='Other')? 'block' : 'none'; } }
 function getRefValue(){let v=document.getElementById('ref').value; if(v==='Other'){return document.getElementById('refOther').value||'Other';} return v;}
 function getSonoValue(){let v=document.getElementById('sono').value; if(v==='Other'){return document.getElementById('sonoOther').value||'Other';} return v;}
-
 function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777' || p==='Zee'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';}else{document.getElementById('passErr').style.display='block';}}
 if(sessionStorage.getItem('azam_login')==='ok'){document.getElementById('loginOverlay').style.display='none';}
 const allNames=["WHOLE ABDOMEN - Normal","WHOLE ABDOMEN - Fatty Liver Grade 1","WHOLE ABDOMEN - Fatty Liver Grade 2","WHOLE ABDOMEN - Fatty Liver Grade 3","WHOLE ABDOMEN - Hepatomegaly","WHOLE ABDOMEN - Splenomegaly","WHOLE ABDOMEN - Hepatosplenomegaly","WHOLE ABDOMEN - Cholelithiasis Single","WHOLE ABDOMEN - Cholelithiasis Multiple","WHOLE ABDOMEN - Gall Bladder Sludge","WHOLE ABDOMEN - Cholecystitis Acute","WHOLE ABDOMEN - CBD Dilated","WHOLE ABDOMEN - Appendicitis","WHOLE ABDOMEN - Umbilical Hernia","WHOLE ABDOMEN - Inguinal Hernia Right","WHOLE ABDOMEN - Inguinal Hernia Left","WHOLE ABDOMEN - Liver Cyst","WHOLE ABDOMEN - Liver Hemangioma","WHOLE ABDOMEN - Ascites Mild","WHOLE ABDOMEN - Ascites Moderate to Gross","WHOLE ABDOMEN - Liver Abscess","WHOLE ABDOMEN - Renal Cyst","WHOLE ABDOMEN - Gall Bladder Polyp","WHOLE ABDOMEN - Pancreatitis Acute","WHOLE ABDOMEN - Paraumbilical Hernia","WHOLE ABDOMEN - Ventral Hernia","WHOLE ABDOMEN - Incisional Hernia","WHOLE ABDOMEN - Lymphadenopathy","KUB - Normal","KUB - Renal Calculus Right","KUB - Renal Calculus Left","KUB - Renal Calculus Bilateral","KUB - Staghorn Calculus","KUB - Microliths Bilateral","KUB - Hydronephrosis Mild Right","KUB - Hydronephrosis Moderate Right","KUB - Hydronephrosis Severe Right","KUB - Hydronephrosis Mild Left","KUB - Hydronephrosis Moderate Left","KUB - Hydronephrosis Severe Left","KUB - Hydronephrosis Bilateral Mild","KUB - Hydronephrosis Bilateral Moderate","KUB - Hydroureteronephrosis Right","KUB - Hydroureteronephrosis Left","KUB - Hydroureteronephrosis Bilateral","KUB - Ureteric Calculus with Hydronephrosis","KUB - PUJ Obstruction Right","KUB - PUJ Obstruction Left","KUB - Parenchymal Changes Grade 1","KUB - Parenchymal Changes Grade 2","KUB - Parenchymal Changes Grade 3","KUB - Simple Cortical Cyst Right","KUB - Simple Cortical Cyst Left","KUB - Bilateral Cortical Cysts","KUB - Complex Cyst Right","KUB - Complex Cyst Left","KUB - Polycystic Kidneys","KUB - Bladder Stone Single","KUB - Bladder Stones Multiple","KUB - Cystitis Thickened Wall","KUB - Bladder Diverticulum","KUB - Bladder Mass","KUB - Ectopic Kidney Right","KUB - Bladder Trabeculation","KUB - High Post Void Residual","KUB - Fullness Right","KUB - Fullness Left","KUB - Fullness Bilateral","KUB - Dilated Proximal Ureter Right","KUB - Dilated Proximal Ureter Left","KUB - Dilated Proximal Ureter Bilateral","KUB + PROSTATE - Normal","KUB + PROSTATE - BPH","KUB + PROSTATE - BPH with Cystitis","KUB + PROSTATE - Prostatitis","KUB + PROSTATE - Prostate Calcification","PELVIS - Normal","PELVIS - PCOS","PELVIS - Fibroid Intramural","PELVIS - Fibroid Subserosal","PELVIS - Fibroid Submucosal","PELVIS - Multiple Fibroids","PELVIS - Ovarian Cyst Simple Right","PELVIS - Ovarian Cyst Simple Left","PELVIS - Ovarian Cyst Bilateral","PELVIS - Endometrioma","PELVIS - Dermoid Cyst","PELVIS - PID","PELVIS - Free Fluid POD","PELVIS - Early Pregnancy","PELVIS - Bulky Uterus","PELVIS - Endometrial Hyperplasia","PELVIS - Endometrial Polyp","FWB - Normal Single Pregnancy","FWB - Breech Presentation","FWB - IUGR","FWB - Twins Normal","FWB - Oligohydramnios","FWB - Polyhydramnios","FWB - Early Pregnancy 6-8 Weeks","FWB - Anomaly Scan Normal","FWB - Placenta Previa","FWB - Placental Abruption","FWB - Growth Scan Normal","FWB - IUD / Demise","BREAST - Normal","BREAST - Fibroadenoma Right","BREAST - Fibroadenoma Left","BREAST - Fibroadenoma Bilateral","BREAST - Breast Cyst Right","BREAST - Breast Cyst Left","BREAST - Breast Cysts Multiple","BREAST - Fibrocystic Disease","BREAST - Mastitis","BREAST - Breast Abscess","BREAST - Gynecomastia","BREAST - Suspicious Mass","THYROID - Normal","THYROID - Multinodular Goiter","THYROID - Solitary Nodule Right","THYROID - Solitary Nodule Left","THYROID - Thyroid Cyst Right","THYROID - Thyroid Cyst Left","THYROID - Thyroiditis","THYROID - Hyperthyroid Goiter","SCROTUM - Normal","SCROTUM - Hydrocele Right","SCROTUM - Hydrocele Left","SCROTUM - Hydrocele Bilateral","SCROTUM - Varicocele Left","SCROTUM - Varicocele Right","SCROTUM - Varicocele Bilateral","SCROTUM - Epididymitis Right","SCROTUM - Epididymitis Left","SCROTUM - Epididymo-orchitis Right","SCROTUM - Epididymo-orchitis Left","SCROTUM - Orchitis","SCROTUM - Testicular Torsion","TESTIS - Microlithiasis","TESTIS - Testicular Cyst","AXILLA - Normal","AXILLA - Lymphadenopathy Left","NECK - Normal","NECK - Cervical Lymphadenopathy","ABDOMEN + PELVIS - Normal Male","ABDOMEN + PELVIS - Normal Female"];
-
 function getReportEdit(n){
 let normalLiver = `LIVER: 14.5 cm [N: 12-15 cm], Normal size & echotexture, No focal lesion, No IHBR dilatation, Portal vein 8 mm [N: 7-10 mm].`;
 let normalGB = `GALL BLADDER: Well distended, Wall 2-3 mm [N: <3 mm], No calculus/sludge, CBD 3-4 mm [N: 3-4 mm].`;
@@ -146,22 +136,8 @@ if(n.includes("Renal Calculus")) return "Adv: RFTs, Creatinine, Calcium, Phospho
 if(n.includes("BPH")) return "Adv: PSA, RFTs, Urine R/E, Urine C/S, Uroflowmetry, Post void residual scan, Urologist opinion.";
 return "Adv: Relevant labs as per disease and specialist consultation.";
 }
-function getDiagnosis(n){
- // Sirf diagnosis ka hissa return karna hai, template ka naam nahi
- let parts = n.split(' - ');
- if(parts.length>1){
-   let diag = parts.slice(1).join(' - ').trim();
-   // "WHOLE ABDOMEN - Normal" -> "Normal", "KUB - Fullness Right" -> "Fullness Right" etc
-   return diag;
- }
- return n;
-}
-let T={}; allNames.forEach(k=>{
- let diag = getDiagnosis(k);
- let reportText = getReportEdit(k);
- // Conclusion me sirf diagnosis, bold ke liye yahan sirf text
- T[k]=reportText+`\n\nCONCLUSION:\n${diag}.\n\nADVICE:\n${getAdvice(k)}`;
-});
+function getDiagnosis(n){ let parts = n.split(' - '); if(parts.length>1){ return parts.slice(1).join(' - ').trim(); } return n; }
+let T={}; allNames.forEach(k=>{ let diag = getDiagnosis(k); let reportText = getReportEdit(k); T[k]=reportText+`\n\nCONCLUSION:\n${diag}.\n\nADVICE:\n${getAdvice(k)}`; });
 let allTemplates=Object.keys(T);
 function cleanForPrint(text){ return text.replace(/\s*\[N:.*?\]/g, ''); }
 function filterTemplates(){let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');let cur=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(cur))s.value=cur; checkCalculator();}
@@ -173,16 +149,14 @@ function formatReportToHTML(text){
   lines.forEach(line=>{
     let l=line.trim();
     if(!l){html+='<div style="height:5px"></div>';return;}
-    if(l.toUpperCase().startsWith('ULTRASOUND')){html+=`<div style="text-align:center;margin:10px 0;font-weight:900;text-decoration:underline;font-size:13pt!important">`+l+`</div>`;return;}
+    if(l.toUpperCase().startsWith('ULTRASOUND')){html+=`<div style="text-align:center;margin:10px 0;font-weight:900;text-decoration:underline;font-size:12pt!important">`+l+`</div>`;return;}
     if(l.toUpperCase().startsWith('CONCLUSION:')){
       let rest=l.replace(/CONCLUSION:/i,'').trim();
-      // Bold conclusion
-      html+=`<div style="margin-top:12px"><b style="text-decoration:underline;font-weight:900">CONCLUSION:</b></div><div style="margin-left:10px;font-weight:900"><b>• ${rest}</b></div>`;return;
+      html+=`<div style="margin-top:12px"><b style="text-decoration:underline;font-weight:900;font-size:12pt!important">CONCLUSION:</b></div><div style="margin-left:10px;font-weight:900;font-size:12pt!important"><b>• ${rest}</b></div>`;return;
     }
     if(l.toUpperCase().startsWith('ADVICE:')){
       let rest=l.replace(/ADVICE:/i,'').trim();
-      // Bold advice
-      html+=`<div style="margin-top:8px"><b style="text-decoration:underline;font-weight:900">ADVICE:</b></div><div style="margin-left:10px;font-weight:900"><b>• ${rest}</b></div>`;return;
+      html+=`<div style="margin-top:8px"><b style="text-decoration:underline;font-weight:900;font-size:12pt!important">ADVICE:</b></div><div style="margin-left:10px;font-weight:900;font-size:12pt!important"><b>• ${rest}</b></div>`;return;
     }
     if(l.includes(':')){
       let parts=l.split(':');
@@ -190,11 +164,11 @@ function formatReportToHTML(text){
       let value=parts.slice(1).join(':').trim();
       let organs=["LIVER","GALL BLADDER","SPLEEN","PANCREAS","RIGHT KIDNEY","LEFT KIDNEY","URINARY BLADDER","UTERUS","RIGHT OVARY","LEFT OVARY","POD","BPD","HC","AC","FL","PROSTATE","APPENDIX","HERNIA","ASCITES","LYMPH NODES","BREAST TISSUE","AXILLA","RIGHT LOBE","LEFT LOBE","ISTHMUS","NECK","RIGHT TESTIS","LEFT TESTIS","SCROTUM"];
       if(organs.some(o=>heading.toUpperCase().includes(o))){
-        html+=`<div style="margin:3px 0 3px 10px">• <b style="text-decoration:underline;font-weight:900">${heading}:</b> ${value}</div>`;
+        html+=`<div style="margin:3px 0 3px 10px;font-size:12pt!important">• <b style="text-decoration:underline;font-weight:900;font-size:12pt!important">${heading}:</b> <span style="font-size:12pt!important">${value}</span></div>`;
         return;
       }
     }
-    html+=`<div style="margin:2px 0 2px 10px">• ${l.replace(/^•\s*/,'')}</div>`;
+    html+=`<div style="margin:2px 0 2px 10px;font-size:12pt!important">• ${l.replace(/^•\s*/,'')}</div>`;
   });
   return html;
 }
@@ -202,17 +176,16 @@ function make(){
   let pn=document.getElementById('pName');
   if(!pn?.value){alert('Enter Name');return;}
   let pid=document.getElementById('pIDMobile')?.value||'';
-  // Bold patient details + space justified 2 lines
   let patientBorder=`
-  <div style="border:1.2px solid #000;padding:6px 8px;margin-bottom:8px;font-size:8.8pt!important;line-height:1.5;font-weight:900">
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:8.8pt!important;font-weight:900">
+  <div style="border:1.2px solid #000;padding:5px 8px;margin-bottom:8px;line-height:1.4">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:7.8pt!important;font-weight:900">
       <span><b>Name: ${document.getElementById('pName').value}</b></span>
       <span><b>Age: ${document.getElementById('pAge').value}</b></span>
       <span><b>Sex: ${document.getElementById('pGen').value}</b></span>
       <span><b>Date: ${document.getElementById('pDate').value}</b></span>
       <span><b>ID: ${pid}</b></span>
     </div>
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:2px;font-size:8.8pt!important;font-weight:900">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:2px;font-size:7.8pt!important;font-weight:900">
       <span><b>Ref By: ${getRefValue()}</b></span>
       <span><b>Sonologist: ${getSonoValue()}</b></span>
       <span style="opacity:0">.</span>
@@ -221,7 +194,7 @@ function make(){
 
   let complaintText=(document.getElementById('pComplaint')?.value||'').trim();
   let bodyHTML=formatReportToHTML(document.getElementById('rText').value);
-  if(complaintText){bodyHTML=`<div style="margin-bottom:6px;font-size:10pt!important;font-style:italic"><b>C/O: ${complaintText}</b></div>`+bodyHTML;}
+  if(complaintText){bodyHTML=`<div style="margin-bottom:6px;font-size:12pt!important;font-style:italic"><b>C/O: ${complaintText}</b></div>`+bodyHTML;}
   let footer=`<div style="margin-top:14px;text-align:center"><div style="font-size:8pt!important"><i>This is computer generated report no signature required.</i></div><div style="font-size:9pt!important;margin-top:4px;font-weight:700">Thanks for availing our services</div></div>`;
   document.getElementById('reportContent').innerHTML=patientBorder+bodyHTML+footer;
   document.getElementById('outCard').style.display='block';
@@ -248,18 +221,8 @@ function saveR(){
     text:document.getElementById('rText')?.value||''
   };
   let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}
-  if(editingId){
-    let idx=all.findIndex(x=>x.id===editingId);
-    if(idx>=0) all[idx]=rec; else all.unshift(rec);
-    editingId=null;
-    document.getElementById('editMode').style.display='none';
-  } else {
-    all.unshift(rec);
-  }
-  localStorage.setItem('azam_reports',JSON.stringify(all));
-  render();
-  uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));
-  alert('✅ Saved to Drive & Local');
+  if(editingId){ let idx=all.findIndex(x=>x.id===editingId); if(idx>=0) all[idx]=rec; else all.unshift(rec); editingId=null; document.getElementById('editMode').style.display='none'; } else { all.unshift(rec); }
+  localStorage.setItem('azam_reports',JSON.stringify(all)); render(); uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all)); alert('✅ Saved to Drive & Local');
 }
 function render(){
   let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}
@@ -278,26 +241,9 @@ function render(){
     </div>`).join('');
 }
 function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('reportContent').innerHTML=r.html;document.getElementById('outCard').style.display='block';window.scrollTo(0,document.getElementById('outCard').offsetTop);}
-function editR(id){
-  let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;
-  document.getElementById('pName').value=r.pName||r.name||'';
-  document.getElementById('pAge').value=r.pAge||'';
-  document.getElementById('pGen').value=r.pGen||'Male';
-  document.getElementById('pDate').value=r.pDate||r.date||'';
-  document.getElementById('pIDMobile').value=r.pIDMobile||r.mobile||'';
-  // For ref/sonologist handle custom
-  if(refDoctors.includes(r.ref)){document.getElementById('ref').value=r.ref; document.getElementById('refOther').style.display='none';} else {document.getElementById('ref').value='Other'; document.getElementById('refOther').style.display='block'; document.getElementById('refOther').value=r.ref||'';}
-  if(sonoDoctors.includes(r.sono)){document.getElementById('sono').value=r.sono; document.getElementById('sonoOther').style.display='none';} else {document.getElementById('sono').value='Other'; document.getElementById('sonoOther').style.display='block'; document.getElementById('sonoOther').value=r.sono||'';}
-  document.getElementById('pComplaint').value=r.pComplaint||'';
-  document.getElementById('rText').value=r.text||'';
-  editingId=r.id;
-  document.getElementById('editMode').style.display='inline-block';
-  document.getElementById('reportContent').innerHTML=r.html;
-  document.getElementById('outCard').style.display='block';
-  window.scrollTo(0,document.getElementById('formCard').offsetTop);
-}
+function editR(id){ let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return; document.getElementById('pName').value=r.pName||r.name||''; document.getElementById('pAge').value=r.pAge||''; document.getElementById('pGen').value=r.pGen||'Male'; document.getElementById('pDate').value=r.pDate||r.date||''; document.getElementById('pIDMobile').value=r.pIDMobile||r.mobile||''; if(refDoctors.includes(r.ref)){document.getElementById('ref').value=r.ref; document.getElementById('refOther').style.display='none';} else {document.getElementById('ref').value='Other'; document.getElementById('refOther').style.display='block'; document.getElementById('refOther').value=r.ref||'';} if(sonoDoctors.includes(r.sono)){document.getElementById('sono').value=r.sono; document.getElementById('sonoOther').style.display='none';} else {document.getElementById('sono').value='Other'; document.getElementById('sonoOther').style.display='block'; document.getElementById('sonoOther').value=r.sono||'';} document.getElementById('pComplaint').value=r.pComplaint||''; document.getElementById('rText').value=r.text||''; editingId=r.id; document.getElementById('editMode').style.display='inline-block'; document.getElementById('reportContent').innerHTML=r.html; document.getElementById('outCard').style.display='block'; window.scrollTo(0,document.getElementById('formCard').offsetTop); }
 function delR(id){if(!confirm('Delete karna hai?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));}
-function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[180,210]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:cleanForPrint(document.getElementById('rText').value);doc.setFontSize(10);doc.text(doc.splitTextToSize(txt,160),10,10);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}
+function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[180,210]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:cleanForPrint(document.getElementById('rText').value);doc.setFontSize(12);doc.text(doc.splitTextToSize(txt,160),10,10);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}
 function init(){let s=document.getElementById('uType');if(s){s.innerHTML='';allNames.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate');if(pd)pd.valueAsDate=new Date();document.getElementById('templateCount').innerText=allTemplates.length+' Templates';render();}
 init();
 </script></body></html>
