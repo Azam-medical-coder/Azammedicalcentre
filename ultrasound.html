@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - Grams Fixed Auto cm/mm</title>
+<title>Azam Medical Centre - Final Complete Fixed</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -13,17 +13,17 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 .btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin-top:8px}
 .small{padding:7px 9px;border-radius:8px;border:none;margin:2px;font-weight:700;cursor:pointer;color:#fff;font-size:11px}
 .report{width:180mm;min-height:210mm;margin:auto;background:#fff;border:1.5px solid #0a4eb5;border-radius:10px;padding:0 5mm 5mm 5mm;padding-top:36mm;position:relative;overflow:hidden}
-.report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5cm;height:5cm;background-image:url('logo.png'),url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.12;z-index:0;pointer-events:none;filter:grayscale(100%) brightness(1.2) contrast(0.8);}
+.report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5cm;height:5cm;background-image:url('logo.png'),url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.12;z-index:0;pointer-events:none;}
 .report-inner{width:170mm;min-height:165mm;margin:2mm auto;padding:3mm 4mm;font-size:12pt!important;line-height:1.6;z-index:2;color:#000;position:relative}
 .report-inner *{font-family:Calibri!important;font-size:12pt!important}
 #loginOverlay{position:fixed;inset:0;background:#0a4eb5;display:flex;align-items:center;justify-content:center;z-index:99999}
 .loginBox{background:#fff;padding:30px;border-radius:20px;width:90%;max-width:400px;text-align:center}
 @media print{@page{size:180mm 210mm;margin:0}body{background:#fff}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:180mm;min-height:210mm;border:none;margin:0}.noPrint{display:none}}
 .boxTitle{font-size:13px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-.calcBox{border:2px solid #f59e0b;background:#fffbeb;padding:10px;border-radius:12px;margin:10px 0;display:none}
+.calcBox{border:3px solid #f59e0b;background:#fffbeb;padding:12px;border-radius:12px;margin:10px 0;display:none}
 .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
 .customInput{display:none;border:2px solid #ff9800;background:#fff8e1}
-.fwb-result{background:#dcfce7;border:2px solid #10b981;padding:12px;border-radius:10px;font-weight:900;text-align:center;font-size:14pt!important}
+.fwb-result{background:#dcfce7;border:2px solid #10b981;padding:12px;border-radius:10px;font-weight:900;text-align:center;font-size:15pt!important}
 </style></head><body>
 
 <div id="loginOverlay"><div class="loginBox">
@@ -36,7 +36,7 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 <img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:55px;height:55px;border-radius:50%;border:2px solid #0a4eb5">
 <div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p style="font-size:10pt">Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:10px;color:#10b981">● Drive Ready</div></div></div>
 
-<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search template..." onkeyup="filterTemplates()"><select id="uType" size="20" style="height:380px;font-size:12pt;font-weight:600" onchange="checkCalculator()"></select><button class="small" style="background:#8b5cf6;width:100%;padding:10px;margin-top:8px" onclick="useSelectedTemplate()">Use Template</button></div>
+<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library (New Added)</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search template... Gastritis, Renal Swelling..." onkeyup="filterTemplates()"><select id="uType" size="22" style="height:400px;font-size:12pt;font-weight:600" onchange="checkCalculator()"></select><button class="small" style="background:#8b5cf6;width:100%;padding:10px;margin-top:8px" onclick="useSelectedTemplate()">Use Template</button></div>
 
 <div class="card noPrint" id="formCard" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Prepare Report</span><span id="editMode" style="display:none;background:#ff9800;color:#fff;padding:3px 10px;border-radius:20px;font-size:10px">EDITING MODE</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div>
@@ -47,25 +47,26 @@ textarea#rText{font-size:12pt!important;line-height:1.5!important;font-weight:60
 </div>
 <div style="border:2px solid #10b981;border-radius:12px;padding:8px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:11px">C/O</label><textarea id="pComplaint" rows="2"></textarea></div>
 
-<div id="obsCalc" class="calcBox"><h4>🤰 FWB Calculator - Auto cm/mm Fixed</h4>
-<p style="font-size:10px;color:#0a4eb5;font-weight:700">Ab chahe 7.1 cm likhen ya 71 mm, dono par sahi weight ayega</p>
+<!-- FWB CALCULATOR - 100% FIXED WITH AUTO CM/MM -->
+<div id="obsCalc" class="calcBox" style="border-color:#10b981;background:#f0fdf4"><h4>🤰 FWB Calculator - Baby Weight 100% Fixed (Hadlock)</h4>
+<p style="font-size:11px;color:#065f46;font-weight:800">Auto cm/mm: 7.1 likhen ya 71 - dono sahi | AC 20.1 ya 201 dono sahi</p>
 <div class="grid4" style="margin-top:8px">
-<div><label>BPD mm or cm</label><input id="bpd" type="number" step="0.01" placeholder="7.1 or 71" oninput="calcFWBFixed()"></div>
-<div><label>HC mm or cm</label><input id="hc" type="number" step="0.01" placeholder="25.0 or 250" oninput="calcFWBFixed()"></div>
-<div><label>AC mm or cm</label><input id="ac" type="number" step="0.01" placeholder="20.1 or 201" oninput="calcFWBFixed()"></div>
-<div><label>FL mm or cm</label><input id="fl" type="number" step="0.01" placeholder="5.4 or 54" oninput="calcFWBFixed()"></div>
+<div><label>BPD</label><input id="bpd" type="number" step="0.01" placeholder="7.1 or 71" oninput="calcFWBFixed()"></div>
+<div><label>HC</label><input id="hc" type="number" step="0.01" placeholder="25.0 or 250" oninput="calcFWBFixed()"></div>
+<div><label>AC</label><input id="ac" type="number" step="0.01" placeholder="20.1 or 201" oninput="calcFWBFixed()"></div>
+<div><label>FL</label><input id="fl" type="number" step="0.01" placeholder="5.4 or 54" oninput="calcFWBFixed()"></div>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
-<div><label>LMP (for EDD)</label><input id="lmp" type="date" onchange="calcEDD()"></div>
+<div><label>LMP</label><input id="lmp" type="date" onchange="calcEDD()"></div>
 <div><label>GA (auto)</label><input id="gaResult" readonly style="background:#fef3c7;font-weight:900"></div>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
-<div><label>EDD (auto)</label><input id="eddResult" readonly style="background:#e0f2fe;font-weight:900"></div>
-<div><label>EFW - Baby Weight (Hadlock)</label><input id="efwResult" readonly class="fwb-result"></div>
+<div><label>EDD</label><input id="eddResult" readonly style="background:#e0f2fe;font-weight:900"></div>
+<div><label>EFW - Baby Weight</label><input id="efwResult" readonly class="fwb-result"></div>
 </div>
-<div id="calcDetail" style="font-size:9px;color:#065f46;margin-top:6px;background:#f0fdf4;padding:6px;border-radius:6px"></div>
-<button class="small" style="background:#f59e0b;width:100%;margin-top:10px;padding:10px" onclick="insertFWBAnomaly()">Insert Anomaly Scan Report (Photo Jaisa)</button>
-<button class="small" style="background:#10b981;width:100%;margin-top:6px;padding:8px" onclick="insertFWBSimple()">Insert Simple FWB</button>
+<div id="calcDetail" style="font-size:10px;color:#065f46;margin-top:8px;background:#fff;padding:6px;border-radius:6px;border:1px dashed #10b981"></div>
+<button class="small" style="background:#f59e0b;width:100%;margin-top:10px;padding:11px;font-size:12px" onclick="insertFWBAnomaly()">Insert Anomaly Scan Report (Photo Jaisa)</button>
+<button class="small" style="background:#10b981;width:100%;margin-top:6px;padding:9px" onclick="insertFWBSimple()">Insert Simple FWB Line</button>
 </div>
 
 <div id="prosCalc" class="calcBox"><h4>🧮 Prostate Calculator</h4><div class="grid4"><div><label>L cm</label><input id="prosL" type="number" step="0.1" oninput="calcProstate()"></div><div><label>W cm</label><input id="prosW" type="number" step="0.1" oninput="calcProstate()"></div><div><label>H cm</label><input id="prosH" type="number" step="0.1" oninput="calcProstate()"></div><div><label>Vol</label><input id="prosVol" readonly style="background:#dcfce7;font-weight:bold"></div></div><button class="small" style="background:#f59e0b;width:100%;margin-top:8px" onclick="insertProstate()">Insert</button></div>
@@ -99,113 +100,49 @@ async function loadFromDrive(){ try{ document.getElementById('driveStatus').inne
 window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1500);});
 function checkCalculator(){ let v=document.getElementById('uType').value||''; document.getElementById('obsCalc').style.display = (v.includes('FWB'))? 'block' : 'none'; document.getElementById('prosCalc').style.display = (v.includes('PROSTATE'))? 'block' : 'none'; }
 
-// *** FIXED AUTO CM/MM + HADLOCK CORRECT ***
-function toMM(val){
- // Auto detect: agar value < 30 hai to ye cm hai (jaise 7.1 cm), mm me convert karo x10
- // agar >30 hai to already mm hai
- if(!val || val==0) return 0;
- if(val < 30) return val*10; // cm to mm
- return val; // already mm
-}
+function toMM(val){ if(!val || val==0) return 0; if(val < 30) return val*10; return val; }
 function calcFWBFixed(){
  let raw_bpd = parseFloat(document.getElementById('bpd').value)||0;
  let raw_hc = parseFloat(document.getElementById('hc').value)||0;
  let raw_ac = parseFloat(document.getElementById('ac').value)||0;
  let raw_fl = parseFloat(document.getElementById('fl').value)||0;
-
- let bpd_mm = toMM(raw_bpd);
- let hc_mm = toMM(raw_hc);
- let ac_mm = toMM(raw_ac);
- let fl_mm = toMM(raw_fl);
-
- // Agar AC khali ho to HC se estimate karo (HC * 0.8)
+ let bpd_mm = toMM(raw_bpd); let hc_mm = toMM(raw_hc); let ac_mm = toMM(raw_ac); let fl_mm = toMM(raw_fl);
  if(ac_mm===0 && hc_mm>0){ ac_mm = hc_mm*0.80; }
-
  if(bpd_mm===0 && hc_mm===0 && fl_mm===0 && ac_mm===0){ return; }
-
  let bpd_cm = bpd_mm/10, hc_cm = hc_mm/10, ac_cm = ac_mm/10, fl_cm = fl_mm/10;
-
- // GA calculation - simple clinical
  let ga_bpd=0, ga_hc=0, ga_fl=0, ga_ac=0;
- if(bpd_mm>0) ga_bpd = (bpd_mm - 20)*0.3 + 12;
- if(hc_mm>0) ga_hc = (hc_mm - 80)*0.11 + 12;
- if(fl_mm>0) ga_fl = (fl_mm - 10)*0.38 + 12;
- if(ac_mm>0) ga_ac = (ac_mm - 60)*0.13 + 12;
- let sum=0, cnt=0;
- if(bpd_mm>0){sum+=ga_bpd;cnt++} if(hc_mm>0){sum+=ga_hc;cnt++} if(fl_mm>0){sum+=ga_fl;cnt++} if(ac_mm>0){sum+=ga_ac;cnt++}
+ if(bpd_mm>0) ga_bpd = (bpd_mm - 20)*0.3 + 12; if(hc_mm>0) ga_hc = (hc_mm - 80)*0.11 + 12;
+ if(fl_mm>0) ga_fl = (fl_mm - 10)*0.38 + 12; if(ac_mm>0) ga_ac = (ac_mm - 60)*0.13 + 12;
+ let sum=0, cnt=0; if(bpd_mm>0){sum+=ga_bpd;cnt++} if(hc_mm>0){sum+=ga_hc;cnt++} if(fl_mm>0){sum+=ga_fl;cnt++} if(ac_mm>0){sum+=ga_ac;cnt++}
  let avgGA = cnt>0? sum/cnt : 0;
-
  if(avgGA>0){
    document.getElementById('gaResult').value = avgGA.toFixed(1)+' wks';
    let today = new Date(); let edd = new Date(); edd.setDate(today.getDate() + (40-avgGA)*7);
    document.getElementById('eddResult').value = edd.toLocaleDateString('en-GB');
-   document.getElementById('calcDetail').innerHTML = `Used: BPD ${bpd_cm.toFixed(1)}cm (${bpd_mm}mm) | HC ${hc_cm.toFixed(1)}cm (${hc_mm}mm) | AC ${ac_cm.toFixed(1)}cm (${ac_mm.toFixed(0)}mm) | FL ${fl_cm.toFixed(1)}cm (${fl_mm}mm) | GA ${avgGA.toFixed(1)}wks`;
+   document.getElementById('calcDetail').innerHTML = `Converted: BPD ${bpd_cm.toFixed(1)}cm | HC ${hc_cm.toFixed(1)}cm | AC ${ac_cm.toFixed(1)}cm | FL ${fl_cm.toFixed(1)}cm | GA ${avgGA.toFixed(1)}wks`;
  }
-
- // Hadlock 1985 correct formula - EFW in grams
- // Hadlock 4 param: log10(EFW) = 1.3596 -0.00386*AC*FL +0.0064*HC +0.00061*BPD*AC +0.0424*AC +0.174*FL (cm)
  if(ac_cm>0 && fl_cm>0 && hc_cm>0){
    let log10EFW;
-   if(bpd_cm>0){
-     log10EFW = 1.3596 - (0.00386*ac_cm*fl_cm) + (0.0064*hc_cm) + (0.00061*bpd_cm*ac_cm) + (0.0424*ac_cm) + (0.174*fl_cm);
-   } else {
-     log10EFW = 1.326 - (0.00326*ac_cm*fl_cm) + (0.0107*hc_cm) + (0.0438*ac_cm) + (0.158*fl_cm);
-   }
+   if(bpd_cm>0){ log10EFW = 1.3596 - (0.00386*ac_cm*fl_cm) + (0.0064*hc_cm) + (0.00061*bpd_cm*ac_cm) + (0.0424*ac_cm) + (0.174*fl_cm); }
+   else { log10EFW = 1.326 - (0.00326*ac_cm*fl_cm) + (0.0107*hc_cm) + (0.0438*ac_cm) + (0.158*fl_cm); }
    let efw = Math.pow(10, log10EFW);
-   // Safety: 100g se 5000g ke beech
-   if(efw>100 && efw<5000){
-     document.getElementById('efwResult').value = Math.round(efw) + ' gms';
-   }
+   if(efw>100 && efw<5500){ document.getElementById('efwResult').value = Math.round(efw) + ' gms'; }
  }
 }
 function calcEDD(){ let lmp=document.getElementById('lmp').value; if(!lmp){ calcFWBFixed(); return; } let d=new Date(lmp); d.setDate(d.getDate()+280); document.getElementById('eddResult').value = d.toLocaleDateString('en-GB'); let today=new Date(lmp); let now=new Date(); let diffDays=Math.floor((now-today)/(1000*60*60*24)); let gaWeeks=diffDays/7; if(gaWeeks>0) document.getElementById('gaResult').value=gaWeeks.toFixed(1)+' wks (LMP)'; }
 
 function insertFWBAnomaly(){
- let raw_bpd = parseFloat(document.getElementById('bpd').value)||7.1;
- let raw_hc = parseFloat(document.getElementById('hc').value)||25.0;
- let raw_ac = parseFloat(document.getElementById('ac').value)||20.1;
- let raw_fl = parseFloat(document.getElementById('fl').value)||5.4;
+ let raw_bpd = parseFloat(document.getElementById('bpd').value)||7.1; let raw_hc = parseFloat(document.getElementById('hc').value)||25.0; let raw_ac = parseFloat(document.getElementById('ac').value)||20.1; let raw_fl = parseFloat(document.getElementById('fl').value)||5.4;
  let bpd_mm = toMM(raw_bpd), hc_mm = toMM(raw_hc), ac_mm = toMM(raw_ac), fl_mm = toMM(raw_fl);
  let bpd_cm = (bpd_mm/10).toFixed(1), hc_cm = (hc_mm/10).toFixed(1), ac_cm = (ac_mm/10).toFixed(1), fl_cm = (fl_mm/10).toFixed(1);
- let ga = document.getElementById('gaResult').value||'28 weeks+1 week';
- let efw = document.getElementById('efwResult').value||'1656 gms';
- let report = `FWB & OBSTETRIC ULTRASOUND REPORT:
-
-Number of Fetus: SINGLE [N: Single]
-Location: INTRAUTERINE [N: Intrauterine]
-Presentation: CEPHALIC [N: Cephalic]
-Lie: LONGITUDINAL LIE [N: Longitudinal]
-Fetal Cardiac Activity: PRESENT (152 BPM) [N: Present]
-Gross Fetal Movement: PRESENT [N: Present]
-Placenta: ANTERIOR, NOT LOW-LYING [N: Not low-lying]
-Placental Maturity: GRADE II [N: Grade 0-III]
-Amount of Liquor: ADEQUATE RESPECTIVE TO GEST-AGE [N: Adequate]
-
-B.P.D.: (Bi Parietal Diameter) ${bpd_cm} cm [N: As per ${ga}]
-F.L.: (Femur Length) ${fl_cm} cm [N: As per ${ga}]
-HC: (Head Circumference) ${hc_cm} cm [N: As per ${ga}]
-AC: (Abdominal Circumference) ${ac_cm} cm [N: As per ${ga}]
-Estimated Fetal Weight: ${efw} Approx [N: As per GA]
-
-CONCLUSION:
-Scan of the pelvis shows single alive intrauterine pregnancy corresponding to the gestational age of ${ga}. Cephalic presentation & placenta localized anteriorly no previa with grade II maturity. Internal os is closed. Amount of liquor is adequate.
-Rest of study unremarkable.
-
-AFI: 4.8 cm - 2.5 cm / 3.0 cm - 4.3 cm
-The amniotic fluid index is 14.8 cm (Normal 08 to 20cm) [N: 8-20 cm]
-
-ADVICE:
-Routine antenatal follow up.`;
+ let ga = document.getElementById('gaResult').value||'28 weeks+1 week'; let efw = document.getElementById('efwResult').value||'1656 gms';
+ let report = `FWB & OBSTETRIC ULTRASOUND REPORT:\n\nNumber of Fetus: SINGLE [N: Single]\nLocation: INTRAUTERINE [N: Intrauterine]\nPresentation: CEPHALIC [N: Cephalic]\nLie: LONGITUDINAL LIE [N: Longitudinal]\nFetal Cardiac Activity: PRESENT (152 BPM) [N: Present]\nGross Fetal Movement: PRESENT [N: Present]\nPlacenta: ANTERIOR, NOT LOW-LYING [N: Not low-lying]\nPlacental Maturity: GRADE II [N: Grade 0-III]\nAmount of Liquor: ADEQUATE RESPECTIVE TO GEST-AGE [N: Adequate]\n\nB.P.D.: (Bi Parietal Diameter) ${bpd_cm} cm [N: As per ${ga}]\nF.L.: (Femur Length) ${fl_cm} cm [N: As per ${ga}]\nHC: (Head Circumference) ${hc_cm} cm [N: As per ${ga}]\nAC: (Abdominal Circumference) ${ac_cm} cm [N: As per ${ga}]\nEstimated Fetal Weight: ${efw} Approx [N: As per GA]\n\nCONCLUSION:\nScan of the pelvis shows single alive intrauterine pregnancy corresponding to the gestational age of ${ga}. Cephalic presentation & placenta localized anteriorly no previa with grade II maturity. Internal os is closed. Amount of liquor is adequate.\nRest of study unremarkable.\n\nAFI: 4.8 cm - 2.5 cm / 3.0 cm - 4.3 cm\nThe amniotic fluid index is 14.8 cm (Normal 08 to 20cm) [N: 8-20 cm]\n\nADVICE:\nRoutine antenatal follow up.`;
  document.getElementById('rText').value = report;
 }
 function insertFWBSimple(){
- let raw_bpd = parseFloat(document.getElementById('bpd').value)||0;
- let raw_hc = parseFloat(document.getElementById('hc').value)||0;
- let raw_ac = parseFloat(document.getElementById('ac').value)||0;
- let raw_fl = parseFloat(document.getElementById('fl').value)||0;
+ let raw_bpd = parseFloat(document.getElementById('bpd').value)||0; let raw_hc = parseFloat(document.getElementById('hc').value)||0; let raw_ac = parseFloat(document.getElementById('ac').value)||0; let raw_fl = parseFloat(document.getElementById('fl').value)||0;
  let bpd_mm = toMM(raw_bpd), hc_mm = toMM(raw_hc), ac_mm = toMM(raw_ac), fl_mm = toMM(raw_fl);
- let ga = document.getElementById('gaResult').value||'__';
- let efw = document.getElementById('efwResult').value||'__';
+ let ga = document.getElementById('gaResult').value||'__'; let efw = document.getElementById('efwResult').value||'__';
  document.getElementById('rText').value += `\nBPD: ${bpd_mm} mm [N: 47-94 mm], HC: ${hc_mm} mm [N: 170-320 mm], AC: ${ac_mm} mm [N: 152-330 mm], FL: ${fl_mm} mm [N: 33-73 mm]\nGA: ${ga}, EFW: ${efw}\n`;
 }
 function calcProstate(){ let l=parseFloat(document.getElementById('prosL').value)||0; let w=parseFloat(document.getElementById('prosW').value)||0; let h=parseFloat(document.getElementById('prosH').value)||0; if(l&&w&&h){ let vol = l*w*h*0.52; document.getElementById('prosVol').value = vol.toFixed(1)+' gm'; } }
@@ -219,7 +156,21 @@ function getRefValue(){let v=document.getElementById('ref').value; if(v==='Other
 function getSonoValue(){let v=document.getElementById('sono').value; if(v==='Other'){return document.getElementById('sonoOther').value||'Other';} return v;}
 function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777' || p==='Zee'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';}else{document.getElementById('passErr').style.display='block';}}
 if(sessionStorage.getItem('azam_login')==='ok'){document.getElementById('loginOverlay').style.display='none';}
-const allNames=["WHOLE ABDOMEN - Normal","WHOLE ABDOMEN - Fatty Liver Grade 1","WHOLE ABDOMEN - Fatty Liver Grade 2","WHOLE ABDOMEN - Fatty Liver Grade 3","WHOLE ABDOMEN - Hepatomegaly","WHOLE ABDOMEN - Splenomegaly","WHOLE ABDOMEN - Hepatosplenomegaly","WHOLE ABDOMEN - Cholelithiasis Single","WHOLE ABDOMEN - Cholelithiasis Multiple","WHOLE ABDOMEN - Gall Bladder Sludge","WHOLE ABDOMEN - Cholecystitis Acute","WHOLE ABDOMEN - CBD Dilated","WHOLE ABDOMEN - Appendicitis","WHOLE ABDOMEN - Umbilical Hernia","WHOLE ABDOMEN - Inguinal Hernia Right","WHOLE ABDOMEN - Inguinal Hernia Left","WHOLE ABDOMEN - Liver Cyst","WHOLE ABDOMEN - Liver Hemangioma","WHOLE ABDOMEN - Ascites Mild","WHOLE ABDOMEN - Ascites Moderate to Gross","WHOLE ABDOMEN - Liver Abscess","WHOLE ABDOMEN - Renal Cyst","WHOLE ABDOMEN - Gall Bladder Polyp","WHOLE ABDOMEN - Pancreatitis Acute","WHOLE ABDOMEN - Paraumbilical Hernia","WHOLE ABDOMEN - Ventral Hernia","WHOLE ABDOMEN - Incisional Hernia","WHOLE ABDOMEN - Lymphadenopathy","KUB - Normal","KUB - Renal Calculus Right","KUB - Renal Calculus Left","KUB - Renal Calculus Bilateral","KUB - Staghorn Calculus","KUB - Microliths Bilateral","KUB - Hydronephrosis Mild Right","KUB - Hydronephrosis Moderate Right","KUB - Hydronephrosis Severe Right","KUB - Hydronephrosis Mild Left","KUB - Hydronephrosis Moderate Left","KUB - Hydronephrosis Severe Left","KUB - Hydronephrosis Bilateral Mild","KUB - Hydronephrosis Bilateral Moderate","KUB - Hydroureteronephrosis Right","KUB - Hydroureteronephrosis Left","KUB - Hydroureteronephrosis Bilateral","KUB - Ureteric Calculus with Hydronephrosis","KUB - PUJ Obstruction Right","KUB - PUJ Obstruction Left","KUB - Parenchymal Changes Grade 1","KUB - Parenchymal Changes Grade 2","KUB - Parenchymal Changes Grade 3","KUB - Simple Cortical Cyst Right","KUB - Simple Cortical Cyst Left","KUB - Bilateral Cortical Cysts","KUB - Complex Cyst Right","KUB - Complex Cyst Left","KUB - Polycystic Kidneys","KUB - Bladder Stone Single","KUB - Bladder Stones Multiple","KUB - Cystitis Thickened Wall","KUB - Bladder Diverticulum","KUB - Bladder Mass","KUB - Ectopic Kidney Right","KUB - Bladder Trabeculation","KUB - High Post Void Residual","KUB - Fullness Right","KUB - Fullness Left","KUB - Fullness Bilateral","KUB - Dilated Proximal Ureter Right","KUB - Dilated Proximal Ureter Left","KUB - Dilated Proximal Ureter Bilateral","KUB + PROSTATE - Normal","KUB + PROSTATE - BPH","KUB + PROSTATE - BPH with Cystitis","KUB + PROSTATE - Prostatitis","KUB + PROSTATE - Prostate Calcification","PELVIS - Normal","PELVIS - PCOS","PELVIS - Fibroid Intramural","PELVIS - Fibroid Subserosal","PELVIS - Fibroid Submucosal","PELVIS - Multiple Fibroids","PELVIS - Ovarian Cyst Simple Right","PELVIS - Ovarian Cyst Simple Left","PELVIS - Ovarian Cyst Bilateral","PELVIS - Endometrioma","PELVIS - Dermoid Cyst","PELVIS - PID","PELVIS - Free Fluid POD","PELVIS - Early Pregnancy","PELVIS - Bulky Uterus","PELVIS - Endometrial Hyperplasia","PELVIS - Endometrial Polyp","FWB - Normal Single Pregnancy","FWB - Breech Presentation","FWB - IUGR","FWB - Twins Normal","FWB - Oligohydramnios","FWB - Polyhydramnios","FWB - Early Pregnancy 6-8 Weeks","FWB - Anomaly Scan Normal","FWB - Placenta Previa","FWB - Placental Abruption","FWB - Growth Scan Normal","FWB - IUD / Demise","BREAST - Normal","BREAST - Fibroadenoma Right","BREAST - Fibroadenoma Left","BREAST - Fibroadenoma Bilateral","BREAST - Breast Cyst Right","BREAST - Breast Cyst Left","BREAST - Breast Cysts Multiple","BREAST - Fibrocystic Disease","BREAST - Mastitis","BREAST - Breast Abscess","BREAST - Gynecomastia","BREAST - Suspicious Mass","THYROID - Normal","THYROID - Multinodular Goiter","THYROID - Solitary Nodule Right","THYROID - Solitary Nodule Left","THYROID - Thyroid Cyst Right","THYROID - Thyroid Cyst Left","THYROID - Thyroiditis","THYROID - Hyperthyroid Goiter","SCROTUM - Normal","SCROTUM - Hydrocele Right","SCROTUM - Hydrocele Left","SCROTUM - Hydrocele Bilateral","SCROTUM - Varicocele Left","SCROTUM - Varicocele Right","SCROTUM - Varicocele Bilateral","SCROTUM - Epididymitis Right","SCROTUM - Epididymitis Left","SCROTUM - Epididymo-orchitis Right","SCROTUM - Epididymo-orchitis Left","SCROTUM - Orchitis","SCROTUM - Testicular Torsion","TESTIS - Microlithiasis","TESTIS - Testicular Cyst","AXILLA - Normal","AXILLA - Lymphadenopathy Left","NECK - Normal","NECK - Cervical Lymphadenopathy","ABDOMEN + PELVIS - Normal Male","ABDOMEN + PELVIS - Normal Female"];
+
+const allNames=[
+"WHOLE ABDOMEN - Normal","WHOLE ABDOMEN - Fatty Liver Grade 1","WHOLE ABDOMEN - Fatty Liver Grade 2","WHOLE ABDOMEN - Fatty Liver Grade 3","WHOLE ABDOMEN - Hepatomegaly","WHOLE ABDOMEN - Splenomegaly","WHOLE ABDOMEN - Hepatosplenomegaly","WHOLE ABDOMEN - Cholelithiasis Single","WHOLE ABDOMEN - Cholelithiasis Multiple","WHOLE ABDOMEN - Gall Bladder Sludge","WHOLE ABDOMEN - Cholecystitis Acute","WHOLE ABDOMEN - CBD Dilated","WHOLE ABDOMEN - Appendicitis","WHOLE ABDOMEN - Umbilical Hernia","WHOLE ABDOMEN - Inguinal Hernia Right","WHOLE ABDOMEN - Inguinal Hernia Left","WHOLE ABDOMEN - Liver Cyst","WHOLE ABDOMEN - Liver Hemangioma","WHOLE ABDOMEN - Ascites Mild","WHOLE ABDOMEN - Ascites Moderate to Gross","WHOLE ABDOMEN - Liver Abscess","WHOLE ABDOMEN - Renal Cyst","WHOLE ABDOMEN - Gall Bladder Polyp","WHOLE ABDOMEN - Pancreatitis Acute","WHOLE ABDOMEN - Paraumbilical Hernia","WHOLE ABDOMEN - Ventral Hernia","WHOLE ABDOMEN - Incisional Hernia","WHOLE ABDOMEN - Lymphadenopathy",
+"WHOLE ABDOMEN - Gastritis",
+"KUB - Normal","KUB - Renal Calculus Right","KUB - Renal Calculus Left","KUB - Renal Calculus Bilateral","KUB - Staghorn Calculus","KUB - Microliths Bilateral","KUB - Hydronephrosis Mild Right","KUB - Hydronephrosis Moderate Right","KUB - Hydronephrosis Severe Right","KUB - Hydronephrosis Mild Left","KUB - Hydronephrosis Moderate Left","KUB - Hydronephrosis Severe Left","KUB - Hydronephrosis Bilateral Mild","KUB - Hydronephrosis Bilateral Moderate","KUB - Hydroureteronephrosis Right","KUB - Hydroureteronephrosis Left","KUB - Hydroureteronephrosis Bilateral","KUB - Ureteric Calculus with Hydronephrosis","KUB - PUJ Obstruction Right","KUB - PUJ Obstruction Left","KUB - Parenchymal Changes Grade 1","KUB - Parenchymal Changes Grade 2","KUB - Parenchymal Changes Grade 3","KUB - Simple Cortical Cyst Right","KUB - Simple Cortical Cyst Left","KUB - Bilateral Cortical Cysts","KUB - Complex Cyst Right","KUB - Complex Cyst Left","KUB - Polycystic Kidneys","KUB - Bladder Stone Single","KUB - Bladder Stones Multiple","KUB - Cystitis Thickened Wall","KUB - Bladder Diverticulum","KUB - Bladder Mass","KUB - Ectopic Kidney Right","KUB - Bladder Trabeculation","KUB - High Post Void Residual","KUB - Fullness Right","KUB - Fullness Left","KUB - Fullness Bilateral","KUB - Dilated Proximal Ureter Right","KUB - Dilated Proximal Ureter Left","KUB - Dilated Proximal Ureter Bilateral",
+"KUB - Renal Swelling Right","KUB - Renal Swelling Left","KUB - Renal Swelling Bilateral",
+"KUB + PROSTATE - Normal","KUB + PROSTATE - BPH","KUB + PROSTATE - BPH with Cystitis","KUB + PROSTATE - Prostatitis","KUB + PROSTATE - Prostate Calcification",
+"PELVIS - Normal","PELVIS - PCOS","PELVIS - Fibroid Intramural","PELVIS - Fibroid Subserosal","PELVIS - Fibroid Submucosal","PELVIS - Multiple Fibroids","PELVIS - Ovarian Cyst Simple Right","PELVIS - Ovarian Cyst Simple Left","PELVIS - Ovarian Cyst Bilateral","PELVIS - Endometrioma","PELVIS - Dermoid Cyst","PELVIS - PID","PELVIS - Free Fluid POD","PELVIS - Early Pregnancy","PELVIS - Bulky Uterus","PELVIS - Endometrial Hyperplasia","PELVIS - Endometrial Polyp",
+"FWB - Normal Single Pregnancy","FWB - Breech Presentation","FWB - IUGR","FWB - Twins Normal","FWB - Oligohydramnios","FWB - Polyhydramnios","FWB - Early Pregnancy 6-8 Weeks","FWB - Anomaly Scan Normal","FWB - Placenta Previa","FWB - Placental Abruption","FWB - Growth Scan Normal","FWB - IUD / Demise",
+"BREAST - Normal","BREAST - Fibroadenoma Right","BREAST - Fibroadenoma Left","BREAST - Fibroadenoma Bilateral","BREAST - Breast Cyst Right","BREAST - Breast Cyst Left","BREAST - Breast Cysts Multiple","BREAST - Fibrocystic Disease","BREAST - Mastitis","BREAST - Breast Abscess","BREAST - Gynecomastia","BREAST - Suspicious Mass",
+"THYROID - Normal","THYROID - Multinodular Goiter","THYROID - Solitary Nodule Right","THYROID - Solitary Nodule Left","THYROID - Thyroid Cyst Right","THYROID - Thyroid Cyst Left","THYROID - Thyroiditis","THYROID - Hyperthyroid Goiter",
+"SCROTUM - Normal","SCROTUM - Hydrocele Right","SCROTUM - Hydrocele Left","SCROTUM - Hydrocele Bilateral","SCROTUM - Varicocele Left","SCROTUM - Varicocele Right","SCROTUM - Varicocele Bilateral","SCROTUM - Epididymitis Right","SCROTUM - Epididymitis Left","SCROTUM - Epididymo-orchitis Right","SCROTUM - Epididymo-orchitis Left","SCROTUM - Orchitis","SCROTUM - Testicular Torsion","TESTIS - Microlithiasis","TESTIS - Testicular Cyst",
+"AXILLA - Normal","AXILLA - Lymphadenopathy Left","NECK - Normal","NECK - Cervical Lymphadenopathy","ABDOMEN + PELVIS - Normal Male","ABDOMEN + PELVIS - Normal Female"
+];
+
 function getReportEdit(n){
 let normalLiver = `LIVER: 14.5 cm [N: 12-15 cm], Normal size & echotexture, No focal lesion, No IHBR dilatation, Portal vein 8 mm [N: 7-10 mm].`;
 let normalGB = `GALL BLADDER: Well distended, Wall 2-3 mm [N: <3 mm], No calculus/sludge, CBD 3-4 mm [N: 3-4 mm].`;
@@ -228,9 +179,16 @@ let normalPanc = `PANCREAS: Head 2.2 cm, Body 1.2 cm [N: Head <3.0 cm Body <2.0 
 let normalRK = `RIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.`;
 let normalLK = `LEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.`;
 let normalBlad = `URINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].`;
+
 if(n==="WHOLE ABDOMEN - Normal") return `ULTRASOUND WHOLE ABDOMEN:\n\n${normalLiver}\n\n${normalGB}\n\n${normalSpleen}\n\n${normalPanc}\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}`;
+if(n==="WHOLE ABDOMEN - Gastritis") return `ULTRASOUND WHOLE ABDOMEN:\n\n${normalLiver}\n\n${normalGB}\n\n${normalSpleen}\n\n${normalPanc}\n\nSTOMACH: Mildly distended with fluid and debris, Wall thickened 6-7 mm [N: <4 mm], Mucosal edema present, No perigastric collection, Findings suggestive of Gastritis.\n\nDUODENUM: Visualized part normal, No thickening.\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}\n\nNo free fluid in abdomen [N: No free fluid].`;
+
+if(n==="KUB - Renal Swelling Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 13.2 x 5.8 cm [N: 9-13 x 4-6 cm], Enlarged in size, Increased cortical echogenicity, Cortical thickness 18 mm [N: 12-18 mm], Mild swelling / edema present, No calculus/hydronephrosis, No perinephric collection, Findings suggestive of Acute Pyelonephritis / Renal Swelling.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.\n\n${normalBlad}`;
+if(n==="KUB - Renal Swelling Left") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.\n\nLEFT KIDNEY: 13.2 x 5.8 cm [N: 9-13 x 4-6 cm], Enlarged in size, Increased cortical echogenicity, Cortical thickness 18 mm [N: 12-18 mm], Mild swelling / edema present, No calculus/hydronephrosis, Findings suggestive of Acute Pyelonephritis / Renal Swelling.\n\n${normalBlad}`;
+if(n==="KUB - Renal Swelling Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 13.0 x 5.5 cm [N: 9-13 x 4-6 cm], Enlarged, Increased echogenicity, Cortical thickness 18 mm [N: 12-18 mm], Bilateral renal swelling present, No calculus/hydronephrosis, No collection.\n\nLEFT KIDNEY: 13.0 x 5.5 cm [N: 9-13 x 4-6 cm], Enlarged, Increased echogenicity, Cortical thickness 18 mm [N: 12-18 mm], Swelling present, No calculus/hydronephrosis.\n\n${normalBlad}\n\nFindings suggestive of Bilateral Renal Swelling / Medical Renal Disease - needs clinical correlation.`;
+
 if(n==="WHOLE ABDOMEN - Fatty Liver Grade 1") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 15.0 cm [N: 12-15 cm], Mildly enlarged, Mild increased echogenicity - Grade I fatty liver, No focal lesion, No IHBR dilatation, Portal vein 8 mm [N: 7-10 mm].\n\n${normalGB}\n\n${normalSpleen}\n\n${normalPanc}\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}`;
-if(n==="KUB - Normal") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.\n\nURINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].`;
+if(n==="KUB - Normal") return `ULTRASOUND KUB:\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}`;
 if(n.startsWith("KUB -")||n.startsWith("KUB + PROSTATE")) return getReportEditKUB(n);
 if(n.startsWith("PELVIS -")) return `ULTRASOUND PELVIS:\n\nFindings as per ${n.split(' - ')[1]} with normal values [N: As per report].`;
 if(n.startsWith("FWB - Anomaly Scan Normal")) return `FWB & OBSTETRIC ULTRASOUND REPORT:\n\nNumber of Fetus: SINGLE [N: Single]\nLocation: INTRAUTERINE [N: Intrauterine]\nPresentation: CEPHALIC [N: Cephalic]\nLie: LONGITUDINAL LIE [N: Longitudinal]\nFetal Cardiac Activity: PRESENT (152 BPM) [N: Present]\nGross Fetal Movement: PRESENT [N: Present]\nPlacenta: ANTERIOR, NOT LOW-LYING [N: Not low-lying]\nPlacental Maturity: GRADE II [N: Grade 0-III]\nAmount of Liquor: ADEQUATE RESPECTIVE TO GEST-AGE [N: Adequate]\n\nB.P.D.: (Bi Parietal Diameter) 7.1 cm [N: As per GA]\nF.L.: (Femur Length) 5.4 cm [N: As per GA]\nHC: (Head Circumference) 25.0 cm [N: As per GA]\nAC: (Abdominal Circumference) 20.1 cm [N: As per GA]\nEstimated Fetal Weight: 1656 Gms Approx [N: As per GA]`;
@@ -238,7 +196,7 @@ if(n.startsWith("FWB")) return `ULTRASOUND FWB:\n\nSingle live intrauterine fetu
 if(n.startsWith("BREAST")) return `ULTRASOUND BREAST:\n\nBREAST TISSUE: Fibroglandular tissue normal [N: Normal], No focal solid or cystic lesion [N: No lesion], No ductal dilatation [N: No dilatation], No calcification [N: No calcification].\n\nAXILLA: No significant lymphadenopathy [N: No LAP], No mass.`;
 if(n.startsWith("THYROID")) return `ULTRASOUND THYROID:\n\nRIGHT LOBE: Size 5.0 x 1.8 x 1.5 cm [N: 4-6 x 1.5-2.0 x 1.0-2.0 cm], Volume __ ml [N: 4-7 ml], Echotexture homogenous [N: Homogenous], No focal lesion [N: No lesion].\n\nLEFT LOBE: Size 4.5 x 1.6 x 1.3 cm [N: 3-5 x 1.2-1.8 x 1.0-1.5 cm], Volume __ ml [N: 3-6 ml], Homogenous, No focal lesion [N: No lesion].\n\nISTHMUS: Thickness 2.5 mm [N: <3 mm], Normal, No lesion.\n\nNECK: No cervical lymphadenopathy [N: No LAP], No retrosternal extension [N: No extension].`;
 if(n.startsWith("SCROTUM")||n.startsWith("TESTIS")) return `ULTRASOUND SCROTUM:\n\nRIGHT TESTIS: Size 4.0 x 2.5 x 3.0 cm [N: 3-5 x 2-3 x 2-4 cm], Volume 12 ml [N: 10-20 ml], Normal echotexture [N: Homogenous], No focal lesion, Epididymis normal 0.8 cm [N: <1.0 cm].\n\nLEFT TESTIS: Size 4.0 x 2.5 x 3.0 cm [N: 3-5 x 2-3 x 2-4 cm], Volume 12 ml [N: 10-20 ml], Normal, No lesion.\n\nSCROTUM: No hydrocele [N: No fluid], No significant abnormality [N: Normal].`;
-if(n.startsWith("ABDOMEN + PELVIS")) return `ULTRASOUND ABDOMEN + PELVIS:\n\nLIVER: 14.5 cm [N: 12-15 cm], Normal size & echotexture, No focal lesion, No IHBR dilatation, Portal vein 8 mm [N: 7-10 mm].\n\nGALL BLADDER: Well distended, Wall 2-3 mm [N: <3 mm], No calculus/sludge, CBD 3-4 mm [N: 3-4 mm].\n\nSPLEEN: 10.0 cm [N: <12 cm], Normal size & texture, No focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm [N: Head <3.0 cm Body <2.0 cm], Normal texture, No lesion, Duct <2 mm [N: <2 mm].\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal, No calculus/hydronephrosis.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal.\n\nURINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].\n\n${n.includes("Male")?`PROSTATE: Size 3.5 x 3.0 x 3.0 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 16 gm [N: 15-25 gm], Normal texture.`:`UTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal, Endometrium 8 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 3.1 x 2.1 cm, Volume 6.5 cc [N: 3-10 cc], Normal.\n\nPOD: No free fluid [N: No free fluid].`}`;
+if(n.startsWith("ABDOMEN + PELVIS")) return `ULTRASOUND ABDOMEN + PELVIS:\n\n${normalLiver}\n\n${normalGB}\n\n${normalSpleen}\n\n${normalPanc}\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}\n\n${n.includes("Male")?`PROSTATE: Size 3.5 x 3.0 x 3.0 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 16 gm [N: 15-25 gm], Normal texture.`:`UTERUS: Anteverted, Size 7.5 x 4.0 x 5.0 cm [N: 6-9 x 3-5 x 4-6 cm], Normal, Endometrium 8 mm [N: 5-12 mm].\n\nRIGHT OVARY: Size 3.0 x 2.0 cm, Volume 6 cc [N: 3-10 cc], Normal.\n\nLEFT OVARY: Size 3.1 x 2.1 cm, Volume 6.5 cc [N: 3-10 cc], Normal.\n\nPOD: No free fluid [N: No free fluid].`}`;
 return `ULTRASOUND ${n.split(' - ')[0]}:\n\nFindings as per ${n.split(' - ')[1]||n}.`;
 }
 function getReportEditKUB(n){
@@ -257,6 +215,8 @@ return `ULTRASOUND KUB:\n\n${normalRK}\n\n${normalLK}\n\n${normalBlad}`;
 }
 function getAdvice(n){
 if(n.includes("Normal")) return "No active pathology. Routine follow up if needed.";
+if(n.includes("Gastritis")) return "Adv: CBC, H.Pylori test, Avoid spicy/oily food, No smoking/alcohol, Tab Omeprazole, Gastro physician opinion, Plenty of water.";
+if(n.includes("Renal Swelling")) return "Adv: CBC, RFTs, Creatinine, Urine R/E, Urine C/S, Blood Culture if fever, Plenty of water, Nephrologist / Urologist opinion, Repeat USG after treatment.";
 if(n.includes("Fatty Liver Grade 1")) return "Adv: LFTs, Fasting Lipid Profile, HbA1c, RBS, Ultrasound follow up after 6 months, Avoid oily/fatty foods, Regular exercise, Weight reduction.";
 if(n.includes("Fullness")) return "Adv: RFTs, Creatinine, Urine R/E, Plenty of water, Repeat USG KUB after hydration, Urologist opinion if persistent.";
 if(n.includes("Dilated Proximal Ureter")) return "Adv: RFTs, Creatinine, Urine R/E, X-ray KUB, CT KUB plain (Stone protocol), Urologist opinion, Plenty of water.";
@@ -265,7 +225,7 @@ if(n.includes("Renal Calculus")) return "Adv: RFTs, Creatinine, Calcium, Phospho
 if(n.includes("BPH")) return "Adv: PSA, RFTs, Urine R/E, Urine C/S, Uroflowmetry, Post void residual scan, Urologist opinion.";
 return "Adv: Relevant labs as per disease and specialist consultation.";
 }
-function getDiagnosis(n){ if(n.includes("Dilated Proximal Ureter")){ return "Mild hydronephrosis with proximal ureter dilated. However, no calculus seen in the visualized part of ureter. Possibility of distal ureteric calculus cannot be excluded"; } let parts = n.split(' - '); if(parts.length>1){ return parts.slice(1).join(' - ').trim(); } return n; }
+function getDiagnosis(n){ if(n.includes("Renal Swelling")) return n.replace('KUB - ','')+" - Kidney enlarged with swelling, suggestive of acute pyelonephritis / medical renal disease"; if(n.includes("Gastritis")) return "Gastritis - Stomach wall thickened with fluid and edema"; if(n.includes("Dilated Proximal Ureter")){ return "Mild hydronephrosis with proximal ureter dilated. However, no calculus seen in the visualized part of ureter. Possibility of distal ureteric calculus cannot be excluded"; } let parts = n.split(' - '); if(parts.length>1){ return parts.slice(1).join(' - ').trim(); } return n; }
 let T={}; allNames.forEach(k=>{ let diag = getDiagnosis(k); let reportText = getReportEdit(k); let finalConclusion = diag + ".\nRest of study unremarkable."; T[k]=reportText+`\n\nCONCLUSION:\n${finalConclusion}\n\nADVICE:\n${getAdvice(k)}`; });
 let allTemplates=Object.keys(T);
 function cleanForPrint(text){ return text.replace(/\s*\[N:.*?\]/g, ''); }
@@ -291,7 +251,7 @@ function formatReportToHTML(text){
       let parts=l.split(':');
       let heading=parts[0].trim();
       let value=parts.slice(1).join(':').trim();
-      let organs=["LIVER","GALL BLADDER","SPLEEN","PANCREAS","RIGHT KIDNEY","LEFT KIDNEY","URINARY BLADDER","UTERUS","RIGHT OVARY","LEFT OVARY","POD","BPD","HC","AC","FL","PROSTATE","Number of Fetus","Location","Presentation","Lie","Fetal Cardiac Activity","Gross Fetal Movement","Placenta","Placental Maturity","Amount of Liquor","B.P.D.","F.L.","HC","AC","Estimated Fetal Weight","AFI"];
+      let organs=["LIVER","GALL BLADDER","SPLEEN","PANCREAS","STOMACH","DUODENUM","RIGHT KIDNEY","LEFT KIDNEY","URINARY BLADDER","UTERUS","RIGHT OVARY","LEFT OVARY","POD","BPD","HC","AC","FL","PROSTATE","Number of Fetus","Location","Presentation","Lie","Fetal Cardiac Activity","Gross Fetal Movement","Placenta","Placental Maturity","Amount of Liquor","B.P.D.","F.L.","HC","AC","Estimated Fetal Weight","AFI"];
       if(organs.some(o=>heading.toUpperCase().includes(o.toUpperCase()))){
         html+=`<div style="margin:3px 0 3px 10px;font-size:12pt!important">• <b style="text-decoration:underline;font-weight:900;font-size:12pt!important">${heading}:</b> <span style="font-size:12pt!important">${value}</span></div>`;
         return;
