@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - Final Detailed</title>
+<title>Azam Medical Centre - Pathology Wise Correct</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -36,10 +36,10 @@ textarea{font-size:11pt!important;line-height:1.5!important;font-weight:600}
 <img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:55px;height:55px;border-radius:50%;border:2px solid #0a4eb5">
 <div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p style="font-size:10pt">Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:10px;color:#10b981">Drive Ready</div></div></div>
 
-<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - Final Full Detailed</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search Death / Hilum / Fatty..." onkeyup="filterTemplates()"><select id="uType" size="18" style="height:340px;font-size:11pt;font-weight:600" onchange="showTemplatePreview();checkCalculator()"></select>
+<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - Pathology Wise Correct</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search Dilated / Hydronephrosis..." onkeyup="filterTemplates()"><select id="uType" size="20" style="height:360px;font-size:11pt;font-weight:600" onchange="showTemplatePreview();checkCalculator()"></select>
 <button class="small" style="background:#8b5cf6;width:100%;padding:10px;margin-top:8px" onclick="useSelectedTemplate()">Load Template</button></div>
 
-<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Preview</span><button class="small" style="background:#0a4eb5" onclick="copyPreviewToReport()">Copy to Editor</button></div><textarea id="templatePreview" rows="20" readonly></textarea></div>
+<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Preview - Check Pathology</span><button class="small" style="background:#0a4eb5" onclick="copyPreviewToReport()">Copy to Editor</button></div><textarea id="templatePreview" rows="22" readonly></textarea></div>
 
 <div class="card noPrint" id="formCard" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Report Editor</span><span id="editMode" style="display:none;background:#ff9800;color:#fff;padding:3px 10px;border-radius:20px;font-size:10px">EDITING</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div>
@@ -109,17 +109,16 @@ const allNames=[
 ];
 
 function getReportEdit(n){
-/* ===== COMMON NORMAL LINES WITH WALL THICKNESS ===== */
-let liverN = `LIVER: 14.5 cm [N: 12-15 cm], Normal size & homogenous echotexture, Smooth margins, No focal lesion, No IHBR dilatation, IVC diameter 12 mm [N: 10-15 mm] patent & compressible, Portal vein diameter 9 mm [N: 7-12 mm] patent, Hepatic veins patent & normal caliber [N: Patent].`;
+let liverN = `LIVER: 14.5 cm [N: 12-15 cm], Normal size & homogenous echotexture, Smooth margins, No focal lesion, No IHBR dilatation, IVC diameter 12 mm [N: 10-15 mm] patent & compressible, Portal vein diameter 9 mm [N: 7-12 mm] patent.`;
 let gbN = `GALL BLADDER: Well distended, Wall thickness 2-3 mm [N: <3 mm], No calculus / sludge / mass / polyp, No pericholecystic fluid / collection, CBD diameter 4.2 mm [N: 3-6 mm] normal caliber, No IHBR dilatation.`;
-let spleenN = `SPLEEN: 10.0 cm [N: <12 cm], Normal size & homogenous echotexture, No focal lesion, No accessory spleen, Splenic vein diameter 6 mm [N: <10 mm] patent.`;
-let pancN = `PANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm [N: Head <3.0 cm Body <2.0 cm Tail <2.5 cm], Normal size & homogenous echotexture, No focal lesion, No peripancreatic collection / edema, Pancreatic duct diameter <2 mm [N: <2 mm], No calcification, Portal vein 9 mm [N: 7-12 mm] patent.`;
-let rkN = `RIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal / Cortical thickness 15 mm [N: 12-18 mm], Normal size & corticomedullary differentiation preserved, No calculus / hydronephrosis / mass, No perinephric collection, Ureter not dilated.`;
-let lkN = `LEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal / Cortical thickness 15 mm [N: 12-18 mm], Normal size & corticomedullary differentiation preserved, No calculus / hydronephrosis / mass, No perinephric collection, Ureter not dilated.`;
-let bladN = `URINARY BLADDER: Well distended, Normal capacity 350 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm] - Normal, No calculus / mass / diverticulum / clot, No internal echoes, Ureteric jets present bilaterally.`; // NO POST VOID
+let spleenN = `SPLEEN: 10.0 cm [N: <12 cm], Normal size & homogenous echotexture, No focal lesion, Splenic vein diameter 6 mm [N: <10 mm] patent.`;
+let pancN = `PANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm [N: Head <3.0 cm Body <2.0 cm], Normal size & homogenous echotexture, No focal lesion, Pancreatic duct diameter <2 mm [N: <2 mm], No calcification.`;
+let rkN = `RIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Normal size & corticomedullary differentiation preserved, No calculus / hydronephrosis / mass, No perinephric collection, Ureter not dilated.`;
+let lkN = `LEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Normal size & corticomedullary differentiation preserved, No calculus / hydronephrosis / mass, No perinephric collection, Ureter not dilated.`;
+let bladN = `URINARY BLADDER: Well distended, Normal capacity 350 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm] - Normal, No calculus / mass / diverticulum / clot, No internal echoes, Ureteric jets present bilaterally.`;
 let bladPrePostN = `URINARY BLADDER: Well distended, Pre-void volume 350 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm], No calculus / mass, Post-void residual volume 15 ml [N: <50 ml] - Insignificant.`;
 
-/* ===== DEATH CERTIFICATE ===== */
+/* ===== DEATH ===== */
 if(n==="DEATH CERTIFICATE - Final As Per Pictures"){
 return `Name:
 Father/Husband Name:
@@ -130,8 +129,8 @@ Time of Death:
 Place of Death: ☐ At Hospital ☐ At Home ☐ Brought Dead ☐ On the Way ☐ Other: ______________________ [Location]
 Cause of Death: Cardiac Arrest / Cardio Respiratory Failure / Myocardial Infarction / Respiratory Failure / Septic Shock / Physical Death
 Brought: ☐ Dead on Arrival ☐ Expired during treatment ☐ Expired at home - Brought for confirmation ☐ Referred from other hospital
-History of Disease: Known case of : [HTN / DM / IHD / Asthma / CKD / CVA / COPD / TB / Malignancy / ________________________________________] for ____ years. History of __________________________________________________________________.
-Family contact No: ______________________ Name: ______________________ Relation: ______________________
+History of Disease: Known case of : [HTN / DM / IHD / Asthma / CKD / CVA / COPD / TB / Malignancy / for ____ years.
+Family contact No: 0300000000 Name: Relation:
 On examination at: ____:____ AM/PM - Pulse not palpable, BP not recordable, No spontaneous respiration, Pupils dilated & fixed, No response to painful stimuli, Heart sounds absent, ECG flat / asystole. CPR attempted for ____ mins - No response. Declared dead at ____:____ AM/PM.
 
 Date of issue: 08/10/2026 [Date of Issue]
@@ -147,76 +146,123 @@ Doctor Name: DR. ______________________________ Signature & Stamp: _____________
 `;
 }
 
-/* ===== WHOLE ABDOMEN ===== */
+/* ===== WHOLE ABDOMEN CORRECT ===== */
 if(n==="WHOLE ABDOMEN - Normal") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 1") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 16.0 cm [N: 12-15 cm] mildly enlarged in size, Increased echogenicity as compared to renal cortex - Grade I Fatty Liver, Homogenous echotexture, Smooth margins, No focal lesion / SOL, No IHBR dilatation, Portal vein 9 mm [N: 7-12 mm] patent, IVC 12 mm [N: 10-15 mm].\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 2") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 16.8 cm [N: 12-15 cm] enlarged, Markedly increased echogenicity obscuring portal vein walls - Grade II Fatty Liver, No focal lesion, No IHBR dilatation, Portal vein 9 mm [N: 7-12 mm].\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 3") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 17.5 cm [N: 12-15 cm] enlarged, Markedly increased echogenicity with poor visualization of diaphragm & portal vein - Grade III Fatty Liver, No focal lesion.\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
-if(n==="WHOLE ABDOMEN - Hepatomegaly") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 17.5 cm [N: 12-15 cm] enlarged in size, Normal homogenous echotexture, No focal lesion / fatty change, No IHBR dilatation, Portal vein 9.5 mm [N: 7-12 mm].\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
-if(n==="WHOLE ABDOMEN - Splenomegaly") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\n${gbN}\n\nSPLEEN: 14.5 cm [N: <12 cm] enlarged - Splenomegaly, Homogenous echotexture, No focal lesion, Splenic vein diameter 7 mm [N: <10 mm].\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
-if(n==="WHOLE ABDOMEN - Hepatosplenomegaly") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 17.0 cm [N: 12-15 cm] enlarged, Normal echotexture, No focal lesion.\n\n${gbN}\n\nSPLEEN: 14.0 cm [N: <12 cm] enlarged - Splenomegaly, Homogenous.\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
-if(n==="WHOLE ABDOMEN - Cholelithiasis Single") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\nGALL BLADDER: Well distended, Wall thickness 3 mm [N: <3 mm] normal, Single echogenic mobile calculus measuring 14 mm [N: No calculus] in lumen with posterior acoustic shadowing, No pericholecystic fluid, CBD 4.5 mm [N: 3-6 mm].\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
-if(n==="WHOLE ABDOMEN - Cholelithiasis Multiple") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\nGALL BLADDER: Well distended, Wall thickness 3 mm [N: <3 mm], Multiple mobile echogenic calculi largest 12 mm [N: No calculus] with acoustic shadowing, No pericholecystic fluid, CBD 4.2 mm [N: 3-6 mm].\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
-if(n==="WHOLE ABDOMEN - Gall Bladder Sludge") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\nGALL BLADDER: Well distended, Wall thickness 3 mm [N: <3 mm], Low level echoes / sludge [N: No sludge] in lumen, No calculus, CBD 4.0 mm [N: 3-6 mm].\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
-if(n==="WHOLE ABDOMEN - Cholecystitis Acute") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\nGALL BLADDER: Distended, Wall thickness 6 mm [N: <3 mm] thickened & edematous, Single calculus 13 mm impacted at neck, Pericholecystic fluid present, Positive sonographic Murphy's sign, CBD 5.0 mm [N: 3-6 mm].\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
-if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\n${gbN}\n\nSPLEEN: 10.5 cm [N: <12 cm], Normal size & homogenous echotexture [N: Normal], No focal lesion, Splenic vein 6 mm [N: <10 mm].\n\n${pancN}\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Normal texture, No calculus / hydronephrosis [N: Normal].\n\nLEFT KIDNEY: 11.2 x 4.6 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Normal texture, No calculus / hydronephrosis, Left renal hilum partially obscured by lymph node [N: Normal].\n\n${bladN}\n\nHILUM / PARA-HILAR LYMPH NODE ASSESSMENT:\nSite: Left renal hilum / Splenic hilum [N: No lymphadenopathy]\nNumber: Single / Multiple - 1-2 nodes [N: No lymph node]\nSize: Largest measuring 22 x 14 mm [N: <10 mm], Smallest 12 x 8 mm [N: <10 mm]\nShape: Oval / Round, Well-defined, Smooth margins [N: Oval with preserved fatty hilum]\nEchogenicity: Hypoechoic, Homogenous cortex [N: Isoechoic]\nFatty Hilum: Central echogenic hilum - Preserved / Partially effaced / Completely effaced [N: Preserved]\nCorticomedullary Differentiation: Cortex 4.5 mm thickened [N: <3 mm] - Symmetrical / Asymmetrical [N: Symmetrical]\nVascularity on Color Doppler: Hilar vascularity preserved / Peripheral vascularity / Mixed hypervascularity / Avascular [N: Hilar vascularity present]\nWall thickness: Capsular thickness 1.2 mm [N: <1 mm]\nCalcification: No calcification [N: No calcification]\nNecrosis / Cystic Change: No necrosis [N: No necrosis]\nMatting / Conglomeration: No matting [N: No matting]\nSurrounding: No perinodal edema / collection, No mass effect on renal vessels & ureter, No hydronephrosis secondary to compression [N: No compression]\n\n`;
+if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Normal texture, No hydronephrosis.\n\nLEFT KIDNEY: 11.2 x 4.6 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Normal texture, Left renal hilum partially obscured by lymph node.\n\n${bladN}\n\nHILUM LYMPH NODE:\nSite: Left renal hilum / Splenic hilum [N: No lymphadenopathy]\nSize: 22 x 14 mm [N: <10 mm], Shape oval, Hypoechoic, Fatty hilum partially effaced [N: Preserved], No calcification, No necrosis, No compressive hydronephrosis.`;
+/* ===== KUB PATHOLOGY WISE CORRECT ===== */
+if(n==="KUB - Normal") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
 
-/* ===== KUB ===== */
-if(n==="KUB - Normal") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\n${bladN}\n\nProstate: 3.5 x 3.0 x 2.8 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 15 gm [N: 15-25 gm], Normal echotexture.`;
-if(n.includes("KUB - Renal Calculus Right")) return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Echogenic calculus 8 mm [N: No calculus] in middle pole with acoustic shadowing, No hydronephrosis.\n\n${lkN}\n\n${bladN}`;
-if(n==="KUB - Renal Calculus Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Calculus 7 mm [N: No calculus] in lower pole, No hydronephrosis.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Calculus 6 mm [N: No calculus] in middle pole, No hydronephrosis.\n\n${bladN}`;
-if(n.includes("Hydronephrosis")) return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 13 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis] - Pelvicalyceal system dilated, No calculus seen, Ureter not visualized, Wall thickness of pelvicalyceal system normal.\n\n${lkN}\n\n${bladN}`;
-if(n==="KUB - Cystitis Thickened Wall") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Moderately distended, Capacity 250 ml [N: 300-500 ml], Wall thickness 7 mm [N: <4 mm] diffusely thickened & irregular - Cystitis, No calculus / mass, Internal echoes / debris present.`;
+if(n==="KUB - Renal Calculus Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Echogenic calculus 8 mm [N: No calculus] in middle pole calyx with posterior acoustic shadowing, No hydronephrosis, Ureter not dilated, No perinephric collection.\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Renal Calculus Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Echogenic calculus 7 mm [N: No calculus] in lower pole with acoustic shadowing, No hydronephrosis, Ureter not dilated.\n\n${bladN}`;
+if(n==="KUB - Renal Calculus Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Calculus 7 mm [N: No calculus] in lower pole, No hydronephrosis, Ureter not dilated.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Calculus 6 mm [N: No calculus] in middle pole, No hydronephrosis, Ureter not dilated.\n\n${bladN}`;
+if(n==="KUB - Staghorn Calculus") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Large echogenic branching calculus 28 mm [N: No calculus] occupying pelvis & calyces - Staghorn, Mild hydronephrosis, Ureter not dilated.\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Microliths Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Multiple tiny echogenic foci 2-3 mm [N: No calculus] - Microlithiasis / nephrocalcinosis, No hydronephrosis, Ureter not dilated.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Multiple tiny echogenic foci 2-3 mm [N: No calculus] - Microlithiasis, No hydronephrosis.\n\n${bladN}`;
 
-/* ===== KUB + PROSTATE - WITH PRE & POST VOID ONLY ===== */
-if(n==="KUB + PROSTATE - Normal with Pre & Post Void") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\n${bladPrePostN}\n\nPROSTATE: 3.5 x 3.0 x 2.8 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 16 gm [N: 15-25 gm], Homogenous echotexture, No focal lesion, No calcification, Capsule intact, Wall thickness of prostate capsule 1 mm [N: <1 mm].`;
-if(n==="KUB + PROSTATE - BPH with Pre & Post Void") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Pre-void volume 380 ml [N: 300-500 ml], Wall thickness 5 mm [N: <4 mm] thickened due to BPH, Trabeculated, No calculus, Post-void residual volume 25 ml [N: <50 ml] insignificant.\n\nPROSTATE: 4.8 x 4.2 x 4.0 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 42 gm [N: 15-25 gm] enlarged - BPH, Heterogeneous echotexture, Median lobe enlarged, No focal lesion, Capsule intact.`;
-if(n==="KUB + PROSTATE - BPH with High PVR") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Pre-void volume 400 ml [N: 300-500 ml], Wall thickness 5.5 mm [N: <4 mm] thickened & trabeculated, Post-void residual volume 120 ml [N: <50 ml] high / significant.\n\nPROSTATE: 5.2 x 4.5 x 4.2 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 51 gm [N: 15-25 gm] enlarged - BPH, Heterogeneous.`;
-if(n.includes("KUB + PROSTATE")) return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\n${bladPrePostN}\n\nPROSTATE: Detailed findings as per ${n.split(' - ')[1]} - Size, Volume, Wall thickness, Echotexture mentioned with measurements [N: 15-25 gm].`;
+if(n==="KUB - Hydronephrosis Mild Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 14 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis] - Pelvicalyceal system mildly dilated, Calyces mildly prominent, No calculus seen, Proximal ureter not dilated, Wall thickness of PCS normal.\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Hydronephrosis Moderate Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 12 mm [N: 12-18 mm] mildly thinned, Moderate hydronephrosis [N: No hydronephrosis] - Marked pelvicalyceal dilatation with blunting of calyces, No calculus, Proximal ureter mildly dilated 5 mm [N: <4 mm].\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Hydronephrosis Severe Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 13.0 x 5.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 8 mm [N: 12-18 mm] thinned, Severe hydronephrosis [N: No hydronephrosis] - Gross pelvicalyceal dilatation, Cortical thinning, No calculus, Proximal ureter dilated 7 mm [N: <4 mm].\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Hydronephrosis Mild Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 14 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis] - PCS mildly dilated, No calculus, Ureter not dilated.\n\n${bladN}`;
+if(n==="KUB - Hydronephrosis Moderate Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 12 mm [N: 12-18 mm], Moderate hydronephrosis [N: No hydronephrosis] - Pelvicalyceal system dilated with calyceal blunting.\n\n${bladN}`;
+if(n==="KUB - Hydronephrosis Severe Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 13.0 x 5.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 8 mm [N: 12-18 mm] thinned, Severe hydronephrosis [N: No hydronephrosis] - Gross dilatation, Parenchymal thinning.\n\n${bladN}`;
+if(n==="KUB - Hydronephrosis Bilateral Mild") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 14 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis] bilaterally - PCS mildly dilated both sides, No calculus.\n\nLEFT KIDNEY: 12.0 x 5.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 14 mm [N: 12-18 mm], Mild hydronephrosis [N: No hydronephrosis] - PCS mildly dilated.\n\n${bladN}`;
+if(n==="KUB - Hydronephrosis Bilateral Moderate") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 12 mm [N: 12-18 mm], Moderate hydronephrosis [N: No hydronephrosis].\n\nLEFT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 12 mm [N: 12-18 mm], Moderate hydronephrosis [N: No hydronephrosis].\n\n${bladN}`;
 
-/* ===== OTHER TEMPLATES GENERIC BUT FULL DETAILED ===== */
-if(n.startsWith("WHOLE ABDOMEN")) return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}\n\nAdditional Finding: ${n.split(' - ')[1]} - Detailed measurements with wall thickness noted where applicable [N: Normal].`;
-if(n.startsWith("KUB")) return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\n${bladN}\n\nAdditional Finding: ${n.split(' - ')[1]} - Full detailed with wall thickness [N: Normal].`;
-if(n.startsWith("PELVIS")) return `ULTRASOUND PELVIS:\n\nURINARY BLADDER: Well distended, Capacity 350 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm], No calculus.\n\nUTERUS: Anteverted, 7.5 x 4.0 x 3.5 cm [N: 7-9 x 4-5 x 2-3 cm], Endometrial thickness 8 mm [N: 5-12 mm proliferative], Myometrial echotexture homogenous, No fibroid.\n\nRIGHT OVARY: 3.0 x 2.0 cm [N: 2-3.5 cm], Volume 6 cc [N: 3-10 cc], No cyst.\n\nLEFT OVARY: 2.8 x 2.0 cm [N: 2-3.5 cm], Volume 5.5 cc [N: 3-10 cc], No cyst.\n\nPOD: No free fluid [N: No fluid].\n\nFinding: ${n.split(' - ')[1]} - Full detailed.`;
-if(n.startsWith("FWB")) return `FWB & OBSTETRIC ULTRASOUND:\n\nSingle alive intrauterine pregnancy, Cephalic, Placenta anterior upper, Liquor adequate, BPD 7.1 cm [N: As per GA], FL 5.4 cm [N: As per GA], HC 26 cm [N: As per GA], AC 24 cm [N: As per GA], EFW 1200 gms.\n\nFinding: ${n.split(' - ')[1]}.`;
-if(n.startsWith("BREAST")) return `ULTRASOUND BREAST:\n\nSkin thickness 2 mm [N: 2 mm], Subcutaneous fat normal, Fibroglandular tissue homogenous, No mass, Ducts not dilated, Axilla - No lymphadenopathy, Wall thickness of chest wall normal.\n\nFinding: ${n.split(' - ')[1]}.`;
-if(n.startsWith("THYROID")) return `ULTRASOUND THYROID:\n\nRight lobe 4.0 x 1.5 x 1.2 cm [N: 4-6 x 1-1.5 cm], Left lobe 4.0 x 1.4 x 1.1 cm [N: 4-6 x 1-1.5 cm], Isthmus thickness 2 mm [N: 2-3 mm], Homogenous echotexture, No nodule, No calcification, Wall thickness of capsule normal.\n\nFinding: ${n.split(' - ')[1]}.`;
-if(n.startsWith("SCROTUM")||n.startsWith("TESTIS")) return `ULTRASOUND SCROTUM:\n\nRight Testis 4.0 x 2.5 x 3.0 cm [N: 3-5 cm], Volume 12 cc [N: 12-20 cc], Homogenous echotexture, No focal lesion, Epididymis normal, Wall thickness of tunica 1 mm [N: <2 mm].\nLeft Testis 4.0 x 2.5 x 3.0 cm [N: 3-5 cm], Volume 12 cc [N: 12-20 cc], Homogenous.\n\nFinding: ${n.split(' - ')[1]}.`;
-if(n.startsWith("ANAL")) return `ANAL / PERIANAL ULTRASOUND:\n\nAnal canal length 3.5 cm [N: 3-4 cm], Internal sphincter thickness 2 mm [N: 2-3 mm], External sphincter thickness 4 mm [N: 3-6 mm], No fistula / abscess / fissure, Perianal soft tissues normal, Wall thickness of rectum 3 mm [N: <4 mm].\n\nFinding: ${n.split(' - ')[1]}.`;
+if(n==="KUB - Hydroureteronephrosis Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.5 x 5.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 13 mm [N: 12-18 mm], Moderate hydroureteronephrosis [N: No hydronephrosis] - Pelvicalyceal system dilated + Proximal to distal ureter dilated 8 mm [N: <4 mm] throughout, Wall thickness of ureter 2 mm [N: <2 mm], No calculus seen in upper ureter, Lower ureter obscured.\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Hydroureteronephrosis Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 12.5 x 5.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 13 mm [N: 12-18 mm], Moderate hydroureteronephrosis [N: No hydronephrosis] - PCS dilated + Entire left ureter dilated 8 mm [N: <4 mm] down to VUJ.\n\n${bladN}`;
+if(n==="KUB - Hydroureteronephrosis Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.5 x 5.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 13 mm [N: 12-18 mm], Bilateral hydroureteronephrosis [N: No hydronephrosis] - PCS dilated + Ureter dilated 7 mm [N: <4 mm].\n\nLEFT KIDNEY: 12.5 x 5.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 13 mm [N: 12-18 mm], Bilateral hydroureteronephrosis [N: No hydronephrosis] - PCS dilated + Ureter dilated 7 mm [N: <4 mm].\n\n${bladN}`;
 
-return `ULTRASOUND ${n.split(' - ')[0]}:\n\nFull detailed findings with measurements and wall thickness mentioned where applicable [N: Normal].\n\nCONCLUSION will be auto-generated.`;
+if(n==="KUB - Ureteric Calculus with Hydronephrosis") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.5 x 5.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 13 mm [N: 12-18 mm], Moderate hydronephrosis [N: No hydronephrosis] with proximal hydroureter, Echogenic calculus 9 mm [N: No calculus] in mid ureter with acoustic shadowing causing obstruction.\n\n${lkN}\n\n${bladN}`;
+
+if(n==="KUB - Fullness Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.8 x 4.8 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Pelvicalyceal system shows fullness / prominent PCS [N: No fullness] - Mild prominence of pelvis & calyces, No frank hydronephrosis, Ureter not dilated [N: Not dilated], No calculus.\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Fullness Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 11.8 x 4.8 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], PCS fullness / prominence [N: No fullness] noted, No frank hydronephrosis, Ureter not dilated.\n\n${bladN}`;
+if(n==="KUB - Fullness Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.8 x 4.8 cm [N: 9-13 x 4-6 cm], Bilateral PCS fullness [N: No fullness] - Prominent pelvicalyceal system both sides, No frank hydronephrosis, Ureter not dilated.\n\nLEFT KIDNEY: 11.8 x 4.8 cm [N: 9-13 x 4-6 cm], Bilateral PCS fullness [N: No fullness] - Prominent PCS, No hydronephrosis, Ureter not dilated.\n\n${bladN}`;
+
+if(n==="KUB - Dilated Proximal Ureter Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.8 x 4.6 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], No hydronephrosis, Proximal ureter dilated 7 mm [N: <4 mm] up to mid ureter, Wall thickness of ureter 1.5 mm [N: <2 mm], No calculus seen in visualized ureter, Mid & distal ureter not dilated / obscured by bowel.\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Dilated Proximal Ureter Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 11.8 x 4.6 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], No hydronephrosis, Proximal left ureter dilated 7 mm [N: <4 mm] - Dilated proximal ureter, No calculus in visualized part.\n\n${bladN}`;
+if(n==="KUB - Dilated Proximal Ureter Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.8 x 4.6 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], No calculus, No hydronephrosis, Right proximal ureter dilated 6.5 mm [N: <4 mm] - Dilated proximal ureter bilateral.\n\nLEFT KIDNEY: 11.8 x 4.6 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], No calculus, No hydronephrosis, Left proximal ureter dilated 6.8 mm [N: <4 mm] - Dilated proximal ureter bilateral.\n\n${bladN}`;
+
+if(n==="KUB - Renal Swelling Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 13.5 x 6.0 cm [N: 9-13 x 4-6 cm] enlarged & swollen, Parenchymal thickness 17 mm [N: 12-18 mm] edematous, Increased size - Renal swelling / acute nephritis pattern, No calculus / hydronephrosis, Ureter not dilated.\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Renal Swelling Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 13.5 x 6.0 cm [N: 9-13 x 4-6 cm] enlarged & swollen [N: 9-13 x 4-6 cm] - Renal swelling, Parenchyma edematous, No calculus / hydronephrosis.\n\n${bladN}`;
+if(n==="KUB - Renal Swelling Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 13.0 x 5.8 cm [N: 9-13 x 4-6 cm] enlarged & swollen bilaterally, Parenchymal thickness 16 mm [N: 12-18 mm] edematous.\n\nLEFT KIDNEY: 13.0 x 5.8 cm [N: 9-13 x 4-6 cm] enlarged & swollen bilaterally, Parenchyma edematous, No calculus / hydronephrosis.\n\n${bladN}`;
+
+if(n==="KUB - PUJ Obstruction Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.8 x 5.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 13 mm [N: 12-18 mm], Gross hydronephrosis with PUJ obstruction [N: No hydronephrosis] - Pelvis AP diameter 35 mm [N: <10 mm] dilated, Calyces dilated, Proximal ureter not dilated / abrupt cut-off at PUJ, No calculus.\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - PUJ Obstruction Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 12.8 x 5.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 13 mm [N: 12-18 mm], Gross hydronephrosis with PUJ obstruction [N: No hydronephrosis] - Pelvis dilated 35 mm [N: <10 mm], Ureter not dilated below PUJ.\n\n${bladN}`;
+
+if(n==="KUB - Parenchymal Changes Grade 1") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 10.5 x 4.2 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 13 mm [N: 12-18 mm], Increased cortical echogenicity Grade I [N: Normal echogenicity < liver], CMD partially preserved, No calculus / hydronephrosis, Ureter not dilated.\n\nLEFT KIDNEY: 10.2 x 4.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 12 mm [N: 12-18 mm], Grade I parenchymal changes [N: Normal], CMD partially preserved.\n\n${bladN}`;
+if(n==="KUB - Parenchymal Changes Grade 2") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 9.5 x 4.0 cm [N: 9-13 x 4-6 cm] small, Parenchymal thickness 11 mm [N: 12-18 mm] thinned, Increased echogenicity Grade II [N: Normal], Loss of CMD, No hydronephrosis.\n\nLEFT KIDNEY: 9.2 x 3.8 cm [N: 9-13 x 4-6 cm] small, Parenchymal thickness 10 mm [N: 12-18 mm], Grade II changes, Loss of CMD.\n\n${bladN}`;
+if(n==="KUB - Parenchymal Changes Grade 3") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 8.5 x 3.5 cm [N: 9-13 x 4-6 cm] small & shrunken, Parenchymal thickness 8 mm [N: 12-18 mm] markedly thinned, Markedly increased echogenicity Grade III [N: Normal], Complete loss of CMD, No hydronephrosis.\n\nLEFT KIDNEY: 8.2 x 3.2 cm [N: 9-13 x 4-6 cm] shrunken, Parenchymal thickness 7 mm [N: 12-18 mm], Grade III changes, Loss of CMD.\n\n${bladN}`;
+
+if(n==="KUB - Simple Cortical Cyst Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 15 mm [N: 12-18 mm], Simple anechoic cortical cyst 22 x 20 mm [N: No cyst] in middle pole with posterior acoustic enhancement & thin wall thickness 1 mm [N: No cyst], No septation / calcification, No hydronephrosis, Ureter not dilated.\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Simple Cortical Cyst Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Simple cortical cyst 20 x 18 mm [N: No cyst] in lower pole, Thin wall thickness 1 mm [N: No cyst], Anechoic, Posterior enhancement present.\n\n${bladN}`;
+if(n==="KUB - Bilateral Cortical Cysts") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Simple cortical cyst 18 mm [N: No cyst] in upper pole, Thin wall thickness 1 mm [N: No cyst].\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Simple cortical cyst 20 mm [N: No cyst] in middle pole.\n\n${bladN}`;
+if(n==="KUB - Complex Cyst Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Complex cystic lesion 30 x 28 mm [N: No cyst] in middle pole with internal echoes / septations, Wall thickness 2.5 mm [N: <1 mm] thickened & irregular, No hydronephrosis.\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Complex Cyst Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Complex cyst 28 x 25 mm [N: No cyst] with septation & internal echoes, Wall thickness 2.5 mm [N: <1 mm] thickened.\n\n${bladN}`;
+if(n==="KUB - Polycystic Kidneys") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 14.0 x 6.0 cm [N: 9-13 x 4-6 cm] enlarged, Multiple variable sized anechoic cysts [N: No cyst] largest 35 mm replacing parenchyma - Polycystic kidney, No hydronephrosis.\n\nLEFT KIDNEY: 14.5 x 6.2 cm [N: 9-13 x 4-6 cm] enlarged, Multiple cysts largest 38 mm [N: No cyst] - Polycystic, No hydronephrosis.\n\n${bladN}`;
+
+if(n==="KUB - Bladder Stone Single" || n==="KUB - Urinary Bladder Stone") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Capacity 300 ml [N: 300-500 ml], Wall thickness 3.5 mm [N: <4 mm], Single echogenic calculus 18 mm [N: No calculus] in bladder lumen with acoustic shadowing & mobile, No mass / diverticulum.`;
+if(n==="KUB - Bladder Stones Multiple" || n==="KUB - Urinary Bladder Multiple Stones") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Capacity 300 ml [N: 300-500 ml], Wall thickness 4 mm [N: <4 mm], Multiple echogenic calculi largest 14 mm [N: No calculus] with shadowing, No mass.`;
+if(n==="KUB - Blood Clots in Urinary Bladder") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Capacity 280 ml [N: 300-500 ml], Wall thickness 3.5 mm [N: <4 mm], Echogenic non-shadowing mobile material - Blood clots [N: No clot] measuring 25 mm in lumen, No calculus / mass.`;
+if(n==="KUB - Distal Ureter Calculus Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 4.8 cm [N: 9-13 x 4-6 cm], Mild hydronephrosis [N: No hydronephrosis], Parenchymal thickness 14 mm [N: 12-18 mm], No renal calculus.\n\n${lkN}\n\nURINARY BLADDER: Well distended, Capacity 320 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm], Echogenic calculus 6 mm [N: No calculus] at right VUJ / distal ureter with acoustic shadowing, Right ureteric jet absent / reduced.`;
+if(n==="KUB - Distal Ureter Calculus Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 12.0 x 4.8 cm [N: 9-13 x 4-6 cm], Mild hydronephrosis [N: No hydronephrosis], No renal calculus.\n\nURINARY BLADDER: Well distended, Capacity 320 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm], Echogenic calculus 6 mm [N: No calculus] at left VUJ / distal ureter, Left ureteric jet absent.`;
+if(n==="KUB - Distal Ureter Calculus Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.0 x 4.8 cm [N: 9-13 x 4-6 cm], Mild hydronephrosis [N: No hydronephrosis] both sides.\n\nLEFT KIDNEY: 12.0 x 4.8 cm [N: 9-13 x 4-6 cm], Mild hydronephrosis [N: No hydronephrosis].\n\nURINARY BLADDER: Well distended, Capacity 320 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm], Bilateral distal ureteric calculi 5-6 mm [N: No calculus] at VUJ both sides, Ureteric jets absent bilaterally.`;
+if(n==="KUB - Cystitis Thickened Wall") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Moderately distended, Capacity 220 ml [N: 300-500 ml], Wall thickness 7 mm [N: <4 mm] diffusely thickened & irregular - Cystitis, Mucosal irregularity, Internal echoes / debris present, No calculus / mass, No diverticulum.`;
+if(n==="KUB - Bladder Diverticulum") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Capacity 350 ml [N: 300-500 ml], Wall thickness 4 mm [N: <4 mm], Bladder diverticulum measuring 28 x 20 mm [N: No diverticulum] at right posterolateral wall with narrow neck, Wall thickness of diverticulum 2 mm [N: <2 mm], No calculus inside diverticulum.`;
+if(n==="KUB - Bladder Mass") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Capacity 300 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm] focally thickened, Soft tissue echogenic mass 22 x 18 mm [N: No mass] at right lateral wall with internal vascularity, No calculus, No diverticulum.`;
+if(n==="KUB - Ectopic Kidney Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: Right renal fossa empty - No kidney seen in right renal fossa [N: Normal location], Ectopic kidney seen in right pelvis measuring 9.5 x 4.0 cm [N: 9-13 x 4-6 cm], Parenchymal thickness 13 mm [N: 12-18 mm], No calculus / hydronephrosis, Ureter not dilated.\n\n${lkN}\n\n${bladN}`;
+if(n==="KUB - Bladder Trabeculation") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Capacity 350 ml [N: 300-500 ml], Wall thickness 6 mm [N: <4 mm] thickened & trabeculated - Trabeculation due to chronic obstruction, Irregular wall, No calculus / mass.`;
+if(n==="KUB - High Post Void Residual") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Pre-void capacity 400 ml [N: 300-500 ml], Wall thickness 5 mm [N: <4 mm] thickened & trabeculated, No calculus / mass, Post-void residual volume 180 ml [N: <50 ml] - High / significant residual, Incomplete emptying.`;
+
+/* ===== KUB+PROSTATE ===== */
+if(n==="KUB + PROSTATE - Normal with Pre & Post Void") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Pre-void volume 350 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm], No calculus / mass, Post-void residual volume 15 ml [N: <50 ml] - Insignificant.\n\nPROSTATE: 3.5 x 3.0 x 2.8 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 16 gm [N: 15-25 gm], Homogenous echotexture, No focal lesion, No calcification, Capsule intact, Wall thickness of capsule 1 mm [N: <1 mm].`;
+if(n==="KUB + PROSTATE - BPH with Pre & Post Void") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Pre-void volume 380 ml [N: 300-500 ml], Wall thickness 5 mm [N: <4 mm] thickened due to BPH, Trabeculated, No calculus, Post-void residual volume 25 ml [N: <50 ml] insignificant.\n\nPROSTATE: 4.8 x 4.2 x 4.0 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 42 gm [N: 15-25 gm] enlarged - BPH, Heterogeneous echotexture, Median lobe enlarged, Capsule intact.`;
+if(n==="KUB + PROSTATE - BPH with High PVR") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Pre-void volume 400 ml [N: 300-500 ml], Wall thickness 5.5 mm [N: <4 mm] thickened & trabeculated, No calculus, Post-void residual volume 120 ml [N: <50 ml] high / significant.\n\nPROSTATE: 5.2 x 4.5 x 4.2 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 51 gm [N: 15-25 gm] enlarged - BPH, Heterogeneous.`;
+if(n==="KUB + PROSTATE - BPH with Cystitis & Pre/Post Void") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Pre-void volume 350 ml [N: 300-500 ml], Wall thickness 7 mm [N: <4 mm] diffusely thickened - Cystitis with BPH, Internal echoes present, Post-void residual volume 60 ml [N: <50 ml] mildly high.\n\nPROSTATE: 4.8 x 4.2 x 4.0 cm [N: 15-25 gm], Volume 42 gm [N: 15-25 gm] enlarged - BPH with cystitis.`;
+if(n==="KUB + PROSTATE - BPH Median Lobe Hypertrophy with Pre/Post Void") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Well distended, Pre-void volume 360 ml [N: 300-500 ml], Wall thickness 5 mm [N: <4 mm] thickened, Median lobe hypertrophy causing indentation at bladder base, Post-void residual volume 45 ml [N: <50 ml].\n\nPROSTATE: 4.5 x 4.0 x 3.8 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 36 gm [N: 15-25 gm], Median lobe hypertrophy [N: No hypertrophy] measuring 18 mm [N: <10 mm] projecting into bladder.`;
+if(n==="KUB + PROSTATE - Prostatitis with Pre/Post Void") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Pre-void 340 ml [N: 300-500 ml], Wall thickness 4 mm [N: <4 mm], Post-void residual 30 ml [N: <50 ml].\n\nPROSTATE: 4.2 x 3.8 x 3.5 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 29 gm [N: 15-25 gm] mildly enlarged, Heterogeneous echotexture with increased vascularity - Prostatitis, No abscess, Capsule intact.`;
+if(n==="KUB + PROSTATE - Prostate Calcification with Pre/Post Void") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Pre-void 350 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm], Post-void residual 15 ml [N: <50 ml].\n\nPROSTATE: 3.8 x 3.2 x 3.0 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 19 gm [N: 15-25 gm], Multiple echogenic foci with shadowing - Prostatic calcifications [N: No calcification], No focal lesion.`;
+if(n==="KUB + PROSTATE - Small Prostate with High PVR") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Pre-void 450 ml [N: 300-500 ml], Wall thickness 4 mm [N: <4 mm], Post-void residual volume 160 ml [N: <50 ml] high - Neurogenic / atonic bladder.\n\nPROSTATE: 2.8 x 2.5 x 2.2 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 8 gm [N: 15-25 gm] small, Normal echotexture.`;
+if(n==="KUB + PROSTATE - BPH with Bladder Diverticulum with Pre/Post Void") return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\n${rkN}\n\n${lkN}\n\nURINARY BLADDER: Pre-void 380 ml [N: 300-500 ml], Wall thickness 5 mm [N: <4 mm] thickened & trabeculated, Diverticulum 30 x 25 mm [N: No diverticulum] at right lateral wall, Post-void residual 70 ml [N: <50 ml].\n\nPROSTATE: 5.0 x 4.4 x 4.1 cm [N: <4.0 x 3.0 x 3.0 cm], Volume 47 gm [N: 15-25 gm] enlarged - BPH with diverticulum.`;
+
+if(n.startsWith("WHOLE ABDOMEN")) return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: As per ${n.split(' - ')[1]} - Size measured, Echotexture described, Wall thickness of IVC/Portal normal [N: 12-15 cm].\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}\n\nAdditional: ${n.split(' - ')[1]} pathology detailed with wall thickness where applicable.`;
+
+return `ULTRASOUND ${n.split(' - ')[0]}:\n\nFull detailed findings with measurements and wall thickness mentioned where applicable [N: Normal].`;
 }
 function getAdvice(n){
 if(n.includes("DEATH CERTIFICATE")) return "Burial purpose only. Obtain NADRA Death Certificate from Union Council.";
-if(n.includes("Hilum Lymph Node")) return "CBC, ESR, CRP, CT Abdomen with contrast, Physician consultation, FNAC if needed.";
-if(n.includes("Fatty Liver Grade 1")) return "Low fat diet, Exercise 30 min daily, Avoid alcohol, LFT, Lipid profile, Repeat USG after 3 months.";
-if(n.includes("Fatty Liver Grade 2")||n.includes("Grade 3")) return "Strict low fat diet, Weight reduction, Avoid ghee/oil, LFT, Lipid, HbA1c, Physician consultation.";
-if(n.includes("Cholelithiasis")) return "Low fat diet, Avoid oily food, Surgeon consultation, LFT, No heavy meal.";
-if(n.includes("Cholecystitis")) return "NPO, IV fluids, Antibiotic, Surgeon consultation urgently, Admit if needed.";
-if(n.includes("CBD Dilated")) return "LFT, MRCP, Surgeon / Gastroenterologist consultation.";
-if(n.includes("Appendicitis")) return "Surgeon consultation urgently, CBC, CRP, NPO, Admit.";
-if(n.includes("Hernia")) return "Avoid weight lifting, Surgeon consultation, Supportive truss if advised.";
-if(n.includes("Liver Cyst")||n.includes("Renal Cyst")) return "Usually benign, No treatment needed, Repeat USG after 6 months, Physician consultation.";
-if(n.includes("Ascites")) return "LFT, RFT, Albumin, Ascitic fluid DR if needed, Physician consultation, Low salt diet.";
-if(n.includes("Hydronephrosis")||n.includes("Calculus")||n.includes("Fullness")||n.includes("Dilated Proximal")) return "Drink plenty of water 3-4L/day, KFT, Urine DR, Urologist consultation, Avoid cold drinks.";
-if(n.includes("Cystitis")) return "Drink plenty water, Urine DR/C/S, Tab antibiotic as per doctor, Avoid spicy food, Urologist consultation.";
-if(n.includes("BPH")) return "Urologist consultation, KFT, PSA, Urine DR, Avoid constipation, Drink adequate water.";
-if(n.includes("PCOS")) return "Gynecologist consultation, Weight reduction, Exercise, Hormonal profile.";
-if(n.includes("Fibroid")) return "Gynecologist consultation, Hb, Pregnancy test if needed, Repeat USG.";
-if(n.includes("Ovarian Cyst")) return "Gynecologist consultation, CA-125, Repeat USG after menses.";
+if(n.includes("Hilum Lymph Node")) return "CBC, ESR, CRP, CT Abdomen with contrast, Physician consultation.";
+if(n.includes("Dilated Proximal Ureter")) return "KFT, Urine DR, CT KUB / IVP, Urologist consultation, Drink plenty of water 3L/day.";
+if(n.includes("Fullness")) return "Hydration, KFT, Urine DR, Repeat USG after hydration, Urologist opinion.";
+if(n.includes("Hydronephrosis")||n.includes("Hydroureteronephrosis")) return "KFT, Urine DR/C/S, CT KUB, Urologist consultation urgently, Drink 3-4L water.";
+if(n.includes("PUJ Obstruction")) return "DTPA scan, CT KUB, KFT, Urologist consultation.";
+if(n.includes("Renal Swelling")) return "KFT, Urine DR, CBC, Physician / Nephrologist consultation, No NSAID.";
+if(n.includes("Calculus")||n.includes("Staghorn")||n.includes("Microliths")) return "Drink plenty water 3-4L/day, KFT, Urine DR, Urologist consultation, Avoid spinach/tomato.";
+if(n.includes("Parenchymal Changes")) return "KFT, Urine DR, BP monitoring, Nephrologist consultation, Avoid nephrotoxic drugs.";
+if(n.includes("Cyst")) return "Usually benign, Repeat USG after 6 months, Physician consultation, KFT.";
+if(n.includes("Bladder Stone")) return "KFT, Urine DR/C/S, Urologist consultation, Drink plenty water, Cystoscopy if needed.";
+if(n.includes("Blood Clots")) return "Urine DR, KFT, CBC, Urologist consultation urgently, No blood thinner without advice.";
+if(n.includes("Distal Ureter Calculus")) return "Drink plenty water, KFT, Urine DR, Urologist consultation, Medical expulsion therapy if advised.";
+if(n.includes("Cystitis")) return "Urine DR/C/S, Drink 3-4L water, Antibiotic as per doctor, Urologist consultation, Avoid spicy food.";
+if(n.includes("Diverticulum")||n.includes("Trabeculation")) return "Urodynamic study, KFT, Urine DR, Urologist consultation, Avoid constipation.";
+if(n.includes("Bladder Mass")) return "CT KUB with contrast, Urine cytology, Cystoscopy, Urologist consultation urgently.";
+if(n.includes("BPH")) return "KFT, PSA, Urine DR, Uroflowmetry, Urologist consultation, Avoid cold & constipation.";
 if(n.includes("Normal")) return "No active pathology seen at present. Routine follow up if needed.";
 return "Relevant labs and specialist consultation advised.";
 }
 function getDiagnosis(n){
-if(n.startsWith("DEATH CERTIFICATE")) return "Natural Death - Medical confirmation for burial purpose, not NADRA certificate";
-if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return "Lymph node at left renal / splenic hilum 22x14 mm - Hypoechoic, fatty hilum partially effaced, no compressive hydronephrosis";
-if(n==="WHOLE ABDOMEN - Normal") return "No sonographic abnormality detected - Whole Abdomen Normal";
-if(n==="KUB - Normal") return "No sonographic abnormality detected - KUB Normal";
-if(n==="KUB + PROSTATE - Normal with Pre & Post Void") return "KUB & Prostate Normal, Pre & Post Void insignificant";
+if(n.startsWith("DEATH CERTIFICATE")) return "Natural Death - Medical confirmation for burial purpose";
+if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return "Lymph node at left renal / splenic hilum 22x14 mm - Hypoechoic, no compressive hydronephrosis";
+if(n==="KUB - Dilated Proximal Ureter Bilateral") return "Bilateral proximal ureters dilated 6.5-6.8 mm [N: <4 mm] - Dilated proximal ureters, no hydronephrosis";
+if(n==="KUB - Dilated Proximal Ureter Right") return "Right proximal ureter dilated 7 mm [N: <4 mm] - Dilated proximal ureter Right, no hydronephrosis";
+if(n==="KUB - Dilated Proximal Ureter Left") return "Left proximal ureter dilated 7 mm [N: <4 mm] - Dilated proximal ureter Left";
+if(n==="KUB - Fullness Right") return "Right pelvicalyceal system fullness / prominence [N: No fullness] - PCS fullness Right";
+if(n==="KUB - Fullness Left") return "Left PCS fullness - Left pelvicalyceal fullness";
+if(n==="KUB - Fullness Bilateral") return "Bilateral PCS fullness - Prominent PCS both sides";
+if(n==="KUB - Renal Swelling Right") return "Right renal swelling / Renomegaly 13.5 x 6.0 cm - Swollen right kidney";
+if(n==="KUB - Renal Swelling Bilateral") return "Bilateral renal swelling - Both kidneys enlarged & edematous";
 if(n.includes(" - ")){ let p=n.split(' - '); return p.slice(1).join(' - ').trim(); }
 return n;
 }
-let T={}; allNames.forEach(k=>{ let diag = getDiagnosis(k); let reportText = getReportEdit(k); if(k.startsWith("DEATH CERTIFICATE")){ T[k]=reportText; } else { T[k]=reportText+`\n\nCONCLUSION:\n${diag}.\nRest of study unremarkable.\n\nADVICE:\n${getAdvice(k)}`; } });
+let T={}; allNames.forEach(k=>{ let diag = getDiagnosis(k); let reportText = getReportEdit(k); if(k.startsWith("DEATH CERTIFICATE")){ T[k]=reportText; } else { T[k]=reportText+`\n\nCONCLUSION:\n${diag}.\nRest of study unremarkable unless mentioned.\n\nADVICE:\n${getAdvice(k)}`; } });
 let allTemplates=Object.keys(T);
 function cleanForPrint(text){ return text.replace(/\s*\[N:.*?\]/g, ''); }
 function filterTemplates(){let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');let cur=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(cur))s.value=cur; showTemplatePreview(); checkCalculator();}
@@ -230,7 +276,7 @@ function formatReportToHTML(text){
   lines.forEach(line=>{
     let l=line.trim();
     if(!l){html+='<div style="height:6px"></div>';return;}
-    if(l.toUpperCase()==='DEATH CERTIFICATE' || l.toUpperCase().startsWith('ULTRASOUND') || l.toUpperCase().startsWith('FWB &')){inConclusion=false; if(l.toUpperCase()==='DEATH CERTIFICATE') return; html+=`<div style="text-align:center;margin:6px 0;font-weight:900;text-decoration:underline;font-size:11pt!important">${l}</div>`;return;}
+    if(l.toUpperCase()==='DEATH CERTIFICATE' || l.toUpperCase().startsWith('ULTRASOUND')){inConclusion=false; if(l.toUpperCase()==='DEATH CERTIFICATE') return; html+=`<div style="text-align:center;margin:6px 0;font-weight:900;text-decoration:underline;font-size:11pt!important">${l}</div>`;return;}
     if(l.toUpperCase().startsWith('CONCLUSION:')){
       inConclusion=true;
       let rest=l.replace(/CONCLUSION:/i,'').trim();
@@ -238,11 +284,11 @@ function formatReportToHTML(text){
       if(rest){ html+=`<div style="margin-left:2px;font-weight:900;font-size:11pt!important;margin-top:2px"><b>• ${rest}</b></div>`; }
       return;
     }
-    if(l.toUpperCase().startsWith('NOTE:')||l.toUpperCase().startsWith('ADVICE:')||l.toUpperCase().startsWith('REMARKS:')){
+    if(l.toUpperCase().startsWith('NOTE:')||l.toUpperCase().startsWith('ADVICE:')){
       inConclusion=false;
       let head = l.split(':')[0];
       let rest=l.substring(l.indexOf(':')+1).trim();
-      html+=`<div style="margin-top:8px"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">${head}:</b></div><div style="margin-left:2px;font-size:11pt!important;text-align:justify">${rest}</div>`;return;
+      html+=`<div style="margin-top:8px"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">${head}:</b></div><div style="margin-left:2px;font-size:11pt!important">${rest}</div>`;return;
     }
     if(inConclusion){
       html+=`<div style="margin:2px 0 2px 2px;font-size:11pt!important;font-weight:900"><b>• ${l.replace(/^•\s*/,'')}</b></div>`;
@@ -252,7 +298,7 @@ function formatReportToHTML(text){
       let idx=l.indexOf(':');
       let heading=l.substring(0,idx).trim();
       let value=l.substring(idx+1).trim();
-      html+=`<div style="margin:3px 0 3px 2px;font-size:11pt!important">• <b style="text-decoration:underline;font-weight:900">${heading}:</b> <span style="font-size:11pt!important">${value}</span></div>`;
+      html+=`<div style="margin:3px 0 3px 2px;font-size:11pt!important">• <b style="text-decoration:underline;font-weight:900">${heading}:</b> ${value}</div>`;
       return;
     }
     html+=`<div style="margin:2px 0 2px 2px;font-size:11pt!important">• ${l.replace(/^•\s*/,'')}</div>`;
@@ -262,11 +308,11 @@ function formatReportToHTML(text){
 function make(){
   let pn=document.getElementById('pName');
   if(!pn?.value){alert('Enter Name');return;}
-  let isDeath = (document.getElementById('uType')?.value||'').includes('DEATH CERTIFICATE') || (document.getElementById('rText').value||'').includes('Place of Death') || (document.getElementById('rText').value||'').includes('Date of Death');
+  let isDeath = (document.getElementById('uType')?.value||'').includes('DEATH CERTIFICATE') || (document.getElementById('rText').value||'').includes('Place of Death');
   let pid=document.getElementById('pIDMobile')?.value||'';
   let patientBorder;
   if(isDeath){
-    patientBorder=`<div style="text-align:center;font-size:18pt!important;font-weight:900;text-decoration:underline;margin-bottom:14px;letter-spacing:0.5px">DEATH CERTIFICATE</div>`;
+    patientBorder=`<div style="text-align:center;font-size:18pt!important;font-weight:900;text-decoration:underline;margin-bottom:14px">DEATH CERTIFICATE</div>`;
   }else{
     patientBorder=`
     <div style="border:1.2px solid #000;padding:4px 7px;margin-bottom:6px;line-height:1.3">
