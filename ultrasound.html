@@ -36,7 +36,7 @@ textarea{font-size:11pt!important;line-height:1.5!important;font-weight:600}
 <img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:55px;height:55px;border-radius:50%;border:2px solid #0a4eb5">
 <div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p style="font-size:10pt">Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:10px;color:#10b981">Drive Ready</div></div></div>
 
-<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - Final</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search template... Death / Hilum" onkeyup="filterTemplates()"><select id="uType" size="18" style="height:340px;font-size:11pt;font-weight:600" onchange="showTemplatePreview();checkCalculator()"></select>
+<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - Final</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search Death / Hilum" onkeyup="filterTemplates()"><select id="uType" size="18" style="height:340px;font-size:11pt;font-weight:600" onchange="showTemplatePreview();checkCalculator()"></select>
 <button class="small" style="background:#8b5cf6;width:100%;padding:10px;margin-top:8px" onclick="useSelectedTemplate()">Load Template</button></div>
 
 <div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Preview</span><button class="small" style="background:#0a4eb5" onclick="copyPreviewToReport()">Copy to Editor</button></div><textarea id="templatePreview" rows="18" readonly></textarea></div>
@@ -148,105 +148,63 @@ const allNames=[
 "SCROTUM - Normal","SCROTUM - Hydrocele Right","SCROTUM - Hydrocele Left","SCROTUM - Hydrocele Bilateral","SCROTUM - Varicocele Left","SCROTUM - Varicocele Right","SCROTUM - Varicocele Bilateral","SCROTUM - Epididymitis Right","SCROTUM - Epididymitis Left","SCROTUM - Epididymo-orchitis Right","SCROTUM - Epididymo-orchitis Left","SCROTUM - Orchitis","SCROTUM - Testicular Torsion","TESTIS - Microlithiasis","TESTIS - Testicular Cyst",
 "AXILLA - Normal","AXILLA - Lymphadenopathy Left","NECK - Normal","NECK - Cervical Lymphadenopathy","ABDOMEN + PELVIS - Normal Male","ABDOMEN + PELVIS - Normal Female",
 "ANAL - Normal","ANAL - Perianal Abscess","ANAL - Intersphincteric Fistula","ANAL - Transsphincteric Fistula","ANAL - Suprasphincteric Fistula","ANAL - Perianal Fistula with Abscess","ANAL - Anal Fissure","ANAL - Hemorrhoids Internal","ANAL - Hemorrhoids External Thrombosed","ANAL - Pilonidal Sinus","ANAL - Anal Sphincter Defect","ANAL - Perianal Hematoma",
-"DEATH CERTIFICATE - As Per Your Format","DEATH CERTIFICATE - Standard","DEATH CERTIFICATE - Natural Death","DEATH CERTIFICATE - Detailed Medical"
+"DEATH CERTIFICATE - Final As Per Pictures"
 ];
 
 function getReportEdit(n){
-let nLiver = `LIVER: 14.5 cm [N: 12-15 cm], Normal size & echotexture, No focal lesion, No IHBR dilatation, IVC 12 mm [N: 10-15 mm] patent & compressible, Portal vein 9 mm [N: 7-12 mm] patent, Hepatic veins patent & normal caliber [N: Patent].`;
-let nGB = `GALL BLADDER: Well distended, Wall 2-3 mm [N: <3 mm], No calculus/sludge, CBD 4.2 mm [N: 3-6 mm] normal caliber, No IHBR dilatation, No pericholecystic fluid.`;
-let nSpleen = `SPLEEN: 10.0 cm [N: <12 cm], Normal size & texture, No focal lesion, Splenic vein 6 mm [N: <10 mm].`;
-let nPanc = `PANCREAS: Head 2.2 cm, Body 1.2 cm [N: Head <3.0 cm Body <2.0 cm], Normal texture, No focal lesion, No collection, Pancreatic duct <2 mm [N: <2 mm], Portal vein 9 mm [N: 7-12 mm], No lymphadenopathy.`;
-let nRK = `RIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.`;
-let nLK = `LEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.`;
-let nBlad = `URINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].`;
+let nLiver = `LIVER: 14.5 cm [N: 12-15 cm], Normal size & echotexture, No focal lesion.`;
+let nGB = `GALL BLADDER: Well distended, Wall 2-3 mm [N: <3 mm], No calculus.`;
+let nSpleen = `SPLEEN: 10.0 cm [N: <12 cm], Normal size & texture.`;
+let nPanc = `PANCREAS: Head 2.2 cm, Body 1.2 cm [N: Head <3.0 cm Body <2.0 cm], Normal texture.`;
+let nRK = `RIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical 15 mm [N: 12-18 mm], Normal.`;
+let nLK = `LEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical 15 mm [N: 12-18 mm], Normal.`;
+let nBlad = `URINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm].`;
 
-// ===== YOUR EXACT REQUIRED FORMAT =====
-if(n==="DEATH CERTIFICATE - As Per Your Format"){
-let pName = document.getElementById('pName')?.value || '________________________';
-let pAge = document.getElementById('pAge')?.value || '____';
-let pGen = document.getElementById('pGen')?.value || 'Male / Female';
-let pCnic = document.getElementById('pIDMobile')?.value || '________________________';
-let pDate = document.getElementById('pDate')?.value? new Date(document.getElementById('pDate').value).toLocaleDateString('en-GB') : '____/____/________';
-let todayIssue = new Date().toLocaleDateString('en-GB');
+if(n==="DEATH CERTIFICATE - Final As Per Pictures"){
+return `Name:
+Father/Husband Name:
+CNIC No / B-Form No.:
+Date Of Birth:
+Date of Death:
+Time of Death:
+Place of Death: ☐ At Hospital ☐ At Home ☐ Brought Dead ☐ On the Way ☐ Other: ______________________ [Location]
+Cause of Death: Cardiac Arrest / Cardio Respiratory Failure / Myocardial Infarction / Respiratory Failure / Septic Shock / Physical Death
+Brought: /Dead on Arrival / Expired during treatment / Expired at home - Brought for confirmation / Referred from other hospital
+History of Disease: Known case of : [HTN / DM / IHD / Asthma / CKD / CVA / COPD / TB / Malignancy / for ____ years.
+Family contact No: 0300000000 Name: Relation:
+On examination at: ____:____ AM/PM - Pulse not palpable, BP not recordable, No spontaneous respiration, Pupils dilated & fixed, No response to painful stimuli, Heart sounds absent, ECG flat / asystole. CPR attempted for ____ mins - No response. Declared dead at ____:____ AM/PM.
 
-return `DEATH CERTIFICATE
-Azam Medical Centre
-Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - Contact: 021-XXXXXXX
-
-Name: ${pName}
-Father/Husband Name: ________________________________________ [S/O, D/O, W/O]
-CNIC No.: ${pCnic}
-Date Of Birth: ____/____/________ [DD/MM/YYYY] Age: ${pAge} Sex: ${pGen}
-Date of Death: ____/____/________ [DD/MM/YYYY]
-Time of Death: ____:____ AM / PM [Exact Time]
-Place of Death: ☐ At Hospital ☐ At Home ☐ Brought Dead ☐ On the Way ☐ Other: ______________ [Location]
-Cause of Death: ________________________________________ [Immediate Cause - e.g. Cardiac Arrest / Cardio Respiratory Failure / Myocardial Infarction / Respiratory Failure / Septic Shock]
-Brought: ☐ Dead on Arrival ☐ Expired during treatment ☐ Expired at home - Brought for confirmation ☐ Referred from other hospital [Status]
-History of Disease: Known case of ______________________ [HTN / DM / IHD / Asthma / CKD / CVA / COPD / TB / Malignancy / ______________________] for ____ years. History of ______________________ [Chest pain / Breathlessness / Fever / Unconsciousness / Fits / ______________________]
-Family contact No: ________________________________________ [Name: ______________________ Relation: ______________]
-Examen by doctor: On examination at ____:____ AM/PM - Pulse not palpable, BP not recordable, No spontaneous respiration, Pupils dilated & fixed, No response to painful stimuli, Heart sounds absent, ECG flat / asystole. CPR attempted for ____ mins - No response. Declared dead at ____:____ AM/PM.
-Date of issue: ${todayIssue} [Date of Issue]
+Date of issue: 08/10/2026 [Date of Issue]
 
 CONCLUSION:
-This is to certify that Mr. / Mrs. / Master ${pName}, Age ${pAge}, Sex ${pGen}, S/O, D/O, W/O ________________________________________, CNIC No. ${pCnic}, resident of ________________________________________, has expired on ____/____/________ at ____:____ AM/PM at ______________________ due to natural cause - Cardiac Arrest / ______________________.
+This is to certify that Mr. / Mrs. / Master ______________________________, Age ____, Sex Male, S/O, D/O, W/O ________________________________________, CNIC No. ______________________________, resident of ________________________________________, has expired on ____/____/________ at ____:____ AM/PM at ______________________________ due to natural cause - Cardiac Arrest / ______________________________.
 
 This certificate is issued on the request of family members for burial / legal purposes. No postmortem performed as death appears natural. Police information not required as per family statement.
-
-ADVICE / NOTE:
+NOTE:
 This is a medical confirmation of death, not a NADRA death certificate. For legal record, please obtain NADRA Death Certificate from Union Council. Body handed over to family / heirs.
 
-Date of Issue: ${todayIssue}
-
-Doctor Name: DR. ______________________ PMDC No: ______________________
-Signature & Stamp: ______________________ Azam Medical Centre
+Doctor Name: DR. ______________________________ Signature & Stamp: ______________________________
 `;
 }
 
-if(n.startsWith("DEATH CERTIFICATE")){
-let dName = document.getElementById('pName')?.value || '________________';
-let dAge = document.getElementById('pAge')?.value || '____';
-let dGen = document.getElementById('pGen')?.value || 'Male/Female';
-let dID = document.getElementById('pIDMobile')?.value || '______________';
-let today = document.getElementById('pDate')?.value || new Date().toLocaleDateString('en-GB');
-return `DEATH CERTIFICATE
-Azam Medical Centre
-
-Patient Name: ${dName}
-Age: ${dAge} Sex: ${dGen} CNIC: ${dID}
-Date: ${today}
-
-Cause of Death: Cardiac Arrest / Cardio Respiratory Failure
-
-This certificate is issued on the request of family members for burial / legal purposes. No postmortem performed as death appears natural. Police information not required as per family statement.
-
-ADVICE / NOTE:
-This is a medical confirmation of death, not a NADRA death certificate. For legal record, please obtain NADRA Death Certificate from Union Council. Body handed over to family / heirs.
-
-Date of Issue: ${today}
-`;
-}
-
-// WHOLE ABDOMEN - Hilum Lymph Node
-if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\nSPLEEN: 10.5 cm [N: <12 cm], Normal size & homogenous texture [N: Normal], No focal lesion, Splenic vein 6 mm [N: <10 mm].\n\n${nPanc}\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis [N: Normal].\n\nLEFT KIDNEY: 11.2 x 4.6 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis, Left renal hilum partially obscured by lymph node [N: Normal].\n\n${nBlad}\n\nHILUM / PARA-HILAR LYMPH NODE ASSESSMENT:\nSite: Left renal hilum / Splenic hilum [N: No lymphadenopathy]\nNumber: Single / Multiple - 1-2 nodes [N: No lymph node]\nSize: Largest measuring 22 x 14 mm [N: <10 mm], Smallest 12 x 8 mm [N: <10 mm]\nShape: Oval / Round, Well-defined, Smooth margins [N: Oval with preserved fatty hilum]\nEchogenicity: Hypoechoic, Homogenous cortex [N: Isoechoic]\nFatty Hilum: Central echogenic hilum - Preserved / Partially effaced / Completely effaced [N: Preserved]\nCorticomedullary Differentiation: Cortex 4.5 mm thickened [N: <3 mm] - Symmetrical / Asymmetrical [N: Symmetrical]\nVascularity on Color Doppler: Hilar vascularity preserved / Peripheral vascularity / Mixed hypervascularity / Avascular [N: Hilar vascularity present]\nCalcification: No calcification [N: No calcification]\nNecrosis / Cystic Change: No necrosis [N: No necrosis]\nMatting / Conglomeration: No matting [N: No matting]\nSurrounding: No perinodal edema / collection, No mass effect on renal vessels & ureter, No hydronephrosis secondary to compression [N: No compression]\n\nREMARKS:\nWell-defined hypoechoic lymph node at left renal / splenic hilum. Correlate clinically - Likely reactive / inflammatory.\n\n`;
+if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\nSPLEEN: 10.5 cm [N: <12 cm], Normal size & homogenous texture [N: Normal].\n\n${nPanc}\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical 15 mm [N: 12-18 mm], Normal texture [N: Normal].\n\nLEFT KIDNEY: 11.2 x 4.6 cm [N: 9-13 x 4-6 cm], Cortical 15 mm [N: 12-18 mm], Normal texture, Left renal hilum partially obscured by lymph node [N: Normal].\n\n${nBlad}\n\nHILUM / PARA-HILAR LYMPH NODE ASSESSMENT:\nSite: Left renal hilum / Splenic hilum [N: No lymphadenopathy]\nNumber: Single / Multiple - 1-2 nodes [N: No lymph node]\nSize: Largest measuring 22 x 14 mm [N: <10 mm]\nShape: Oval / Round, Well-defined [N: Oval]\nEchogenicity: Hypoechoic [N: Isoechoic]\nFatty Hilum: Preserved / Partially effaced / Completely effaced [N: Preserved]\nVascularity: Hilar vascularity preserved / Peripheral [N: Hilar]\nCalcification: No calcification [N: No calcification]\nNecrosis: No necrosis [N: No necrosis]\nMatting: No matting [N: No matting]\nSurrounding: No mass effect on renal vessels & ureter [N: No compression]\n\n`;
 
 if(n==="WHOLE ABDOMEN - Normal") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
 
-return `ULTRASOUND ${n.split(' - ')[0]}:\n\nDetailed findings as per ${n.split(' - ')[1]||n} with measurements and Doppler evaluation.\n\nCONCLUSION will be auto-generated with advice.`;
+return `ULTRASOUND ${n.split(' - ')[0]}:\n\nDetailed findings as per ${n.split(' - ')[1]||n} with measurements.\n\nCONCLUSION will be auto-generated.`;
 }
 function getAdvice(n){
-if(n.includes("DEATH CERTIFICATE")) return "Burial purpose - Get NADRA Death Certificate from Union Council.";
-if(n.includes("Hilum Lymph Node")) return "CBC, ESR, CRP, CT Abdomen with contrast, Medical specialist opinion, FNAC if suspicious.";
+if(n.includes("DEATH CERTIFICATE")) return "Burial purpose only. Obtain NADRA Death Certificate from Union Council.";
+if(n.includes("Hilum Lymph Node")) return "CBC, ESR, CRP, CT Abdomen with contrast, Medical specialist opinion.";
 if(n.includes("Normal")) return "No active pathology.";
 return "Relevant labs and specialist consultation.";
 }
 function getDiagnosis(n){
-if(n.startsWith("DEATH CERTIFICATE")){
-return "Natural Death - Cardiac Arrest confirmed, body handed over to family for burial - Medical confirmation, not NADRA certificate";
-}
-if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return "Lymph node at left renal / splenic hilum 22x14 mm - Hypoechoic, fatty hilum preserved / partially effaced";
+if(n.startsWith("DEATH CERTIFICATE")) return "Natural Death - Medical confirmation for burial purpose";
+if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return "Lymph node at left renal / splenic hilum 22x14 mm - Hypoechoic, no compressive hydronephrosis";
 let parts = n.split(' - '); if(parts.length>1){ return parts.slice(1).join(' - ').trim(); } return n;
 }
-let T={}; allNames.forEach(k=>{ let diag = getDiagnosis(k); let reportText = getReportEdit(k); let finalConclusion = diag + ".\nRest of study unremarkable."; if(k.startsWith("DEATH CERTIFICATE")){ T[k]=reportText; } else { T[k]=reportText+`\n\nCONCLUSION:\n${finalConclusion}\n\nADVICE:\n${getAdvice(k)}`; } });
+let T={}; allNames.forEach(k=>{ let diag = getDiagnosis(k); let reportText = getReportEdit(k); if(k.startsWith("DEATH CERTIFICATE")){ T[k]=reportText; } else { T[k]=reportText+`\n\nCONCLUSION:\n${diag}.\nRest of study unremarkable.\n\nADVICE:\n${getAdvice(k)}`; } });
 let allTemplates=Object.keys(T);
 function cleanForPrint(text){ return text.replace(/\s*\[N:.*?\]/g, ''); }
 function filterTemplates(){let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');let cur=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(cur))s.value=cur; showTemplatePreview(); checkCalculator();}
@@ -259,59 +217,65 @@ function formatReportToHTML(text){
   let html=''; let inConclusion=false;
   lines.forEach(line=>{
     let l=line.trim();
-    if(!l){html+='<div style="height:4px"></div>';return;}
-    if(l.toUpperCase().startsWith('DEATH CERTIFICATE')||l.toUpperCase().startsWith('ULTRASOUND')||l.toUpperCase().startsWith('FWB &')){inConclusion=false; html+=`<div style="text-align:center;margin:8px 0;font-weight:900;text-decoration:underline;font-size:11pt!important">`+l+`</div>`;return;}
+    if(!l){html+='<div style="height:6px"></div>';return;}
+    if(l.toUpperCase()==='DEATH CERTIFICATE'){return;} // heading already added separately
     if(l.toUpperCase().startsWith('CONCLUSION:')){
       inConclusion=true;
       let rest=l.replace(/CONCLUSION:/i,'').trim();
-      html+=`<div style="margin-top:10px"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">CONCLUSION:</b></div>`;
-      if(rest){ html+=`<div style="margin-left:10px;font-weight:900;font-size:11pt!important"><b>• ${rest}</b></div>`; }
+      html+=`<div style="margin-top:12px"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">CONCLUSION:</b></div>`;
+      if(rest){ html+=`<div style="margin-left:2px;font-size:11pt!important;margin-top:4px;text-align:justify">${rest}</div>`; }
       return;
     }
-    if(l.toUpperCase().startsWith('ADVICE / NOTE:')||l.toUpperCase().startsWith('ADVICE:')||l.toUpperCase().startsWith('REMARKS:')||l.toUpperCase().startsWith('NOTE:')){
+    if(l.toUpperCase().startsWith('NOTE:')||l.toUpperCase().startsWith('ADVICE')){
       inConclusion=false;
       let head = l.split(':')[0];
       let rest=l.substring(l.indexOf(':')+1).trim();
-      html+=`<div style="margin-top:6px"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">${head}:</b></div><div style="margin-left:10px;font-size:11pt!important;font-weight:600">${rest}</div>`;return;
+      html+=`<div style="margin-top:8px"><b style="font-weight:900;font-size:11pt!important">${head}:</b></div><div style="margin-left:2px;font-size:11pt!important;text-align:justify">${rest}</div>`;return;
     }
     if(inConclusion){
-      html+=`<div style="margin:2px 0 2px 10px;font-size:11pt!important;font-weight:900"><b>• ${l.replace(/^•\s*/,'')}</b></div>`;
+      html+=`<div style="margin:4px 0 2px 2px;font-size:11pt!important;text-align:justify">${l}</div>`;
       return;
     }
     if(l.includes(':')){
-      let parts=l.split(':');
-      let heading=parts[0].trim();
-      let value=parts.slice(1).join(':').trim();
-      html+=`<div style="margin:2px 0 2px 10px;font-size:11pt!important">• <b style="text-decoration:underline;font-weight:900;font-size:11pt!important">${heading}:</b> <span style="font-size:11pt!important">${value}</span></div>`;
+      let idx=l.indexOf(':');
+      let heading=l.substring(0,idx).trim();
+      let value=l.substring(idx+1).trim();
+      html+=`<div style="margin:3px 0 3px 2px;font-size:11pt!important"><b style="font-weight:900">${heading}:</b> ${value}</div>`;
       return;
     }
-    html+=`<div style="margin:1px 0 1px 10px;font-size:11pt!important">• ${l.replace(/^•\s*/,'')}</div>`;
+    html+=`<div style="margin:2px 0 2px 2px;font-size:11pt!important;text-align:justify">${l}</div>`;
   });
   return html;
 }
 function make(){
   let pn=document.getElementById('pName');
   if(!pn?.value){alert('Enter Name');return;}
+  let isDeath = (document.getElementById('uType')?.value||'').includes('DEATH CERTIFICATE') || (document.getElementById('rText').value||'').includes('DEATH CERTIFICATE') || (document.getElementById('rText').value||'').includes('Place of Death');
   let pid=document.getElementById('pIDMobile')?.value||'';
-  let patientBorder=`
-  <div style="border:1.2px solid #000;padding:4px 7px;margin-bottom:6px;line-height:1.3">
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:7.5pt!important;font-weight:900">
-      <span><b>Name: ${document.getElementById('pName').value}</b></span>
-      <span><b>Age: ${document.getElementById('pAge').value}</b></span>
-      <span><b>Sex: ${document.getElementById('pGen').value}</b></span>
-      <span><b>Date: ${document.getElementById('pDate').value}</b></span>
-      <span><b>ID: ${pid}</b></span>
-    </div>
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:2px;font-size:7.5pt!important;font-weight:900">
-      <span><b>Ref By: ${getRefValue()}</b></span>
-      <span><b>Sonologist: ${getSonoValue()}</b></span>
-      <span style="opacity:0">.</span>
-    </div>
-  </div>`;
+  let patientBorder;
+  if(isDeath){
+    patientBorder=`<div style="text-align:center;font-size:18pt!important;font-weight:900;text-decoration:underline;margin-bottom:14px;letter-spacing:0.5px">DEATH CERTIFICATE</div>`;
+  }else{
+    patientBorder=`
+    <div style="border:1.2px solid #000;padding:4px 7px;margin-bottom:6px;line-height:1.3">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:7.5pt!important;font-weight:900">
+        <span><b>Name: ${document.getElementById('pName').value}</b></span>
+        <span><b>Age: ${document.getElementById('pAge').value}</b></span>
+        <span><b>Sex: ${document.getElementById('pGen').value}</b></span>
+        <span><b>Date: ${document.getElementById('pDate').value}</b></span>
+        <span><b>ID: ${pid}</b></span>
+      </div>
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:2px;font-size:7.5pt!important;font-weight:900">
+        <span><b>Ref By: ${getRefValue()}</b></span>
+        <span><b>Sonologist: ${getSonoValue()}</b></span>
+        <span style="opacity:0">.</span>
+      </div>
+    </div>`;
+  }
   let complaintText=(document.getElementById('pComplaint')?.value||'').trim();
   let bodyHTML=formatReportToHTML(document.getElementById('rText').value);
-  if(complaintText){bodyHTML=`<div style="margin-bottom:5px;font-size:11pt!important;font-style:italic"><b>C/O: ${complaintText}</b></div>`+bodyHTML;}
-  let footer=`<div style="margin-top:12px;text-align:center"><div style="font-size:7.5pt!important"><i>This is computer generated report no signature required.</i></div><div style="font-size:8.5pt!important;margin-top:3px;font-weight:700">Thanks for availing our services</div></div>`;
+  if(complaintText &&!isDeath){bodyHTML=`<div style="margin-bottom:5px;font-size:11pt!important;font-style:italic"><b>C/O: ${complaintText}</b></div>`+bodyHTML;}
+  let footer=`<div style="margin-top:16px;text-align:center"><div style="font-size:7.5pt!important"><i>This is computer generated report no signature required.</i></div><div style="font-size:8.5pt!important;margin-top:3px;font-weight:700">Thanks for availing our services</div></div>`;
   document.getElementById('reportContent').innerHTML=patientBorder+bodyHTML+footer;
   document.getElementById('outCard').style.display='block';
   window.scrollTo(0, document.getElementById('outCard').offsetTop);
