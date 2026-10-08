@@ -48,14 +48,14 @@ textarea{font-size:11pt!important;line-height:1.5!important;font-weight:600}
 <div><select id="ref" onchange="checkOther('ref')"></select><input id="refOther" class="customInput" placeholder="Other Doctor"></div>
 <div><select id="sono" onchange="checkOther('sono')"></select><input id="sonoOther" class="customInput" placeholder="Other Sonologist"></div>
 </div>
-<div style="border:2px solid #10b981;border-radius:12px;padding:8px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:11px">C/O / Extra Notes</label><textarea id="pComplaint" rows="2" placeholder="For Death: S/O, D/O, CNIC, Date & Time of Death, Place etc"></textarea></div>
+<div style="border:2px solid #10b981;border-radius:12px;padding:8px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:11px">C/O / Extra Notes</label><textarea id="pComplaint" rows="2"></textarea></div>
 
 <div id="obsCalc" class="calcBox" style="border-color:#10b981;background:#f0fdf4"><h4>FWB Calculator</h4>
 <div class="grid4" style="margin-top:8px">
-<div><label>BPD</label><input id="bpd" type="number" step="0.01" placeholder="7.1 or 71" oninput="calcFWBFixed()"></div>
-<div><label>HC</label><input id="hc" type="number" step="0.01" placeholder="25.0 or 250" oninput="calcFWBFixed()"></div>
-<div><label>AC</label><input id="ac" type="number" step="0.01" placeholder="20.1 or 201" oninput="calcFWBFixed()"></div>
-<div><label>FL</label><input id="fl" type="number" step="0.01" placeholder="5.4 or 54" oninput="calcFWBFixed()"></div>
+<div><label>BPD</label><input id="bpd" type="number" step="0.01" oninput="calcFWBFixed()"></div>
+<div><label>HC</label><input id="hc" type="number" step="0.01" oninput="calcFWBFixed()"></div>
+<div><label>AC</label><input id="ac" type="number" step="0.01" oninput="calcFWBFixed()"></div>
+<div><label>FL</label><input id="fl" type="number" step="0.01" oninput="calcFWBFixed()"></div>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
 <div><label>LMP</label><input id="lmp" type="date" onchange="calcEDD()"></div>
@@ -148,7 +148,7 @@ const allNames=[
 "SCROTUM - Normal","SCROTUM - Hydrocele Right","SCROTUM - Hydrocele Left","SCROTUM - Hydrocele Bilateral","SCROTUM - Varicocele Left","SCROTUM - Varicocele Right","SCROTUM - Varicocele Bilateral","SCROTUM - Epididymitis Right","SCROTUM - Epididymitis Left","SCROTUM - Epididymo-orchitis Right","SCROTUM - Epididymo-orchitis Left","SCROTUM - Orchitis","SCROTUM - Testicular Torsion","TESTIS - Microlithiasis","TESTIS - Testicular Cyst",
 "AXILLA - Normal","AXILLA - Lymphadenopathy Left","NECK - Normal","NECK - Cervical Lymphadenopathy","ABDOMEN + PELVIS - Normal Male","ABDOMEN + PELVIS - Normal Female",
 "ANAL - Normal","ANAL - Perianal Abscess","ANAL - Intersphincteric Fistula","ANAL - Transsphincteric Fistula","ANAL - Suprasphincteric Fistula","ANAL - Perianal Fistula with Abscess","ANAL - Anal Fissure","ANAL - Hemorrhoids Internal","ANAL - Hemorrhoids External Thrombosed","ANAL - Pilonidal Sinus","ANAL - Anal Sphincter Defect","ANAL - Perianal Hematoma",
-"DEATH CERTIFICATE - Standard","DEATH CERTIFICATE - Natural Death","DEATH CERTIFICATE - Detailed Medical"
+"DEATH CERTIFICATE - As Per Your Format","DEATH CERTIFICATE - Standard","DEATH CERTIFICATE - Natural Death","DEATH CERTIFICATE - Detailed Medical"
 ];
 
 function getReportEdit(n){
@@ -160,40 +160,62 @@ let nRK = `RIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15
 let nLK = `LEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis.`;
 let nBlad = `URINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].`;
 
+// ===== YOUR EXACT REQUIRED FORMAT =====
+if(n==="DEATH CERTIFICATE - As Per Your Format"){
+let pName = document.getElementById('pName')?.value || '________________________';
+let pAge = document.getElementById('pAge')?.value || '____';
+let pGen = document.getElementById('pGen')?.value || 'Male / Female';
+let pCnic = document.getElementById('pIDMobile')?.value || '________________________';
+let pDate = document.getElementById('pDate')?.value? new Date(document.getElementById('pDate').value).toLocaleDateString('en-GB') : '____/____/________';
+let todayIssue = new Date().toLocaleDateString('en-GB');
+
+return `DEATH CERTIFICATE
+Azam Medical Centre
+Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi - Contact: 021-XXXXXXX
+
+Name: ${pName}
+Father/Husband Name: ________________________________________ [S/O, D/O, W/O]
+CNIC No.: ${pCnic}
+Date Of Birth: ____/____/________ [DD/MM/YYYY] Age: ${pAge} Sex: ${pGen}
+Date of Death: ____/____/________ [DD/MM/YYYY]
+Time of Death: ____:____ AM / PM [Exact Time]
+Place of Death: ☐ At Hospital ☐ At Home ☐ Brought Dead ☐ On the Way ☐ Other: ______________ [Location]
+Cause of Death: ________________________________________ [Immediate Cause - e.g. Cardiac Arrest / Cardio Respiratory Failure / Myocardial Infarction / Respiratory Failure / Septic Shock]
+Brought: ☐ Dead on Arrival ☐ Expired during treatment ☐ Expired at home - Brought for confirmation ☐ Referred from other hospital [Status]
+History of Disease: Known case of ______________________ [HTN / DM / IHD / Asthma / CKD / CVA / COPD / TB / Malignancy / ______________________] for ____ years. History of ______________________ [Chest pain / Breathlessness / Fever / Unconsciousness / Fits / ______________________]
+Family contact No: ________________________________________ [Name: ______________________ Relation: ______________]
+Examen by doctor: On examination at ____:____ AM/PM - Pulse not palpable, BP not recordable, No spontaneous respiration, Pupils dilated & fixed, No response to painful stimuli, Heart sounds absent, ECG flat / asystole. CPR attempted for ____ mins - No response. Declared dead at ____:____ AM/PM.
+Date of issue: ${todayIssue} [Date of Issue]
+
+CONCLUSION:
+This is to certify that Mr. / Mrs. / Master ${pName}, Age ${pAge}, Sex ${pGen}, S/O, D/O, W/O ________________________________________, CNIC No. ${pCnic}, resident of ________________________________________, has expired on ____/____/________ at ____:____ AM/PM at ______________________ due to natural cause - Cardiac Arrest / ______________________.
+
+This certificate is issued on the request of family members for burial / legal purposes. No postmortem performed as death appears natural. Police information not required as per family statement.
+
+ADVICE / NOTE:
+This is a medical confirmation of death, not a NADRA death certificate. For legal record, please obtain NADRA Death Certificate from Union Council. Body handed over to family / heirs.
+
+Date of Issue: ${todayIssue}
+
+Doctor Name: DR. ______________________ PMDC No: ______________________
+Signature & Stamp: ______________________ Azam Medical Centre
+`;
+}
+
 if(n.startsWith("DEATH CERTIFICATE")){
 let dName = document.getElementById('pName')?.value || '________________';
 let dAge = document.getElementById('pAge')?.value || '____';
 let dGen = document.getElementById('pGen')?.value || 'Male/Female';
 let dID = document.getElementById('pIDMobile')?.value || '______________';
 let today = document.getElementById('pDate')?.value || new Date().toLocaleDateString('en-GB');
-
-if(n==="DEATH CERTIFICATE - Standard" || n==="DEATH CERTIFICATE - Natural Death"){
 return `DEATH CERTIFICATE
 Azam Medical Centre
-Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi
 
-This is to certify that:
+Patient Name: ${dName}
+Age: ${dAge} Sex: ${dGen} CNIC: ${dID}
+Date: ${today}
 
-Patient Name: ${dName} [Full Name]
-S/O, D/O, W/O: S/O - ______________________ [Father/Husband Name]
-Age: ${dAge} years Sex: ${dGen} [Male/Female/Child]
-CNIC No / B-Form: ${dID} [CNIC: 42201-________]
-Address: ______________________________________________________ [Permanent Address]
-Contact No: ______________________ [Family Contact]
-
-Date of Death: ____/____/________ [DD/MM/YYYY] Time of Death: ____:____ AM/PM [Exact Time]
-Place of Death: Azam Medical Centre / Home / On the way / Other Hospital [Location]
-Brought: Dead on Arrival / Expired during treatment / Expired at home - Brought for confirmation [Status]
-
-Probable Cause of Death: Natural Death due to Cardiac Arrest / Cardio Respiratory Failure / Myocardial Infarction / Severe Respiratory Distress / Multi-organ Failure / Septic Shock [Cause]
-Immediate Cause: Cardiac Arrest [Cardiac Arrest]
-Antecedent Cause: ______________________________________ [e.g. Ischemic Heart Disease, HTN, DM]
-Other Significant Conditions: ______________________________________ [e.g. Diabetes, Hypertension]
-
-History / Brief Illness: Patient was known case of ______________________ for ____ years. Brought with complaints of ______________________. Despite resuscitative efforts, could not be revived. Declared dead at above mentioned time.
-
-CONCLUSION:
-As per information provided by attendants and available medical record, Mr./Ms. ${dName}, ${dAge}Y/${dGen}, expired on ____/____/________ at ____:____ AM/PM due to natural cause - Cardiac Arrest.
+Cause of Death: Cardiac Arrest / Cardio Respiratory Failure
 
 This certificate is issued on the request of family members for burial / legal purposes. No postmortem performed as death appears natural. Police information not required as per family statement.
 
@@ -203,120 +225,25 @@ This is a medical confirmation of death, not a NADRA death certificate. For lega
 Date of Issue: ${today}
 `;
 }
-if(n==="DEATH CERTIFICATE - Detailed Medical"){
-return `MEDICAL DEATH CERTIFICATE - DETAILED
-Azam Medical Centre - Emergency / OPD
 
-Patient Name: ${dName}
-S/O, D/O, W/O: ________________________________________
-Age: ${dAge} Sex: ${dGen} CNIC: ${dID}
-Address: ______________________________________________________
-Contact of Next of Kin: ______________________ Relation: _____________
+// WHOLE ABDOMEN - Hilum Lymph Node
+if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\nSPLEEN: 10.5 cm [N: <12 cm], Normal size & homogenous texture [N: Normal], No focal lesion, Splenic vein 6 mm [N: <10 mm].\n\n${nPanc}\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis [N: Normal].\n\nLEFT KIDNEY: 11.2 x 4.6 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis, Left renal hilum partially obscured by lymph node [N: Normal].\n\n${nBlad}\n\nHILUM / PARA-HILAR LYMPH NODE ASSESSMENT:\nSite: Left renal hilum / Splenic hilum [N: No lymphadenopathy]\nNumber: Single / Multiple - 1-2 nodes [N: No lymph node]\nSize: Largest measuring 22 x 14 mm [N: <10 mm], Smallest 12 x 8 mm [N: <10 mm]\nShape: Oval / Round, Well-defined, Smooth margins [N: Oval with preserved fatty hilum]\nEchogenicity: Hypoechoic, Homogenous cortex [N: Isoechoic]\nFatty Hilum: Central echogenic hilum - Preserved / Partially effaced / Completely effaced [N: Preserved]\nCorticomedullary Differentiation: Cortex 4.5 mm thickened [N: <3 mm] - Symmetrical / Asymmetrical [N: Symmetrical]\nVascularity on Color Doppler: Hilar vascularity preserved / Peripheral vascularity / Mixed hypervascularity / Avascular [N: Hilar vascularity present]\nCalcification: No calcification [N: No calcification]\nNecrosis / Cystic Change: No necrosis [N: No necrosis]\nMatting / Conglomeration: No matting [N: No matting]\nSurrounding: No perinodal edema / collection, No mass effect on renal vessels & ureter, No hydronephrosis secondary to compression [N: No compression]\n\nREMARKS:\nWell-defined hypoechoic lymph node at left renal / splenic hilum. Correlate clinically - Likely reactive / inflammatory.\n\n`;
 
-I. PARTICULARS OF DEATH:
-Date of Death: ____/____/________ Time of Death: ____:____ AM/PM
-Place of Death: ☐ At Hospital ☐ At Home ☐ On the way ☐ Brought Dead
-Type: ☐ Natural ☐ Un-natural ☐ Unknown
-If Brought Dead: Time of arrival ____:____ AM/PM, Condition on arrival - No pulse, No BP, No respiration, Pupils dilated & fixed, ECG flat.
-
-II. CAUSE OF DEATH - As per WHO format:
-a) Immediate Cause (Final disease / condition resulting in death): CARDIAC ARREST / CARDIO-RESPIRATORY FAILURE [Duration: Minutes]
-b) Due to / Antecedent Cause: ________________________________________ [e.g. Acute Myocardial Infarction / Cerebrovascular Accident / Chronic Kidney Disease / Severe Pneumonia] [Duration: Hours/Days]
-c) Due to / Underlying Cause: ________________________________________ [e.g. Coronary Artery Disease / Hypertension / Diabetes Mellitus / COPD] [Duration: Years]
-
-III. Other Significant Conditions Contributing to Death:
-1. Hypertension [Duration: ____ years]
-2. Diabetes Mellitus [Duration: ____ years]
-3. Ischemic Heart Disease / Old MI / CVA / CKD / Asthma / TB / Malignancy [Specify]
-4. ______________________________________________________
-
-IV. Brief Clinical History & Examination Findings:
-Known case of ______________________. Presented with chest pain / breathlessness / unconsciousness / fits / fever / ______________________ for ______________________.
-On Examination at ____:____ AM/PM: Pulse not palpable, BP not recordable, No spontaneous respiration, Pupils dilated & fixed non-reactive to light, No response to painful stimuli, ECG shows asystole / flat line, No heart sounds on auscultation.
-Resuscitation (CPR) attempted for ____ minutes as per protocol - No response. Declared dead at ____:____ AM/PM.
-
-V. Manner of Death: Natural Death - Appears natural due to disease process. No evidence of foul play / injury / poisoning as per attendants and external examination. If suspicious, advise Medico-Legal.
-
-CONCLUSION:
-Mr./Mrs./Master ${dName}, ${dAge} years / ${dGen}, S/O, D/O, W/O ______________________, CNIC ${dID}, R/O ______________________, has expired on ____/____/________ at ____:____ AM/PM at ______________________ due to natural cause as mentioned above.
-
-Body examined - No external injury marks noted / Body not examined in detail as brought dead. Body handed over to legal heirs Mr. ______________________ Relation ______________ CNIC ______________________ after confirmation.
-
-This certificate is issued for burial and record purpose only.
-
-Issuing Doctor: DR. ______________________ [Name & Stamp]
-PMDC No: ______________________
-Date & Time of Issue: ${today} ____:____ AM/PM
-Signature: ______________________
-Hospital Stamp: Azam Medical Centre
-
-NOTE:
-1. This is not a Government Death Certificate. Please get official Death Certificate from Union Council / NADRA / Cantonment Board.
-2. In case of unnatural / suspicious death, police / medico-legal officer should be informed.
-`;
-}
-}
-
-// ===== WHOLE ABDOMEN =====
 if(n==="WHOLE ABDOMEN - Normal") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 1") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 15.0 cm [N: 12-15 cm], Mildly enlarged, Mild increased echogenicity, Grade I fatty infiltration, No focal lesion, Portal vein 9 mm [N: 7-12 mm].\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 2") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 16.2 cm [N: 12-15 cm], Enlarged, Moderate increased echogenicity, Portal walls obscured, Grade II fatty infiltration, Portal vein 10 mm [N: 7-12 mm].\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 3") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 17.5 cm [N: 12-15 cm], Markedly enlarged, Markedly increased echogenicity, Poor visualization of portal walls & diaphragm, Grade III fatty infiltration.\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Hepatomegaly") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 16.8 cm [N: 12-15 cm], Enlarged, Normal echotexture, No focal lesion.\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Splenomegaly") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\nSPLEEN: 14.5 cm [N: <12 cm], Enlarged, Normal texture, No focal lesion, Splenic vein 8 mm [N: <10 mm].\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Hepatosplenomegaly") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 16.5 cm [N: 12-15 cm], Enlarged, Normal texture.\n\n${nGB}\n\nSPLEEN: 14.0 cm [N: <12 cm], Enlarged.\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Cholelithiasis Single") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\nGALL BLADDER: Well distended, Wall 2.5 mm [N: <3 mm], Single calculus 14 mm [N: No calculus] mobile with shadowing, CBD 4.0 mm [N: 3-6 mm].\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Cholelithiasis Multiple") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\nGALL BLADDER: Well distended, Wall 3.0 mm [N: <3 mm], Multiple calculi largest 12 mm smallest 5 mm [N: No calculus] mobile with shadowing, CBD 4.2 mm [N: 3-6 mm].\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Gall Bladder Sludge") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\nGALL BLADDER: Well distended, Wall 2.5 mm [N: <3 mm], Low level echoes / sludge [N: No sludge] no shadowing, CBD 4.0 mm [N: 3-6 mm].\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Cholecystitis Acute") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\nGALL BLADDER: Distended, Wall thickened 5.5 mm [N: <3 mm] edematous, Calculus 15 mm impacted at neck [N: No calculus], Pericholecystic fluid present [N: No fluid], Murphy's positive.\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - CBD Dilated") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\nGALL BLADDER: Well distended, Wall 2.5 mm [N: <3 mm], No calculus, CBD dilated 9.2 mm [N: 3-6 mm], IHBR mildly dilated [N: No dilatation].\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Appendicitis") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}\n\nRIGHT ILIAC FOSSA: Appendix diameter 9.5 mm [N: <6 mm] dilated, Wall thickness 3.5 mm [N: <2 mm] thickened, Surrounding inflamed fat & minimal fluid, Probe tenderness positive [N: Negative].`;
-if(n==="WHOLE ABDOMEN - Liver Cyst") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 14.8 cm [N: 12-15 cm], Anechoic thin walled cyst 35 x 32 mm [N: No cyst] in right lobe segment VI, No internal echoes, Rest normal.\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Liver Hemangioma") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 14.5 cm [N: 12-15 cm], Well defined hyperechoic lesion 28 x 24 mm [N: No lesion] in right lobe segment VII, No halo, No Doppler vascularity.\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Ascites Mild") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}\n\nPERITONEAL CAVITY: Mild free fluid in Morrison's pouch, perisplenic & pelvis ~150-200 ml [N: No fluid].`;
-if(n==="WHOLE ABDOMEN - Ascites Moderate to Gross") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 14.5 cm [N: 12-15 cm], Coarse echotexture, Portal vein 11 mm [N: 7-12 mm].\n\n${nGB}\n\nSPLEEN: 13.5 cm [N: <12 cm], Enlarged.\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}\n\nPERITONEAL CAVITY: Moderate to gross free fluid ~800-1000 ml [N: No fluid], Bowel loops floating.`;
-if(n==="WHOLE ABDOMEN - Liver Abscess") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 15.0 cm [N: 12-15 cm], Heterogeneous hypoechoic lesion 45 x 40 mm [N: No lesion] in right lobe segment VI with debris, Surrounding edema.\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Renal Cyst") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Simple cyst 25 x 22 mm [N: No cyst] at upper pole, Thin walled, Anechoic.\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Gall Bladder Polyp") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\nGALL BLADDER: Well distended, Wall 2.5 mm [N: <3 mm], Echogenic polyp 6 mm [N: No polyp] anterior wall, Non-mobile, No shadowing, CBD 4.0 mm [N: 3-6 mm].\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Pancreatitis Acute") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\nPANCREAS: Enlarged Head 3.2 cm Body 2.8 cm [N: Head <3.0 Body <2.0], Bulky, Hypoechoic & edematous, Duct 2.5 mm [N: <2 mm], Peripancreatic fluid 30 x 20 mm [N: No collection].\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Umbilical Hernia") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}\n\nANTERIOR ABDOMINAL WALL - UMBILICAL REGION: Defect 18 mm [N: No defect], Sac 32 x 28 x 22 mm [N: No sac], Contents Omental fat & minimal bowel [N: No contents], Partially reducible, Cough impulse Positive [N: Negative], Vascularity preserved [N: Preserved].`;
-if(n==="WHOLE ABDOMEN - Paraumbilical Hernia") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}\n\nANTERIOR ABDOMINAL WALL - PARAUMBILICAL: Defect 22 mm [N: No defect], Sac 45 x 35 x 30 mm [N: No sac], Contents Omental fat with bowel [N: No contents], Partially reducible, Cough Positive, Neck 20 mm [N: No neck].`;
-if(n==="WHOLE ABDOMEN - Ventral Hernia") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}\n\nANTERIOR ABDOMINAL WALL - VENTRAL HERNIA: Site Midline epigastric [N: No hernia], Defect 25 mm [N: No defect], Sac 50 x 40 x 35 mm [N: No sac], Contents Omental fat & small bowel [N: No contents], Reducible, Cough Positive.`;
-if(n==="WHOLE ABDOMEN - Incisional Hernia") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}\n\nANTERIOR ABDOMINAL WALL - INCISIONAL HERNIA: At previous scar lower midline [N: No scar defect], Defect 30 mm [N: No defect], Sac 60 x 50 x 40 mm [N: No sac], Contents Omentum & bowel [N: No contents], Partially reducible with adhesions.`;
-if(n==="WHOLE ABDOMEN - Inguinal Hernia Right") return `ULTRASOUND WHOLE ABDOMEN WITH INGUINAL REGION:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}\n\nRIGHT INGUINAL REGION: Defect at deep ring 16 mm [N: No defect], Sac 40 x 25 x 20 mm [N: No sac], Contents Omental fat & bowel [N: No contents], Reducible, Cough Positive, Lateral to inferior epigastric artery - Indirect hernia [N: No hernia].\n\nLEFT INGUINAL REGION: No hernia [N: No hernia].`;
-if(n==="WHOLE ABDOMEN - Inguinal Hernia Left") return `ULTRASOUND WHOLE ABDOMEN WITH INGUINAL REGION:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}\n\nLEFT INGUINAL REGION: Defect 16 mm [N: No defect], Sac 38 x 24 x 18 mm [N: No sac], Contents Omental fat & small bowel [N: No contents], Reducible, Cough Positive, Indirect hernia [N: No hernia].`;
-if(n==="WHOLE ABDOMEN - Lymphadenopathy") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\n${nPanc}\n\n${nRK}\n\n${nLK}\n\n${nBlad}\n\nABDOMEN: Multiple enlarged lymph nodes paraaortic, mesenteric, periportal, Largest 22 x 15 mm [N: <10 mm] at paraaortic, Few hilum preserved, No necrosis.`;
-if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\nSPLEEN: 10.5 cm [N: <12 cm], Normal size & homogenous texture [N: Normal], No focal lesion, Splenic vein 6 mm [N: <10 mm].\n\n${nPanc}\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis [N: Normal].\n\nLEFT KIDNEY: 11.2 x 4.6 cm [N: 9-13 x 4-6 cm], Cortical thickness 15 mm [N: 12-18 mm], Normal texture, No calculus/hydronephrosis, Left renal hilum partially obscured by lymph node [N: Normal].\n\n${nBlad}\n\nHILUM / PARA-HILAR LYMPH NODE ASSESSMENT:\nSite: Left renal hilum / Splenic hilum [N: No lymphadenopathy]\nNumber: Single / Multiple - 1-2 nodes [N: No lymph node]\nSize: Largest measuring 22 x 14 mm [N: <10 mm], Smallest 12 x 8 mm [N: <10 mm]\nShape: Oval / Round, Well-defined, Smooth margins [N: Oval with preserved fatty hilum]\nEchogenicity: Hypoechoic, Homogenous cortex [N: Isoechoic]\nFatty Hilum: Central echogenic hilum - Preserved / Partially effaced / Completely effaced [N: Preserved]\nCorticomedullary Differentiation: Cortex 4.5 mm thickened [N: <3 mm] - Symmetrical / Asymmetrical [N: Symmetrical]\nVascularity on Color Doppler: Hilar vascularity preserved / Peripheral vascularity / Mixed hypervascularity / Avascular [N: Hilar vascularity present]\nCalcification: No calcification [N: No calcification]\nNecrosis / Cystic Change: No necrosis [N: No necrosis] / Central necrosis present if any\nMatting / Conglomeration: No matting [N: No matting]\nSurrounding: No perinodal edema / collection, No mass effect on renal vessels & ureter, No hydronephrosis secondary to compression [N: No compression]\nSplenic Hilum: No lymphadenopathy / Similar node noted at splenic hilum 18 x 11 mm [N: No lymphadenopathy]\n\nREMARKS:\nWell-defined hypoechoic lymph node at left renal / splenic hilum with preserved / effaced fatty hilum. No calcification or gross necrosis. No compressive effect on hilar vessels noted. Correlate clinically - Likely reactive / inflammatory. If suspicious, consider follow up / CECT / FNAC.\n\n`;
-if(n==="WHOLE ABDOMEN - Gastritis") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\nSTOMACH: Distended with fluid & debris, Wall thickened 6-7 mm [N: <4 mm], Mucosal edema present.\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
-if(n==="WHOLE ABDOMEN - Prominent Bowel Loops") return `ULTRASOUND WHOLE ABDOMEN:\n\n${nLiver}\n\n${nGB}\n\n${nSpleen}\n\nBOWEL LOOPS: Small bowel prominent & mildly dilated Max 2.8 cm [N: <2.5 cm], Wall thickened 4 mm [N: <3 mm], Hyperperistaltic, Mild inter-bowel fluid.\n\n${nRK}\n\n${nLK}\n\n${nBlad}`;
 
-// ---- KUB ----
-if(n.startsWith("KUB -")){ /* same as before - shortened for brevity in this snippet, keep original logic */
-let nb = `URINARY BLADDER: Normal capacity 350 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], No calculus/mass, Post void 10 ml [N: <50 ml].`;
-if(n==="KUB - Normal") return `ULTRASOUND KUB:\n\n${nRK}\n\n${nLK}\n\n${nb}`;
-if(n==="KUB - Renal Calculus Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical 15 mm [N: 12-18 mm], Calculus 9 mm [N: No calculus] middle calyx, Shadowing present [N: No shadowing], No hydronephrosis [N: No hydronephrosis].\n\n${nLK}\n\n${nb}`;
-if(n==="KUB - Renal Calculus Left") return `ULTRASOUND KUB:\n\n${nRK}\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Cortical 15 mm [N: 12-18 mm], Calculus 10 mm [N: No calculus] lower calyx, Shadowing present.\n\n${nb}`;
-if(n==="KUB - Renal Calculus Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Calculus 8 mm [N: No calculus] middle calyx.\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Calculus 9 mm [N: No calculus] lower calyx.\n\n${nb}`;
-if(n==="KUB - Bladder Stone Single" || n==="KUB - Urinary Bladder Stone") return `ULTRASOUND KUB:\n\n${nRK}\n\n${nLK}\n\nURINARY BLADDER: Well distended, Volume 380 ml [N: 300-500 ml], Wall thickness 3.5 mm [N: <4 mm], Single large echogenic calculus measuring 22 x 18 mm [N: No calculus] seen in lumen, Mobile on changing position [N: No calculus], Posterior acoustic shadowing present [N: No shadowing], No mass/diverticulum [N: No mass], Post void residual 15 ml [N: <50 ml].\n\nCONCLUSION:\nUrinary bladder single calculus 22 mm - With normal kidneys.\n\nREMARKS:\nCalculus is mobile, no bladder wall mass, no hydronephrosis, no perivesical collection.\n\nADVICE:\nUrine R/E, RFTs, X-ray KUB, Urologist opinion, Plenty of water.`;
-if(n==="KUB - Bladder Stones Multiple" || n==="KUB - Urinary Bladder Multiple Stones") return `ULTRASOUND KUB:\n\n${nRK}\n\n${nLK}\n\nURINARY BLADDER: Well distended, Volume 400 ml [N: 300-500 ml], Wall thickness 4.5 mm [N: <4 mm] - Mildly thickened & trabeculated [N: Smooth], Multiple echogenic calculi seen [N: No calculus], Largest measuring 18 mm, Smallest 6 mm, Total 4-5 stones [N: No calculus], Mobile on position change [N: No calculus], Posterior acoustic shadowing present [N: No shadowing], Internal echoes/debris present due to cystitis [N: Clear], No mass/diverticulum [N: No mass], Post void residual 40 ml [N: <50 ml].\n\nCONCLUSION:\nUrinary bladder multiple calculi, largest 18 mm, 4-5 stones with mild cystitis & trabeculated wall.\n\nREMARKS:\nBladder wall mildly thickened suggestive of chronic cystitis due to stones, no upper tract dilatation, no perivesical lymphadenopathy.\n\nADVICE:\nUrine R/E, Urine C/S, RFTs, Cystoscopy, Urologist opinion.`;
-if(n==="KUB - Blood Clots in Urinary Bladder") return `ULTRASOUND KUB:\n\n${nRK}\n\n${nLK}\n\nURINARY BLADDER: Well distended, Volume 360 ml [N: 300-500 ml], Wall thickness 4.0 mm [N: <4 mm] mildly thickened, Multiple heterogeneous echogenic non-shadowing masses seen in lumen [N: No mass], Largest measuring 35 x 25 mm [N: No mass], Non-mobile, No posterior acoustic shadowing [N: No shadowing] - Differentiates from stone, No internal vascularity on Doppler [N: No vascularity], Internal echoes / blood clots present [N: Clear], No calculus [N: No calculus], Post void residual 50 ml [N: <50 ml] with residual clots.\n\nCONCLUSION:\nBlood clots in urinary bladder - Heterogeneous non-shadowing avascular masses, largest 35 mm.\n\nREMARKS:\nFindings suggestive of blood clots - No stone shadowing, no tumor vascularity, kidneys normal, no hydronephrosis, history of hematuria / trauma / post procedure to be correlated.\n\nADVICE:\nUrine R/E, Hb, PT/INR, Platelets, RFTs, Urgent Urologist opinion, Plenty of water, Avoid blood thinners if on them (consult doctor), Cystoscopy if persistent hematuria.`;
-if(n==="KUB - Distal Ureter Calculus Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 12.5 x 5.2 cm [N: 9-13 x 4-6 cm], Cortical thickness 14 mm [N: 12-18 mm], Mild hydronephrosis, Pelvis 14 mm [N: <10 mm], Proximal ureter dilated 6 mm [N: <3 mm], No renal calculus [N: No calculus].\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Normal, No calculus/hydronephrosis [N: Normal].\n\nURINARY BLADDER: Partially distended 300 ml [N: 300-500 ml], Wall 3 mm [N: <4 mm], Distal right ureter at VUJ - Echogenic calculus measuring 7 mm [N: No calculus] seen with shadowing [N: No shadowing], Mild ureteric jet absent on right side [N: Jet present], No bladder calculus [N: No calculus], Post void 10 ml [N: <50 ml].\n\nCONCLUSION:\nRight distal ureteric calculus 7 mm at VUJ with mild right hydronephrosis & hydroureter.\n\nREMARKS:\nRight ureter dilated upto VUJ due to obstructing calculus, left kidney normal, no bladder mass, twinkle artifact may be seen on Doppler at calculus.\n\nADVICE:\nRFTs, Urine R/E, X-ray KUB, CT KUB plain, Plenty of water 3-4L, Urologist opinion.`;
-}
 return `ULTRASOUND ${n.split(' - ')[0]}:\n\nDetailed findings as per ${n.split(' - ')[1]||n} with measurements and Doppler evaluation.\n\nCONCLUSION will be auto-generated with advice.`;
 }
 function getAdvice(n){
-if(n.includes("DEATH CERTIFICATE")) return "This certificate is for burial / family record purpose. Obtain official Government Death Certificate from Union Council / NADRA. Keep CNIC copy. No postmortem as natural death.";
-if(n.includes("Hilum Lymph Node")) return "CBC, ESR, CRP, LDH, RFTs, CT Abdomen with contrast / CECT, Medical specialist opinion, FNAC / Biopsy if suspicious, Follow up USG after 2-3 weeks.";
-if(n.includes("ANAL")){ if(n.includes("Abscess")) return "CBC, CRP, Blood Sugar, Sitz bath, Antibiotics, Surgical I&D opinion."; if(n.includes("Fistula")) return "MRI Fistulogram, CBC, CRP, Surgical opinion - Fistulotomy / Seton, High fiber diet."; return "Surgical consultation, Sitz bath, High fiber diet."; }
-if(n.includes("Normal")) return "No active pathology. Routine follow up if needed.";
+if(n.includes("DEATH CERTIFICATE")) return "Burial purpose - Get NADRA Death Certificate from Union Council.";
+if(n.includes("Hilum Lymph Node")) return "CBC, ESR, CRP, CT Abdomen with contrast, Medical specialist opinion, FNAC if suspicious.";
+if(n.includes("Normal")) return "No active pathology.";
 return "Relevant labs and specialist consultation.";
 }
 function getDiagnosis(n){
 if(n.startsWith("DEATH CERTIFICATE")){
-if(n.includes("Detailed")) return "Natural death confirmed - Detailed medical death certificate with WHO format, cause Cardiac Arrest, resuscitation attempted, body handed over to heirs";
-return "Natural Death - Cardiac Arrest / Cardio-Respiratory Failure confirmed, declared dead, body handed over to family for burial";
+return "Natural Death - Cardiac Arrest confirmed, body handed over to family for burial - Medical confirmation, not NADRA certificate";
 }
-if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return "Lymph node at left renal / splenic hilum 22x14 mm - Hypoechoic, fatty hilum preserved / partially effaced, hilar vascularity present, no necrosis or compressive hydronephrosis";
+if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return "Lymph node at left renal / splenic hilum 22x14 mm - Hypoechoic, fatty hilum preserved / partially effaced";
 let parts = n.split(' - '); if(parts.length>1){ return parts.slice(1).join(' - ').trim(); } return n;
 }
 let T={}; allNames.forEach(k=>{ let diag = getDiagnosis(k); let reportText = getReportEdit(k); let finalConclusion = diag + ".\nRest of study unremarkable."; if(k.startsWith("DEATH CERTIFICATE")){ T[k]=reportText; } else { T[k]=reportText+`\n\nCONCLUSION:\n${finalConclusion}\n\nADVICE:\n${getAdvice(k)}`; } });
@@ -333,7 +260,7 @@ function formatReportToHTML(text){
   lines.forEach(line=>{
     let l=line.trim();
     if(!l){html+='<div style="height:4px"></div>';return;}
-    if(l.toUpperCase().startsWith('DEATH CERTIFICATE')||l.toUpperCase().startsWith('MEDICAL DEATH')||l.toUpperCase().startsWith('ULTRASOUND')||l.toUpperCase().startsWith('FWB &')){inConclusion=false; html+=`<div style="text-align:center;margin:8px 0;font-weight:900;text-decoration:underline;font-size:11pt!important">`+l+`</div>`;return;}
+    if(l.toUpperCase().startsWith('DEATH CERTIFICATE')||l.toUpperCase().startsWith('ULTRASOUND')||l.toUpperCase().startsWith('FWB &')){inConclusion=false; html+=`<div style="text-align:center;margin:8px 0;font-weight:900;text-decoration:underline;font-size:11pt!important">`+l+`</div>`;return;}
     if(l.toUpperCase().startsWith('CONCLUSION:')){
       inConclusion=true;
       let rest=l.replace(/CONCLUSION:/i,'').trim();
@@ -341,15 +268,11 @@ function formatReportToHTML(text){
       if(rest){ html+=`<div style="margin-left:10px;font-weight:900;font-size:11pt!important"><b>• ${rest}</b></div>`; }
       return;
     }
-    if(l.toUpperCase().startsWith('REMARKS:')||l.toUpperCase().startsWith('NOTE:')){
+    if(l.toUpperCase().startsWith('ADVICE / NOTE:')||l.toUpperCase().startsWith('ADVICE:')||l.toUpperCase().startsWith('REMARKS:')||l.toUpperCase().startsWith('NOTE:')){
       inConclusion=false;
-      let rest=l.replace(/REMARKS:|NOTE:/i,'').trim();
-      html+=`<div style="margin-top:6px"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">${l.split(':')[0]}:</b></div><div style="margin-left:10px;font-size:11pt!important">${rest}</div>`;return;
-    }
-    if(l.toUpperCase().startsWith('ADVICE:')){
-      inConclusion=false;
-      let rest=l.replace(/ADVICE:/i,'').trim();
-      html+=`<div style="margin-top:6px"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">ADVICE:</b></div><div style="margin-left:10px;font-weight:900;font-size:11pt!important"><b>• ${rest}</b></div>`;return;
+      let head = l.split(':')[0];
+      let rest=l.substring(l.indexOf(':')+1).trim();
+      html+=`<div style="margin-top:6px"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">${head}:</b></div><div style="margin-left:10px;font-size:11pt!important;font-weight:600">${rest}</div>`;return;
     }
     if(inConclusion){
       html+=`<div style="margin:2px 0 2px 10px;font-size:11pt!important;font-weight:900"><b>• ${l.replace(/^•\s*/,'')}</b></div>`;
