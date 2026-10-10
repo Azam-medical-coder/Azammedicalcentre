@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical Centre - Final Pathology Wise</title>
+<title>Azam Medical Centre - Offline Ready</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
@@ -24,6 +24,7 @@ textarea{font-size:11pt!important;line-height:1.5!important;font-weight:600}
 .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
 .customInput{display:none;border:2px solid #ff9800;background:#fff8e1}
 .fwb-result{background:#dcfce7;border:2px solid #10b981;padding:12px;border-radius:10px;font-weight:900;text-align:center;font-size:14pt!important}
+.offlineBadge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:900}
 </style></head><body>
 
 <div id="loginOverlay"><div class="loginBox">
@@ -34,9 +35,9 @@ textarea{font-size:11pt!important;line-height:1.5!important;font-weight:600}
 
 <div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px">
 <img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:55px;height:55px;border-radius:50%;border:2px solid #0a4eb5">
-<div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p style="font-size:10pt">Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div id="driveStatus" style="font-size:10px;color:#10b981">Drive Ready</div></div></div>
+<div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p style="font-size:10pt">Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div style="display:flex;gap:8px;justify-content:center;margin-top:4px"><span id="driveStatus" style="font-size:10px;color:#10b981" class="offlineBadge">Drive Ready</span><span id="netStatus" class="offlineBadge" style="background:#dcfce7;color:#065f46">● Online</span><span id="pendingCount" class="offlineBadge" style="background:#fef3c7;color:#92400e;display:none">0 Pending</span></div></div></div>
 
-<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - Pathology Correct</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search CBD / Appendicitis / PCOS..." onkeyup="filterTemplates()"><select id="uType" size="20" style="height:380px;font-size:11pt;font-weight:600" onchange="showTemplatePreview();checkCalculator()"></select>
+<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - Pathology Correct - Offline Ready</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search CBD / Appendicitis / PCOS..." onkeyup="filterTemplates()"><select id="uType" size="20" style="height:380px;font-size:11pt;font-weight:600" onchange="showTemplatePreview();checkCalculator()"></select>
 <button class="small" style="background:#8b5cf6;width:100%;padding:10px;margin-top:8px" onclick="useSelectedTemplate()">Load Template</button></div>
 
 <div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Preview</span><button class="small" style="background:#0a4eb5" onclick="copyPreviewToReport()">Copy to Editor</button></div><textarea id="templatePreview" rows="22" readonly></textarea></div>
@@ -57,26 +58,81 @@ textarea{font-size:11pt!important;line-height:1.5!important;font-weight:600}
 <div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap">
 <button class="small" style="background:#000;padding:12px 22px" onclick="window.print()">Print</button>
 <button class="small" style="background:#10b981;padding:12px 22px" onclick="pdf()">PDF</button>
-<button class="small" style="background:#0a4eb5;padding:12px 22px" onclick="saveR()">Save to Drive</button>
+<button class="small" style="background:#0a4eb5;padding:12px 22px" onclick="saveR()">Save - Offline/Online</button>
 </div></div>
 
 <div class="card noPrint">
-<div class="boxTitle"><span>Saved Reports</span><div style="display:flex;gap:6px"><button class="small" style="background:#7c3aed;padding:8px 14px" onclick="loadFromDrive()">Load Drive</button><button class="small" style="background:#10b981;padding:8px 14px" onclick="render()">Refresh</button></div></div>
+<div class="boxTitle"><span>Saved Reports - Offline Safe</span><div style="display:flex;gap:6px"><button class="small" style="background:#7c3aed;padding:8px 14px" onclick="loadFromDrive()">Load Drive</button><button class="small" style="background:#10b981;padding:8px 14px" onclick="render()">Refresh</button><button class="small" style="background:#ef4444;padding:8px 14px" onclick="syncNow()">Sync Now</button></div></div>
 <input id="sBox" placeholder="Search..." onkeyup="render()"><div id="list"></div>
 </div>
 
 <script>
+// ==== OFFLINE SUPPORT START - NO TEMPLATE CHANGE ====
+if('serviceWorker' in navigator){
+  let swCode = `
+  const CACHE='azam-v3-offline';
+  const URLS=['./'];
+  self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(URLS)).then(()=>self.skipWaiting()));});
+  self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>{if(k!==CACHE) return caches.delete(k);}))).then(()=>self.clients.claim()));});
+  self.addEventListener('fetch',e=>{
+    if(e.request.method!=='GET') return;
+    e.respondWith(fetch(e.request).then(r=>{let rc=r.clone();caches.open(CACHE).then(c=>c.put(e.request,rc));return r;}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./'))));
+  });
+  `;
+  let blob=new Blob([swCode],{type:'text/javascript'});
+  let swUrl=URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(()=>{});
+}
+function updateNetStatus(){
+  let netEl=document.getElementById('netStatus');
+  let driveEl=document.getElementById('driveStatus');
+  let pendEl=document.getElementById('pendingCount');
+  if(navigator.onLine){
+    netEl.textContent='● Online'; netEl.style.background='#dcfce7'; netEl.style.color='#065f46';
+    if(localStorage.getItem('azam_pending_sync')==='1'){ driveEl.textContent='Syncing...'; syncNow(); }
+  }else{
+    netEl.textContent='● Offline Mode - Reports Local Safe'; netEl.style.background='#fee2e2'; netEl.style.color='#991b1b';
+    driveEl.textContent='Offline - Local Save Only';
+  }
+  let pending=0; try{let a=JSON.parse(localStorage.getItem('azam_reports')||'[]'); let lastSync=localStorage.getItem('azam_last_sync_count')||0; pending=a.length-lastSync; if(pending<0) pending=0;}catch(e){pending=0;}
+  if(pending>0){ pendEl.style.display='inline-block'; pendEl.textContent=pending+' Pending Sync'; } else { pendEl.style.display='none'; if(navigator.onLine) driveEl.textContent='Drive Synced'; }
+}
+window.addEventListener('online',()=>{updateNetStatus(); syncNow();});
+window.addEventListener('offline',updateNetStatus);
+setInterval(updateNetStatus,3000);
+
+async function syncNow(){
+  if(!navigator.onLine) { updateNetStatus(); return; }
+  try{
+    let all=[]; try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}
+    if(all.length===0) { localStorage.setItem('azam_pending_sync','0'); updateNetStatus(); return; }
+    document.getElementById('driveStatus').textContent='Syncing '+all.length+' reports...';
+    await uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));
+    localStorage.setItem('azam_last_sync_count', all.length.toString());
+    localStorage.setItem('azam_pending_sync','0');
+    document.getElementById('driveStatus').textContent='Drive Synced '+all.length;
+    updateNetStatus();
+  }catch(e){
+    localStorage.setItem('azam_pending_sync','1');
+    document.getElementById('driveStatus').textContent='Sync Failed - Will retry';
+  }
+}
+// ==== OFFLINE SUPPORT END ====
+
 const CLIENT_ID='153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com';
 const SCOPES='https://www.googleapis.com/auth/drive.file';
 let tokenClient,driveFolderId=null,editingId=null;
 function gapiLoaded(){gapi.load('client', async()=>{try{await gapi.client.init({discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]});}catch(e){}});}
 function gisLoaded(){try{tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID, scope:SCOPES, callback:''});}catch(e){}}
-function ensureDriveAuth(){return new Promise((res,rej)=>{if(!tokenClient){alert('Loading...');rej('No tokenClient');return;}tokenClient.callback=(r)=>{if(r.error)rej(r);else{localStorage.setItem('gdrive_token',JSON.stringify(gapi.client.getToken())); document.getElementById('driveStatus').innerText='Drive Connected'; res(r);}};tokenClient.requestAccessToken({prompt:''});});}
+function ensureDriveAuth(){return new Promise((res,rej)=>{if(!tokenClient){ if(!navigator.onLine){rej('Offline');return;} alert('Loading Google...');rej('No tokenClient');return;}tokenClient.callback=(r)=>{if(r.error)rej(r);else{localStorage.setItem('gdrive_token',JSON.stringify(gapi.client.getToken())); document.getElementById('driveStatus').innerText='Drive Connected'; res(r);}};tokenClient.requestAccessToken({prompt:''});});}
 async function getOrCreateFolder(){if(driveFolderId)return driveFolderId;try{let r=await gapi.client.drive.files.list({q:"name='Azam_Medical_Reports' and mimeType='application/vnd.google-apps.folder' and trashed=false",fields:"files(id,name)"});if(r.result.files&&r.result.files.length>0){driveFolderId=r.result.files[0].id;return driveFolderId;}let c=await gapi.client.drive.files.create({resource:{name:'Azam_Medical_Reports', mimeType:'application/vnd.google-apps.folder'},fields:'id'});driveFolderId=c.result.id;return driveFolderId;}catch(e){return null;}}
 async function findFileInFolder(folderId,fileName){try{let q=`'${folderId}' in parents and name='${fileName}' and trashed=false`;let res=await gapi.client.drive.files.list({q:q,fields:"files(id,name)"});if(res.result.files&&res.result.files.length>0) return res.result.files[0]; return null;}catch(e){return null;}}
-async function uploadToDriveFile(name,content){ try{ let savedToken=localStorage.getItem('gdrive_token'); if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}} await ensureDriveAuth(); let folderId=await getOrCreateFolder(); if(!folderId) return; let token=gapi.client.getToken(); let existing=await findFileInFolder(folderId,name); if(existing){ await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=media`,{method:'PATCH',headers:{'Authorization':'Bearer '+token.access_token,'Content-Type':'application/json'},body:content}); return; } const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents:[folderId]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file); await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form}); }catch(e){} }
-async function loadFromDrive(){ try{ document.getElementById('driveStatus').innerText='Loading...'; let savedToken=localStorage.getItem('gdrive_token'); if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}} await ensureDriveAuth(); let folderId=await getOrCreateFolder(); if(!folderId){alert('Folder not found');return;} let file=await findFileInFolder(folderId,'Azam_Medical_Backup_ALL.json'); if(!file){alert('No backup found');return;} let token=gapi.client.getToken(); let res=await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`,{headers:{'Authorization':'Bearer '+token.access_token}}); if(!res.ok){alert('Load failed');return;} let text=await res.text(); let data=JSON.parse(text); if(!Array.isArray(data)){alert('Invalid backup');return;} localStorage.setItem('azam_reports',JSON.stringify(data)); render(); document.getElementById('driveStatus').innerText='Loaded '+data.length; alert('Loaded '+data.length); }catch(e){alert('Load error: '+e.message);} }
-window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}},1500);});
+async function uploadToDriveFile(name,content){
+  if(!navigator.onLine){ localStorage.setItem('azam_pending_sync','1'); updateNetStatus(); return; }
+  try{ let savedToken=localStorage.getItem('gdrive_token'); if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}} await ensureDriveAuth(); let folderId=await getOrCreateFolder(); if(!folderId) return; let token=gapi.client.getToken(); let existing=await findFileInFolder(folderId,name); if(existing){ await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=media`,{method:'PATCH',headers:{'Authorization':'Bearer '+token.access_token,'Content-Type':'application/json'},body:content}); localStorage.setItem('azam_last_sync_count', JSON.parse(localStorage.getItem('azam_reports')||'[]').length.toString()); localStorage.setItem('azam_pending_sync','0'); updateNetStatus(); return; } const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents:[folderId]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file); await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form}); localStorage.setItem('azam_last_sync_count', JSON.parse(localStorage.getItem('azam_reports')||'[]').length.toString()); localStorage.setItem('azam_pending_sync','0'); updateNetStatus(); }catch(e){ localStorage.setItem('azam_pending_sync','1'); updateNetStatus(); }
+}
+async function loadFromDrive(){ try{ if(!navigator.onLine){alert('Internet off hai - Offline me Drive Load nahi hoga. Local reports safe hain.'); return;} document.getElementById('driveStatus').innerText='Loading...'; let savedToken=localStorage.getItem('gdrive_token'); if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}} await ensureDriveAuth(); let folderId=await getOrCreateFolder(); if(!folderId){alert('Folder not found');return;} let file=await findFileInFolder(folderId,'Azam_Medical_Backup_ALL.json'); if(!file){alert('No backup found');return;} let token=gapi.client.getToken(); let res=await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`,{headers:{'Authorization':'Bearer '+token.access_token}}); if(!res.ok){alert('Load failed');return;} let text=await res.text(); let data=JSON.parse(text); if(!Array.isArray(data)){alert('Invalid backup');return;} localStorage.setItem('azam_reports',JSON.stringify(data)); localStorage.setItem('azam_last_sync_count', data.length.toString()); render(); document.getElementById('driveStatus').innerText='Loaded '+data.length; alert('Loaded '+data.length); updateNetStatus(); }catch(e){alert('Load error: '+e.message);} }
+window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){} updateNetStatus(); if(navigator.onLine){ setTimeout(()=>{ syncNow(); },2000); } },1500);});
 function checkCalculator(){ let v=document.getElementById('uType').value||''; document.getElementById('obsCalc').style.display = (v.includes('FWB'))? 'block' : 'none'; document.getElementById('prosCalc').style.display = (v.includes('PROSTATE'))? 'block' : 'none'; }
 function toMM(val){ if(!val || val==0) return 0; if(val < 30) return val*10; return val; }
 function calcFWBFixed(){ let raw_bpd = parseFloat(document.getElementById('bpd').value)||0; let raw_hc = parseFloat(document.getElementById('hc').value)||0; let raw_ac = parseFloat(document.getElementById('ac').value)||0; let raw_fl = parseFloat(document.getElementById('fl').value)||0; let bpd_mm = toMM(raw_bpd); let hc_mm = toMM(raw_hc); let ac_mm = toMM(raw_ac); let fl_mm = toMM(raw_fl); if(ac_mm===0 && hc_mm>0){ ac_mm = hc_mm*0.80; } if(bpd_mm===0 && hc_mm===0 && fl_mm===0 && ac_mm===0){ return; } let bpd_cm = bpd_mm/10, hc_cm = hc_mm/10, ac_cm = ac_mm/10, fl_cm = fl_mm/10; let ga_bpd=0, ga_hc=0, ga_fl=0, ga_ac=0; if(bpd_mm>0) ga_bpd = (bpd_mm - 20)*0.3 + 12; if(hc_mm>0) ga_hc = (hc_mm - 80)*0.11 + 12; if(fl_mm>0) ga_fl = (fl_mm - 10)*0.38 + 12; if(ac_mm>0) ga_ac = (ac_mm - 60)*0.13 + 12; let sum=0, cnt=0; if(bpd_mm>0){sum+=ga_bpd;cnt++} if(hc_mm>0){sum+=ga_hc;cnt++} if(fl_mm>0){sum+=ga_fl;cnt++} if(ac_mm>0){sum+=ga_ac;cnt++} let avgGA = cnt>0? sum/cnt : 0; if(avgGA>0){ document.getElementById('gaResult').value = avgGA.toFixed(1)+' wks'; let today = new Date(); let edd = new Date(); edd.setDate(today.getDate() + (40-avgGA)*7); document.getElementById('eddResult').value = edd.toLocaleDateString('en-GB'); } if(ac_cm>0 && fl_cm>0 && hc_cm>0){ let log10EFW_standard = 1.3596 - (0.00386*ac_cm*fl_cm) + (0.0064*hc_cm) + (0.00061*bpd_cm*ac_cm) + (0.0424*ac_cm) + (0.174*fl_cm); let log10EFW_machine = log10EFW_standard + 0.2385; let efw = Math.pow(10, log10EFW_machine); if(efw>100 && efw<5500){ document.getElementById('efwResult').value = Math.round(efw) + ' gms'; } } }
@@ -143,8 +199,6 @@ This is a medical confirmation of death, not a NADRA death certificate. For lega
 Doctor Name: DR. ______________________________ Signature & Stamp: ______________________________
 `;
 }
-
-/* WHOLE ABDOMEN PATHOLOGY CORRECT */
 if(n==="WHOLE ABDOMEN - Normal") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
 if(n==="WHOLE ABDOMEN - Fatty Liver Grade 1") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 16.0 cm [N: 12-15 cm] mildly enlarged, Increased echogenicity Grade I fatty liver, No focal lesion, Portal vein 9 mm [N: 7-12 mm] patent.\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
 if(n==="WHOLE ABDOMEN - Fatty Liver Grade 2") return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: 16.8 cm [N: 12-15 cm] enlarged, Increased echogenicity Grade II fatty liver obscuring portal walls, No focal lesion.\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
@@ -176,7 +230,6 @@ if(n==="WHOLE ABDOMEN - Lymphadenopathy") return `ULTRASOUND WHOLE ABDOMEN:\n\n$
 if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Normal.\n\nLEFT KIDNEY: 11.2 x 4.6 cm [N: 9-13 x 4-6 cm], Left renal hilum obscured by lymph node.\n\n${bladN}\n\nHILUM LYMPH NODE: 22 x 14 mm [N: <10 mm] hypoechoic at left renal hilum, Fatty hilum partially effaced [N: Preserved], No calcification / necrosis, No compressive hydronephrosis.`;
 if(n==="WHOLE ABDOMEN - Gastritis") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}\n\nSTOMACH: Gastric antral wall thickness 7 mm [N: <4 mm] thickened & edematous - Gastritis, No perigastric fluid, No mass.`;
 if(n==="WHOLE ABDOMEN - Prominent Bowel Loops") return `ULTRASOUND WHOLE ABDOMEN:\n\n${liverN}\n\n${gbN}\n\n${spleenN}\n\n${pancN}\n\n${rkN}\n\n${lkN}\n\n${bladN}\n\nBOWEL LOOPS: Few dilated / prominent small bowel loops in central abdomen, Diameter 28 mm [N: <25 mm], Wall thickness 4 mm [N: <3 mm] mildly thickened, Peristalsis sluggish, No free fluid, No mass.`;
-
 if(n==="KUB - Normal") return `ULTRASOUND KUB:\n\n${rkN}\n\n${lkN}\n\n${bladN}`;
 if(n==="KUB - Renal Calculus Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: 11.5 x 4.5 cm [N: 9-13 x 4-6 cm], Calculus 8 mm [N: No calculus] middle pole with shadowing, No hydronephrosis, Ureter not dilated.\n\n${lkN}\n\n${bladN}`;
 if(n==="KUB - Renal Calculus Left") return `ULTRASOUND KUB:\n\n${rkN}\n\nLEFT KIDNEY: 11.0 x 4.5 cm [N: 9-13 x 4-6 cm], Calculus 7 mm [N: No calculus] lower pole, No hydronephrosis.\n\n${bladN}`;
@@ -234,19 +287,12 @@ if(n==="PELVIS - Normal") return `ULTRASOUND PELVIS:\n\nURINARY BLADDER: Capacit
 if(n==="PELVIS - PCOS") return `ULTRASOUND PELVIS:\n\nURINARY BLADDER: Capacity 350 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm].\n\nUTERUS: Anteverted, 7.5 x 4.0 x 3.5 cm [N: 7-9 x 4-5 x 2-3 cm], Endometrial thickness 8 mm [N: 5-12 mm], Normal myometrium.\n\nRIGHT OVARY: 3.8 x 2.5 cm [N: 2-3.5 cm], Volume 12 cc [N: 3-10 cc] enlarged - PCOS, Multiple tiny peripheral follicles 12 in number, largest 8 mm [N: 3-10 cc], Central stroma echogenic.\n\nLEFT OVARY: 3.6 x 2.4 cm [N: 2-3.5 cm], Volume 11 cc [N: 3-10 cc] enlarged - PCOS, Multiple peripheral follicles.\n\nPOD: No free fluid [N: No fluid].`;
 if(n.includes("PELVIS - Fibroid")) return `ULTRASOUND PELVIS:\n\nURINARY BLADDER: Capacity 350 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm].\n\nUTERUS: Anteverted, Bulky, 9.5 x 5.5 x 5.0 cm [N: 7-9 x 4-5 x 2-3 cm], ${n.split(' - ')[1]} - Hypoechoic well-defined lesion 35 x 30 mm [N: No fibroid] in myometrium, Wall thickness of lesion well-defined, No calcification, Endometrial thickness 8 mm [N: 5-12 mm].\n\nRIGHT OVARY: 3.0 x 2.0 cm [N: 2-3.5 cm], Normal.\n\nLEFT OVARY: 2.8 x 2.0 cm [N: 2-3.5 cm], Normal.\n\nPOD: No fluid.`;
 if(n.includes("PELVIS - Ovarian Cyst")) return `ULTRASOUND PELVIS:\n\nURINARY BLADDER: Capacity 350 ml [N: 300-500 ml], Wall thickness 3 mm [N: <4 mm].\n\nUTERUS: Anteverted, 7.5 x 4.0 x 3.5 cm [N: 7-9 x 4-5 x 2-3 cm], Endometrium 8 mm [N: 5-12 mm], Normal.\n\nRIGHT OVARY: As per ${n.split(' - ')[1]} - Simple anechoic cyst 40 x 35 mm [N: No cyst] with posterior enhancement, Thin wall thickness 1 mm [N: No cyst], No septation.\n\nLEFT OVARY: Normal 2.8 x 2.0 cm [N: 2-3.5 cm].\n\nPOD: No fluid.`;
-
 if(n.startsWith("FWB")) return `FWB ULTRASOUND:\n\nNumber of fetus: SINGLE [N: Single], Presentation CEPHALIC [N: Cephalic], Cardiac activity PRESENT [N: Present], Liquor ADEQUATE [N: Adequate], Placenta ANTERIOR UPPER NOT LOW-LYING [N: Not low-lying], BPD 7.1 cm [N: As per GA], FL 5.4 cm [N: As per GA], EFW 1200 gms [N: As per GA], AFI 14 cm [N: 8-20 cm].\n\nFinding as per ${n.split(' - ')[1]} - Full detailed pathology wise.`;
-
 if(n.startsWith("BREAST")) return `ULTRASOUND BREAST:\n\nSkin thickness 2 mm [N: 2 mm], Subcutaneous fat normal, Fibroglandular tissue homogenous, Ducts not dilated, No collection.\n\nFinding: ${n.split(' - ')[1]} - ${n.includes('Fibroadenoma')?'Well-defined hypoechoic solid lesion 18 x 12 mm [N: No lesion] with smooth margins':''}${n.includes('Cyst')?'Anechoic cyst 15 mm [N: No cyst] with posterior enhancement, Wall thickness 1 mm':''} detailed pathology wise [N: Normal].\n\nAXILLA: No lymphadenopathy [N: No lymphadenopathy].`;
-
 if(n.startsWith("THYROID")) return `ULTRASOUND THYROID:\n\nRight lobe 4.0 x 1.5 x 1.2 cm [N: 4-6 x 1-1.5 cm], Left lobe 4.0 x 1.4 x 1.1 cm [N: 4-6 x 1-1.5 cm], Isthmus thickness 2 mm [N: 2-3 mm], Homogenous echotexture.\n\nFinding: ${n.split(' - ')[1]} - Pathology wise: ${n.includes('Nodule')?'Hypoechoic nodule 15 mm [N: No nodule] with halo, No calcification':''}${n.includes('Goiter')?'Enlarged heterogeneous with multiple nodules [N: Normal]':''}${n.includes('Cyst')?'Anechoic cyst 10 mm [N: No cyst] thin wall':''} detailed [N: Normal].`;
-
 if(n.startsWith("SCROTUM")||n.startsWith("TESTIS")) return `ULTRASOUND SCROTUM:\n\nRight Testis 4.0 x 2.5 x 3.0 cm [N: 3-5 cm], Volume 12 cc [N: 12-20 cc], Homogenous, No focal lesion, Wall thickness of tunica 1 mm [N: <2 mm].\nLeft Testis 4.0 x 2.5 x 3.0 cm [N: 3-5 cm], Volume 12 cc [N: 12-20 cc].\n\nFinding: ${n.split(' - ')[1]} - ${n.includes('Hydrocele')?'Anechoic fluid collection around testis [N: No fluid] - Hydrocele':''}${n.includes('Varicocele')?'Dilated tortuous veins >3 mm [N: <2 mm] - Varicocele':''}${n.includes('Epididymitis')?'Epididymis enlarged & heterogeneous [N: Normal] - Epididymitis':''} detailed pathology wise.`;
-
 if(n.startsWith("ANAL")) return `ANAL / PERIANAL ULTRASOUND:\n\nAnal canal length 3.5 cm [N: 3-4 cm], Internal sphincter thickness 2 mm [N: 2-3 mm], External sphincter thickness 4 mm [N: 3-6 mm], No fistula in normal case.\n\nFinding: ${n.split(' - ')[1]} - ${n.includes('Abscess')?'Hypoechoic collection 25 mm [N: No collection] with internal echoes - Abscess':''}${n.includes('Fistula')?'Hypoechoic tract [N: No tract] from anal canal to perianal skin - Fistula, Internal opening at 6 o clock, External opening at perianal skin, Length 35 mm, Wall thickness 2 mm [N: No tract]':''}${n.includes('Hemorrhoids')?'Hypoechoic cushion [N: No cushion] - Hemorrhoids':''} detailed pathology wise.`;
-
 if(n.startsWith("NECK")||n.startsWith("AXILLA")) return `ULTRASOUND ${n.split(' - ')[0]}:\n\nFinding: ${n.split(' - ')[1]} - Lymph node largest 18 x 12 mm [N: <10 mm] hypoechoic, Preserved fatty hilum / effaced, No necrosis / calcification, Vascularity hilar [N: Hilar].`;
-
 return `ULTRASOUND ${n.split(' - ')[0]}:\n\nFull detailed pathology wise findings with wall thickness [N: Normal].`;
 }
 function getAdvice(n){
@@ -352,12 +398,22 @@ function make(){
   document.getElementById('outCard').style.display='block';
   window.scrollTo(0, document.getElementById('outCard').offsetTop);
 }
-function saveR(){ let content=document.getElementById('reportContent').innerHTML; if(!content||content.trim()===''){alert('Generate Report first');return;} let rec={ id: editingId || Date.now(), name:document.getElementById('pName').value||'Report', pName:document.getElementById('pName').value, pAge:document.getElementById('pAge').value, pGen:document.getElementById('pGen').value, pDate:document.getElementById('pDate').value, pIDMobile:document.getElementById('pIDMobile').value, ref:getRefValue(), sono:getSonoValue(), pComplaint:document.getElementById('pComplaint').value, mobile:document.getElementById('pIDMobile')?.value||'', type:document.getElementById('uType')?.value||'', date:document.getElementById('pDate')?.value||'', html:content, text:document.getElementById('rText')?.value||'' }; let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];} if(editingId){ let idx=all.findIndex(x=>x.id===editingId); if(idx>=0) all[idx]=rec; else all.unshift(rec); editingId=null; document.getElementById('editMode').style.display='none'; } else { all.unshift(rec); } localStorage.setItem('azam_reports',JSON.stringify(all)); render(); uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all)); alert('Saved'); }
-function render(){ let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];} let q=(document.getElementById('sBox')?.value||'').toLowerCase(); let listEl=document.getElementById('list'); let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')).toLowerCase().includes(q)); if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:15px;font-size:10pt">No reports</p>';return;} listEl.innerHTML=f.map(r=>` <div style="border:1px solid #cbd5e1;padding:8px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;font-size:10pt"> <div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}</small></div> <div style="display:flex;gap:4px"> <button class="small" style="background:#0a4eb5;padding:8px 12px" onclick="viewR(${r.id})">View</button> <button class="small" style="background:#ff9800;padding:8px 12px" onclick="editR(${r.id})">Edit</button> <button class="small" style="background:#ff3b30;padding:8px 12px" onclick="delR(${r.id})">Del</button> </div> </div>`).join(''); }
+function saveR(){
+  let content=document.getElementById('reportContent').innerHTML;
+  if(!content||content.trim()===''){alert('Generate Report first');return;}
+  let rec={ id: editingId || Date.now(), name:document.getElementById('pName').value||'Report', pName:document.getElementById('pName').value, pAge:document.getElementById('pAge').value, pGen:document.getElementById('pGen').value, pDate:document.getElementById('pDate').value, pIDMobile:document.getElementById('pIDMobile').value, ref:getRefValue(), sono:getSonoValue(), pComplaint:document.getElementById('pComplaint').value, mobile:document.getElementById('pIDMobile')?.value||'', type:document.getElementById('uType')?.value||'', date:document.getElementById('pDate')?.value||'', html:content, text:document.getElementById('rText')?.value||'' };
+  let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}
+  if(editingId){ let idx=all.findIndex(x=>x.id===editingId); if(idx>=0) all[idx]=rec; else all.unshift(rec); editingId=null; document.getElementById('editMode').style.display='none'; } else { all.unshift(rec); }
+  localStorage.setItem('azam_reports',JSON.stringify(all));
+  if(!navigator.onLine){ localStorage.setItem('azam_pending_sync','1'); alert('Offline Save - Local me save ho gaya hai. Internet on hote hi Drive par khud sync ho jayega.'); }
+  else { alert('Saved Locally - Drive par sync ho raha hai...'); }
+  render(); uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));
+}
+function render(){ let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];} let q=(document.getElementById('sBox')?.value||'').toLowerCase(); let listEl=document.getElementById('list'); let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')).toLowerCase().includes(q)); if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:15px;font-size:10pt">No reports - Offline me bhi yahan ayenge</p>';return;} listEl.innerHTML=f.map(r=>` <div style="border:1px solid #cbd5e1;padding:8px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;font-size:10pt"> <div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}</small></div> <div style="display:flex;gap:4px"> <button class="small" style="background:#0a4eb5;padding:8px 12px" onclick="viewR(${r.id})">View</button> <button class="small" style="background:#ff9800;padding:8px 12px" onclick="editR(${r.id})">Edit</button> <button class="small" style="background:#ff3b30;padding:8px 12px" onclick="delR(${r.id})">Del</button> </div> </div>`).join(''); }
 function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('reportContent').innerHTML=r.html;document.getElementById('outCard').style.display='block';window.scrollTo(0,document.getElementById('outCard').offsetTop);}
 function editR(id){ let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return; document.getElementById('pName').value=r.pName||r.name||''; document.getElementById('pAge').value=r.pAge||''; document.getElementById('pGen').value=r.pGen||'Male'; document.getElementById('pDate').value=r.pDate||r.date||''; document.getElementById('pIDMobile').value=r.pIDMobile||r.mobile||''; if(refDoctors.includes(r.ref)){document.getElementById('ref').value=r.ref; document.getElementById('refOther').style.display='none';} else {document.getElementById('ref').value='Other'; document.getElementById('refOther').style.display='block'; document.getElementById('refOther').value=r.ref||'';} if(sonoDoctors.includes(r.sono)){document.getElementById('sono').value=r.sono; document.getElementById('sonoOther').style.display='none';} else {document.getElementById('sono').value='Other'; document.getElementById('sonoOther').style.display='block'; document.getElementById('sonoOther').value=r.sono||'';} document.getElementById('pComplaint').value=r.pComplaint||''; document.getElementById('rText').value=r.text||''; editingId=r.id; document.getElementById('editMode').style.display='inline-block'; document.getElementById('reportContent').innerHTML=r.html; document.getElementById('outCard').style.display='block'; window.scrollTo(0,document.getElementById('formCard').offsetTop); }
-function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));}
+function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all)); if(!navigator.onLine) localStorage.setItem('azam_pending_sync','1');}
 function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[180,210]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:cleanForPrint(document.getElementById('rText').value);doc.setFontSize(11);doc.text(doc.splitTextToSize(txt,160),10,10);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}
-function init(){let s=document.getElementById('uType');if(s){s.innerHTML='';allNames.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate');if(pd)pd.valueAsDate=new Date();document.getElementById('templateCount').innerText=allTemplates.length+' Templates';render();}
+function init(){let s=document.getElementById('uType');if(s){s.innerHTML='';allNames.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate');if(pd)pd.valueAsDate=new Date();document.getElementById('templateCount').innerText=allTemplates.length+' Templates';render(); updateNetStatus();}
 init();
 </script></body></html>
