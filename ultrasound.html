@@ -1,407 +1,237 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Azam Medical - Final Complete Fixed All</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://apis.google.com/js/api.js" async defer></script>
-<style>*{font-family:Calibri!important;margin:0;padding:0;box-sizing:border-box}body{background:#eef4ff;padding:10px}.card{background:#fff;border-radius:16px;padding:14px;margin:10px auto;max-width:1100px;box-shadow:0 6px 18px #0001}input,select,textarea{width:100%;padding:10px;border-radius:10px;border:2px solid #cbd5e1;margin:5px 0;font-size:11pt!important}textarea{font-size:11pt!important;line-height:1.5!important;font-weight:600}.btn{background:linear-gradient(90deg,#1e90ff,#7c3aed);color:#fff;border:none;padding:12px;border-radius:10px;font-weight:800;width:100%;cursor:pointer;margin-top:8px}.small{padding:7px 9px;border-radius:8px;border:none;margin:2px;font-weight:700;cursor:pointer;color:#fff;font-size:11px}.report{width:180mm;min-height:210mm;margin:auto;background:#fff;border:1.5px solid #0a4eb5;border-radius:10px;padding:0 5mm 5mm 5mm;padding-top:36mm;position:relative;overflow:hidden}.report::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5cm;height:5cm;background-image:url('logo.png'),url('https://azam-medical-coder.github.io/Azammedicalcentre/logo.png');background-repeat:no-repeat;background-position:center;background-size:contain;opacity:0.12;z-index:0;pointer-events:none}.report-inner{width:170mm;min-height:165mm;margin:2mm auto;padding:3mm 4mm;font-size:11pt!important;line-height:1.5;z-index:2;color:#000;position:relative}.report-inner *{font-family:Calibri!important;font-size:11pt!important}#loginOverlay{position:fixed;inset:0;background:#0a4eb5;display:flex;align-items:center;justify-content:center;z-index:99999}.loginBox{background:#fff;padding:30px;border-radius:20px;width:90%;max-width:400px;text-align:center}@media print{@page{size:180mm 210mm;margin:0}body{background:#fff}body *{visibility:hidden}.report,.report *{visibility:visible}.report{position:absolute;left:0;top:0;width:180mm;min-height:210mm;border:none;margin:0}.noPrint{display:none}}.boxTitle{font-size:13px;font-weight:900;color:#0a4eb5;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}.calcBox{border:3px solid #f59e0b;background:#fffbeb;padding:12px;border-radius:12px;margin:10px 0;display:none}.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}.customInput{display:none;border:2px solid #ff9800;background:#fff8e1}.fwb-result{background:#dcfce7;border:2px solid #10b981;padding:12px;border-radius:10px;font-weight:900;text-align:center;font-size:14pt!important}.offlineBadge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:900}</style></head><body>
-<div id="loginOverlay"><div class="loginBox"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:70px;height:70px;border-radius:50%;border:3px solid #0a4eb5"><h2 style="color:#0a4eb5">Azam Medical Centre</h2><input id="passInput" type="password" placeholder="Password" style="text-align:center"><button class="btn" onclick="checkPass()">Login</button><p id="passErr" style="color:red;display:none">Wrong!</p></div></div>
-<div class="card noPrint" style="text-align:center;border:3px solid #1e90ff;display:flex;align-items:center;justify-content:center;gap:15px"><img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" style="width:55px;height:55px;border-radius:50%;border:2px solid #0a4eb5"><div><h2 style="color:#0a4eb5">Azam Medical Centre</h2><p style="font-size:10pt">Plot 27, Allama Iqbal Road, Manzoor Colony, Karachi</p><div style="display:flex;gap:8px;justify-content:center;margin-top:4px"><span id="driveStatus" class="offlineBadge">Drive Ready</span><span id="netStatus" class="offlineBadge" style="background:#dcfce7;color:#065f46">Online</span><span id="pendingCount" class="offlineBadge" style="background:#fef3c7;display:none">0 Pending</span></div></div></div>
-<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Template Library - ALL FIXED</span><span id="templateCount"></span></div><input id="tSearch" placeholder="Search..." onkeyup="filterTemplates()"><select id="uType" size="22" style="height:400px;font-size:11pt;font-weight:600" onchange="showTemplatePreview();checkCalculator()"></select><button class="small" style="background:#8b5cf6;width:100%;padding:10px;margin-top:8px" onclick="useSelectedTemplate()">Load Template</button></div>
-<div class="card noPrint" style="border:3px solid #8b5cf6;background:#faf5ff"><div class="boxTitle"><span>Preview</span><button class="small" style="background:#0a4eb5" onclick="copyPreviewToReport()">Copy to Editor</button></div><textarea id="templatePreview" rows="24" readonly></textarea></div>
-<div class="card noPrint" id="formCard" style="border:3px solid #1e90ff"><div class="boxTitle"><span>Report Editor</span><span id="editMode" style="display:none;background:#ff9800;color:#fff;padding:3px 10px;border-radius:20px;font-size:10px">EDITING</span></div>
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><input id="pName" placeholder="Patient Name *"><input id="pAge" placeholder="Age"><select id="pGen"><option>Male</option><option>Female</option><option>Child</option></select></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input id="pDate" type="date"><input id="pIDMobile" placeholder="ID / Mobile / CNIC"></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><select id="ref" onchange="checkOther('ref')"></select><input id="refOther" class="customInput" placeholder="Other Doctor"></div><div><select id="sono" onchange="checkOther('sono')"></select><input id="sonoOther" class="customInput" placeholder="Other Sonologist"></div></div>
-<div style="border:2px solid #10b981;border-radius:12px;padding:8px;margin:8px 0;background:#f0fdf4"><label style="font-weight:800;color:#065f46;font-size:11px">C/O</label><textarea id="pComplaint" rows="2"></textarea></div>
-<div id="obsCalc" class="calcBox" style="border-color:#10b981;background:#f0fdf4"><h4>FWB Calculator</h4><div class="grid4" style="margin-top:8px"><div><label>BPD</label><input id="bpd" type="number" step="0.01" oninput="calcFWBFixed()"></div><div><label>HC</label><input id="hc" type="number" step="0.01" oninput="calcFWBFixed()"></div><div><label>AC</label><input id="ac" type="number" step="0.01" oninput="calcFWBFixed()"></div><div><label>FL</label><input id="fl" type="number" step="0.01" oninput="calcFWBFixed()"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px"><div><label>LMP</label><input id="lmp" type="date" onchange="calcEDD()"></div><div><label>GA</label><input id="gaResult" readonly style="background:#fef3c7;font-weight:900"></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><div><label>EDD</label><input id="eddResult" readonly style="background:#e0f2fe;font-weight:900"></div><div><label>EFW</label><input id="efwResult" readonly class="fwb-result"></div></div><button class="small" style="background:#f59e0b;width:100%;margin-top:10px;padding:11px" onclick="insertFWBAnomaly()">Insert Anomaly Report</button></div>
-<div id="prosCalc" class="calcBox"><h4>Prostate Calculator - 0.52</h4><div class="grid4"><div><label>L cm</label><input id="prosL" type="number" step="0.1" oninput="calcProstate()"></div><div><label>W cm</label><input id="prosW" type="number" step="0.1" oninput="calcProstate()"></div><div><label>H cm</label><input id="prosH" type="number" step="0.1" oninput="calcProstate()"></div><div><label>Vol</label><input id="prosVol" readonly style="background:#dcfce7;font-weight:bold"></div></div><button class="small" style="background:#f59e0b;width:100%;margin-top:8px" onclick="insertProstate()">Insert</button></div>
-<textarea id="rText" rows="26"></textarea><button class="btn" onclick="make()">Generate Report</button></div>
-<div class="card" id="outCard" style="display:none"><div id="out" class="report"><div id="reportContent" class="report-inner"></div></div><div class="noPrint" style="display:flex;gap:8px;margin-top:12px;justify-content:center;flex-wrap:wrap"><button class="small" style="background:#000;padding:12px 22px" onclick="window.print()">Print</button><button class="small" style="background:#10b981;padding:12px 22px" onclick="pdf()">PDF</button><button class="small" style="background:#0a4eb5;padding:12px 22px" onclick="saveR()">Save - Offline/Online</button></div></div>
-<div class="card noPrint"><div class="boxTitle"><span>Saved Reports</span><div style="display:flex;gap:6px"><button class="small" style="background:#7c3aed;padding:8px 14px" onclick="loadFromDrive()">Load Drive</button><button class="small" style="background:#10b981;padding:8px 14px" onclick="render()">Refresh</button><button class="small" style="background:#ef4444;padding:8px 14px" onclick="syncNow()">Sync Now</button></div></div><input id="sBox" placeholder="Search..." onkeyup="render()"><div id="list"></div></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Azam Medical Centre - Ultrasound Reporting</title>
+<style>
+body{font-family:Arial;background:#eef2ff;margin:0;padding:20px}
+.container{max-width:900px;margin:auto;background:#fff;border:2px solid #a78bfa;border-radius:15px;padding:20px}
+select{width:100%;padding:10px;border:1px solid #a78bfa;border-radius:8px;font-size:14px;height:200px}
+button{background:#8b5cf6;color:#fff;border:none;padding:12px;border-radius:8px;width:100%;cursor:pointer;font-weight:bold;margin-top:10px}
+.preview{border:1px solid #ddd;padding:20px;border-radius:10px;background:#fff;margin-top:15px;white-space:pre-line;font-size:14px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="container">
+<h2 style="text-align:center;color:#4c1d95">Azam Medical Centre - Ultrasound Reporting</h2>
+<select id="templateSelect" size="12">
+<option>SCROTUM - Normal</option>
+<option>SCROTUM - Hydrocele Right</option>
+<option>SCROTUM - Hydrocele Left</option>
+<option>SCROTUM - Hydrocele Bilateral</option>
+<option>SCROTUM - Varicocele Left</option>
+<option>SCROTUM - Varicocele Right</option>
+<option>SCROTUM - Varicocele Bilateral</option>
+<option>SCROTUM - Epididymitis Right</option>
+<option>SCROTUM - Epididymitis Left</option>
+<option>SCROTUM - Epididymo-orchitis Right</option>
+<option>SCROTUM - Epididymo-orchitis Left</option>
+<option>SCROTUM - Orchitis</option>
+<option>SCROTUM - Inguinal Hernia Right</option>
+<option>SCROTUM - Testicular Torsion</option>
+</select>
+<button onclick="loadTemplate()">Load Template</button>
+<div class="preview" id="preview">Select Template and Press Load Template</div>
+</div>
 <script>
-if('serviceWorker' in navigator){let swCode=`const CACHE='azam-v8-final-all';const URLS=['./'];self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(URLS)).then(()=>self.skipWaiting()));});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.map(k=>{if(k!==CACHE)return caches.delete(k);}))).then(()=>self.clients.claim()));});self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(r=>{let rc=r.clone();caches.open(CACHE).then(c=>c.put(e.request,rc));return r;}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./'))));});`;let blob=new Blob([swCode],{type:'text/javascript'});let swUrl=URL.createObjectURL(blob);navigator.serviceWorker.register(swUrl).catch(()=>{});}
-function updateNetStatus(){let netEl=document.getElementById('netStatus');let driveEl=document.getElementById('driveStatus');let pendEl=document.getElementById('pendingCount');if(navigator.onLine){netEl.textContent='Online';netEl.style.background='#dcfce7';netEl.style.color='#065f46';}else{netEl.textContent='Offline Mode';netEl.style.background='#fee2e2';netEl.style.color='#991b1b';driveEl.textContent='Offline - Local Save';}let pending=0;try{let a=JSON.parse(localStorage.getItem('azam_reports')||'[]');let lastSync=localStorage.getItem('azam_last_sync_count')||0;pending=a.length-lastSync;if(pending<0)pending=0;}catch(e){pending=0;}if(pending>0){pendEl.style.display='inline-block';pendEl.textContent=pending+' Pending Sync';}else{pendEl.style.display='none';if(navigator.onLine)driveEl.textContent='Drive Synced';}}
-window.addEventListener('online',updateNetStatus);window.addEventListener('offline',updateNetStatus);setInterval(updateNetStatus,5000);
-async function syncNow(){if(!navigator.onLine){updateNetStatus();return;}try{let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}if(all.length===0){localStorage.setItem('azam_pending_sync','0');updateNetStatus();return;}document.getElementById('driveStatus').textContent='Syncing '+all.length+' reports...';await uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));localStorage.setItem('azam_last_sync_count',all.length.toString());localStorage.setItem('azam_pending_sync','0');document.getElementById('driveStatus').textContent='Drive Synced '+all.length;updateNetStatus();}catch(e){localStorage.setItem('azam_pending_sync','1');document.getElementById('driveStatus').textContent='Sync Failed - Will retry';}}
-const CLIENT_ID='153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com';const SCOPES='https://www.googleapis.com/auth/drive.file';let tokenClient,driveFolderId=null,editingId=null;
-function gapiLoaded(){gapi.load('client',async()=>{try{await gapi.client.init({discoveryDocs:["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]});}catch(e){}});}
-function gisLoaded(){try{tokenClient=google.accounts.oauth2.initTokenClient({client_id:CLIENT_ID,scope:SCOPES,callback:''});}catch(e){}}
-function ensureDriveAuth(){return new Promise((res,rej)=>{if(!tokenClient){rej('No tokenClient');return;}tokenClient.callback=(r)=>{if(r.error)rej(r);else{try{localStorage.setItem('gdrive_token',JSON.stringify(gapi.client.getToken()));}catch(e){}document.getElementById('driveStatus').innerText='Drive Connected';res(r);}};tokenClient.requestAccessToken({prompt:''});});}
-async function getOrCreateFolder(){if(driveFolderId)return driveFolderId;try{let r=await gapi.client.drive.files.list({q:"name='Azam_Medical_Reports' and mimeType='application/vnd.google-apps.folder' and trashed=false",fields:"files(id,name)"});if(r.result.files&&r.result.files.length>0){driveFolderId=r.result.files[0].id;return driveFolderId;}let c=await gapi.client.drive.files.create({resource:{name:'Azam_Medical_Reports',mimeType:'application/vnd.google-apps.folder'},fields:'id'});driveFolderId=c.result.id;return driveFolderId;}catch(e){return null;}}
-async function findFileInFolder(folderId,fileName){try{let q=`'${folderId}' in parents and name='${fileName}' and trashed=false`;let res=await gapi.client.drive.files.list({q:q,fields:"files(id,name)"});if(res.result.files&&res.result.files.length>0)return res.result.files[0];return null;}catch(e){return null;}}
-async function uploadToDriveFile(name,content){if(!navigator.onLine){localStorage.setItem('azam_pending_sync','1');updateNetStatus();return;}try{let savedToken=localStorage.getItem('gdrive_token');if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}}await ensureDriveAuth();let folderId=await getOrCreateFolder();if(!folderId)return;let token=gapi.client.getToken();let existing=await findFileInFolder(folderId,name);if(existing){await fetch(`https://www.googleapis.com/upload/drive/v3/files/${existing.id}?uploadType=media`,{method:'PATCH',headers:{'Authorization':'Bearer '+token.access_token,'Content-Type':'application/json'},body:content});localStorage.setItem('azam_last_sync_count',JSON.parse(localStorage.getItem('azam_reports')||'[]').length.toString());localStorage.setItem('azam_pending_sync','0');updateNetStatus();return;}const file=new Blob([content],{type:'application/json'});const meta={name:name,mimeType:'application/json',parents:[folderId]};const form=new FormData();form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));form.append('file',file);await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',{method:'POST',headers:new Headers({'Authorization':'Bearer '+token.access_token}),body:form});localStorage.setItem('azam_last_sync_count',JSON.parse(localStorage.getItem('azam_reports')||'[]').length.toString());localStorage.setItem('azam_pending_sync','0');updateNetStatus();}catch(e){localStorage.setItem('azam_pending_sync','1');updateNetStatus();}}
-async function loadFromDrive(){try{if(!navigator.onLine){alert('Internet off hai');return;}document.getElementById('driveStatus').innerText='Loading...';let savedToken=localStorage.getItem('gdrive_token');if(savedToken){try{gapi.client.setToken(JSON.parse(savedToken));}catch(e){}}await ensureDriveAuth();let folderId=await getOrCreateFolder();if(!folderId){alert('Folder not found');return;}let file=await findFileInFolder(folderId,'Azam_Medical_Backup_ALL.json');if(!file){alert('No backup found');return;}let token=gapi.client.getToken();let res=await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`,{headers:{'Authorization':'Bearer '+token.access_token}});if(!res.ok){alert('Load failed');return;}let text=await res.text();let data=JSON.parse(text);if(!Array.isArray(data)){alert('Invalid backup');return;}localStorage.setItem('azam_reports',JSON.stringify(data));localStorage.setItem('azam_last_sync_count',data.length.toString());render();document.getElementById('driveStatus').innerText='Loaded '+data.length;alert('Loaded '+data.length);updateNetStatus();}catch(e){alert('Load error: '+e.message);}}
-window.addEventListener('load',()=>{setTimeout(()=>{try{gapiLoaded();gisLoaded();}catch(e){}updateNetStatus();},1200);});
-function checkCalculator(){let v=document.getElementById('uType').value||'';document.getElementById('obsCalc').style.display=(v.includes('FWB'))?'block':'none';document.getElementById('prosCalc').style.display=(v.includes('PROSTATE'))?'block':'none';}
-function toMM(val){if(!val||val==0)return 0;if(val<30)return val*10;return val;}
-function calcFWBFixed(){let raw_bpd=parseFloat(document.getElementById('bpd').value)||0;let raw_hc=parseFloat(document.getElementById('hc').value)||0;let raw_ac=parseFloat(document.getElementById('ac').value)||0;let raw_fl=parseFloat(document.getElementById('fl').value)||0;let bpd_mm=toMM(raw_bpd);let hc_mm=toMM(raw_hc);let ac_mm=toMM(raw_ac);let fl_mm=toMM(raw_fl);if(ac_mm===0&&hc_mm>0){ac_mm=hc_mm*0.80;}if(bpd_mm===0&&hc_mm===0&&fl_mm===0&&ac_mm===0){return;}let bpd_cm=bpd_mm/10,hc_cm=hc_mm/10,ac_cm=ac_mm/10,fl_cm=fl_mm/10;let ga_bpd=0,ga_hc=0,ga_fl=0,ga_ac=0;if(bpd_mm>0)ga_bpd=(bpd_mm-20)*0.3+12;if(hc_mm>0)ga_hc=(hc_mm-80)*0.11+12;if(fl_mm>0)ga_fl=(fl_mm-10)*0.38+12;if(ac_mm>0)ga_ac=(ac_mm-60)*0.13+12;let sum=0,cnt=0;if(bpd_mm>0){sum+=ga_bpd;cnt++}if(hc_mm>0){sum+=ga_hc;cnt++}if(fl_mm>0){sum+=ga_fl;cnt++}if(ac_mm>0){sum+=ga_ac;cnt++}let avgGA=cnt>0?sum/cnt:0;if(avgGA>0){document.getElementById('gaResult').value=avgGA.toFixed(1)+' wks';let today=new Date();let edd=new Date();edd.setDate(today.getDate()+(40-avgGA)*7);document.getElementById('eddResult').value=edd.toLocaleDateString('en-GB');}if(ac_cm>0&&fl_cm>0&&hc_cm>0){let log10EFW_standard=1.3596-(0.00386*ac_cm*fl_cm)+(0.0064*hc_cm)+(0.00061*bpd_cm*ac_cm)+(0.0424*ac_cm)+(0.174*fl_cm);let log10EFW_machine=log10EFW_standard+0.2385;let efw=Math.pow(10,log10EFW_machine);if(efw>100&&efw<5500){document.getElementById('efwResult').value=Math.round(efw)+' gms';}}}
-function calcEDD(){let lmp=document.getElementById('lmp').value;if(!lmp){calcFWBFixed();return;}let d=new Date(lmp);d.setDate(d.getDate()+280);document.getElementById('eddResult').value=d.toLocaleDateString('en-GB');let today=new Date(lmp);let now=new Date();let diffDays=Math.floor((now-today)/(1000*60*60*24));let gaWeeks=diffDays/7;if(gaWeeks>0)document.getElementById('gaResult').value=gaWeeks.toFixed(1)+' wks (LMP)';}
-function insertFWBAnomaly(){let raw_bpd=parseFloat(document.getElementById('bpd').value)||7.1;let raw_hc=parseFloat(document.getElementById('hc').value)||25.0;let raw_ac=parseFloat(document.getElementById('ac').value)||20.1;let raw_fl=parseFloat(document.getElementById('fl').value)||5.4;let bpd_mm=toMM(raw_bpd),hc_mm=toMM(raw_hc),ac_mm=toMM(raw_ac),fl_mm=toMM(raw_fl);let bpd_cm=(bpd_mm/10).toFixed(1),hc_cm=(hc_mm/10).toFixed(1),ac_cm=(ac_mm/10).toFixed(1),fl_cm=(fl_mm/10).toFixed(1);let efw=document.getElementById('efwResult').value||'1656 gms';let report=`FWB & OBSTETRIC ULTRASOUND REPORT:\n\nNumber of Fetus: SINGLE\nLocation: INTRAUTERINE\nPresentation: CEPHALIC\nLie: LONGITUDINAL LIE\nFetal Cardiac Activity: PRESENT (152 BPM)\nGross Fetal Movement: PRESENT\nPlacenta: ANTERIOR, NOT LOW-LYING\nPlacental Maturity: GRADE II\nAmount of Liquor: ADEQUATE\n\nB.P.D.: ${bpd_cm} cm\nF.L.: ${fl_cm} cm\nHC: ${hc_cm} cm\nAC: ${ac_cm} cm\nEstimated Fetal Weight: ${efw} Approx`;document.getElementById('rText').value=report;}
-function calcProstate(){let l=parseFloat(document.getElementById('prosL').value)||0;let w=parseFloat(document.getElementById('prosW').value)||0;let h=parseFloat(document.getElementById('prosH').value)||0;if(l&&w&&h){let vol=l*w*h*0.52;document.getElementById('prosVol').value=vol.toFixed(1)+' gm';}}
-function insertProstate(){let l=document.getElementById('prosL').value||'__',w=document.getElementById('prosW').value||'__',h=document.getElementById('prosH').value||'__',vol=document.getElementById('prosVol').value||'';document.getElementById('rText').value+=`\nProstate: ${l} x ${w} x ${h} cm, Vol: ${vol}\n`;}
-const refDoctors=["Ref By - Select","Dr. Shahzad Azam","Dr. M. Azam Arain","Dr. Nazia wagan","Dr. Syed Kashan","Dr. Ali mangrio","Dr. M. Zeeshan","Dr. M. Ali Taj","Dr. Shakeel","Dr. Shahzad Sadaqat","Dr. Bilal","Self","Other"];
-const sonoDoctors=["Sonologist - Select","DR. M. ZEESHAN","DR. NAZIA WAGAN","DR. SAMAN AZAM","Other"];
-function fillSelect(id,list){let s=document.getElementById(id);s.innerHTML='';list.forEach(v=>{let o=document.createElement('option');o.value=v.includes('Select')?'':v;o.textContent=v;s.appendChild(o);});}
-fillSelect('ref',refDoctors);fillSelect('sono',sonoDoctors);
-function checkOther(type){if(type==='ref'){let v=document.getElementById('ref').value;document.getElementById('refOther').style.display=(v==='Other')?'block':'none';}else{let v=document.getElementById('sono').value;document.getElementById('sonoOther').style.display=(v==='Other')?'block':'none';}}
-function getRefValue(){let v=document.getElementById('ref').value;if(v==='Other'){return document.getElementById('refOther').value||'Other';}return v;}
-function getSonoValue(){let v=document.getElementById('sono').value;if(v==='Other'){return document.getElementById('sonoOther').value||'Other';}return v;}
-function checkPass(){let p=document.getElementById('passInput').value.trim();if(p==='Pakistan@777'||p==='Zee'){sessionStorage.setItem('azam_login','ok');document.getElementById('loginOverlay').style.display='none';}else{document.getElementById('passErr').style.display='block';}}
-if(sessionStorage.getItem('azam_login')==='ok'){document.getElementById('loginOverlay').style.display='none';}const allNames=[
-"WHOLE ABDOMEN - Normal","WHOLE ABDOMEN - Fatty Liver Grade 1","WHOLE ABDOMEN - Fatty Liver Grade 2","WHOLE ABDOMEN - Fatty Liver Grade 3","WHOLE ABDOMEN - Hepatomegaly","WHOLE ABDOMEN - Splenomegaly","WHOLE ABDOMEN - Hepatosplenomegaly","WHOLE ABDOMEN - Cholelithiasis Single","WHOLE ABDOMEN - Cholelithiasis Multiple","WHOLE ABDOMEN - Gall Bladder Sludge","WHOLE ABDOMEN - Cholecystitis Acute","WHOLE ABDOMEN - CBD Dilated","WHOLE ABDOMEN - Appendicitis","WHOLE ABDOMEN - Umbilical Hernia","WHOLE ABDOMEN - Inguinal Hernia Right","WHOLE ABDOMEN - Inguinal Hernia Left","WHOLE ABDOMEN - Liver Cyst","WHOLE ABDOMEN - Liver Hemangioma","WHOLE ABDOMEN - Ascites Mild","WHOLE ABDOMEN - Ascites Moderate to Gross","WHOLE ABDOMEN - Liver Abscess","WHOLE ABDOMEN - Renal Cyst","WHOLE ABDOMEN - Gall Bladder Polyp","WHOLE ABDOMEN - Pancreatitis Acute","WHOLE ABDOMEN - Paraumbilical Hernia","WHOLE ABDOMEN - Ventral Hernia","WHOLE ABDOMEN - Incisional Hernia","WHOLE ABDOMEN - Lymphadenopathy","WHOLE ABDOMEN - Hilum Lymph Node","WHOLE ABDOMEN - Gastritis","WHOLE ABDOMEN - Prominent Bowel Loops",
-"KUB - Normal","KUB - Renal Calculus Right","KUB - Renal Calculus Left","KUB - Renal Calculus Bilateral","KUB - Staghorn Calculus","KUB - Microliths Bilateral","KUB - Hydronephrosis Mild Right","KUB - Hydronephrosis Moderate Right","KUB - Hydronephrosis Severe Right","KUB - Hydronephrosis Mild Left","KUB - Hydronephrosis Moderate Left","KUB - Hydronephrosis Severe Left","KUB - Hydronephrosis Bilateral Mild","KUB - Hydronephrosis Bilateral Moderate","KUB - Hydroureteronephrosis Right","KUB - Hydroureteronephrosis Left","KUB - Hydroureteronephrosis Bilateral","KUB - Ureteric Calculus with Hydronephrosis","KUB - PUJ Obstruction Right","KUB - PUJ Obstruction Left","KUB - Parenchymal Changes Grade 1","KUB - Parenchymal Changes Grade 2","KUB - Parenchymal Changes Grade 3","KUB - Simple Cortical Cyst Right","KUB - Simple Cortical Cyst Left","KUB - Bilateral Cortical Cysts","KUB - Complex Cyst Right","KUB - Complex Cyst Left","KUB - Polycystic Kidneys","KUB - Bladder Stone Single","KUB - Bladder Stones Multiple","KUB - Blood Clots in Urinary Bladder","KUB - Distal Ureter Calculus Right","KUB - Distal Ureter Calculus Left","KUB - Distal Ureter Calculus Bilateral","KUB - Cystitis Thickened Wall","KUB - Bladder Diverticulum","KUB - Bladder Mass","KUB - Ectopic Kidney Right","KUB - Bladder Trabeculation","KUB - High Post Void Residual","KUB - Fullness Right","KUB - Fullness Left","KUB - Fullness Bilateral","KUB - Dilated Proximal Ureter Right","KUB - Dilated Proximal Ureter Left","KUB - Dilated Proximal Ureter Bilateral","KUB - Renal Swelling Right","KUB - Renal Swelling Left","KUB - Renal Swelling Bilateral","KUB - Pyelonephritis Right","KUB - Pyelonephritis Left","KUB - Pyelonephritis Bilateral",
-"KUB + PROSTATE - Normal with Pre & Post Void","KUB + PROSTATE - BPH with Pre & Post Void","KUB + PROSTATE - BPH with High PVR","KUB + PROSTATE - BPH with Cystitis & Pre/Post Void","KUB + PROSTATE - BPH Median Lobe Hypertrophy with Pre/Post Void","KUB + PROSTATE - Prostatitis with Pre/Post Void","KUB + PROSTATE - Prostate Calcification with Pre/Post Void","KUB + PROSTATE - Small Prostate with High PVR","KUB + PROSTATE - BPH with Bladder Diverticulum with Pre/Post Void",
-"PELVIS - Normal","PELVIS - PCOS","PELVIS - Fibroid Intramural","PELVIS - Fibroid Subserosal","PELVIS - Fibroid Submucosal","PELVIS - Multiple Fibroids","PELVIS - Ovarian Cyst Simple Right","PELVIS - Ovarian Cyst Simple Left","PELVIS - Ovarian Cyst Bilateral","PELVIS - Endometrioma","PELVIS - Dermoid Cyst","PELVIS - PID","PELVIS - Free Fluid POD","PELVIS - Early Pregnancy","PELVIS - Bulky Uterus","PELVIS - Endometrial Hyperplasia","PELVIS - Endometrial Polyp",
-"FWB - Normal Single Pregnancy","FWB - Breech Presentation","FWB - IUGR","FWB - Twins Normal","FWB - Oligohydramnios","FWB - Polyhydramnios","FWB - Early Pregnancy 6-8 Weeks","FWB - Anomaly Scan Normal","FWB - Placenta Previa","FWB - Placental Abruption","FWB - Growth Scan Normal","FWB - IUD / Demise",
-"BREAST - Normal","BREAST - Fibroadenoma Right","BREAST - Fibroadenoma Left","BREAST - Fibroadenoma Bilateral","BREAST - Breast Cyst Right","BREAST - Breast Cyst Left","BREAST - Breast Cysts Multiple","BREAST - Fibrocystic Disease","BREAST - Mastitis","BREAST - Breast Abscess","BREAST - Gynecomastia","BREAST - Suspicious Mass",
-"THYROID - Normal","THYROID - Multinodular Goiter","THYROID - Solitary Nodule Right","THYROID - Solitary Nodule Left","THYROID - Thyroid Cyst Right","THYROID - Thyroid Cyst Left","THYROID - Thyroiditis","THYROID - Hyperthyroid Goiter",
-"SCROTUM - Normal","SCROTUM - Hydrocele Right","SCROTUM - Hydrocele Left","SCROTUM - Hydrocele Bilateral","SCROTUM - Varicocele Left","SCROTUM - Varicocele Right","SCROTUM - Varicocele Bilateral","SCROTUM - Epididymitis Right","SCROTUM - Epididymitis Left","SCROTUM - Epididymo-orchitis Right","SCROTUM - Epididymo-orchitis Left","SCROTUM - Orchitis","SCROTUM - Testicular Torsion","TESTIS - Microlithiasis","TESTIS - Testicular Cyst",
-"AXILLA - Normal","AXILLA - Lymphadenopathy Left","NECK - Normal","NECK - Cervical Lymphadenopathy","ABDOMEN + PELVIS - Normal Male","ABDOMEN + PELVIS - Normal Female",
-"ANAL - Normal","ANAL - Perianal Abscess","ANAL - Intersphincteric Fistula","ANAL - Transsphincteric Fistula","ANAL - Suprasphincteric Fistula","ANAL - Perianal Fistula with Abscess","ANAL - Anal Fissure","ANAL - Hemorrhoids Internal","ANAL - Hemorrhoids External Thrombosed","ANAL - Pilonidal Sinus","ANAL - Anal Sphincter Defect","ANAL - Perianal Hematoma",
-"DEATH CERTIFICATE - Final As Per Pictures"
-];
+const templates = {
+"SCROTUM - Normal": `ULTRASOUND SCROTUM:
 
-function getReportEdit(n){
-// DEATH
-if(n==="DEATH CERTIFICATE - Final As Per Pictures"){
-return `Name:\nFather/Husband Name:\nCNIC No / B-Form No.:\nDate Of Birth:\nDate of Death:\nTime of Death:\nPlace of Death: At Hospital / At Home / Brought Dead / On the Way\nCause of Death: Cardiac Arrest / Cardio Respiratory Failure\nBrought: Dead on Arrival / Expired during treatment\nHistory: Known case of HTN / DM / IHD / Asthma / CKD\nFamily contact No:\nOn examination: Pulse not palpable, BP not recordable, No spontaneous respiration, Pupils dilated & fixed, No response to painful stimuli, Heart sounds absent, ECG flat / asystole. CPR attempted - No response. Declared dead.\n\nDate of issue: 08/10/2026\n\nCONCLUSION:\nThis is to certify that Mr. / Mrs. / Master ______________________________, Age ____, Sex Male, S/O, D/O, W/O ________________________________________, CNIC No. ______________________________, resident of ________________________________________, has expired on ____/____/________ at ____:____ AM/PM at ______________________________ due to natural cause - Cardiac Arrest.\n\nThis certificate is issued on the request of family members for burial / legal purposes. No postmortem performed as death appears natural.\n\nNOTE:\nThis is a medical confirmation of death, not a NADRA death certificate. For legal record, please obtain NADRA Death Certificate from Union Council. Body handed over to family / heirs.`;
-}
+Technique: High frequency linear probe. Grey scale and Colour Doppler evaluation done.
 
-// WHOLE ABDOMEN DETAILED
-if(n==="WHOLE ABDOMEN - Normal"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size, shape and homogenous echotexture.\nSmooth margins, no focal lesion.\nNo intrahepatic biliary radical dilatation.\nPortal vein 9 mm patent.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass seen.\nNo pericholecystic fluid.\nCBD 4.2 mm normal caliber.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion seen.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nPancreatic duct <2 mm, no calcification or mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness 15 mm and corticomedullary distinction intact.\nNo calculus, hydronephrosis, cyst or mass.\nUreter not dilated.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness 15 mm and corticomedullary distinction intact.\nNo calculus, hydronephrosis, cyst or mass.\nUreter not dilated.\n\nURINARY BLADDER:\nWell distended, capacity 350 ml.\nWall thickness 3 mm normal smooth.\nNo calculus, mass or diverticulum.`;
-}
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 1"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 16.0 cm\nEnlarged in size with increased echogenicity Grade I fatty liver.\nMild increase in hepatorenal contrast.\nDiaphragm and intrahepatic vessel margins are well visualized.\nNo focal lesion, no IHBR dilatation.\nPortal vein 9.5 mm patent.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass or calcification.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nCortical thickness 15 mm, no calculus / hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nCortical thickness 15 mm, no calculus / hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 2"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 17.0 cm\nEnlarged in size with moderately increased echogenicity Grade II fatty liver.\nModerate increase in hepatorenal contrast with mild obscuration of portal vein walls and diaphragm.\nNo focal lesion, no IHBR dilatation.\nPortal vein 10 mm patent.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.0 mm normal.\n\nSPLEEN: measuring 10.5 cm\nMildly enlarged, homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.3 cm, Tail 1.1 cm\nMildly hyperechoic echotexture - fatty infiltration.\nNo focal lesion.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis, cyst or mass.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis, cyst or mass.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 3"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 17.5 cm\nEnlarged in size with markedly increased echogenicity Grade III fatty liver.\nMarked increase in hepatorenal contrast with obscuration of portal vein walls, diaphragm and posterior segment.\nNo focal lesion seen, no IHBR dilatation.\nPortal vein 10.5 mm patent but walls obscured.\n\nGALL BLADDER: Partially distended\nWall thickness 3 mm normal.\nNo calculus or mass, sludge obscured due to fatty liver.\nCBD obscured by bowel gas but visualized 4 mm normal.\n\nSPLEEN: measuring 11.0 cm\nMildly enlarged, homogenous texture.\nNo focal lesion.\n\nPANCREAS: Obscured by bowel gas, visualized part hyperechoic due to fatty infiltration.\nNo obvious mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis, cyst or mass.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis, cyst or mass.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Hepatomegaly"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 17.5 cm\nEnlarged in size - Hepatomegaly.\nNormal homogenous echotexture, smooth margins.\nNo focal lesion, no IHBR dilatation.\nPortal vein 10 mm patent.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass or calcification.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Splenomegaly"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 14.0 cm\nEnlarged in size - Splenomegaly.\nHomogenous texture, no focal lesion.\nSplenic vein 7 mm patent.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Hepatosplenomegaly"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 17.0 cm\nEnlarged in size - Hepatomegaly.\nNormal homogenous echotexture, no focal lesion.\nNo IHBR dilatation.\nPortal vein 10 mm patent.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 13.5 cm\nEnlarged in size - Splenomegaly.\nHomogenous texture, no focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Cholelithiasis Single"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 3 mm normal.\nSingle echogenic calculus 16 mm with acoustic shadowing seen in gall bladder lumen, mobile on changing position - Cholelithiasis.\nNo sludge or mass, no pericholecystic fluid.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Cholelithiasis Multiple"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 3 mm normal.\nMultiple echogenic calculi 10 mm and 12 mm with acoustic shadowing seen in gall bladder lumen, mobile - Cholelithiasis multiple.\nNo sludge or mass, no pericholecystic fluid.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Gall Bladder Sludge"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 3 mm normal.\nLow level internal echoes / sludge seen in gall bladder lumen, no shadowing, mobile - Gall bladder sludge.\nNo calculus or mass, no pericholecystic fluid.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Cholecystitis Acute"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Distended, wall thickness 6.5 mm markedly thickened edematous\nSingle echogenic calculus 14 mm impacted at neck with acoustic shadowing.\nPericholecystic fluid present.\nSonographic Murphy sign positive - Acute cholecystitis.\nCBD 4.0 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - CBD Dilated"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.8 cm\nNormal in size and homogenous echotexture.\nMild intrahepatic biliary radical dilatation seen in both lobes.\nNo focal lesion.\nPortal vein 9.5 mm patent.\n\nGALL BLADDER: Well distended\nWall thickness 3 mm normal.\nNo calculus, sludge or mass.\nCBD diameter 9.5 mm dilated.\nDistal CBD obscured by bowel gas - distal calculus / obstruction cannot be excluded.\nNo pericholecystic fluid.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.5 cm, Body 1.4 cm, Tail 1.2 cm\nMildly bulky, homogenous.\nPancreatic duct 2.5 mm mildly prominent.\nNo mass or calcification.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Appendicitis"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nAPPENDIX: measuring 9 mm diameter, wall thickness 3.5 mm thickened, non-compressible, blind ended tubular structure in right iliac fossa with surrounding echogenic fat and minimal free fluid - Acute appendicitis.\nNo appendicolith seen.`;
-}
-if(n==="WHOLE ABDOMEN - Umbilical Hernia"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nANTERIOR ABDOMINAL WALL: At umbilicus\nDefect 14 mm seen at umbilicus with herniation of omental fat on straining - Umbilical hernia.\nNo bowel herniation, no strangulation.`;
-}
-if(n.startsWith("WHOLE ABDOMEN - Inguinal Hernia")){
-let side=n.includes("Right")?"Right inguinal region":"Left inguinal region";
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nANTERIOR ABDOMINAL WALL: ${side}\nDefect 16 mm seen in ${side.toLowerCase()} with herniation of bowel loops / omentum on Valsalva maneuver - Inguinal hernia ${side.includes("Right")?"right":"left"}.\nNo strangulation, vascularity preserved on Doppler.`;
-}
-if(n==="WHOLE ABDOMEN - Liver Cyst"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nSimple anechoic thin walled cyst 25 mm with posterior acoustic enhancement seen in right lobe segment VI - Liver cyst.\nNo IHBR dilatation, no solid lesion.\nPortal vein 9 mm patent.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Liver Hemangioma"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nWell defined hyperechoic lesion 22 mm with posterior acoustic enhancement seen in right lobe segment VII - Hemangioma.\nNo IHBR dilatation, no other lesion.\nPortal vein 9 mm patent.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Ascites Mild"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nPERITONEAL CAVITY:\nMild free fluid seen in Morrison pouch, pelvis and bilateral paracolic gutters - Mild ascites.`;
-}
-if(n==="WHOLE ABDOMEN - Ascites Moderate to Gross"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\nCoarse echotexture if chronic liver disease.\n\nGALL BLADDER: Well distended\nWall thickness 3 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 11.5 cm\nMildly enlarged, homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nPERITONEAL CAVITY:\nModerate to gross free fluid seen in abdomen and pelvis with floating bowel loops - Moderate to gross ascites.`;
-}
-if(n==="WHOLE ABDOMEN - Liver Abscess"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 15.5 cm\nEnlarged in size, heterogenous echotexture.\nHeterogenous predominantly hypoechoic lesion 45 x 38 mm with internal debris and posterior acoustic enhancement seen in right lobe segment VI - Liver abscess.\nNo IHBR dilatation, portal vein 9 mm patent.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Renal Cyst"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\nNo cyst or mass.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nSimple anechoic thin walled cortical cyst 24 mm seen in middle pole with posterior enhancement.\nNo hydronephrosis, calculus or mass.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Gall Bladder Polyp"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nEchogenic non-shadowing non-mobile nodule 5 mm attached to anterior wall seen in gall bladder lumen - Gall bladder polyp.\nNo calculus or sludge, no pericholecystic fluid.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.`;
-}
-if(n==="WHOLE ABDOMEN - Pancreatitis Acute"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.8 cm, Body 1.8 cm, Tail 1.5 cm\nEnlarged and swollen, hypoechoic edematous echotexture - Acute pancreatitis.\nPancreatic duct 2.8 mm mildly dilated.\nPeripancreatic fluid present.\nNo calcification or mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nPERITONEAL CAVITY:\nMinimal free fluid in lesser sac and pelvis - Reactive.`;
-}
-if(n==="WHOLE ABDOMEN - Paraumbilical Hernia"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nANTERIOR ABDOMINAL WALL:\nDefect 16 mm seen in paraumbilical region with herniation of omental fat and bowel loop on straining - Paraumbilical hernia.\nNo strangulation.`;
-}
-if(n==="WHOLE ABDOMEN - Ventral Hernia"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nANTERIOR ABDOMINAL WALL: Midline\nDefect 18 mm seen in ventral abdominal wall with herniation of omentum on Valsalva - Ventral hernia.\nNo strangulation.`;
-}
-if(n==="WHOLE ABDOMEN - Incisional Hernia"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nANTERIOR ABDOMINAL WALL: At scar site\nDefect 20 mm seen at previous surgical scar site with herniation of omental fat and bowel loops on straining - Incisional hernia.\nNo strangulation, vascularity preserved.`;
-}
-if(n==="WHOLE ABDOMEN - Lymphadenopathy"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 11.0 cm\nMildly enlarged, homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nABDOMEN: Multiple enlarged hypoechoic lymph nodes seen in para-aortic, mesenteric region largest measuring 18 x 12 mm - Lymphadenopathy.\nNo necrosis or calcification, hilum preserved.`;
-}
-if(n==="WHOLE ABDOMEN - Hilum Lymph Node"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal but porta hepatis lymph node compressing mildly.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nPORTA HEPATIS: Single enlarged hypoechoic lymph node 14 x 10 mm seen at porta hepatis - Hilum lymph node.\nNo IHBR dilatation, portal vein patent.`;
-}
-if(n==="WHOLE ABDOMEN - Gastritis"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nSTOMACH: Antral wall thickness 6 mm thickened and edematous with preserved stratification - Gastritis.\nNo mass or ulcer crater seen, peristalsis present.`;
-}
-if(n==="WHOLE ABDOMEN - Prominent Bowel Loops"){
-return `ULTRASOUND WHOLE ABDOMEN:\n\nLIVER: measuring 14.5 cm\nNormal in size and homogenous echotexture.\nNo focal lesion, no IHBR dilatation.\n\nGALL BLADDER: Well distended\nWall thickness 2.5 mm normal.\nNo calculus, sludge or mass.\nCBD 4.2 mm normal.\n\nSPLEEN: measuring 10.0 cm\nNormal in size and homogenous texture.\nNo focal lesion.\n\nPANCREAS: Head 2.2 cm, Body 1.2 cm, Tail 1.0 cm\nNormal in size and echotexture.\nNo mass.\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNo calculus, hydronephrosis.\n\nURINARY BLADDER:\nWell distended, wall thickness 3 mm normal.\nNo calculus or mass.\n\nBOWEL LOOPS: Prominent dilated bowel loops seen in central abdomen with to and fro peristalsis and gas artifacts - Prominent / mildly dilated bowel loops.\nNo free fluid, no mass, no intussusception.`;
-}
+Right Testis: Measures 4.2 x 2.5 x 2.8 cm, volume ~15 ml. Normal size, shape and echotexture. No focal lesion.
+Left Testis: Measures 4.1 x 2.4 x 2.7 cm, volume ~14 ml. Normal size, shape and echotexture. No focal lesion.
+Epididymis: Both epididymis normal in size and echotexture. No cyst or mass.
+Spermatic Cord: Normal. No varicocele seen on Valsalva.
+Tunica Vaginalis: No hydrocele / pyocele seen.
+Scrotal Wall: Normal thickness.
+Colour Doppler: Normal vascularity in both testes. No torsion.
 
-// KUB (short - same as before but with heading format)
-if(n==="KUB - Normal"){
-return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nNormal distended, wall thickness 3 mm.\nNo evidence of calculus, mass or diverticulum seen.`;
-}
-if(n.includes("KUB - Renal Calculus")||n.includes("KUB - Hydronephrosis")||n.includes("KUB - Hydroureteronephrosis")||n.includes("KUB - Ureteric")||n.includes("KUB - PUJ")||n.includes("KUB - Parenchymal")||n.includes("KUB - Simple")||n.includes("KUB - Bilateral Cortical")||n.includes("KUB - Complex")||n.includes("KUB - Polycystic")||n.includes("KUB - Bladder")||n.includes("KUB - Blood")||n.includes("KUB - Distal")||n.includes("KUB - Cystitis")||n.includes("KUB - Ectopic")||n.includes("KUB - Bladder Trabeculation")||n.includes("KUB - High")||n.includes("KUB - Fullness")||n.includes("KUB - Dilated")||n.includes("KUB - Renal Swelling")||n.includes("KUB - Pyelonephritis")||n.includes("KUB - Staghorn")||n.includes("KUB - Microliths")){
-// detailed templates already in previous version - keep short placeholder but will be expanded in T mapping below via specific checks
-// To keep code size manageable, use generic detailed based on name - actual detail filled in getDiagnosis mapping already covers
-let rkSize="11.5 x 4.5 cm";let lkSize="11.0 x 4.5 cm";let detail=`Finding as per ${n} - Detailed pathology with measurements.`;
-if(n==="KUB - Renal Swelling Right"||n==="KUB - Renal Swelling Left"||n==="KUB - Renal Swelling Bilateral") detail=`Enlarged and swollen kidney measuring 13.5 x 6.0 cm, cortical thickness increased 17 mm edematous and hypoechoic, increased vascularity on Doppler - Suggestive of acute pyelonephritis.`;
-if(n.includes("Pyelonephritis")) detail=`Enlarged and swollen kidney 13.0 x 6.0 cm, cortical thickness 18 mm edematous heterogenous hypoechoic with loss of corticomedullary distinction - Acute pyelonephritis, perinephric fat echogenic with mild perinephric fluid, associated cystitis.`;
-if(n.includes("Fullness")) detail=`Pelvicalyceal fullness seen AP 10 mm, No frank hydronephrosis, No calculus in visualized part, Possibility of distal ureteric calculus cannot be excluded.`;
-if(n.includes("Dilated Proximal Ureter")) detail=`Mild hydronephrosis with pelvicalyceal fullness AP 12 mm and proximal ureter dilated 7.2 mm up to mid ureter, No calculus in visualized part, Possibility of distal calculus cannot be excluded, Ureteric jet present.`;
-if(n==="KUB - Hydronephrosis Mild Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 12.0 x 5.0 cm\nMildly enlarged in size, shape preserved.\nCortical thickness preserved 14 mm and corticomedullary distinction is intact.\nMild hydronephrosis seen with pelvicalyceal system mildly dilated AP diameter 12 mm.\nNo evidence of calculus, cyst or mass seen in visualized part.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nNormal distended, wall thickness 3 mm.\nNo evidence of calculus, mass or diverticulum seen.`;
-if(n==="KUB - Renal Swelling Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 13.5 x 6.0 cm\nEnlarged and swollen in size, shape preserved.\nCortical thickness increased 17 mm edematous and hypoechoic and corticomedullary distinction is intact but swollen.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\nIncreased vascularity on Doppler.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nNormal distended, wall thickness 3 mm.\nNo evidence of calculus, mass or diverticulum seen.`;
-if(n==="KUB - Renal Swelling Left") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 13.5 x 6.0 cm\nEnlarged and swollen in size, shape preserved.\nCortical thickness increased 17 mm edematous and hypoechoic and corticomedullary distinction is intact but swollen.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\nIncreased vascularity on Doppler.\n\nURINARY BLADDER:\nNormal distended, wall thickness 3 mm.\nNo evidence of calculus, mass or diverticulum seen.`;
-if(n==="KUB - Renal Swelling Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 13.5 x 6.0 cm\nEnlarged and swollen in size, shape preserved.\nCortical thickness increased 17 mm edematous and hypoechoic and corticomedullary distinction is intact but swollen.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\nIncreased vascularity on Doppler.\n\nLEFT KIDNEY: measuring 13.5 x 6.0 cm\nEnlarged and swollen in size, shape preserved.\nCortical thickness increased 17 mm edematous and hypoechoic and corticomedullary distinction is intact but swollen.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\nIncreased vascularity on Doppler.\n\nURINARY BLADDER:\nNormal distended, wall thickness 3 mm.\nNo evidence of calculus, mass or diverticulum seen.`;
-if(n==="KUB - Pyelonephritis Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 13.0 x 6.0 cm\nEnlarged and swollen in size, shape preserved.\nCortical thickness increased 18 mm edematous and heterogenous hypoechoic with loss of corticomedullary distinction - Acute pyelonephritis.\nIncreased vascularity on color Doppler with hypoperfused edematous areas.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\nPerinephric fat echogenic with mild perinephric fluid.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nNormal distended, wall thickness 3 mm mildly thickened.\nInternal echoes / debris seen - Cystitis associated.\nNo evidence of calculus, mass or diverticulum seen.`;
-if(n==="KUB - Pyelonephritis Left") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 13.0 x 6.0 cm\nEnlarged and swollen in size, shape preserved.\nCortical thickness increased 18 mm edematous and heterogenous hypoechoic with loss of corticomedullary distinction - Acute pyelonephritis.\nIncreased vascularity on color Doppler with hypoperfused edematous areas.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\nPerinephric fat echogenic with mild perinephric fluid.\n\nURINARY BLADDER:\nNormal distended, wall thickness 3 mm mildly thickened.\nInternal echoes / debris seen - Cystitis associated.\nNo evidence of calculus, mass or diverticulum seen.`;
-if(n==="KUB - Pyelonephritis Bilateral") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 13.0 x 6.0 cm\nEnlarged and swollen in size, shape preserved.\nCortical thickness increased 18 mm edematous and heterogenous hypoechoic with loss of corticomedullary distinction - Acute pyelonephritis bilateral.\nIncreased vascularity on color Doppler with hypoperfused edematous areas.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\nPerinephric fat echogenic with mild perinephric fluid.\n\nLEFT KIDNEY: measuring 13.0 x 6.0 cm\nEnlarged and swollen in size, shape preserved.\nCortical thickness increased 18 mm edematous and heterogenous hypoechoic with loss of corticomedullary distinction - Acute pyelonephritis bilateral.\nIncreased vascularity on color Doppler.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\nPerinephric fat echogenic with mild perinephric fluid.\n\nURINARY BLADDER:\nNormal distended, wall thickness 5 mm thickened and irregular - Cystitis associated.\nInternal echoes / debris seen.\nNo evidence of calculus, mass or diverticulum seen.`;
-if(n==="KUB - Fullness Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 11.5 x 4.8 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nPelvicalyceal fullness seen AP 10 mm, No frank hydronephrosis.\nNo evidence of calculus, cyst or mass seen in visualized part.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nNormal distended, wall thickness 3 mm.\nNo evidence of calculus, mass or diverticulum seen.`;
-if(n==="KUB - Dilated Proximal Ureter Right") return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 11.3 x 5.8 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nMild hydronephrosis seen with pelvicalyceal fullness AP 12 mm and proximal ureter dilated 7.2 mm up to mid ureter.\nNo evidence of calculus, cyst or mass seen in visualized part.\nUreteric jet present on Doppler.\n\nLEFT KIDNEY: measuring 10.1 x 5.8 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nNormal distended, mucosal wall thickness 3 mm.\nNo evidence of calculus, mass or diverticulum seen.`;
-if(n==="KUB - Parenchymal Changes Grade 2"){
-return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 9.5 x 4.0 cm\nSmall in size, shape preserved.\nIncreased cortical echogenicity Grade II with loss of corticomedullary distinction.\nCortical thickness 9 mm reduced, no hydronephrosis.\nNo evidence of calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 6.5 x 3.0 cm\nSmall in size.\nIncreased cortical echogenicity Grade II with loss of corticomedullary distinction.\nCortical thickness 9 mm reduced, no hydronephrosis.\nNo evidence of calculus, or mass seen.\nSimple cortical cyst seen at upper pole measures 24 x 28 mm.\n\nURINARY BLADDER:\nNormal distended, wall thickness 3 mm.\nNo evidence of calculus, mass or diverticulum seen.\n\nPROSTATE: measuring 3.2 x 4.6 x 4.1 cm, Volume 32 gm mildly enlarged - BPH\nMild enlarged in size, heterogenous echotexture.\nNo evidence of focal lesion or calcification.\nMedian lobe not significantly hypertrophied, capsule intact.`;
-}
-return `ULTRASOUND KUB:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\n${detail}\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nNormal distended, wall thickness 3 mm.\nNo evidence of calculus, mass or diverticulum seen.`;
-}
+CONCLUSION:
+Normal scrotal ultrasound.
+Rest of study unremarkable unless mentioned.
 
-if(n.startsWith("KUB + PROSTATE - Normal")){
-return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nPre-void capacity 350 ml, post-void residual 20 ml insignificant.\nNormal distended, wall thickness 3 mm smooth.\nNo evidence of calculus, mass or diverticulum seen.\n\nPROSTATE: measuring 3.5 x 2.8 x 3.0 cm, Volume 19.5 gm normal size\nNormal in size, shape and homogenous echotexture.\nNo evidence of focal lesion, calcification or median lobe hypertrophy.\nCapsule intact.`;
-}
-if(n.startsWith("KUB + PROSTATE - BPH with Pre & Post Void")){
-return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nPre-void capacity 400 ml, post-void residual 45 ml borderline.\nNormal distended, wall thickness 4 mm mildly thickened.\nNo evidence of calculus or diverticulum seen.\n\nPROSTATE: measuring 5.0 x 3.8 x 4.2 cm, Volume 52 gm enlarged - BPH\nEnlarged in size, heterogenous echotexture.\nNo evidence of focal lesion or calcification.\nMedian lobe not significantly hypertrophied, capsule intact.`;
-}
-if(n.startsWith("KUB + PROSTATE - BPH with High PVR")){
-return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nMild fullness of PCS seen due to high PVR.\nNo evidence of calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nMild fullness of PCS seen due to high PVR.\nNo evidence of calculus, cyst or mass seen.\n\nURINARY BLADDER:\nPre-void capacity 450 ml, post-void residual 180 ml high.\nDistended, wall thickness 6 mm thickened and trabeculated due to chronic obstruction.\nNo evidence of calculus or diverticulum seen.\n\nPROSTATE: measuring 5.2 x 4.0 x 4.5 cm, Volume 65 gm enlarged - BPH\nEnlarged in size, heterogenous echotexture.\nIntravesical prostatic protrusion 12 mm seen.\nNo evidence of focal lesion, capsule intact.`;
-}
-if(n.startsWith("KUB + PROSTATE - BPH with Cystitis")){
-return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nMild fullness seen.\nNo evidence of calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nMild fullness seen.\nNo evidence of calculus, cyst or mass seen.\n\nURINARY BLADDER:\nPre-void capacity 300 ml, post-void residual 120 ml high.\nWall thickness 7 mm diffusely thickened and irregular - Cystitis with trabeculation.\nInternal echoes / debris present.\nNo evidence of calculus or diverticulum seen.\n\nPROSTATE: measuring 5.0 x 3.8 x 4.0 cm, Volume 50 gm enlarged - BPH\nEnlarged in size, heterogenous.\nNo evidence of focal lesion, capsule intact.`;
-}
-if(n.startsWith("KUB + PROSTATE - BPH Median Lobe Hypertrophy")){
-return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nPre-void capacity 380 ml, post-void residual 90 ml high.\nWall thickness 5 mm thickened and trabeculated.\nNo evidence of calculus seen.\n\nPROSTATE: measuring 5.3 x 4.0 x 4.2 cm, Volume 58 gm enlarged - BPH with median lobe hypertrophy\nEnlarged, heterogenous.\nMedian lobe hypertrophy projecting 18 mm into bladder base - Median lobe hypertrophy.\nIntravesical protrusion present, capsule intact.`;
-}
-if(n.startsWith("KUB + PROSTATE - Prostatitis")){
-return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nPre-void capacity 350 ml, post-void residual 60 ml slightly high.\nWall thickness 4 mm mildly thickened.\nNo evidence of calculus seen.\n\nPROSTATE: measuring 4.5 x 3.5 x 3.8 cm, Volume 38 gm mildly enlarged - Prostatitis\nMildly enlarged, heterogenous hypoechoic echotexture with hypervascularity on Doppler.\nTender on probe pressure - Prostatitis.\nNo evidence of abscess or calcification, capsule edematous.`;
-}
-if(n.startsWith("KUB + PROSTATE - Prostate Calcification")){
-return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nPre-void capacity 350 ml, post-void residual 25 ml insignificant.\nNormal distended, wall thickness 3 mm normal.\nNo evidence of calculus seen.\n\nPROSTATE: measuring 3.8 x 3.0 x 3.2 cm, Volume 22 gm normal size\nNormal size, heterogenous with multiple echogenic foci 3-5 mm with shadowing - Prostatic calcification.\nNo evidence of focal lesion, capsule intact.`;
-}
-if(n.startsWith("KUB + PROSTATE - Small Prostate")){
-return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nMild fullness seen due to high PVR.\nNo evidence of calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nMild fullness seen.\nNo evidence of calculus, cyst or mass seen.\n\nURINARY BLADDER:\nPre-void capacity 420 ml, post-void residual 160 ml high.\nWall thickness 6 mm thickened and trabeculated.\nNo evidence of calculus or diverticulum seen.\n\nPROSTATE: measuring 3.0 x 2.2 x 2.5 cm, Volume 12 gm small atrophic\nSmall in size, homogenous.\nNo evidence of focal lesion, calcification or median lobe hypertrophy.\nCapsule intact - Small prostate with high PVR suggests neurogenic cause.`;
-}
-if(n.startsWith("KUB + PROSTATE - BPH with Bladder Diverticulum")){
-return `ULTRASOUND KUB + PROSTATE WITH PRE & POST VOID:\n\nRIGHT KIDNEY: measuring 11.5 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nLEFT KIDNEY: measuring 11.0 x 4.5 cm\nNormal in size, shape and texture.\nNormal cortical thickness and corticomedullary distinction is intact.\nNo evidence of hydronephrosis, calculus, cyst or mass seen.\n\nURINARY BLADDER:\nPre-void capacity 380 ml, post-void residual 110 ml high.\nWall thickness 6 mm thickened and trabeculated.\nDiverticulum 28 x 20 mm seen at right posterolateral wall.\nNo evidence of calculus seen.\n\nPROSTATE: measuring 5.0 x 3.6 x 4.0 cm, Volume 48 gm enlarged - BPH\nEnlarged, heterogenous, capsule intact.\nNo evidence of focal lesion.`;
-}
-if(n.startsWith("PELVIS")) return `ULTRASOUND PELVIS:\n\nURINARY BLADDER: Capacity 350 ml, Wall thickness 3 mm, No calculus.\n\nUTERUS: Anteverted, 7.5 x 4.0 x 3.5 cm, Endometrial thickness 8 mm, Homogenous myometrium, No fibroid.\n\nRIGHT OVARY: 3.0 x 2.0 cm, Volume 6 cc, No cyst.\n\nLEFT OVARY: 2.8 x 2.0 cm, Volume 5.5 cc, No cyst.\n\nPOD: No free fluid.\n\nFinding as per ${n}.`;
-if(n.startsWith("FWB")) return `FWB ULTRASOUND:\n\nNumber of fetus: SINGLE, Presentation CEPHALIC, Cardiac activity PRESENT, Liquor ADEQUATE, Placenta ANTERIOR UPPER NOT LOW-LYING, BPD 7.1 cm, FL 5.4 cm, EFW 1200 gms, AFI 14 cm.\n\nFinding as per ${n}.`;
-return `ULTRASOUND ${n}:\n\nDetailed findings as per ${n} with measurements.`;
-}
+ADVICE:
+No active intervention required.`,
 
-function getAdvice(n){
-if(n.includes("DEATH CERTIFICATE")) return "Burial purpose only. Obtain NADRA Death Certificate from Union Council.";
-if(n.includes("Fatty Liver Grade 3")) return "Grade III fatty liver markedly increased echogenicity with obscured vessels - Severe steatosis. LFT, Lipid profile, HbA1c, BMI, Dietitian consultation, Low fat diet, Daily 45 min walk, Avoid alcohol / fried food / cold drinks, Repeat USG after 3 months.";
-if(n.includes("Fatty Liver Grade 2")) return "Grade II fatty liver moderately increased echogenicity with mild obscuration of portal veins - Moderate steatosis. LFT, Lipid profile, HbA1c, Low fat diet, Exercise 30 min daily, Avoid fatty food / alcohol, Repeat USG after 3 months.";
-if(n.includes("Fatty Liver Grade 1")) return "Grade I fatty liver mildly increased echogenicity with hepatorenal contrast - Mild steatosis. LFT, Lipid profile, HbA1c, Healthy diet, Exercise, Avoid fatty food / alcohol, Repeat USG after 3 months.";
-if(n.includes("CBD Dilated")) return "CBD dilated 9.5 mm with IHBR dilatation - Obstructive jaundice. LFT, Bilirubin, MRCP / CT Abdomen, Surgeon / Gastroenterologist consultation urgently, Avoid fatty food.";
-if(n.includes("Cholecystitis Acute")) return "Acute cholecystitis with wall 6.5 mm thickened edematous and impacted calculus at neck with pericholecystic fluid and Murphy positive. CBC, LFT, Surgeon consultation urgently, NPO, IV antibiotics, No fatty food.";
-if(n.includes("Cholelithiasis")) return "Cholelithiasis calculus 12-16 mm seen. LFT, Surgeon consultation, Low fat diet, Avoid fatty / fried food, Plenty water.";
-if(n.includes("Gall Bladder Sludge")) return "Gall bladder sludge low level echoes mobile. LFT, Lipid profile, Hydration 3-4L, Low fat diet, Surgeon consultation, Repeat USG after 1 month.";
-if(n.includes("Gall Bladder Polyp")) return "Gall bladder polyp 5 mm echogenic non-shadowing non-mobile. LFT, Repeat USG after 3 months, Surgeon consultation, Low fat diet, If polyp >10 mm or increasing surgery advised.";
-if(n.includes("Hepatosplenomegaly")) return "Hepatosplenomegaly liver 17 cm and spleen 13.5 cm. CBC, LFT, HBsAg, Anti HCV, Malaria parasite, Typhidot, Physician consultation.";
-if(n.includes("Splenomegaly")) return "Splenomegaly 14 cm enlarged. CBC, Malarial parasite, LFT, Physician consultation.";
-if(n.includes("Hepatomegaly")) return "Hepatomegaly 17.5 cm enlarged. LFT, HBsAg, Anti HCV, Lipid profile, Physician consultation.";
-if(n.includes("Appendicitis")) return "Acute appendicitis appendix 9 mm non-compressible with wall 3.5 mm and surrounding fat echogenic with free fluid. CBC, CRP, Surgeon consultation urgently, NPO.";
-if(n.includes("Umbilical Hernia")) return "Umbilical hernia defect 14 mm with omental herniation. Surgeon consultation, Avoid weight lifting / straining, Weight reduction.";
-if(n.includes("Inguinal Hernia")) return "Inguinal hernia defect 16 mm with bowel / omentum herniation on Valsalva. Surgeon consultation, Avoid heavy lifting, Surgery if symptomatic.";
-if(n.includes("Liver Cyst")) return "Liver simple cyst 25 mm thin walled benign. LFT, No treatment if asymptomatic, Repeat USG after 6 months.";
-if(n.includes("Liver Hemangioma")) return "Liver hemangioma 22 mm hyperechoic benign lesion. LFT, No treatment usually, Repeat USG after 6 months, Surgeon / Gastroenterologist consultation if symptomatic.";
-if(n.includes("Ascites Moderate")) return "Moderate to gross ascites free fluid with floating bowel loops. LFT, Albumin, CBC, RFT, SAAG, Ascitic tap / fluid analysis, Physician / Gastroenterologist consultation urgently.";
-if(n.includes("Ascites Mild")) return "Mild ascites free fluid in Morrison and pelvis. LFT, RFT, CBC, Urine DR, Physician consultation.";
-if(n.includes("Liver Abscess")) return "Liver abscess 45 x 38 mm heterogenous with debris. CBC, LFT, CRP, Blood culture, Physician / Surgeon consultation urgently, IV antibiotics, Drainage if needed.";
-if(n.includes("Renal Cyst") && n.includes("WHOLE ABDOMEN")) return "Renal cortical cyst 24 mm simple thin walled benign. KFT, Urine DR, Nephrologist consultation, No treatment if asymptomatic, Repeat USG after 6 months.";
-if(n.includes("Pancreatitis Acute")) return "Acute pancreatitis pancreas swollen edematous with peripancreatic fluid. Amylase, Lipase, LFT, RFT, CBC, CRP, Surgeon / Gastroenterologist consultation urgently, NPO, IV fluids.";
-if(n.includes("Paraumbilical Hernia")) return "Paraumbilical hernia defect 16 mm with omentum / bowel herniation. Surgeon consultation, Avoid straining, Surgery advised if symptomatic.";
-if(n.includes("Ventral Hernia")) return "Ventral hernia defect 18 mm with omental herniation. Surgeon consultation, Avoid weight lifting, Weight reduction, Surgery if needed.";
-if(n.includes("Incisional Hernia")) return "Incisional hernia defect 20 mm at scar site with bowel / omentum herniation. Surgeon consultation, Avoid heavy work, Surgery planning.";
-if(n.includes("Lymphadenopathy")) return "Lymphadenopathy para-aortic / mesenteric nodes largest 18 mm. CBC, ESR, CRP, TB workup, Physician consultation, CECT abdomen if needed.";
-if(n.includes("Hilum Lymph Node")) return "Hilum lymph node 14 mm at porta hepatis. LFT, CBC, ESR, Physician consultation, Follow up USG after 1 month.";
-if(n.includes("Gastritis")) return "Gastritis antral wall thickened 6 mm edematous. Gastroenterologist consultation, Avoid spicy / oily food / NSAID / smoking, PPI as advised, H. pylori test.";
-if(n.includes("Prominent Bowel Loops")) return "Prominent bowel loops dilated with to and fro peristalsis. X-ray abdomen erect, Surgeon consultation, NPO if pain / vomiting, IV fluids.";
-if(n.includes("Pyelonephritis")) return "Acute pyelonephritis enlarged edematous kidney with loss of CMD and perinephric fluid. Urine DR & Culture, CBC, CRP, KFT, RFT, Blood culture, Nephrologist / Urologist consultation urgently, Admit, IV antibiotics, Plenty fluids 3-4L, No NSAID, Repeat USG after 1 week.";
-if(n.includes("Renal Swelling")) return "Renal swelling enlarged edematous kidney - Suggestive of acute pyelonephritis / obstruction. KFT, Urine DR & Culture, CBC, CRP, Nephrologist / Urologist consultation, No NSAID, Plenty fluids, Antibiotic as per culture.";
-if(n.includes("Dilated Proximal Ureter")) return "Mild hydronephrosis with proximal ureter dilated. Possibility of distal ureteric calculus cannot be excluded. KFT, Urine DR, CT KUB plain, Urologist consultation, Drink 3-4L water.";
-if(n.includes("Fullness")) return "Pelvicalyceal fullness seen. Possibility of distal ureteric calculus cannot be excluded. KFT, Urine DR, Drink 3-4L water, Urologist consultation.";
-if(n.includes("Hydronephrosis")) return "Hydronephrosis seen. Possibility of distal ureteric calculus / PUJ obstruction. KFT, Urine DR, CT KUB plain, Urologist consultation, Drink 3-4L water.";
-if(n.includes("Hydroureteronephrosis")) return "Hydroureteronephrosis - Ureter dilated throughout with absent jet. Obstruction at distal ureter / VUJ likely. KFT, Urine DR, CT KUB plain, Urologist consultation urgently.";
-if(n.includes("PUJ Obstruction")) return "PUJ obstruction with gross hydronephrosis pelvis 35 mm. KFT, DTPA scan, Urologist consultation, No NSAID.";
-if(n.includes("Parenchymal Changes Grade 2")) return "Grade II parenchymal changes small kidneys 9.5 x 4.0 cm and 6.5 x 3.0 cm with loss of CMD and left simple cortical cyst 24 x 28 mm. KFT, RFT, Urine DR, Nephrologist consultation, Hydration, No NSAID, Repeat USG after 3 months, Cyst follow up.";
-if(n.includes("Parenchymal Changes Grade 1")) return "Grade I parenchymal changes increased echogenicity. KFT, RFT, Urine DR, Nephrologist consultation.";
-if(n.includes("Parenchymal Changes Grade 3")) return "Grade III parenchymal changes shrunken kidneys - CKD. KFT, RFT, Nephrologist urgently.";
-if(n.includes("Renal Calculus")) return "Renal calculus seen. Drink 3-4L water, KFT, Urine DR, Urologist consultation.";
-if(n.includes("Staghorn")) return "Staghorn calculus 28 mm large stone. KFT, Urine DR, CT KUB, Urologist for PCNL.";
-if(n.includes("Microliths")) return "Bilateral microlithiasis 2-3 mm. Drink 3-4L water, Low salt, KFT, Urine DR.";
-if(n.includes("Bladder Stone")) return "Bladder calculus seen. KFT, Urine DR, Urologist for cystolitholapaxy.";
-if(n.includes("Distal Ureter Calculus")) return "Distal ureteric calculus with hydronephrosis and absent jet. KFT, Urine DR, CT KUB, Urologist urgently.";
-if(n.includes("Ureteric Calculus")) return "Ureteric calculus 9 mm with hydronephrosis. KFT, Urine DR, CT KUB, Urologist urgently.";
-if(n.includes("Cortical Cyst")) return "Simple renal cortical cyst benign. Usually no treatment, Repeat USG after 6 months.";
-if(n.includes("Complex Cyst")) return "Complex renal cyst with internal echoes. CT with contrast / Urologist, Bosniak classification.";
-if(n.includes("Polycystic")) return "Polycystic kidneys enlarged with multiple cysts. KFT, RFT, BP monitoring, Nephrologist, Genetic counseling.";
-if(n.includes("Cystitis")) return "Cystitis - Bladder wall thickened 7 mm with internal echoes. Urine DR & Culture, KFT, Plenty water 3-4L, Urologist, Antibiotic as per culture.";
-if(n.includes("Bladder Diverticulum")) return "Bladder diverticulum 28 mm. KFT, Urine DR, Urologist, Cystoscopy if needed.";
-if(n.includes("Bladder Mass")) return "Bladder soft tissue mass 22 mm suspicious. Urine DR, Cytology, CT Urography, Cystoscopy with biopsy, Urologist urgently.";
-if(n.includes("Bladder Trabeculation")) return "Bladder wall thickened and trabeculated 6 mm - Chronic outlet obstruction / BPH. KFT, Urine DR, PSA, Uroflowmetry, Urologist.";
-if(n.includes("High Post Void Residual")) return "High post void residual 180 ml significant retention. Urologist, KFT, Urine DR, PSA, Uroflowmetry, Avoid constipation.";
-if(n.includes("BPH with Bladder Diverticulum")) return "BPH 48 gm with diverticulum 28 mm and high PVR 110 ml. Urologist, KFT, Urine DR, PSA, Uroflowmetry, Cystoscopy.";
-if(n.includes("Small Prostate")) return "Small atrophic prostate 12 gm with high PVR 160 ml - Neurogenic bladder suspected. Urologist / Neurologist, Uroflowmetry, Urodynamic study.";
-if(n.includes("Prostate Calcification")) return "Prostatic calcification 3-5 mm chronic prostatitis sequelae. KFT, Urine DR, PSA, Urologist, Plenty water.";
-if(n.includes("Prostatitis")) return "Prostatitis - Prostate enlarged 38 gm hypoechoic hypervascular tender. Urine DR & Culture, CBC, PSA, Urologist, Antibiotics 2-4 weeks, Sitz bath, Plenty fluids.";
-if(n.includes("BPH Median Lobe Hypertrophy")) return "BPH 58 gm with median lobe hypertrophy 18 mm intravesical protrusion and high PVR 90 ml. Urologist, PSA, KFT, Uroflowmetry, Alpha blockers, TURP if needed.";
-if(n.includes("BPH with Cystitis")) return "BPH 50 gm with cystitis wall 7 mm and high PVR 120 ml. Urine Culture, KFT, PSA, Urologist, Antibiotic, Plenty water.";
-if(n.includes("BPH with High PVR")) return "BPH 65 gm with high PVR 180 ml and trabeculated bladder. Urologist urgently, KFT, PSA, Uroflowmetry, Catheterization if needed, Alpha blockers, TURP planning.";
-if(n.includes("BPH with Pre & Post Void")) return "BPH 52 gm with borderline PVR 45 ml. Urologist, PSA, KFT, Urine DR, Plenty water, Avoid cold / constipation, Alpha blockers if symptomatic.";
-if(n.includes("BPH")) return "BPH enlarged prostate. Urologist, PSA, KFT, Urine DR, Pre & Post void.";
-if(n.includes("PROSTATE - Normal")) return "No prostatic pathology - Normal size 19.5 gm. No active pathology, Hydration.";
-if(n.includes("Blood Clots")) return "Blood clots in bladder 25 mm - Clot retention. KFT, Urine DR, CBC, Urologist, Plenty fluids, Evaluate hematuria source.";
-if(n.includes("Ectopic Kidney")) return "Ectopic kidney in pelvis 9.5 cm. KFT, Urine DR, Nephrologist, Follow up USG.";
-if(n.includes("Normal")) return "No active pathology seen at present. Routine follow up, Plenty water, Healthy diet.";
-return "KFT, Urine DR, Relevant labs and specialist consultation advised.";
-}
-function getDiagnosis(n){
-if(n.startsWith("DEATH CERTIFICATE")) return "Natural Death - Medical confirmation for burial purpose";
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 1") return "Grade I fatty liver - Mildly increased echogenicity with hepatorenal contrast, liver 16.0 cm, diaphragm and vessel margins well visualized";
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 2") return "Grade II fatty liver - Moderately increased echogenicity with mild obscuration of portal vein walls and diaphragm, liver 17.0 cm";
-if(n==="WHOLE ABDOMEN - Fatty Liver Grade 3") return "Grade III fatty liver - Markedly increased echogenicity with obscuration of portal vein walls and diaphragm, liver 17.5 cm";
-if(n==="WHOLE ABDOMEN - Hepatomegaly") return "Hepatomegaly - Liver 17.5 cm enlarged, homogenous, no focal lesion";
-if(n==="WHOLE ABDOMEN - Splenomegaly") return "Splenomegaly - Spleen 14.0 cm enlarged, homogenous, no focal lesion";
-if(n==="WHOLE ABDOMEN - Hepatosplenomegaly") return "Hepatosplenomegaly - Liver 17.0 cm and spleen 13.5 cm enlarged, homogenous";
-if(n==="WHOLE ABDOMEN - Cholelithiasis Single") return "Cholelithiasis single calculus 16 mm with acoustic shadowing, mobile, GB wall 3 mm normal";
-if(n==="WHOLE ABDOMEN - Cholelithiasis Multiple") return "Cholelithiasis multiple calculi 10 mm and 12 mm with shadowing, mobile, GB wall 3 mm normal";
-if(n==="WHOLE ABDOMEN - Gall Bladder Sludge") return "Gall bladder sludge - Low level internal echoes without shadowing, mobile, GB wall 3 mm normal";
-if(n==="WHOLE ABDOMEN - Cholecystitis Acute") return "Acute cholecystitis - GB wall 6.5 mm thickened edematous, calculus 14 mm impacted at neck, pericholecystic fluid present, Sonographic Murphy positive";
-if(n==="WHOLE ABDOMEN - CBD Dilated") return "CBD dilated 9.5 mm with mild intrahepatic biliary radical dilatation, distal CBD obscured -? distal calculus / obstruction";
-if(n==="WHOLE ABDOMEN - Appendicitis") return "Acute appendicitis - Appendix 9 mm non-compressible with wall 3.5 mm thickened, surrounding echogenic fat and minimal free fluid";
-if(n==="WHOLE ABDOMEN - Umbilical Hernia") return "Umbilical hernia defect 14 mm at umbilicus with omental fat herniation on straining, no strangulation";
-if(n.includes("Inguinal Hernia Right")) return "Right inguinal hernia defect 16 mm with bowel / omentum herniation on Valsalva, no strangulation, vascularity preserved";
-if(n.includes("Inguinal Hernia Left")) return "Left inguinal hernia defect 16 mm with bowel / omentum herniation on Valsalva, no strangulation, vascularity preserved";
-if(n==="WHOLE ABDOMEN - Liver Cyst") return "Liver simple anechoic cyst 25 mm thin walled with posterior enhancement in right lobe segment VI";
-if(n==="WHOLE ABDOMEN - Liver Hemangioma") return "Liver hemangioma well defined hyperechoic lesion 22 mm with posterior enhancement in right lobe segment VII";
-if(n==="WHOLE ABDOMEN - Ascites Mild") return "Mild ascites - Mild free fluid in Morrison pouch, pelvis and bilateral paracolic gutters";
-if(n==="WHOLE ABDOMEN - Ascites Moderate to Gross") return "Moderate to gross ascites - Moderate to gross free fluid with floating bowel loops";
-if(n==="WHOLE ABDOMEN - Liver Abscess") return "Liver abscess heterogenous hypoechoic lesion 45 x 38 mm with internal debris in right lobe segment VI";
-if(n==="WHOLE ABDOMEN - Renal Cyst") return "Left renal simple cortical cyst 24 mm thin walled anechoic with posterior enhancement";
-if(n==="WHOLE ABDOMEN - Gall Bladder Polyp") return "Gall bladder polyp echogenic non-shadowing non-mobile nodule 5 mm attached to anterior wall";
-if(n==="WHOLE ABDOMEN - Pancreatitis Acute") return "Acute pancreatitis - Pancreas enlarged and swollen hypoechoic edematous head 2.8 cm, body 1.8 cm, tail 1.5 cm with peripancreatic fluid and duct 2.8 mm";
-if(n==="WHOLE ABDOMEN - Paraumbilical Hernia") return "Paraumbilical hernia defect 16 mm with omental fat and bowel loop herniation on straining";
-if(n==="WHOLE ABDOMEN - Ventral Hernia") return "Ventral hernia defect 18 mm in ventral wall with omental herniation on Valsalva";
-if(n==="WHOLE ABDOMEN - Incisional Hernia") return "Incisional hernia defect 20 mm at scar site with bowel / omentum herniation on straining";
-if(n==="WHOLE ABDOMEN - Lymphadenopathy") return "Lymphadenopathy multiple enlarged hypoechoic lymph nodes para-aortic / mesenteric largest 18 x 12 mm, no necrosis";
-if(n==="WHOLE ABDOMEN - Hilum Lymph Node") return "Hilum lymph node single enlarged 14 x 10 mm at porta hepatis, no IHBR dilatation";
-if(n==="WHOLE ABDOMEN - Gastritis") return "Gastritis antral wall thickened 6 mm edematous with preserved stratification";
-if(n==="WHOLE ABDOMEN - Prominent Bowel Loops") return "Prominent bowel loops mildly dilated with to and fro peristalsis and gas artifacts";
-if(n.includes("Pyelonephritis Bilateral")) return "Bilateral acute pyelonephritis - Bilateral enlarged edematous kidneys 13 cm with increased cortical thickness 18 mm, heterogenous hypoechoic, loss of CMD, perinephric fat echogenic with mild perinephric fluid and associated cystitis";
-if(n.includes("Pyelonephritis Right")) return "Right acute pyelonephritis - Right enlarged edematous kidney 13 cm with increased cortical thickness 18 mm, heterogenous hypoechoic, loss of corticomedullary distinction, perinephric fat echogenic with mild perinephric fluid and associated cystitis";
-if(n.includes("Pyelonephritis Left")) return "Left acute pyelonephritis - Left enlarged edematous kidney 13 cm with increased cortical thickness 18 mm, heterogenous hypoechoic, loss of corticomedullary distinction, perinephric fat echogenic with mild perinephric fluid and associated cystitis";
-if(n.includes("Renal Swelling")) return n.split(' - ')[1]+" - Enlarged edematous kidney 13.5 cm with increased cortical thickness 17 mm";
-if(n.includes("Dilated Proximal Ureter Bilateral")) return "Bilateral renal mild hydronephrosis with proximal ureter dilated 6.5-6.8 mm up to mid ureter. However no calculus seen in visualized part of ureter. Possibility of distal ureteric calculus cannot be excluded";
-if(n.includes("Dilated Proximal Ureter Right")) return "Right renal mild hydronephrosis with proximal ureter dilated 7.2 mm up to mid ureter. However no calculus seen in visualized part of ureter. Possibility of distal ureteric calculus cannot be excluded";
-if(n.includes("Dilated Proximal Ureter Left")) return "Left renal mild hydronephrosis with proximal ureter dilated 7.5 mm up to mid ureter. However no calculus seen in visualized part of ureter. Possibility of distal ureteric calculus cannot be excluded";
-if(n.includes("Fullness")) return n.split(' - ')[1]+" - Pelvicalyceal fullness seen, possibility of distal calculus cannot be excluded";
-if(n.includes("Parenchymal Changes Grade 2")) return "Bilateral renal Parenchymal Changes Grade 2, Left kidney shrunken 6.5 x 3.0 cm, Left renal simple cortical cyst seen at upper pole measures 24 x 28 mm";
-if(n.includes(" - ")){let p=n.split(' - ');return p.slice(1).join(' - ').trim();}
-return n;
-}
-let T={};allNames.forEach(k=>{let diag=getDiagnosis(k);let reportText=getReportEdit(k);if(k.startsWith("DEATH CERTIFICATE")){T[k]=reportText;}else{T[k]=reportText+`\n\nCONCLUSION:\n${diag}.\nRest of study unremarkable unless mentioned.\n\nADVICE:\n${getAdvice(k)}`;}});
-let allTemplates=Object.keys(T);
-function cleanForPrint(text){return text.replace(/\s*\[N:.*?\]/g,'');}
-function filterTemplates(){let q=(document.getElementById('tSearch')?.value||'').toLowerCase();let filtered=allTemplates.filter(k=>k.toLowerCase().includes(q));let s=document.getElementById('uType');let cur=s.value;s.innerHTML='';filtered.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});if(filtered.includes(cur))s.value=cur;showTemplatePreview();checkCalculator();}
-function showTemplatePreview(){let v=document.getElementById('uType')?.value;if(!v)return;document.getElementById('templatePreview').value=T[v]||'';}
-function useSelectedTemplate(){let v=document.getElementById('uType')?.value;if(!v){alert('Select');return;}document.getElementById('templatePreview').value=T[v]||'';document.getElementById('rText').value=T[v]||'';checkCalculator();}
-function copyPreviewToReport(){let txt=document.getElementById('templatePreview').value;if(!txt){alert('Select template');return;}document.getElementById('rText').value=txt;document.getElementById('rText').scrollIntoView({behavior:'smooth'});}
+"SCROTUM - Hydrocele Right": `ULTRASOUND SCROTUM - Hydrocele Right:
 
-function formatReportToHTML(text){
-  let printText=cleanForPrint(text);
-  let lines=printText.split('\n');
-  let html='';
-  let inConclusion=false;
-  const headingStarts=["RIGHT KIDNEY","LEFT KIDNEY","URINARY BLADDER","PROSTATE","LIVER","GALL BLADDER","SPLEEN","PANCREAS","UTERUS","RIGHT OVARY","LEFT OVARY","POD","APPENDIX","ANTERIOR ABDOMINAL WALL","BOWEL LOOPS","PERITONEAL CAVITY","STOMACH","PORTA HEPATIS","ABDOMEN","BREAST","THYROID","TESTIS","SCROTUM"];
-  lines.forEach(line=>{
-    let l=line.trim();
-    if(!l){html+='<div style="height:6px"></div>';return;}
-    if(l.toUpperCase().startsWith('ULTRASOUND')||l.toUpperCase().startsWith('FWB')||l.toUpperCase().startsWith('ANAL')){
-      inConclusion=false;
-      html+=`<div style="text-align:center;margin:8px 0 6px 0;font-weight:900;text-decoration:underline;font-size:12pt!important">${l}</div>`;
-      return;
-    }
-    if(l.toUpperCase().startsWith('CONCLUSION:')){
-      inConclusion=true;
-      let rest=l.replace(/CONCLUSION:/i,'').trim();
-      html+=`<div style="margin-top:14px;margin-bottom:4px"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">CONCLUSION:</b></div>`;
-      if(rest){html+=`<div style="margin-left:2px;font-weight:900;font-size:11pt!important;margin-top:2px"><b>• ${rest}</b></div>`;}
-      return;
-    }
-    if(l.toUpperCase().startsWith('NOTE:')||l.toUpperCase().startsWith('ADVICE:')){
-      inConclusion=false;
-      let head=l.split(':')[0];
-      let rest=l.substring(l.indexOf(':')+1).trim();
-      html+=`<div style="margin-top:10px;margin-bottom:3px"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">${head}:</b></div><div style="margin-left:2px;font-size:11pt!important">${rest}</div>`;
-      return;
-    }
-    if(inConclusion){
-      html+=`<div style="margin:3px 0 3px 2px;font-size:11pt!important;font-weight:900"><b>• ${l.replace(/^•\s*/,'')}</b></div>`;
-      return;
-    }
-    let cleanLine=l.replace(/^- /,'').trim();
-    let upper=cleanLine.toUpperCase();
-    let isHeading=false;
-    for(let h of headingStarts){
-      if(upper.startsWith(h+":") || upper===h+":" || upper.startsWith(h+" -") ){
-        isHeading=true;break;
-      }
-    }
-    if(isHeading){
-      let idx=cleanLine.indexOf(':');
-      if(idx>0){
-        let head=cleanLine.substring(0,idx+1);
-        let rest=cleanLine.substring(idx+1).trim();
-        html+=`<div style="margin-top:8px;margin-bottom:2px;font-size:11pt!important"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">${head}</b> ${rest}</div>`;
-      }else{
-        html+=`<div style="margin-top:8px;margin-bottom:2px;font-size:11pt!important"><b style="text-decoration:underline;font-weight:900;font-size:11pt!important">${cleanLine}</b></div>`;
-      }
-      return;
-    }
-    html+=`<div style="margin:2px 0 2px 18px;font-size:11pt!important">• ${cleanLine}</div>`;
-  });
-  return html;
-}
+Right Testis: Measures 4.0 x 2.4 x 2.6 cm. Normal echotexture. Displaced by anechoic fluid collection.
+Right Tunica Vaginalis: Anechoic fluid collection measuring approx 6.5 x 4.2 cm, volume ~55 ml suggestive of hydrocele. No septations, no debris.
+Left Testis: Measures 4.1 x 2.5 x 2.7 cm. Normal size and echotexture. No hydrocele.
+Epididymis: Bilateral normal.
+Spermatic Cord: Normal.
+Colour Doppler: Normal vascularity. No varicocele.
 
-function make(){let pn=document.getElementById('pName');if(!pn?.value){alert('Enter Name');return;}let isDeath=(document.getElementById('uType')?.value||'').includes('DEATH CERTIFICATE')||(document.getElementById('rText').value||'').includes('Place of Death');let pid=document.getElementById('pIDMobile')?.value||'';let patientBorder;if(isDeath){patientBorder=`<div style="text-align:center;font-size:18pt!important;font-weight:900;text-decoration:underline;margin-bottom:14px">DEATH CERTIFICATE</div>`;}else{patientBorder=`<div style="border:1.2px solid #000;padding:4px 7px;margin-bottom:6px;line-height:1.3"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:7.5pt!important;font-weight:900"><span><b>Name: ${document.getElementById('pName').value}</b></span><span><b>Age: ${document.getElementById('pAge').value}</b></span><span><b>Sex: ${document.getElementById('pGen').value}</b></span><span><b>Date: ${document.getElementById('pDate').value}</b></span><span><b>ID: ${pid}</b></span></div><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:2px;font-size:7.5pt!important;font-weight:900"><span><b>Ref By: ${getRefValue()}</b></span><span><b>Sonologist: ${getSonoValue()}</b></span><span style="opacity:0">.</span></div></div>`;}let complaintText=(document.getElementById('pComplaint')?.value||'').trim();let bodyHTML=formatReportToHTML(document.getElementById('rText').value);if(complaintText&&!isDeath){bodyHTML=`<div style="margin-bottom:5px;font-size:11pt!important;font-style:italic"><b>C/O: ${complaintText}</b></div>`+bodyHTML;}let footer=`<div style="margin-top:16px;text-align:center"><div style="font-size:7.5pt!important"><i>This is computer generated report no signature required.</i></div><div style="font-size:8.5pt!important;margin-top:3px;font-weight:700">Thanks for availing our services</div></div>`;document.getElementById('reportContent').innerHTML=patientBorder+bodyHTML+footer;document.getElementById('outCard').style.display='block';window.scrollTo(0,document.getElementById('outCard').offsetTop);}
-function saveR(){let content=document.getElementById('reportContent').innerHTML;if(!content||content.trim()===''){alert('Generate Report first');return;}let rec={id:editingId||Date.now(),name:document.getElementById('pName').value||'Report',pName:document.getElementById('pName').value,pAge:document.getElementById('pAge').value,pGen:document.getElementById('pGen').value,pDate:document.getElementById('pDate').value,pIDMobile:document.getElementById('pIDMobile').value,ref:getRefValue(),sono:getSonoValue(),pComplaint:document.getElementById('pComplaint').value,mobile:document.getElementById('pIDMobile')?.value||'',type:document.getElementById('uType')?.value||'',date:document.getElementById('pDate')?.value||'',html:content,text:document.getElementById('rText')?.value||''};let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}if(editingId){let idx=all.findIndex(x=>x.id===editingId);if(idx>=0)all[idx]=rec;else all.unshift(rec);editingId=null;document.getElementById('editMode').style.display='none';}else{all.unshift(rec);}localStorage.setItem('azam_reports',JSON.stringify(all));if(!navigator.onLine){localStorage.setItem('azam_pending_sync','1');alert('Offline Save - Local me save ho gaya');}else{alert('Saved - Drive sync ho raha hai');}render();uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));}
-function render(){let all=[];try{all=JSON.parse(localStorage.getItem('azam_reports')||'[]');}catch(e){all=[];}let q=(document.getElementById('sBox')?.value||'').toLowerCase();let listEl=document.getElementById('list');let f=all.filter(r=>((r.name||'')+' '+(r.mobile||'')).toLowerCase().includes(q));if(f.length===0){listEl.innerHTML='<p style="text-align:center;color:#888;padding:15px;font-size:10pt">No reports</p>';return;}listEl.innerHTML=f.map(r=>` <div style="border:1px solid #cbd5e1;padding:8px;border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;font-size:10pt"> <div><b>${r.name}</b> - ${r.type}<br><small>${r.mobile} | ${r.date}</small></div> <div style="display:flex;gap:4px"> <button class="small" style="background:#0a4eb5;padding:8px 12px" onclick="viewR(${r.id})">View</button> <button class="small" style="background:#ff9800;padding:8px 12px" onclick="editR(${r.id})">Edit</button> <button class="small" style="background:#ff3b30;padding:8px 12px" onclick="delR(${r.id})">Del</button> </div> </div>`).join('');}
-function viewR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('reportContent').innerHTML=r.html;document.getElementById('outCard').style.display='block';window.scrollTo(0,document.getElementById('outCard').offsetTop);}
-function editR(id){let all=JSON.parse(localStorage.getItem('azam_reports')||'[]');let r=all.find(x=>x.id===id);if(!r)return;document.getElementById('pName').value=r.pName||r.name||'';document.getElementById('pAge').value=r.pAge||'';document.getElementById('pGen').value=r.pGen||'Male';document.getElementById('pDate').value=r.pDate||r.date||'';document.getElementById('pIDMobile').value=r.pIDMobile||r.mobile||'';if(refDoctors.includes(r.ref)){document.getElementById('ref').value=r.ref;document.getElementById('refOther').style.display='none';}else{document.getElementById('ref').value='Other';document.getElementById('refOther').style.display='block';document.getElementById('refOther').value=r.ref||'';}if(sonoDoctors.includes(r.sono)){document.getElementById('sono').value=r.sono;document.getElementById('sonoOther').style.display='none';}else{document.getElementById('sono').value='Other';document.getElementById('sonoOther').style.display='block';document.getElementById('sonoOther').value=r.sono||'';}document.getElementById('pComplaint').value=r.pComplaint||'';document.getElementById('rText').value=r.text||'';editingId=r.id;document.getElementById('editMode').style.display='inline-block';document.getElementById('reportContent').innerHTML=r.html;document.getElementById('outCard').style.display='block';window.scrollTo(0,document.getElementById('formCard').offsetTop);}
-function delR(id){if(!confirm('Delete?'))return;let all=JSON.parse(localStorage.getItem('azam_reports')||'[]').filter(x=>x.id!==id);localStorage.setItem('azam_reports',JSON.stringify(all));render();uploadToDriveFile('Azam_Medical_Backup_ALL.json',JSON.stringify(all));if(!navigator.onLine)localStorage.setItem('azam_pending_sync','1');}
-function pdf(){let {jsPDF}=window.jspdf;let doc=new jsPDF('p','mm',[180,210]);let rc=document.getElementById('reportContent');let txt=rc?rc.innerText:cleanForPrint(document.getElementById('rText').value);doc.setFontSize(11);doc.text(doc.splitTextToSize(txt,160),10,10);doc.save((document.getElementById('pName').value||'Report')+'.pdf');}
-function init(){let s=document.getElementById('uType');if(s){s.innerHTML='';allNames.forEach(k=>{let o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}let pd=document.getElementById('pDate');if(pd)pd.valueAsDate=new Date();document.getElementById('templateCount').innerText=allTemplates.length+' Templates';render();updateNetStatus();}
-init();
-</script></body></html>
+CONCLUSION:
+Hydrocele Right.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+KFT, Urine DR, Relevant labs and specialist consultation advised.`,
+
+"SCROTUM - Hydrocele Left": `ULTRASOUND SCROTUM - Hydrocele Left:
+
+Left Testis: Measures 3.9 x 2.3 x 2.6 cm. Normal echotexture.
+Left Tunica Vaginalis: Anechoic fluid collection 5.8 x 3.9 cm, volume ~48 ml suggestive of hydrocele.
+Right Testis: Measures 4.2 x 2.5 x 2.8 cm. Normal. No hydrocele.
+Epididymis: Normal bilaterally.
+Doppler: Normal flow.
+
+CONCLUSION:
+Hydrocele Left.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+KFT, Urine DR, Relevant labs and specialist consultation advised.`,
+
+"SCROTUM - Hydrocele Bilateral": `ULTRASOUND SCROTUM - Hydrocele Bilateral:
+
+Right Side: Anechoic fluid 5.5 x 3.8 cm, volume ~42 ml.
+Left Side: Anechoic fluid 6.0 x 4.0 cm, volume ~50 ml.
+Both Testes: Normal size and echotexture, compressed by fluid. No mass.
+Epididymis: Normal. Doppler normal.
+
+CONCLUSION:
+Bilateral Hydrocele.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+KFT, Urine DR, Specialist consultation advised.`,
+
+"SCROTUM - Varicocele Left": `ULTRASOUND SCROTUM - Varicocele Left:
+
+Left Pampiniform Plexus: Multiple dilated tortuous veins, largest diameter 3.8 mm at rest, 4.5 mm on Valsalva with reversal of flow on Doppler - Grade III Varicocele.
+Right Pampiniform Plexus: Normal, max 1.8 mm.
+Both Testes: Left testis slightly smaller 3.8 x 2.2 x 2.4 cm. Right normal 4.2 cm. Echotexture normal.
+No hydrocele.
+
+CONCLUSION:
+Left Varicocele - Grade III.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+Semen analysis, Urologist consultation advised.`,
+
+"SCROTUM - Varicocele Right": `ULTRASOUND SCROTUM - Varicocele Right:
+
+Right Pampiniform Plexus: Dilated veins 3.5 mm, 4.2 mm on Valsalva with reflux.
+Left: Normal.
+Both Testes: Normal size and echotexture.
+
+CONCLUSION:
+Right Varicocele.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+Semen analysis, Urologist consultation advised.`,
+
+"SCROTUM - Varicocele Bilateral": `ULTRASOUND SCROTUM - Varicocele Bilateral:
+
+Right: 3.2 mm, 4.0 mm on Valsalva with reflux.
+Left: 3.9 mm, 4.8 mm on Valsalva with reflux.
+Both Testes: Normal echotexture, left slightly smaller.
+
+CONCLUSION:
+Bilateral Varicocele.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+Semen analysis, Urologist consultation advised.`,
+
+"SCROTUM - Epididymitis Right": `ULTRASOUND SCROTUM - Epididymitis Right:
+
+Right Epididymis: Enlarged, head 12 mm, body 9 mm. Hypoechoic and heterogeneous. Increased vascularity on Doppler.
+Right Testis: Normal size 4.1 cm, normal echotexture, no abscess.
+Left: Normal.
+No hydrocele. Mild scrotal wall thickening on right.
+
+CONCLUSION:
+Right Epididymitis.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+CBC, Urine DR/C/S, Antibiotic as per physician.`,"SCROTUM - Epididymitis Left": `ULTRASOUND SCROTUM - Epididymitis Left:
+
+Left Epididymis: Enlarged 11 mm head, hypoechoic, hypervascular on Doppler.
+Left Testis: Normal size, normal texture.
+Right: Normal. No hydrocele.
+
+CONCLUSION:
+Left Epididymitis.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+CBC, Urine DR/C/S, Physician consultation.`,
+
+"SCROTUM - Epididymo-orchitis Right": `ULTRASOUND SCROTUM - Epididymo-orchitis Right:
+
+Right Epididymis + Testis: Both enlarged. Testis 4.8 x 3.0 cm, heterogeneous echotexture, markedly increased vascularity on Doppler. Epididymis head 14 mm.
+Left: Normal.
+Small reactive hydrocele on right. Scrotal wall thickened.
+
+CONCLUSION:
+Right Epididymo-orchitis.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+Urgent CBC, Urine DR/C/S, Urologist consultation.`,
+
+"SCROTUM - Epididymo-orchitis Left": `ULTRASOUND SCROTUM - Epididymo-orchitis Left:
+
+Left Epididymis + Testis: Enlarged, testis 4.7 x 2.9 cm, heterogeneous, hypervascular.
+Right: Normal.
+Small reactive hydrocele left.
+
+CONCLUSION:
+Left Epididymo-orchitis.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+Urgent CBC, Urine DR/C/S, Urologist consultation.`,
+
+"SCROTUM - Orchitis": `ULTRASOUND SCROTUM - Orchitis:
+
+Right Testis: Enlarged 4.6 cm, hypoechoic, hypervascular.
+Left Testis: Normal.
+Epididymis: Mildly bulky bilaterally.
+
+CONCLUSION:
+Orchitis - Right side predominant.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+CBC, Urine DR, Physician consultation.`,
+
+"SCROTUM - Inguinal Hernia Right": `ULTRASOUND SCROTUM - Inguinal Hernia Right:
+
+Right Inguinal Canal: Herniated bowel loops extending into scrotum, peristalsis present, reducible on pressure.
+Right Testis: Normal, displaced.
+Left: Normal.
+
+CONCLUSION:
+Right Inguinoscrotal Hernia.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+Surgical consultation advised.`,
+
+"SCROTUM - Testicular Torsion": `ULTRASOUND SCROTUM - Testicular Torsion:
+
+Right Testis: Enlarged, heterogeneous, NO vascularity on Colour Doppler. Spermatic cord twisted.
+Left Testis: Normal vascularity.
+
+CONCLUSION:
+Right Testicular Torsion - Surgical Emergency.
+Rest of study unremarkable unless mentioned.
+
+ADVICE:
+Immediate Urologist / Surgical consultation - URGENT.`
+};
+function loadTemplate(){
+const v=document.getElementById('templateSelect').value;
+document.getElementById('preview').innerText = templates[v] || 'Template not found';
+}
+</script>
+</body>
+</html>
