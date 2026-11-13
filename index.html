@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azam Medical Centre - Prescription & Patient Record</title>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:#F2F7FB}
+:root{--red:#D21F2B;--blue:#137AB5;--navy:#0B2C5E}
+header{background:#fff;padding:4px 18px 2px;border-bottom:4px solid var(--red);display:flex;align-items:center;gap:12px}
+header img{width:70px;height:auto;flex-shrink:0}
+.head-center{flex:1;text-align:center}
+.head-center h1{margin:0;color:var(--navy);font-size:42px;letter-spacing:1px;font-weight:900;line-height:1}
+.head-center p{margin:2px 0 0;color:#333;font-size:14px;font-weight:bold;line-height:1.3}
+.head-spacer{width:70px;flex-shrink:0}
+.container{max-width:1000px;margin:12px auto;padding:0 10px}
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:15px;box-shadow:0 3px 12px #0001;border-top:4px solid var(--blue)}
+h2{margin:0 0 12px;color:var(--navy);font-size:19px;border-bottom:2px solid #F0C9CC;padding-bottom:6px}
+label{font-weight:bold;font-size:13px;display:block;margin-top:10px;color:#333}
+input,select,textarea{width:100%;padding:11px;border:1.5px solid #CBDFF0;border-radius:9px;margin-top:4px;font-size:14px;background:#F8FBFE}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue);background:#fff}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.row6{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+button{border:0;padding:9px 13px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:13px}
+.btn-red{background:var(--red);color:#fff}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-green{background:#15803d;color:#fff}
+.btn-grey{background:#E8EEF3;color:#333}
+.flex{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+th,td{border:1px solid #eee;padding:8px;text-align:left}
+th{background:var(--navy);color:#fff}
+.badge{background:#FDE8EA;color:var(--red);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:bold}
+.hint{font-size:11px;color:#666;margin:2px 0 0}
+#loginScreen{position:fixed;inset:0;background:#0B2C5E;z-index:9999;display:flex;align-items:center;justify-content:center;padding:15px}
+.login-box{background:#fff;width:100%;max-width:380px;border-radius:16px;padding:24px;text-align:center}
+.login-box h1{color:#0B2C5E;margin:0;font-size:32px}
+.login-box p{font-size:13px;color:#666}
+#statusBar{position:sticky;top:0;z-index:99;text-align:center;font-size:12px;font-weight:bold;padding:6px}
+.online{background:#DCFCE7;color:#166534}
+.offline{background:#FEE2E2;color:#991B1B}
+#printArea{display:none}
+@media print{
+  @page{margin:10mm}
+  body *{visibility:hidden}
+  #printArea,#printArea *{visibility:visible}
+  #printArea{display:block;position:absolute;left:0;top:0;width:100%;padding:0;background:#fff;font-size:12px;line-height:1.3}
+  .no-print{display:none!important}
+}
+.p-head{display:flex;align-items:center;gap:10px;border-bottom:3px solid var(--red);padding-bottom:2px}
+.p-head img{width:60px;height:auto;flex-shrink:0}
+.p-head-center{flex:1;text-align:center}
+.p-head-center h1{color:var(--navy);margin:0;font-size:34px;letter-spacing:1px;font-weight:900;line-height:1}
+.p-head-center p{margin:1px 0 0;font-size:11px;font-weight:bold;line-height:1.3}
+.p-head-spacer{width:60px;flex-shrink:0}
+.p-notvalid{text-align:center;font-weight:900;font-size:12px;margin:4px 0 0;color:#000;border-bottom:1px solid #000;padding-bottom:3px}
+.p-info{display:grid;grid-template-columns:1fr 1fr;gap:2px 20px;margin:8px 0;font-size:12px}
+.p-box{border:1px solid #999;padding:6px 8px;border-radius:5px;margin-top:6px;min-height:30px;font-size:12px}
+.p-box-inline{display:flex;gap:6px;align-items:flex-start}
+.p-box-inline b{white-space:nowrap}
+.p-sign{margin-top:38px;display:flex;justify-content:flex-end;text-align:center;font-size:12px;line-height:1.5}
+@media(max-width:700px){
+  header img{width:55px}
+  .head-spacer{width:55px}
+  .head-center h1{font-size:30px}
+  .head-center p{font-size:12px}
+  .row,.row3{grid-template-columns:1fr}
+  .row6{grid-template-columns:1fr 1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-box">
+    <div style="font-size:40px">🏥</div>
+    <h1>AZAM MEDICAL CENTRE</h1>
+    <p>Doctor Login - Authorized Only</p>
+    <input type="password" id="loginPass" placeholder="Enter Password" style="text-align:center;font-size:18px;letter-spacing:3px">
+    <button class="btn-red" style="width:100%;padding:12px;margin-top:10px;font-size:15px" onclick="checkPass()">Login</button>
+    <p id="loginError" style="color:red;display:none">Wrong Password !</p>
+  </div>
+</div>
+
+<div id="statusBar" class="online">Online - Auto Save ON</div>
+
+<header class="no-print">
+<img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" alt="Azam Medical Centre Logo">
+<div class="head-center">
+<h1>AZAM MEDICAL CENTRE</h1>
+<p>Plot 27, New Street No.16, Sec C, Allama Iqbal Road, Manzoor Colony, Ph: 02135803668</p>
+</div>
+<div class="head-spacer"></div>
+</header>
+
+<datalist id="complaintList">
+<option value="FEVER"></option><option value="FEVER 3 DAYS"></option><option value="FEVER, COUGH"></option><option value="FEVER, HEADACHE"></option><option value="COUGH"></option><option value="DRY COUGH"></option><option value="PRODUCTIVE COUGH"></option><option value="SORE THROAT"></option><option value="HEADACHE"></option><option value="BODY ACHE"></option><option value="JOINT PAIN"></option><option value="BACK PAIN"></option><option value="ABDOMINAL PAIN"></option><option value="STOMACH PAIN"></option><option value="VOMITING"></option><option value="LOOSE MOTION"></option><option value="DIARRHEA"></option><option value="CONSTIPATION"></option><option value="NAUSEA"></option><option value="CHEST PAIN"></option><option value="SHORTNESS OF BREATH"></option><option value="FLU"></option><option value="COLD"></option><option value="RUNNY NOSE"></option><option value="ALLERGY"></option><option value="SKIN RASH"></option><option value="ITCHING"></option><option value="WEAKNESS"></option><option value="DIZZINESS"></option><option value="HIGH BP"></option><option value="SUGAR HIGH"></option><option value="BURNING URINE"></option><option value="EAR PAIN"></option><option value="TOOTH PAIN"></option><option value="EYE REDNESS"></option>
+</datalist>
+<datalist id="diagnosisList">
+<option value="URTI"></option><option value="LRTI"></option><option value="TYPHOID FEVER"></option><option value="MALARIA"></option><option value="DENGUE FEVER"></option><option value="VIRAL FEVER"></option><option value="FLU"></option><option value="ALLERGIC RHINITIS"></option><option value="PHARYNGITIS"></option><option value="TONSILLITIS"></option><option value="BRONCHITIS"></option><option value="PNEUMONIA"></option><option value="ASTHMA"></option><option value="GASTRITIS"></option><option value="ACID REFLUX"></option><option value="GASTROENTERITIS"></option><option value="DIARRHEA"></option><option value="CONSTIPATION"></option><option value="UTI"></option><option value="HYPERTENSION"></option><option value="DIABETES MELLITUS"></option><option value="MIGRAINE"></option><option value="ANEMIA"></option><option value="SKIN ALLERGY"></option><option value="FUNGAL INFECTION"></option><option value="SCABIES"></option><option value="JOINT PAIN"></option><option value="ARTHRITIS"></option><option value="BACK PAIN"></option><option value="VITAMIN D DEFICIENCY"></option><option value="FEVER - UNDER EVALUATION"></option>
+</datalist>
+<datalist id="medicineList">
+<option value="TAB PANADOL 500 MG"></option><option value="TAB PANADOL CF"></option><option value="TAB AUGMENTIN 625 MG"></option><option value="TAB AZOMAX 250 MG"></option><option value="CAP AZOMAX 250 MG"></option><option value="TAB SOFTIN 5 MG"></option><option value="TAB SOFTIN 10 MG"></option><option value="TAB SURBEX Z"></option><option value="TAB CAC 1000 PLUS"></option><option value="TAB NUBEROL FORTE"></option><option value="TAB BRUFEN 400 MG"></option><option value="TAB VOLTRAL 50 MG"></option><option value="TAB DICLORAN 50 MG"></option><option value="TAB MOTILIUM 10 MG"></option><option value="TAB OMEPRAZOLE 20 MG"></option><option value="CAP RISKEK 20 MG"></option><option value="CAP RISKEK 40 MG"></option><option value="TAB FLAGYL 400 MG"></option><option value="TAB ENTAMIZOLE"></option><option value="TAB CIPROXIN 500 MG"></option><option value="TAB CEFSPAN 400 MG"></option><option value="TAB ZINNAT 500 MG"></option><option value="TAB CALAMOX 625 MG"></option><option value="TAB BETNESOL"></option><option value="TAB AVIL 25 MG"></option><option value="TAB CETRIZINE 10 MG"></option><option value="TAB LORATADINE 10 MG"></option><option value="TAB FEXET 120 MG"></option><option value="SYP PANADOL"></option><option value="SYP BRUFEN"></option><option value="SYP AUGMENTIN"></option><option value="SYP AZOMAX"></option><option value="SYP CALPOL"></option><option value="SYP IBUPROFEN"></option><option value="SYP MOTILIUM"></option><option value="SYP GRAVINATE"></option><option value="SYP SIROLIN"></option><option value="SYP HYDROLINE"></option><option value="SYP ARINAC"></option><option value="SYP CALAMOX"></option><option value="SYP ENTEROGERMINA"></option><option value="ORS"></option><option value="TAB DISPRIN"></option><option value="TAB ARINAC"></option><option value="TAB RIGIX"></option><option value="TAB XYZAL 5 MG"></option><option value="TAB LEFLOX 500 MG"></option><option value="TAB NOVIDAT 500 MG"></option><option value="TAB FLEXON"></option><option value="TAB MYONAL 50 MG"></option><option value="TAB SKELETON"></option><option value="TAB OSNATE D"></option><option value="TAB FOLIC ACID 5 MG"></option><option value="TAB IRON"></option><option value="TAB SANGOBION"></option><option value="INJ DECADRON"></option><option value="INJ AVIL"></option><option value="INJ GRAVINATE"></option><option value="CREAM BETNOVATE"></option><option value="CREAM DERMOVATE"></option><option value="LOTION CALAMINE"></option>
+</datalist>
+
+<div class="container no-print">
+
+<div class="card">
+<h2>New Prescription</h2>
+<div class="row">
+<div><label>Date</label><input type="date" id="date"></div>
+<div><label>Patient ID / Token No.</label><input type="text" id="pid" placeholder="e.g. 101"></div>
+</div>
+<label>Patient Name *</label>
+<input type="text" id="pname" placeholder="Enter Patient Name">
+<div class="row3">
+<div><label>Age</label><input type="number" id="age" placeholder="Age"></div>
+<div><label>Gender</label><select id="gender"><option>Male</option><option>Female</option><option>Child</option></select></div>
+<div><label>Phone</label><input type="text" id="phone" placeholder="03xx-xxxxxxx"></div>
+</div>
+<label>Address</label><input type="text" id="address" placeholder="Enter Address">
+<div class="row">
+<div><label>Complaint / History</label><input type="text" id="complaint" list="complaintList" placeholder="Type 2-3 letters, e.g. FE..." autocomplete="off"><p class="hint">Type 2-3 letters, list will open - select from list</p></div>
+<div><label>Diagnosis</label><input type="text" id="diagnosis" list="diagnosisList" placeholder="Type 2-3 letters, e.g. UR..." autocomplete="off"><p class="hint">Type 2-3 letters, list will open - select from list</p></div>
+</div>
+<label>Vitals</label>
+<div class="row6">
+<div><input type="text" id="bp" placeholder="BP:"></div>
+<div><input type="text" id="spo2" placeholder="SPO2:"></div>
+<div><input type="text" id="hr" placeholder="HR:"></div>
+<div><input type="text" id="temp" placeholder="TEM:"></div>
+<div><input type="text" id="rbs" placeholder="RBS:"></div>
+<div><input type="text" id="weight" placeholder="WEIGHT:"></div>
+</div>
+<p class="hint">Sirf number likhen, Print me unit khud lag jayega - BP mmHg, SPO2 %, HR /M, TEM °F, RBS mg/dl, WEIGHT KG</p>
+<label>Test Results</label>
+<textarea id="tests" rows="2" placeholder="e.g. HB: 12, TLC: 12000, PLT: 250,000"></textarea>
+<h3 style="margin:15px 0 0;color:var(--navy);font-size:16px">Medicines</h3>
+<p class="hint">Type medicine name - full name will appear after typing 3 letters. Select Dose and Days only.</p>
+<div id="medList"></div>
+<button class="btn-grey" style="margin-top:8px" onclick="addMed()">+ Add Medicine</button>
+<label>Advice</label><textarea id="advice" rows="2" placeholder="e.g. Take rest, drink more water..."></textarea>
+<div class="row">
+<div><label>Follow-up Date</label><input type="date" id="followup"></div>
+<div><label>Fees (Rs.)</label><input type="number" id="fees" placeholder="500"></div>
+</div>
+<div class="flex">
+<button class="btn-red" onclick="saveAndPrint()">Save + Print Prescription</button>
+<button class="btn-blue" onclick="saveOnly()">Save Only</button>
+<button class="btn-grey" onclick="clearForm()">Clear Form</button>
+<button class="btn-red" onclick="logout()">Logout</button>
+</div>
+</div>
+
+<div class="card">
+<h2>Patient Records <span class="badge" id="totalCount">0 Records</span></h2>
+<input type="text" id="searchBox" placeholder="Search by Name, Phone or Diagnosis..." onkeyup="renderList()" style="margin-bottom:10px">
+<div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>Patient</th><th>Diagnosis</th><th>Phone</th><th>Fees</th><th>Action</th></tr></thead><tbody id="recordTable"></tbody></table></div>
+<div class="flex"><button class="btn-navy" onclick="exportCSV()">Excel / CSV Download</button><button class="btn-red" onclick="deleteAll()">Delete All Data</button></div>
+<p style="font-size:12px;color:#666">Data is saved in this mobile / computer browser. It works offline also. When online, it will auto sync to Drive.</p>
+</div>
+
+<div class="card" style="border-top-color:#15803d;text-align:center">
+<h2 style="text-align:center">Cloud Backup</h2>
+<div class="flex" style="justify-content:center">
+<button class="btn-green" onclick="connectDrive()">Connect Google Drive</button>
+<button class="btn-blue" onclick="syncToDrive(true)">Save to Drive Now</button>
+</div>
+<p class="hint" id="driveStatus" style="text-align:center">Drive: Not Connected</p>
+</div>
+
+</div>
+
+<div id="printArea">
+<div class="p-head">
+<img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'">
+<div class="p-head-center"><h1>AZAM MEDICAL CENTRE</h1><p>Plot 27, New Street No.16, Sec C, Allama Iqbal Road, Manzoor Colony, Ph: 02135803668</p></div>
+<div class="p-head-spacer"></div>
+</div>
+<div class="p-notvalid">Not Valid For Medicolegal & Court Purpose</div>
+<div class="p-info"><div><b>Date:</b> <span id="pr-date"></span></div><div><b>Patient ID:</b> <span id="pr-pid"></span></div><div><b>Name:</b> <span id="pr-name"></span></div><div><b>Age / Gender:</b> <span id="pr-age"></span></div><div><b>Phone:</b> <span id="pr-phone"></span></div><div><b>Address:</b> <span id="pr-address"></span></div></div>
+<div class="p-box"><b>Complaint:</b><br><span id="pr-complaint"></span></div>
+<div class="p-box p-box-inline"><b>Diagnosis:</b> <span id="pr-diagnosis"></span></div>
+<div class="p-box p-box-inline"><b>Vitals:</b> <span id="pr-vitals"></span></div>
+<div class="p-box p-box-inline"><b>Test Results:</b> <span id="pr-tests"></span></div>
+<div class="p-box"><b>Rx - Medicines:</b><br><span id="pr-meds"></span></div>
+<div class="p-box"><b>Advice:</b><br><span id="pr-advice"></span></div>
+<div style="margin-top:8px;font-size:12px"><b>Follow-up:</b> <span id="pr-follow"></span> &nbsp; | &nbsp; <b>Fees:</b> Rs. <span id="pr-fees"></span></div>
+<div class="p-sign"><div><b>DR. MUHAMMAD ZEESHAN</b><br>MBBS, RMP (General Physician)<br><br>Signature: ___________</div></div>
+</div><script src="https://apis.google.com/js/api.js"></script>
+<script src="https://accounts.google.com/gsi/client"></script>
+<script>
+const FIXED_CLIENT_ID = "153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com";
+function checkPass(){
+  if(document.getElementById('loginPass').value==='2201'){
+    sessionStorage.setItem('azam_login','yes');
+    document.getElementById('loginScreen').style.display='none';
+  } else { document.getElementById('loginError').style.display='block'; }
+}
+function logout(){ sessionStorage.removeItem('azam_login'); location.reload(); }
+if(sessionStorage.getItem('azam_login')==='yes'){ document.getElementById('loginScreen').style.display='none'; }
+document.getElementById('loginPass').addEventListener('keydown',e=>{ if(e.key==='Enter') checkPass(); });
+function updateStatus(){
+  let bar=document.getElementById('statusBar');
+  if(navigator.onLine){ bar.className='online'; bar.innerText='Online - Auto Save ON'; autoSync(); }
+  else { bar.className='offline'; bar.innerText='Offline - Data is saved locally, will sync when online'; }
+}
+window.addEventListener('online',updateStatus);
+window.addEventListener('offline',updateStatus);
+function autoSync(){ if(driveToken && navigator.onLine){ syncToDrive(false); } }
+let driveToken=null;
+function connectDrive(){
+  let client = google.accounts.oauth2.initTokenClient({
+    client_id: FIXED_CLIENT_ID,
+    scope: 'https://www.googleapis.com/auth/drive',
+    callback: (resp)=>{
+      if(resp.access_token){ driveToken=resp.access_token; document.getElementById('driveStatus').innerText='Drive: Connected - Auto Sync ON'; syncToDrive(true); }
+      else { document.getElementById('driveStatus').innerText='Drive: Not Connected - Try Again'; }
+    },
+  });
+  client.requestAccessToken({prompt:'consent'});
+}
+async function syncToDrive(showMsg){
+  if(!driveToken){ if(showMsg) alert('Please Connect Google Drive First'); return; }
+  if(!navigator.onLine){ if(showMsg) alert('You are Offline. Data is saved locally and will sync when online.'); return; }
+  try{
+    let data = localStorage.getItem('azam_records')||'[]';
+    let fileContent = JSON.stringify({updated:new Date().toISOString(), records: JSON.parse(data)}, null, 2);
+    let search = await fetch('https://www.googleapis.com/drive/v3/files?q=name%3D%27azam-medical-backup.json%27&fields=files(id)',{headers:{Authorization:'Bearer '+driveToken}});
+    let sj = await search.json();
+    let metadata = {name:'azam-medical-backup.json', mimeType:'application/json'};
+    let form = new FormData();
+    form.append('metadata', new Blob([JSON.stringify(metadata)],{type:'application/json'}));
+    form.append('file', new Blob([fileContent],{type:'application/json'}));
+    let url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
+    let method='POST';
+    if(sj.files && sj.files.length){ url='https://www.googleapis.com/upload/drive/v3/files/'+sj.files[0].id+'?uploadType=multipart'; method='PATCH'; }
+    await fetch(url,{method:method, headers:{Authorization:'Bearer '+driveToken}, body:form});
+    document.getElementById('driveStatus').innerText='Drive: Last Sync - '+new Date().toLocaleTimeString();
+  }catch(e){ if(showMsg) alert('Drive Sync Error - Please Press Connect Google Drive Again'); }
+}
+document.getElementById('date').valueAsDate = new Date();
+let records = JSON.parse(localStorage.getItem('azam_records')||'[]');
+let editingIndex = -1;
+let doseOptions = ['','1+0+0','0+0+1','1+0+1','1+1+1','1+1+1+1','2+0+0','0+0+2','2+0+2','2+2+2','2+2+2+1','1 Weekly','1 Alternate Days'];
+let daysOptions = ['','1 Day','2 Days','3 Days','4 Days','5 Days','6 Days','7 Days','10 Days','30 Days'];
+function addMed(n='',d='',dy=''){
+  let div=document.createElement('div');div.className='row3 med-row';
+  let doseHtml='<select class="m-dose"><option value="">Select Dose</option>'+doseOptions.filter(x=>x).map(o=>`<option ${o===d?'selected':''}>${o}</option>`).join('')+(d && !doseOptions.includes(d)?`<option selected>${d}</option>`:'')+'</select>';
+  let daysHtml='<select class="m-days"><option value="">Select Days</option>'+daysOptions.filter(x=>x).map(o=>`<option ${o===dy?'selected':''}>${o}</option>`).join('')+(dy && !daysOptions.includes(dy)?`<option selected>${dy}</option>`:'')+'</select>';
+  div.innerHTML=`<input class="m-name" list="medicineList" placeholder="Type 3 letters - e.g. PAN" value="${n}">${doseHtml}${daysHtml}`;
+  document.getElementById('medList').appendChild(div);
+}
+addMed();
+function withUnit(val, unit){
+  val = (val||'').trim();
+  if(!val) return '';
+  if(val.toLowerCase().includes(unit.toLowerCase().replace('/','')) || val.includes('%') || val.toLowerCase().includes('mmhg') || val.toLowerCase().includes('mg/dl') || val.toLowerCase().includes('kg') || val.includes('°F') || val.includes('F')) return val;
+  return val + ' ' + unit;
+}
+function getForm(){
+  let meds=[];document.querySelectorAll('.med-row').forEach(r=>{let n=r.querySelector('.m-name').value,d=r.querySelector('.m-dose').value,dy=r.querySelector('.m-days').value;if(n)meds.push(n+' - '+d+' - '+dy);});
+  let bpV = withUnit(document.getElementById('bp').value, 'mmHg');
+  let spo2V = withUnit(document.getElementById('spo2').value, '%');
+  let hrV = withUnit(document.getElementById('hr').value, '/M');
+  let tempV = withUnit(document.getElementById('temp').value, '°F');
+  let rbsV = withUnit(document.getElementById('rbs').value, 'mg/dl');
+  let wtV = withUnit(document.getElementById('weight').value, 'KG');
+  let vitals=[];
+  if(bpV) vitals.push('BP: '+bpV);
+  if(spo2V) vitals.push('SPO2: '+spo2V);
+  if(hrV) vitals.push('HR: '+hrV);
+  if(tempV) vitals.push('TEM: '+tempV);
+  if(rbsV) vitals.push('RBS: '+rbsV);
+  if(wtV) vitals.push('WEIGHT: '+wtV);
+  return{date:document.getElementById('date').value,pid:document.getElementById('pid').value,name:document.getElementById('pname').value,age:document.getElementById('age').value,gender:document.getElementById('gender').value,phone:document.getElementById('phone').value,address:document.getElementById('address').value,complaint:document.getElementById('complaint').value,diagnosis:document.getElementById('diagnosis').value,vitals:vitals.join(' | '),vitalsRaw:{bp:document.getElementById('bp').value,spo2:document.getElementById('spo2').value,hr:document.getElementById('hr').value,temp:document.getElementById('temp').value,rbs:document.getElementById('rbs').value,weight:document.getElementById('weight').value},tests:document.getElementById('tests').value,meds:meds.join(' | '),medsRaw:meds,advice:document.getElementById('advice').value,followup:document.getElementById('followup').value,fees:document.getElementById('fees').value,};
+}
+function fillPrint(d){document.getElementById('pr-date').innerText=d.date;document.getElementById('pr-pid').innerText=d.pid;document.getElementById('pr-name').innerText=d.name;document.getElementById('pr-age').innerText=d.age+' / '+d.gender;document.getElementById('pr-phone').innerText=d.phone;document.getElementById('pr-address').innerText=d.address;document.getElementById('pr-complaint').innerText=d.complaint;document.getElementById('pr-diagnosis').innerText=d.diagnosis;document.getElementById('pr-vitals').innerText=d.vitals||'';document.getElementById('pr-tests').innerText=d.tests||'';document.getElementById('pr-meds').innerText=d.meds;document.getElementById('pr-advice').innerText=d.advice;document.getElementById('pr-follow').innerText=d.followup;document.getElementById('pr-fees').innerText=d.fees;}
+function saveData(d){if(editingIndex>=0){records[editingIndex]=d;editingIndex=-1;}else{records.unshift(d);}localStorage.setItem('azam_records',JSON.stringify(records));renderList();autoSync();}
+function saveOnly(){let d=getForm();if(!d.name){alert('Please enter Patient Name');return;}saveData(d);alert('Saved');clearForm();}
+function saveAndPrint(){let d=getForm();if(!d.name){alert('Please enter Patient Name');return;}saveData(d);fillPrint(d);window.print();clearForm();}
+function clearForm(){editingIndex=-1;document.querySelectorAll('input[type=text],input[type=number],textarea').forEach(e=>e.value='');document.getElementById('date').valueAsDate=new Date();document.getElementById('medList').innerHTML='';addMed();}
+function renderList(){let q=(document.getElementById('searchBox').value||'').toLowerCase();let tb=document.getElementById('recordTable');tb.innerHTML='';let filtered=records.filter(r=>(r.name+' '+r.phone+' '+r.diagnosis).toLowerCase().includes(q));document.getElementById('totalCount').innerText=records.length+' Records';filtered.forEach((r)=>{let idx=records.indexOf(r);tb.innerHTML+=`<tr><td>${r.date}</td><td><b>${r.name}</b><br><small>${r.age} / ${r.gender}</small></td><td>${r.phone}</td><td>${r.diagnosis}</td><td>${r.fees}</td><td><button class="btn-blue" onclick="viewRec(${idx})">Print</button> <button class="btn-green" onclick="editRec(${idx})">Edit</button> <button class="btn-red" onclick="delRec(${idx})">Del</button></td></tr>`;});}
+function viewRec(i){fillPrint(records[i]);window.print();}
+function editRec(i){let r=records[i];editingIndex=i;document.getElementById('date').value=r.date;document.getElementById('pid').value=r.pid||'';document.getElementById('pname').value=r.name;document.getElementById('age').value=r.age||'';document.getElementById('gender').value=r.gender||'Male';document.getElementById('phone').value=r.phone||'';document.getElementById('address').value=r.address||'';document.getElementById('complaint').value=r.complaint||'';document.getElementById('diagnosis').value=r.diagnosis||'';document.getElementById('tests').value=r.tests||'';document.getElementById('advice').value=r.advice||'';document.getElementById('followup').value=r.followup||'';document.getElementById('fees').value=r.fees||'';if(r.vitalsRaw){document.getElementById('bp').value=r.vitalsRaw.bp||'';document.getElementById('spo2').value=r.vitalsRaw.spo2||'';document.getElementById('hr').value=r.vitalsRaw.hr||'';document.getElementById('temp').value=r.vitalsRaw.temp||'';document.getElementById('rbs').value=r.vitalsRaw.rbs||'';document.getElementById('weight').value=r.vitalsRaw.weight||'';}document.getElementById('medList').innerHTML='';if(r.medsRaw && r.medsRaw.length){r.medsRaw.forEach(m=>{let parts=m.split(' - ');addMed(parts[0]||'',parts[1]||'',parts[2]||'');});}else{addMed();}window.scrollTo({top:0,behavior:'smooth'});alert('Now you can Edit this record and press Save. It will update the same record.');}
+function delRec(i){if(confirm('Delete this record?')){records.splice(i,1);localStorage.setItem('azam_records',JSON.stringify(records));renderList();autoSync();}}
+function deleteAll(){if(confirm('Delete all data?')){records=[];localStorage.removeItem('azam_records');renderList();}}
+function exportCSV(){let csv='Date,ID,Name,Age,Gender,Phone,Diagnosis,Vitals,Tests,Medicines,Fees,Followup\n';records.forEach(r=>{csv+=`"${r.date}","${r.pid}","${r.name}","${r.age}","${r.gender}","${r.phone}","${r.diagnosis}","${r.vitals}","${r.tests}","${r.meds}","${r.fees}","${r.followup}"\n`});let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='azam-medical-records.csv';a.click();}
+renderList();
+updateStatus();
+</script>
+</body>
+</html>
