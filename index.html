@@ -101,6 +101,9 @@ th{background:var(--navy);color:#fff}
 <datalist id="doseList">
 <option value="1+0+0"></option><option value="0+0+1"></option><option value="1+0+1"></option><option value="1+1+1"></option><option value="1+1+1+1"></option><option value="2+0+0"></option><option value="0+0+2"></option><option value="2+0+2"></option><option value="2+2+2"></option><option value="2+2+2+1"></option><option value="1 Weekly"></option><option value="1 Alternate Days"></option><option value="1ml+0+0"></option><option value="1ml+1ml"></option><option value="1ml+1ml+1ml"></option><option value="2ml+0+0"></option><option value="2ml+0+2ml"></option><option value="2ml+2ml+2ml"></option><option value="2.5ml"></option><option value="2.5ml+2.5ml+2.5ml"></option><option value="3ml"></option><option value="3ml+3ml+3ml"></option><option value="3.5ml"></option><option value="3.5ml+3.5ml+3.5ml"></option><option value="5ml"></option><option value="5ml+5ml+5ml"></option><option value="7.5ml"></option><option value="7.5ml+7.5ml+7.5ml"></option><option value="10ml"></option><option value="10ml+10ml+10ml"></option><option value="20ml"></option><option value="30ml"></option>
 </datalist>
+<datalist id="adviceList">
+<option value="Take complete rest"></option><option value="Drink plenty of water"></option><option value="Drink more fluids / ORS"></option><option value="Avoid spicy and oily food"></option><option value="Avoid cold drinks and ice cream"></option><option value="Avoid dust, smoke and cold air"></option><option value="Take soft / light diet"></option><option value="Take Khichri, Dalia, Yogurt"></option><option value="Avoid junk food and bakery items"></option><option value="Do not skip medicine - complete the course"></option><option value="Take medicine after meal"></option><option value="Take medicine before meal"></option><option value="Use steam inhalation twice daily"></option><option value="Gargle with warm salt water"></option><option value="Keep the wound clean and dry"></option><option value="Apply cold sponging in fever"></option><option value="Avoid self medication"></option><option value="Check BP and Sugar regularly"></option><option value="Low salt diet"></option><option value="Low sugar diet - avoid sweets"></option><option value="Walk for 30 minutes daily"></option><option value="Avoid lifting heavy weight"></option><option value="Keep the skin clean - do not scratch"></option><option value="Use mosquito net / mosquito repellent"></option><option value="Drink boiled / clean water"></option><option value="Come for follow-up if fever does not settle in 3 days"></option><option value="Come immediately if condition worsens"></option><option value="Come for follow-up after reports"></option><option value="Take plenty of rest and avoid exertion"></option><option value="Avoid tea, coffee and soft drinks"></option><option value="Eat fruits and vegetables"></option>
+</datalist>
 
 <div class="container no-print">
 
@@ -138,7 +141,10 @@ th{background:var(--navy);color:#fff}
 <p class="hint">Type medicine name - full name will appear after typing 3 letters. Dose me Select bhi kar sakte hen, khud bhi likh sakte hen.</p>
 <div id="medList"></div>
 <button class="btn-grey" style="margin-top:8px" onclick="addMed()">+ Add Medicine</button>
-<label>Advice</label><textarea id="advice" rows="2" placeholder="e.g. Take rest, drink more water..."></textarea>
+<label>Advice - Select karke Add karen, bar bar likhne ki zaroorat nahi</label>
+<div class="row"><div><input type="text" id="adviceSelect" list="adviceList" placeholder="Advice select karen - e.g. Take rest..."></div><div><button class="btn-green" style="width:100%;padding:11px;margin-top:4px" onclick="addAdvice()">+ Add Advice</button></div></div>
+<p class="hint">Upar se Advice Select karen aur Add dabayen - wo neechay Box me aa jayegi. 2-3 Advices bhi add kar sakte hen. Khud se bhi likh sakte hen.</p>
+<textarea id="advice" rows="2" placeholder="Selected Advices yahan aa jayengi..."></textarea>
 <div class="row">
 <div><label>Follow-up Date</label><input type="date" id="followup"></div>
 <div><label>Fees (Rs.)</label><input type="number" id="fees" placeholder="500"></div>
@@ -272,6 +278,21 @@ function addMed(n='',d='',dy=''){
 }
 loadCustomMeds();
 addMed();
+function addAdvice(){
+  let sel = document.getElementById('adviceSelect');
+  let val = (sel.value||'').trim();
+  if(!val){ alert('Pehle Advice Select karen'); return; }
+  let box = document.getElementById('advice');
+  let cur = (box.value||'').trim();
+  if(cur && !cur.endsWith('.') && !cur.endsWith(',')) cur += '. ';
+  else if(cur) cur += ' ';
+  box.value = (cur + val + '. ').trim();
+  sel.value = '';
+  // save custom advice for next time
+  let dl = document.getElementById('adviceList');
+  let exists = Array.from(dl.options).some(o=>o.value.toLowerCase()===val.toLowerCase());
+  if(!exists){ let op=document.createElement('option'); op.value=val; dl.appendChild(op); }
+}
 function withUnit(val, unit){
   val = (val||'').trim();
   if(!val) return '';
