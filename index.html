@@ -54,8 +54,8 @@ th{background:var(--navy);color:#fff}
 .p-box{border:1px solid #999;padding:6px 8px;border-radius:5px;margin-top:6px;min-height:30px;font-size:12px}
 .p-box-inline{display:flex;gap:6px;align-items:flex-start}
 .p-box-inline b{white-space:nowrap}
-.p-sign{margin-top:6px;display:flex;justify-content:flex-end;text-align:center;font-size:12px;line-height:1.2}
-.p-sign img{width:85px;height:auto;margin:0 auto;display:block}
+.p-sign{margin-top:2px;display:flex;justify-content:flex-end;text-align:center;font-size:12px;line-height:1.1}
+.p-sign img{width:80px;height:32px;object-fit:cover;object-position:center;margin:-2px auto 0;display:block}
 .rx-list{column-count:2;column-gap:18px;margin-top:2px}
 .rx-item{break-inside:avoid;padding:1px 0;font-size:12px;line-height:1.45}
 @media(max-width:700px){
@@ -69,7 +69,6 @@ th{background:var(--navy);color:#fff}
 </style>
 </head>
 <body>
-
 <div id="loginScreen">
   <div class="login-box">
     <div style="font-size:40px">🏥</div>
@@ -80,9 +79,7 @@ th{background:var(--navy);color:#fff}
     <p id="loginError" style="color:red;display:none">Wrong Password !</p>
   </div>
 </div>
-
 <div id="statusBar" class="online">Online - Auto Save ON</div>
-
 <header class="no-print">
 <img src="logo.png" onerror="this.src='https://azam-medical-coder.github.io/Azammedicalcentre/logo.png'" alt="Azam Medical Centre Logo">
 <div class="head-center">
@@ -91,7 +88,6 @@ th{background:var(--navy);color:#fff}
 </div>
 <div class="head-spacer"></div>
 </header>
-
 <datalist id="pidList"></datalist>
 <datalist id="complaintList">
 <option value="FEVER"></option><option value="FEVER 3 DAYS"></option><option value="FEVER, COUGH"></option><option value="FEVER, HEADACHE"></option><option value="COUGH"></option><option value="DRY COUGH"></option><option value="PRODUCTIVE COUGH"></option><option value="SORE THROAT"></option><option value="HEADACHE"></option><option value="BODY ACHE"></option><option value="JOINT PAIN"></option><option value="BACK PAIN"></option><option value="ABDOMINAL PAIN"></option><option value="STOMACH PAIN"></option><option value="VOMITING"></option><option value="LOOSE MOTION"></option><option value="DIARRHEA"></option><option value="CONSTIPATION"></option><option value="NAUSEA"></option><option value="CHEST PAIN"></option><option value="SHORTNESS OF BREATH"></option><option value="FLU"></option><option value="COLD"></option><option value="RUNNY NOSE"></option><option value="ALLERGY"></option><option value="SKIN RASH"></option><option value="ITCHING"></option><option value="WEAKNESS"></option><option value="DIZZINESS"></option><option value="HIGH BP"></option><option value="SUGAR HIGH"></option><option value="BURNING URINE"></option><option value="EAR PAIN"></option><option value="TOOTH PAIN"></option><option value="EYE REDNESS"></option>
@@ -108,9 +104,7 @@ th{background:var(--navy);color:#fff}
 <datalist id="adviceList">
 <option value="Take complete rest"></option><option value="Drink plenty of water"></option><option value="Drink more fluids / ORS"></option><option value="Avoid spicy and oily food"></option><option value="Avoid cold drinks and ice cream"></option><option value="Avoid dust, smoke and cold air"></option><option value="Take soft / light diet"></option><option value="Take Khichri, Dalia, Yogurt"></option><option value="Avoid junk food and bakery items"></option><option value="Do not skip medicine - complete the course"></option><option value="Take medicine after meal"></option><option value="Take medicine before meal"></option><option value="Use steam inhalation twice daily"></option><option value="Gargle with warm salt water"></option><option value="Keep the wound clean and dry"></option><option value="Apply cold sponging in fever"></option><option value="Avoid self medication"></option><option value="Check BP and Sugar regularly"></option><option value="Low salt diet"></option><option value="Low sugar diet - avoid sweets"></option><option value="Walk for 30 minutes daily"></option><option value="Avoid lifting heavy weight"></option><option value="Keep the skin clean - do not scratch"></option><option value="Use mosquito net / mosquito repellent"></option><option value="Drink boiled / clean water"></option><option value="Come for follow-up if fever does not settle in 3 days"></option><option value="Come immediately if condition worsens"></option><option value="Come for follow-up after reports"></option><option value="Take plenty of rest and avoid exertion"></option><option value="Avoid tea, coffee and soft drinks"></option><option value="Eat fruits and vegetables"></option>
 </datalist>
-
 <div class="container no-print">
-
 <div class="card">
 <h2>New Prescription</h2>
 <div class="row">
@@ -157,7 +151,6 @@ th{background:var(--navy);color:#fff}
 <button class="btn-red" onclick="logout()">Logout</button>
 </div>
 </div>
-
 <div class="card">
 <h2>Patient Records <span class="badge" id="totalCount">0 Records</span></h2>
 <input type="text" id="searchBox" placeholder="Search by Name, Phone or Diagnosis..." onkeyup="renderList()" style="margin-bottom:10px">
@@ -165,7 +158,6 @@ th{background:var(--navy);color:#fff}
 <div class="flex"><button class="btn-navy" onclick="exportCSV()">Excel / CSV Download</button><button class="btn-red" onclick="deleteAll()">Delete All Data</button></div>
 <p style="font-size:12px;color:#666">Data is saved in this mobile / computer browser. It works offline also. When online, it will auto sync to Drive.</p>
 </div>
-
 <div class="card" style="border-top-color:#15803d;text-align:center">
 <h2 style="text-align:center">Cloud Backup</h2>
 <div class="flex" style="justify-content:center">
@@ -174,9 +166,7 @@ th{background:var(--navy);color:#fff}
 </div>
 <p class="hint" id="driveStatus" style="text-align:center">Drive: Not Connected</p>
 </div>
-
 </div>
-
 <div id="printArea">
 <div class="p-info"><div><b>Date:</b> <span id="pr-date"></span></div><div><b>Patient ID:</b> <span id="pr-pid"></span></div><div><b>Name:</b> <span id="pr-name"></span></div><div><b>Age / Gender:</b> <span id="pr-age"></span></div><div><b>Phone:</b> <span id="pr-phone"></span></div><div><b>Address:</b> <span id="pr-address"></span></div></div>
 <div class="p-box"><b>Complaint:</b><br><span id="pr-complaint"></span></div>
@@ -187,7 +177,8 @@ th{background:var(--navy);color:#fff}
 <div class="p-box"><b>Advice:</b><br><span id="pr-advice"></span></div>
 <div style="margin-top:8px;font-size:12px"><b>Follow-up:</b> <span id="pr-follow"></span> &nbsp; | &nbsp; <b>Fees:</b> Rs. <span id="pr-fees"></span></div>
 <div class="p-sign"><div><b>DR. MUHAMMAD ZEESHAN</b><br>MBBS, RMP (General Physician)<br><img src="signature.png" onerror="this.style.display='none'" alt=""></div></div>
-</div><script src="https://apis.google.com/js/api.js"></script>
+</div>
+<script src="https://apis.google.com/js/api.js"></script>
 <script src="https://accounts.google.com/gsi/client"></script>
 <script>
 const FIXED_CLIENT_ID = "153046624604-p07rnrrj0kdhi23n8384kbd47i2rtace.apps.googleusercontent.com";
