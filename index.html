@@ -124,8 +124,8 @@ th{background:var(--navy);color:#fff}
 </div>
 <label>Address</label><input type="text" id="address" placeholder="Enter Address">
 <div class="row">
-<div><label>Complaint / History</label><input type="text" id="complaint" list="complaintList" placeholder="Type 2-3 letters, e.g. FE..." autocomplete="off"><p class="hint">Type 2-3 letters, list will open - select from list</p></div>
-<div><label>Diagnosis</label><input type="text" id="diagnosis" list="diagnosisList" placeholder="Type 2-3 letters, e.g. UR..." autocomplete="off"><p class="hint">Type 2-3 letters, list will open - select from list</p></div>
+<div><label>Complaint / History</label><input type="text" id="complaint" list="complaintList" placeholder="Type 2-3 letters, e.g. FE..." autocomplete="off"></div>
+<div><label>Diagnosis</label><input type="text" id="diagnosis" list="diagnosisList" placeholder="Type 2-3 letters, e.g. UR..." autocomplete="off"></div>
 </div>
 <label>Vitals</label>
 <div class="row6">
@@ -136,17 +136,14 @@ th{background:var(--navy);color:#fff}
 <div><input type="text" id="rbs" placeholder="RBS:"></div>
 <div><input type="text" id="weight" placeholder="WEIGHT:"></div>
 </div>
-<p class="hint">Sirf number likhen, Print me unit khud lag jayega - BP mmHg, SPO2 %, HR /M, TEM °F, RBS mg/dl, WEIGHT KG</p>
 <label>Test Results</label>
 <textarea id="tests" rows="2" placeholder="e.g. HB: 12, TLC: 12000, PLT: 250,000"></textarea>
 <h3 style="margin:15px 0 0;color:var(--navy);font-size:16px">Medicines</h3>
-<p class="hint">Type medicine name - full name will appear after typing 3 letters. Dose me Select bhi kar sakte hen, khud bhi likh sakte hen.</p>
 <div id="medList"></div>
 <button class="btn-grey" style="margin-top:8px" onclick="addMed()">+ Add Medicine</button>
-<label>Advice - Select karke Add karen, bar bar likhne ki zaroorat nahi</label>
-<div class="row"><div><input type="text" id="adviceSelect" list="adviceList" placeholder="Advice select karen - e.g. Take rest..."></div><div><button class="btn-green" style="width:100%;padding:11px;margin-top:4px" onclick="addAdvice()">+ Add Advice</button></div></div>
-<p class="hint">Upar se Advice Select karen aur Add dabayen - wo neechay Box me aa jayegi. 2-3 Advices bhi add kar sakte hen. Khud se bhi likh sakte hen.</p>
-<textarea id="advice" rows="2" placeholder="Selected Advices yahan aa jayengi..."></textarea>
+<label>Advice</label>
+<div class="row"><div><input type="text" id="adviceSelect" list="adviceList" placeholder="Select Advice - e.g. Take rest..."></div><div><button class="btn-green" style="width:100%;padding:11px;margin-top:4px" onclick="addAdvice()">+ Add Advice</button></div></div>
+<textarea id="advice" rows="2" placeholder="Selected Advices will appear here..."></textarea>
 <div class="row">
 <div><label>Follow-up Date</label><input type="date" id="followup"></div>
 <div><label>Fees (Rs.)</label><input type="number" id="fees" placeholder="500"></div>
@@ -283,7 +280,7 @@ addMed();
 function addAdvice(){
   let sel = document.getElementById('adviceSelect');
   let val = (sel.value||'').trim();
-  if(!val){ alert('Pehle Advice Select karen'); return; }
+  if(!val){ alert('Please Select Advice First'); return; }
   let box = document.getElementById('advice');
   let cur = (box.value||'').trim();
   if(cur && !cur.endsWith('.') && !cur.endsWith(',')) cur += '. ';
@@ -342,7 +339,7 @@ function saveData(d){if(editingIndex>=0){records[editingIndex]=d;editingIndex=-1
 function saveOnly(){let d=getForm();if(!d.name){alert('Please enter Patient Name');return;}saveData(d);alert('Saved');clearForm();}
 function saveAndPrint(){let d=getForm();if(!d.name){alert('Please enter Patient Name');return;}saveData(d);fillPrint(d);window.print();clearForm();}
 function clearForm(){editingIndex=-1;document.querySelectorAll('input[type=text],input[type=number],textarea').forEach(e=>e.value='');document.getElementById('date').valueAsDate=new Date();document.getElementById('medList').innerHTML='';addMed();}
-function renderList(){let q=(document.getElementById('searchBox').value||'').toLowerCase();let tb=document.getElementById('recordTable');tb.innerHTML='';let filtered=records.filter(r=>(r.name+' '+r.phone+' '+r.diagnosis).toLowerCase().includes(q));document.getElementById('totalCount').innerText=records.length+' Records';filtered.forEach((r)=>{let idx=records.indexOf(r);tb.innerHTML+=`<tr><td>${r.date}</td><td><b>${r.name}</b><br><small>${r.age} / ${r.gender}</small></td><td>${r.phone}</td><td>${r.diagnosis}</td><td>${r.fees}</td><td><button class="btn-blue" onclick="viewRec(${idx})">Print</button> <button class="btn-green" onclick="editRec(${idx})">Edit</button> <button class="btn-red" onclick="delRec(${idx})">Del</button></td></tr>`;});}
+function renderList(){let q=(document.getElementById('searchBox').value||'').toLowerCase();let tb=document.getElementById('recordTable');tb.innerHTML='';let filtered=records.filter(r=>(r.name+' '+r.phone+' '+r.diagnosis).toLowerCase().includes(q));document.getElementById('totalCount').innerText=records.length+' Records';filtered.forEach((r)=>{let idx=records.indexOf(r);tb.innerHTML+=`<tr><td>${r.date}</td><td><b>${r.name}</b><br><small>${r.age} / ${r.gender}</small></td><td>${r.diagnosis}</td><td>${r.phone}</td><td>${r.fees}</td><td><button class="btn-blue" onclick="viewRec(${idx})">Print</button> <button class="btn-green" onclick="editRec(${idx})">Edit</button> <button class="btn-red" onclick="delRec(${idx})">Del</button></td></tr>`;});}
 function viewRec(i){fillPrint(records[i]);window.print();}
 function editRec(i){let r=records[i];editingIndex=i;document.getElementById('date').value=r.date;document.getElementById('pid').value=r.pid||'';document.getElementById('pname').value=r.name;document.getElementById('age').value=r.age||'';document.getElementById('gender').value=r.gender||'Male';document.getElementById('phone').value=r.phone||'';document.getElementById('address').value=r.address||'';document.getElementById('complaint').value=r.complaint||'';document.getElementById('diagnosis').value=r.diagnosis||'';document.getElementById('tests').value=r.tests||'';document.getElementById('advice').value=r.advice||'';document.getElementById('followup').value=r.followup||'';document.getElementById('fees').value=r.fees||'';if(r.vitalsRaw){document.getElementById('bp').value=r.vitalsRaw.bp||'';document.getElementById('spo2').value=r.vitalsRaw.spo2||'';document.getElementById('hr').value=r.vitalsRaw.hr||'';document.getElementById('temp').value=r.vitalsRaw.temp||'';document.getElementById('rbs').value=r.vitalsRaw.rbs||'';document.getElementById('weight').value=r.vitalsRaw.weight||'';}document.getElementById('medList').innerHTML='';if(r.medsRaw && r.medsRaw.length){r.medsRaw.forEach(m=>{let parts=m.split(' - ');addMed(parts[0]||'',parts[1]||'',parts[2]||'');});}else{addMed();}window.scrollTo({top:0,behavior:'smooth'});alert('Now you can Edit this record and press Save. It will update the same record.');}
 function delRec(i){if(confirm('Delete this record?')){records.splice(i,1);localStorage.setItem('azam_records',JSON.stringify(records));renderList();autoSync();}}
