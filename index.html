@@ -54,7 +54,8 @@ th{background:var(--navy);color:#fff}
 .p-box{border:1px solid #999;padding:6px 8px;border-radius:5px;margin-top:6px;min-height:30px;font-size:12px}
 .p-box-inline{display:flex;gap:6px;align-items:flex-start}
 .p-box-inline b{white-space:nowrap}
-.p-sign{margin-top:38px;display:flex;justify-content:flex-end;text-align:center;font-size:12px;line-height:1.5}
+.p-sign{margin-top:20px;display:flex;justify-content:flex-end;text-align:center;font-size:12px;line-height:1.5}
+.p-sign img{width:140px;height:auto;margin:2px 0}
 .rx-list{column-count:2;column-gap:18px;margin-top:2px}
 .rx-item{break-inside:avoid;padding:1px 0;font-size:12px;line-height:1.45}
 @media(max-width:700px){
@@ -91,6 +92,7 @@ th{background:var(--navy);color:#fff}
 <div class="head-spacer"></div>
 </header>
 
+<datalist id="pidList"></datalist>
 <datalist id="complaintList">
 <option value="FEVER"></option><option value="FEVER 3 DAYS"></option><option value="FEVER, COUGH"></option><option value="FEVER, HEADACHE"></option><option value="COUGH"></option><option value="DRY COUGH"></option><option value="PRODUCTIVE COUGH"></option><option value="SORE THROAT"></option><option value="HEADACHE"></option><option value="BODY ACHE"></option><option value="JOINT PAIN"></option><option value="BACK PAIN"></option><option value="ABDOMINAL PAIN"></option><option value="STOMACH PAIN"></option><option value="VOMITING"></option><option value="LOOSE MOTION"></option><option value="DIARRHEA"></option><option value="CONSTIPATION"></option><option value="NAUSEA"></option><option value="CHEST PAIN"></option><option value="SHORTNESS OF BREATH"></option><option value="FLU"></option><option value="COLD"></option><option value="RUNNY NOSE"></option><option value="ALLERGY"></option><option value="SKIN RASH"></option><option value="ITCHING"></option><option value="WEAKNESS"></option><option value="DIZZINESS"></option><option value="HIGH BP"></option><option value="SUGAR HIGH"></option><option value="BURNING URINE"></option><option value="EAR PAIN"></option><option value="TOOTH PAIN"></option><option value="EYE REDNESS"></option>
 </datalist>
@@ -112,8 +114,8 @@ th{background:var(--navy);color:#fff}
 <div class="card">
 <h2>New Prescription</h2>
 <div class="row">
-<div><label>Date</label><input type="date" id="date"></div>
-<div><label>Patient ID / Token No.</label><input type="text" id="pid" placeholder="e.g. 101"></div>
+<div><label>Date</label><input type="text" id="date" placeholder="DD/MM/YYYY" maxlength="10" inputmode="numeric"></div>
+<div><label>Patient ID / Token No.</label><input type="text" id="pid" list="pidList" placeholder="e.g. 101" autocomplete="off"></div>
 </div>
 <label>Patient Name *</label>
 <input type="text" id="pname" placeholder="Enter Patient Name">
@@ -145,7 +147,7 @@ th{background:var(--navy);color:#fff}
 <div class="row"><div><input type="text" id="adviceSelect" list="adviceList" placeholder="Select Advice - e.g. Take rest..."></div><div><button class="btn-green" style="width:100%;padding:11px;margin-top:4px" onclick="addAdvice()">+ Add Advice</button></div></div>
 <textarea id="advice" rows="2" placeholder="Selected Advices will appear here..."></textarea>
 <div class="row">
-<div><label>Follow-up Date</label><input type="date" id="followup"></div>
+<div><label>Follow-up Date</label><input type="text" id="followup" placeholder="DD/MM/YYYY" maxlength="10" inputmode="numeric"></div>
 <div><label>Fees (Rs.)</label><input type="number" id="fees" placeholder="500"></div>
 </div>
 <div class="flex">
@@ -184,7 +186,7 @@ th{background:var(--navy);color:#fff}
 <div class="p-box"><b>Rx - Medicines:</b><div id="pr-meds" class="rx-list"></div></div>
 <div class="p-box"><b>Advice:</b><br><span id="pr-advice"></span></div>
 <div style="margin-top:8px;font-size:12px"><b>Follow-up:</b> <span id="pr-follow"></span> &nbsp; | &nbsp; <b>Fees:</b> Rs. <span id="pr-fees"></span></div>
-<div class="p-sign"><div><b>DR. MUHAMMAD ZEESHAN</b><br>MBBS, RMP (General Physician)<br><br>Signature: ___________</div></div>
+<div class="p-sign"><div><b>DR. MUHAMMAD ZEESHAN</b><br>MBBS, RMP (General Physician)<br><img src="signature.png" onerror="this.style.display='none'" alt=""><br>Signature</div></div>
 </div><script src="https://apis.google.com/js/api.js"></script>
 <script src="https://accounts.google.com/gsi/client"></script>
 <script>
@@ -237,7 +239,55 @@ async function syncToDrive(showMsg){
     document.getElementById('driveStatus').innerText='Drive: Last Sync - '+new Date().toLocaleTimeString();
   }catch(e){ if(showMsg) alert('Drive Sync Error - Please Press Connect Google Drive Again'); }
 }
-document.getElementById('date').valueAsDate = new Date();
+function todayDMY(){
+  let n=new Date();
+  let d=String(n.getDate()).padStart(2,'0');
+  let m=String(n.getMonth()+1).padStart(2,'0');
+  let y=n.getFullYear();
+  return d+'/'+m+'/'+y;
+}
+function toDMY(v){
+  v=(v||'').trim();
+  if(!v) return v;
+  if(v.includes('/') && v.split('/').length===3) return v;
+  if(v.includes('-') && v.length===10 && v[4]==='-'){ let p=v.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+  return v;
+}
+function autoSlash(el){
+  let v=el.value.replace(/[^0-9]/g,'').slice(0,8);
+  if(v.length>4) v=v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4);
+  else if(v.length>2) v=v.slice(0,2)+'/'+v.slice(2);
+  el.value=v;
+}
+document.getElementById('date').value = todayDMY();
+document.getElementById('date').addEventListener('input',()=>autoSlash(document.getElementById('date')));
+document.getElementById('followup').addEventListener('input',()=>autoSlash(document.getElementById('followup')));
+function loadCustomPids(){
+  try{
+    let custom = JSON.parse(localStorage.getItem('azam_custom_pids')||'[]');
+    let dl = document.getElementById('pidList');
+    custom.forEach(p=>{
+      let exists = Array.from(dl.options).some(o=>o.value===String(p));
+      if(!exists){ let op=document.createElement('option'); op.value=p; dl.appendChild(op); }
+    });
+  }catch(e){}
+}
+function saveCustomPid(val){
+  val=(val||'').trim();
+  if(!val) return;
+  let dl=document.getElementById('pidList');
+  let exists=Array.from(dl.options).some(o=>o.value===val);
+  if(!exists){
+    let op=document.createElement('option'); op.value=val; dl.appendChild(op);
+    try{
+      let custom=JSON.parse(localStorage.getItem('azam_custom_pids')||'[]');
+      if(!custom.includes(val)){ custom.push(val); localStorage.setItem('azam_custom_pids',JSON.stringify(custom)); }
+    }catch(e){}
+  }
+}
+document.getElementById('pid').addEventListener('change',()=>saveCustomPid(document.getElementById('pid').value));
+document.getElementById('pid').addEventListener('blur',()=>saveCustomPid(document.getElementById('pid').value));
+loadCustomPids();
 let records = JSON.parse(localStorage.getItem('azam_records')||'[]');
 let editingIndex = -1;
 let doseOptions = ['1+0+0','0+0+1','1+0+1','1+1+1','1+1+1+1','2+0+0','0+0+2','2+0+2','2+2+2','2+2+2+1','1 Weekly','1 Alternate Days','1ml+0+0','1ml+1ml','1ml+1ml+1ml','2ml+0+0','2ml+0+2ml','2ml+2ml+2ml','2.5ml','2.5ml+2.5ml+2.5ml','3ml','3ml+3ml+3ml','3.5ml','3.5ml+3.5ml+3.5ml','5ml','5ml+5ml+5ml','7.5ml','7.5ml+7.5ml+7.5ml','10ml','10ml+10ml+10ml','20ml','30ml'];
@@ -299,6 +349,7 @@ function withUnit(val, unit){
 }
 function getForm(){
   let meds=[];document.querySelectorAll('.med-row').forEach(r=>{let n=r.querySelector('.m-name').value,d=r.querySelector('.m-dose').value,dy=r.querySelector('.m-days').value;if(n){ meds.push(n+' - '+d+' - '+dy); saveCustomMed(n); }});
+  saveCustomPid(document.getElementById('pid').value);
   let bpV = withUnit(document.getElementById('bp').value, 'mmHg');
   let spo2V = withUnit(document.getElementById('spo2').value, '%');
   let hrV = withUnit(document.getElementById('hr').value, '/M');
@@ -312,10 +363,10 @@ function getForm(){
   if(tempV) vitals.push('TEM: '+tempV);
   if(rbsV) vitals.push('RBS: '+rbsV);
   if(wtV) vitals.push('WEIGHT: '+wtV);
-  return{date:document.getElementById('date').value,pid:document.getElementById('pid').value,name:document.getElementById('pname').value,age:document.getElementById('age').value,gender:document.getElementById('gender').value,phone:document.getElementById('phone').value,address:document.getElementById('address').value,complaint:document.getElementById('complaint').value,diagnosis:document.getElementById('diagnosis').value,vitals:vitals.join(' | '),vitalsRaw:{bp:document.getElementById('bp').value,spo2:document.getElementById('spo2').value,hr:document.getElementById('hr').value,temp:document.getElementById('temp').value,rbs:document.getElementById('rbs').value,weight:document.getElementById('weight').value},tests:document.getElementById('tests').value,meds:meds.join(' | '),medsRaw:meds,advice:document.getElementById('advice').value,followup:document.getElementById('followup').value,fees:document.getElementById('fees').value,};
+  return{date:toDMY(document.getElementById('date').value),pid:document.getElementById('pid').value,name:document.getElementById('pname').value,age:document.getElementById('age').value,gender:document.getElementById('gender').value,phone:document.getElementById('phone').value,address:document.getElementById('address').value,complaint:document.getElementById('complaint').value,diagnosis:document.getElementById('diagnosis').value,vitals:vitals.join(' | '),vitalsRaw:{bp:document.getElementById('bp').value,spo2:document.getElementById('spo2').value,hr:document.getElementById('hr').value,temp:document.getElementById('temp').value,rbs:document.getElementById('rbs').value,weight:document.getElementById('weight').value},tests:document.getElementById('tests').value,meds:meds.join(' | '),medsRaw:meds,advice:document.getElementById('advice').value,followup:toDMY(document.getElementById('followup').value),fees:document.getElementById('fees').value,};
 }
 function fillPrint(d){
-  document.getElementById('pr-date').innerText=d.date;
+  document.getElementById('pr-date').innerText=toDMY(d.date);
   document.getElementById('pr-pid').innerText=d.pid;
   document.getElementById('pr-name').innerText=d.name;
   document.getElementById('pr-age').innerText=d.age+' / '+d.gender;
@@ -332,19 +383,19 @@ function fillPrint(d){
   }).join('');
   document.getElementById('pr-meds').innerHTML = medsHtml;
   document.getElementById('pr-advice').innerText=d.advice;
-  document.getElementById('pr-follow').innerText=d.followup;
+  document.getElementById('pr-follow').innerText=toDMY(d.followup);
   document.getElementById('pr-fees').innerText=d.fees;
 }
 function saveData(d){if(editingIndex>=0){records[editingIndex]=d;editingIndex=-1;}else{records.unshift(d);}localStorage.setItem('azam_records',JSON.stringify(records));renderList();autoSync();}
 function saveOnly(){let d=getForm();if(!d.name){alert('Please enter Patient Name');return;}saveData(d);alert('Saved');clearForm();}
 function saveAndPrint(){let d=getForm();if(!d.name){alert('Please enter Patient Name');return;}saveData(d);fillPrint(d);window.print();clearForm();}
-function clearForm(){editingIndex=-1;document.querySelectorAll('input[type=text],input[type=number],textarea').forEach(e=>e.value='');document.getElementById('date').valueAsDate=new Date();document.getElementById('medList').innerHTML='';addMed();}
-function renderList(){let q=(document.getElementById('searchBox').value||'').toLowerCase();let tb=document.getElementById('recordTable');tb.innerHTML='';let filtered=records.filter(r=>(r.name+' '+r.phone+' '+r.diagnosis).toLowerCase().includes(q));document.getElementById('totalCount').innerText=records.length+' Records';filtered.forEach((r)=>{let idx=records.indexOf(r);tb.innerHTML+=`<tr><td>${r.date}</td><td><b>${r.name}</b><br><small>${r.age} / ${r.gender}</small></td><td>${r.diagnosis}</td><td>${r.phone}</td><td>${r.fees}</td><td><button class="btn-blue" onclick="viewRec(${idx})">Print</button> <button class="btn-green" onclick="editRec(${idx})">Edit</button> <button class="btn-red" onclick="delRec(${idx})">Del</button></td></tr>`;});}
+function clearForm(){editingIndex=-1;document.querySelectorAll('input[type=text],input[type=number],textarea').forEach(e=>e.value='');document.getElementById('date').value=todayDMY();document.getElementById('medList').innerHTML='';addMed();}
+function renderList(){let q=(document.getElementById('searchBox').value||'').toLowerCase();let tb=document.getElementById('recordTable');tb.innerHTML='';let filtered=records.filter(r=>(r.name+' '+r.phone+' '+r.diagnosis).toLowerCase().includes(q));document.getElementById('totalCount').innerText=records.length+' Records';filtered.forEach((r)=>{let idx=records.indexOf(r);tb.innerHTML+=`<tr><td>${toDMY(r.date)}</td><td><b>${r.name}</b><br><small>${r.age} / ${r.gender}</small></td><td>${r.diagnosis}</td><td>${r.phone}</td><td>${r.fees}</td><td><button class="btn-blue" onclick="viewRec(${idx})">Print</button> <button class="btn-green" onclick="editRec(${idx})">Edit</button> <button class="btn-red" onclick="delRec(${idx})">Del</button></td></tr>`;});}
 function viewRec(i){fillPrint(records[i]);window.print();}
-function editRec(i){let r=records[i];editingIndex=i;document.getElementById('date').value=r.date;document.getElementById('pid').value=r.pid||'';document.getElementById('pname').value=r.name;document.getElementById('age').value=r.age||'';document.getElementById('gender').value=r.gender||'Male';document.getElementById('phone').value=r.phone||'';document.getElementById('address').value=r.address||'';document.getElementById('complaint').value=r.complaint||'';document.getElementById('diagnosis').value=r.diagnosis||'';document.getElementById('tests').value=r.tests||'';document.getElementById('advice').value=r.advice||'';document.getElementById('followup').value=r.followup||'';document.getElementById('fees').value=r.fees||'';if(r.vitalsRaw){document.getElementById('bp').value=r.vitalsRaw.bp||'';document.getElementById('spo2').value=r.vitalsRaw.spo2||'';document.getElementById('hr').value=r.vitalsRaw.hr||'';document.getElementById('temp').value=r.vitalsRaw.temp||'';document.getElementById('rbs').value=r.vitalsRaw.rbs||'';document.getElementById('weight').value=r.vitalsRaw.weight||'';}document.getElementById('medList').innerHTML='';if(r.medsRaw && r.medsRaw.length){r.medsRaw.forEach(m=>{let parts=m.split(' - ');addMed(parts[0]||'',parts[1]||'',parts[2]||'');});}else{addMed();}window.scrollTo({top:0,behavior:'smooth'});alert('Now you can Edit this record and press Save. It will update the same record.');}
+function editRec(i){let r=records[i];editingIndex=i;document.getElementById('date').value=toDMY(r.date);document.getElementById('pid').value=r.pid||'';document.getElementById('pname').value=r.name;document.getElementById('age').value=r.age||'';document.getElementById('gender').value=r.gender||'Male';document.getElementById('phone').value=r.phone||'';document.getElementById('address').value=r.address||'';document.getElementById('complaint').value=r.complaint||'';document.getElementById('diagnosis').value=r.diagnosis||'';document.getElementById('tests').value=r.tests||'';document.getElementById('advice').value=r.advice||'';document.getElementById('followup').value=toDMY(r.followup||'');document.getElementById('fees').value=r.fees||'';if(r.vitalsRaw){document.getElementById('bp').value=r.vitalsRaw.bp||'';document.getElementById('spo2').value=r.vitalsRaw.spo2||'';document.getElementById('hr').value=r.vitalsRaw.hr||'';document.getElementById('temp').value=r.vitalsRaw.temp||'';document.getElementById('rbs').value=r.vitalsRaw.rbs||'';document.getElementById('weight').value=r.vitalsRaw.weight||'';}document.getElementById('medList').innerHTML='';if(r.medsRaw && r.medsRaw.length){r.medsRaw.forEach(m=>{let parts=m.split(' - ');addMed(parts[0]||'',parts[1]||'',parts[2]||'');});}else{addMed();}window.scrollTo({top:0,behavior:'smooth'});alert('Now you can Edit this record and press Save. It will update the same record.');}
 function delRec(i){if(confirm('Delete this record?')){records.splice(i,1);localStorage.setItem('azam_records',JSON.stringify(records));renderList();autoSync();}}
 function deleteAll(){if(confirm('Delete all data?')){records=[];localStorage.removeItem('azam_records');renderList();}}
-function exportCSV(){let csv='Date,ID,Name,Age,Gender,Phone,Diagnosis,Vitals,Tests,Medicines,Fees,Followup\n';records.forEach(r=>{csv+=`"${r.date}","${r.pid}","${r.name}","${r.age}","${r.gender}","${r.phone}","${r.diagnosis}","${r.vitals}","${r.tests}","${r.meds}","${r.fees}","${r.followup}"\n`});let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='azam-medical-records.csv';a.click();}
+function exportCSV(){let csv='Date,ID,Name,Age,Gender,Phone,Diagnosis,Vitals,Tests,Medicines,Fees,Followup\n';records.forEach(r=>{csv+=`"${toDMY(r.date)}","${r.pid}","${r.name}","${r.age}","${r.gender}","${r.phone}","${r.diagnosis}","${r.vitals}","${r.tests}","${r.meds}","${r.fees}","${toDMY(r.followup)}"\n`});let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='azam-medical-records.csv';a.click();}
 renderList();
 updateStatus();
 </script>
