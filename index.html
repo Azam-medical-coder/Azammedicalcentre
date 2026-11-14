@@ -55,6 +55,8 @@ th{background:var(--navy);color:#fff}
 .p-box-inline{display:flex;gap:6px;align-items:flex-start}
 .p-box-inline b{white-space:nowrap}
 .p-sign{margin-top:38px;display:flex;justify-content:flex-end;text-align:center;font-size:12px;line-height:1.5}
+.rx-list{column-count:2;column-gap:18px;margin-top:2px}
+.rx-item{break-inside:avoid;padding:1px 0;font-size:12px;line-height:1.45}
 @media(max-width:700px){
   header img{width:55px}
   .head-spacer{width:55px}
@@ -182,7 +184,7 @@ th{background:var(--navy);color:#fff}
 <div class="p-box p-box-inline"><b>Diagnosis:</b> <span id="pr-diagnosis"></span></div>
 <div class="p-box p-box-inline"><b>Vitals:</b> <span id="pr-vitals"></span></div>
 <div class="p-box p-box-inline"><b>Test Results:</b> <span id="pr-tests"></span></div>
-<div class="p-box"><b>Rx - Medicines:</b><br><span id="pr-meds"></span></div>
+<div class="p-box"><b>Rx - Medicines:</b><div id="pr-meds" class="rx-list"></div></div>
 <div class="p-box"><b>Advice:</b><br><span id="pr-advice"></span></div>
 <div style="margin-top:8px;font-size:12px"><b>Follow-up:</b> <span id="pr-follow"></span> &nbsp; | &nbsp; <b>Fees:</b> Rs. <span id="pr-fees"></span></div>
 <div class="p-sign"><div><b>DR. MUHAMMAD ZEESHAN</b><br>MBBS, RMP (General Physician)<br><br>Signature: ___________</div></div>
@@ -288,7 +290,6 @@ function addAdvice(){
   else if(cur) cur += ' ';
   box.value = (cur + val + '. ').trim();
   sel.value = '';
-  // save custom advice for next time
   let dl = document.getElementById('adviceList');
   let exists = Array.from(dl.options).some(o=>o.value.toLowerCase()===val.toLowerCase());
   if(!exists){ let op=document.createElement('option'); op.value=val; dl.appendChild(op); }
@@ -316,7 +317,27 @@ function getForm(){
   if(wtV) vitals.push('WEIGHT: '+wtV);
   return{date:document.getElementById('date').value,pid:document.getElementById('pid').value,name:document.getElementById('pname').value,age:document.getElementById('age').value,gender:document.getElementById('gender').value,phone:document.getElementById('phone').value,address:document.getElementById('address').value,complaint:document.getElementById('complaint').value,diagnosis:document.getElementById('diagnosis').value,vitals:vitals.join(' | '),vitalsRaw:{bp:document.getElementById('bp').value,spo2:document.getElementById('spo2').value,hr:document.getElementById('hr').value,temp:document.getElementById('temp').value,rbs:document.getElementById('rbs').value,weight:document.getElementById('weight').value},tests:document.getElementById('tests').value,meds:meds.join(' | '),medsRaw:meds,advice:document.getElementById('advice').value,followup:document.getElementById('followup').value,fees:document.getElementById('fees').value,};
 }
-function fillPrint(d){document.getElementById('pr-date').innerText=d.date;document.getElementById('pr-pid').innerText=d.pid;document.getElementById('pr-name').innerText=d.name;document.getElementById('pr-age').innerText=d.age+' / '+d.gender;document.getElementById('pr-phone').innerText=d.phone;document.getElementById('pr-address').innerText=d.address;document.getElementById('pr-complaint').innerText=d.complaint;document.getElementById('pr-diagnosis').innerText=d.diagnosis;document.getElementById('pr-vitals').innerText=d.vitals||'';document.getElementById('pr-tests').innerText=d.tests||'';document.getElementById('pr-meds').innerText=d.meds;document.getElementById('pr-advice').innerText=d.advice;document.getElementById('pr-follow').innerText=d.followup;document.getElementById('pr-fees').innerText=d.fees;}
+function fillPrint(d){
+  document.getElementById('pr-date').innerText=d.date;
+  document.getElementById('pr-pid').innerText=d.pid;
+  document.getElementById('pr-name').innerText=d.name;
+  document.getElementById('pr-age').innerText=d.age+' / '+d.gender;
+  document.getElementById('pr-phone').innerText=d.phone;
+  document.getElementById('pr-address').innerText=d.address;
+  document.getElementById('pr-complaint').innerText=d.complaint;
+  document.getElementById('pr-diagnosis').innerText=d.diagnosis;
+  document.getElementById('pr-vitals').innerText=d.vitals||'';
+  document.getElementById('pr-tests').innerText=d.tests||'';
+  let medsArr = d.medsRaw && d.medsRaw.length ? d.medsRaw : (d.meds ? d.meds.split(' | ') : []);
+  let medsHtml = medsArr.map((m,i)=>{
+    let clean = m.replace(/ - /g,' ').replace(/\s+-\s*$/,'').trim();
+    return '<div class="rx-item">'+(i+1)+'. '+clean+'</div>';
+  }).join('');
+  document.getElementById('pr-meds').innerHTML = medsHtml;
+  document.getElementById('pr-advice').innerText=d.advice;
+  document.getElementById('pr-follow').innerText=d.followup;
+  document.getElementById('pr-fees').innerText=d.fees;
+}
 function saveData(d){if(editingIndex>=0){records[editingIndex]=d;editingIndex=-1;}else{records.unshift(d);}localStorage.setItem('azam_records',JSON.stringify(records));renderList();autoSync();}
 function saveOnly(){let d=getForm();if(!d.name){alert('Please enter Patient Name');return;}saveData(d);alert('Saved');clearForm();}
 function saveAndPrint(){let d=getForm();if(!d.name){alert('Please enter Patient Name');return;}saveData(d);fillPrint(d);window.print();clearForm();}
